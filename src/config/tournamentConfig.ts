@@ -1,0 +1,168 @@
+import { Category, School } from '@/types/tournament';
+
+export const TOURNAMENT_CONFIG = {
+  id: 'costa-de-oro-2026',
+  name: 'Liga Deportiva Costa de Oro 2026',
+  shortName: 'Costa de Oro 2026',
+  edition: 'Edición 2026',
+  host: {
+    name: 'La Paz Community School',
+    campuses: ['Campus Cabo Velas (Brasilito)', 'Campus Tempisque (Comunidad)'],
+  },
+  dates: {
+    seasonStart: '2026-10-05',
+    seasonEnd: '2026-11-27',
+    jornada1: '5 al 9 de octubre, 2026',
+    jornada2: '2 al 6 de noviembre, 2026',
+    jornada3: '16 al 20 de noviembre, 2026',
+    jornadaFinales: '23 al 27 de noviembre, 2026 (Semana de Finales)',
+  },
+  organizer: {
+    name: 'Curiol Studio',
+    subtitle: 'Fotografía • Tecnología • Legado',
+    contactEmail: 'contacto@curiolstudio.com',
+    whatsapp: '+506 8888-0000',
+    logoUrl: '/logos/curiol_logo_oficial_transparente_hd.png',
+  },
+};
+
+export const SCHOOLS_DATA: School[] = [
+  {
+    id: 'la-paz-cabo-velas',
+    name: 'La Paz Cabo Velas',
+    shortName: 'La Paz CV',
+    acronym: 'LPCV',
+    logo: '🌊',
+    primaryColor: '#0284c7', // Sky Blue
+    secondaryColor: '#0369a1',
+    location: 'Brasilito, Cabo Velas',
+    city: 'Santa Cruz, Guanacaste',
+    founded: 2007,
+  },
+  {
+    id: 'la-paz-tempisque',
+    name: 'La Paz Tempisque',
+    shortName: 'La Paz TP',
+    acronym: 'LPTP',
+    logo: '🌿',
+    primaryColor: '#059669', // Emerald Green
+    secondaryColor: '#047857',
+    location: 'Comunidad, Carrillo',
+    city: 'Guanacaste',
+    founded: 2019,
+  },
+  {
+    id: 'cria',
+    name: 'Costa Rica International Academy',
+    shortName: 'CRIA',
+    acronym: 'CRIA',
+    logo: '🦅',
+    primaryColor: '#b91c1c', // Deep Crimson
+    secondaryColor: '#991b1b',
+    location: 'Playa Flamingo',
+    city: 'Santa Cruz, Guanacaste',
+    founded: 2000,
+  },
+  {
+    id: 'journey-school',
+    name: 'The Journey School',
+    shortName: 'Journey School',
+    acronym: 'TJS',
+    logo: '🧭',
+    primaryColor: '#d97706', // Amber Gold
+    secondaryColor: '#b45309',
+    location: 'Tamarindo',
+    city: 'Santa Cruz, Guanacaste',
+    founded: 2015,
+  },
+  {
+    id: 'vittorino',
+    name: 'Instituto Vittorino Prep',
+    shortName: 'Vittorino',
+    acronym: 'VIT',
+    logo: '🛡️',
+    primaryColor: '#7c3aed', // Royal Violet
+    secondaryColor: '#6d28d9',
+    location: 'Huacas',
+    city: 'Santa Cruz, Guanacaste',
+    founded: 2012,
+  },
+  {
+    id: 'educarte',
+    name: 'Educarte Bilingual High School',
+    shortName: 'Educarte',
+    acronym: 'EDU',
+    logo: '☀️',
+    primaryColor: '#e11d48', // Bright Coral / Rose
+    secondaryColor: '#be123c',
+    location: 'Tamarindo',
+    city: 'Santa Cruz, Guanacaste',
+    founded: 2008,
+  },
+];
+
+export const CATEGORIES_DATA: Category[] = [
+  {
+    id: 'cat-fem-futbol',
+    name: 'Fútbol Femenino Abierto',
+    sport: 'futbol',
+    gender: 'Femenino',
+    division: 'Abierta',
+    dayOfWeek: 'Lunes',
+    scheduleTime: '13:00 - 16:30',
+  },
+  {
+    id: 'cat-c-futbol',
+    name: 'Fútbol Masculino Categoría C',
+    sport: 'futbol',
+    gender: 'Masculino',
+    division: 'Categoría C (2010-2011)',
+    dayOfWeek: 'Martes',
+    scheduleTime: '13:00 - 16:30',
+  },
+  {
+    id: 'cat-d-futbol',
+    name: 'Fútbol Masculino Categoría D',
+    sport: 'futbol',
+    gender: 'Masculino',
+    division: 'Categoría D (2012-2014)',
+    dayOfWeek: 'Miércoles',
+    scheduleTime: '13:00 - 16:30',
+  },
+  {
+    id: 'cat-c-voleibol',
+    name: 'Voleibol Femenino Categoría C',
+    sport: 'voleibol',
+    gender: 'Femenino',
+    division: 'Categoría C (2010-2011)',
+    dayOfWeek: 'Jueves',
+    scheduleTime: '13:00 - 16:30',
+  },
+  {
+    id: 'cat-d-voleibol',
+    name: 'Voleibol Femenino Categoría D',
+    sport: 'voleibol',
+    gender: 'Femenino',
+    division: 'Categoría D (2012-2014)',
+    dayOfWeek: 'Jueves',
+    scheduleTime: '13:00 - 16:30',
+  },
+  {
+    id: 'cat-c-baloncesto',
+    name: 'Baloncesto Masculino Categoría C',
+    sport: 'baloncesto',
+    gender: 'Masculino',
+    division: 'Categoría C (2010-2011)',
+    dayOfWeek: 'Viernes',
+    scheduleTime: '13:00 - 16:30',
+  },
+  {
+    id: 'cat-d-baloncesto',
+    name: 'Baloncesto Masculino Categoría D',
+    sport: 'baloncesto',
+    gender: 'Masculino',
+    division: 'Categoría D (2012-2014)',
+    dayOfWeek: 'Viernes',
+    scheduleTime: '13:00 - 16:30',
+  },
+];

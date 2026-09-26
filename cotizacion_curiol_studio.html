@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cotización oficial • Liga de la Costa de Oro 2026 - Curiol Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    @media screen {
+      .document-sheet {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #ffffff;
+        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3);
+        border-radius: 24px;
+      }
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 8mm 10mm 8mm 10mm;
+      }
+      *, *:before, *:after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      html, body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .document-sheet {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+      .print-page-1, .print-page-2 {
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      .print-page-3 {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+      .avoid-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .print-qr-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.5rem !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-800 antialiased py-6 px-3 sm:px-6 lg:px-8">
+
+  <!-- Barra de acciones superior fija (no se imprime) -->
+  <div class="max-w-4xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-4 no-print">
+    <div class="flex items-center space-x-3">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+        Propuesta oficial • Formato ejecutivo A4
+      </span>
+      <span class="text-sm text-slate-400 font-mono font-medium">Ref: CS-COT-2026-LCO-FINAL</span>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button onclick="window.print()" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white text-sm font-bold rounded-xl shadow-lg transition cursor-pointer">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        Imprimir / Guardar en PDF (3 Páginas A4)
+      </button>
+    </div>
+  </div>
+
+  <!-- Documento Principal -->
+  <div class="document-sheet p-6 sm:p-10 text-slate-800 space-y-6">
+    
+    <!-- ==================== PÁGINA 1 ==================== -->
+    <div class="print-page-1 flex flex-col justify-between min-h-[260mm]">
+      <div class="space-y-3.5">
+        
+        <!-- Encabezado Oficial -->
+        <header class="border-b border-slate-200 pb-3">
+          <div class="bg-gradient-to-r from-stone-950 via-slate-900 to-stone-950 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3 shadow-inner">
+            <div class="flex flex-col items-start justify-center">
+              <img src="assets/logos/curiol_logo_oficial_transparente_hd.png" alt="Curiol Studio • Fotografía • Tecnología • Legado" class="h-16 sm:h-20 w-auto object-contain filter drop-shadow-md" />
+            </div>
+            <div class="text-right md:border-l md:border-slate-800 md:pl-5 text-xs text-slate-300 space-y-0.5">
+              <div class="text-amber-400 font-extrabold uppercase tracking-wider text-[9.5px]">Propuesta técnica y comercial</div>
+              <div class="text-white font-bold text-sm">Liga de la Costa de Oro 2026</div>
+              <div class="text-slate-400 text-[10.5px]">Guanacaste, Costa Rica</div>
+            </div>
+          </div>
+
+          <!-- Ficha Técnica -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2.5 text-[10.5px] bg-slate-50 border border-slate-200 rounded-xl p-2.5">
+            <div>
+              <span class="text-slate-500 block">Referencia:</span>
+              <strong class="text-slate-900 font-mono font-bold">CS-COT-2026-LCO</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Fecha de emisión:</span>
+              <strong class="text-slate-900 font-semibold">26 de septiembre de 2026</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Institución:</span>
+              <strong class="text-slate-900 font-semibold">La Paz Community School</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Tiempo de entrega:</span>
+              <strong class="text-emerald-700 font-bold">6 días hábiles (previo 5 Oct)</strong>
+            </div>
+          </div>
+        </header>
+
+        <!-- Justificación de la WebApp -->
+        <section class="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 avoid-break">
+          <h2 class="text-[11px] font-extrabold text-amber-950 uppercase tracking-wide flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            ¿Por qué una WebApp en lugar de archivos PDF o mensajes por chat?
+          </h2>
+          <p class="text-[11px] text-slate-700 mt-1 leading-relaxed">
+            Un torneo con más de <strong>500 familias y 6 instituciones educativas</strong> (<em>CRIA, Journey School, Vittorino, Educarte, La Paz Cabo Velas y La Paz Tempisque</em>) genera desinformación cuando los horarios cambian o los marcadores se pierden entre cientos de mensajes de texto. La WebApp funciona como el punto de encuentro oficial: se abre al instante en cualquier celular sin descargas ni consumo de memoria. Permite a las familias consultar partidos, canchas, tablas de posiciones en vivo y compartir fotos y videos cortos de sus hijos en un mural seguro, proyectando el liderazgo organizativo de <strong>La Paz Community School</strong>.
+          </p>
+        </section>
+
+        <!-- Control de Deportes -->
+        <section class="bg-slate-50 border border-slate-200 rounded-xl p-3 avoid-break">
+          <h3 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-1.5">
+            <span class="w-1.5 h-3 bg-amber-500 rounded-full inline-block"></span>
+            Control de deportes: actualización de datos en tiempo real
+          </h3>
+          <p class="text-[10.5px] text-slate-600 leading-relaxed mb-2">
+            El sistema opera mediante <strong>base de datos estructurada y formularios web móviles</strong> (sin hojas de cálculo), asegurando que los datos se almacenen de forma íntegra y las tablas se actualicen automáticamente:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[10.5px]">
+            <div class="p-2 bg-white border border-slate-200 rounded-lg">
+              <strong class="text-slate-900 block font-bold">1. Registro en formulario:</strong>
+              <span class="text-slate-600">Al terminar el partido, el encargado ingresa los marcadores desde un formulario web móvil.</span>
+            </div>
+            <div class="p-2 bg-white border border-slate-200 rounded-lg">
+              <strong class="text-slate-900 block font-bold">2. Almacenamiento seguro:</strong>
+              <span class="text-slate-600">Almacenamiento de las 6 instituciones y 7 categorías oficiales en base de datos.</span>
+            </div>
+            <div class="p-2 bg-white border border-slate-200 rounded-lg">
+              <strong class="text-slate-900 block font-bold">3. Tablas y clasificación:</strong>
+              <span class="text-slate-600">Cálculo instantáneo de puntos, diferencias y llaves para la semana de finales.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Calendario Oficial -->
+        <section class="avoid-break">
+          <div class="flex items-center justify-between mb-1.5">
+            <h3 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+              <span class="w-1.5 h-3 bg-slate-900 rounded-full inline-block"></span>
+              Calendario oficial del torneo • Temporada octubre – noviembre 2026
+            </h3>
+            <span class="text-[9.5px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full font-bold">4 festivales • 7 categorías</span>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-1.5 text-[10.5px]">
+            <div class="border border-slate-200 rounded-lg p-2 bg-slate-50/70">
+              <div class="text-[9.5px] font-bold text-amber-600 uppercase">1.ª Jornada</div>
+              <div class="text-xs font-extrabold text-slate-900">5 al 9 Octubre</div>
+              <div class="text-[9.5px] text-slate-500">Fase regular apertura</div>
+            </div>
+            <div class="border border-slate-200 rounded-lg p-2 bg-slate-50/70">
+              <div class="text-[9.5px] font-bold text-amber-600 uppercase">2.ª Jornada</div>
+              <div class="text-xs font-extrabold text-slate-900">2 al 6 Noviembre</div>
+              <div class="text-[9.5px] text-slate-500">Fase regular media</div>
+            </div>
+            <div class="border border-slate-200 rounded-lg p-2 bg-slate-50/70">
+              <div class="text-[9.5px] font-bold text-amber-600 uppercase">3.ª Jornada</div>
+              <div class="text-xs font-extrabold text-slate-900">16 al 20 Noviembre</div>
+              <div class="text-[9.5px] text-slate-500">Clasificación a finales</div>
+            </div>
+            <div class="border border-amber-500 rounded-lg p-2 bg-amber-50">
+              <div class="text-[9.5px] font-bold text-amber-800 uppercase flex justify-between">
+                <span>🏆 Finales</span>
+                <span class="text-[8.5px] bg-amber-200 text-amber-900 px-1 rounded font-black">1.° vs 2.°</span>
+              </div>
+              <div class="text-xs font-extrabold text-amber-950">23 al 27 Noviembre</div>
+              <div class="text-[9.5px] text-amber-800">Definición campeones</div>
+            </div>
+          </div>
+
+          <div class="mt-1.5 p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] text-slate-600 flex flex-wrap items-center justify-between gap-1">
+            <span><strong>Orden semanal:</strong> Lun: fútbol fem | Mar: fútbol C | Mié: fútbol D | Jue: vóley fem | Vie: basket</span>
+            <span class="font-bold text-slate-800">Anfitriones: Pumas 🐾 (Cabo Velas) • Tiburones 🦈 (Tempisque)</span>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Pie de página Pág 1 -->
+      <footer class="pt-2 border-t border-slate-200 flex justify-between items-center text-[9.5px] text-slate-400">
+        <span>Curiol Studio • Fotografía • Tecnología • Legado</span>
+        <span>Página 1 de 3</span>
+      </footer>
+    </div>
+
+
+    <!-- ==================== PÁGINA 2 ==================== -->
+    <div class="print-page-2 flex flex-col justify-between min-h-[260mm]">
+      <div class="space-y-3.5">
+        
+        <!-- Tabla Comparativa de Opciones -->
+        <section class="avoid-break">
+          <h3 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+            <span class="w-1.5 h-3 bg-slate-900 rounded-full inline-block"></span>
+            1. Comparativa de opciones y oportunidad de inversión en la WebApp
+          </h3>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-xs">
+            <table class="min-w-full text-left text-[10.5px] border-collapse">
+              <thead>
+                <tr class="bg-slate-900 text-white divide-x divide-slate-700">
+                  <th class="p-2 font-bold uppercase w-1/4">Elemento clave</th>
+                  <th class="p-2 font-bold w-1/4 text-center">
+                    Opción 1: Institucional<br/>
+                    <span class="text-xs font-extrabold text-emerald-400">$650.00 USD</span>
+                  </th>
+                  <th class="p-2 font-bold w-1/4 text-center bg-amber-600">
+                    Opción 2: Co-gestión<br/>
+                    <span class="text-xs font-extrabold text-white">$800.00 USD</span>
+                    <span class="block text-[8.5px] font-normal text-amber-100 uppercase tracking-wider">(Recomendada)</span>
+                  </th>
+                  <th class="p-2 font-bold w-1/4 text-center">
+                    Opción 3: Autónoma<br/>
+                    <span class="text-xs font-extrabold text-emerald-400">$1,300.00 USD</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900 bg-slate-50">Propósito principal</td>
+                  <td class="p-2 text-slate-600">Canal informativo oficial, enfocado 100% en los partidos sin anuncios externos.</td>
+                  <td class="p-2 text-slate-700 bg-amber-50/40 font-medium">Plataforma ($800) + modelo colaborativo para sumar marcas locales (50/50).</td>
+                  <td class="p-2 text-slate-600">Desarrollo autónomo exclusivo (+$500 de licencia): La Paz retiene el 100% de patrocinios.</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900 bg-slate-50">Control de deportes</td>
+                  <td class="p-2 text-slate-600">✔ Base de datos y formularios web para 7 categorías con tablas automáticas.</td>
+                  <td class="p-2 text-slate-700 bg-amber-50/40 font-medium">✔ Base de datos y formularios web para 7 categorías con tablas automáticas.</td>
+                  <td class="p-2 text-slate-600">✔ Base de datos y formularios web para 7 categorías con tablas automáticas.</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900 bg-slate-50">Mural familiar (fotos)</td>
+                  <td class="p-2 text-slate-600">✔ Subida directa de fotos desde el celular de cada familia para celebrar a los atletas.</td>
+                  <td class="p-2 text-slate-700 bg-amber-50/40 font-medium">✔ Fotos compartidas lucen un marco conmemorativo con los 4 comercios amigos.</td>
+                  <td class="p-2 text-slate-600">✔ Mural comunitario con marco digital exclusivo del patrocinador titular de La Paz.</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900 bg-slate-50">Videos cortos (*Shorts*)</td>
+                  <td class="p-2 text-red-500 font-medium">✘ No incluido (opcional por $220.00 USD).</td>
+                  <td class="p-2 text-emerald-800 bg-amber-50/40 font-semibold">✔ <strong>Incluido:</strong> subida directa de videos cortos grabados por familias durante jugadas.</td>
+                  <td class="p-2 text-emerald-800 font-semibold">✔ <strong>Incluido:</strong> videos cortos grabados por familias con cintillo publicitario de patrocinador.</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900 bg-slate-50">Espacios comerciales</td>
+                  <td class="p-2 text-red-500 font-medium">✘ Sin espacios comerciales.</td>
+                  <td class="p-2 text-slate-700 bg-amber-50/40 font-medium">✔ <strong>4 espacios para comercios locales</strong> (precio base $300 USD c/u) + kit comercial.</td>
+                  <td class="p-2 text-slate-600">✔ <strong>4 espacios comerciales</strong> + banners dinámicos + directorio con botón a WhatsApp.</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900 bg-slate-50">Dinámica comunitaria</td>
+                  <td class="p-2 text-red-500 font-medium">✘ No incluida.</td>
+                  <td class="p-2 text-slate-700 bg-amber-50/40 font-medium">✔ Votación divertida de «Jugador del partido / Atleta del festival» respaldada por marca.</td>
+                  <td class="p-2 text-slate-600">✔ Votación de «Jugador del partido» con catálogo interactivo de comercios aliados.</td>
+                </tr>
+                <tr class="divide-x divide-slate-200 bg-slate-50">
+                  <td class="p-2 font-bold text-slate-900">Retorno para La Paz</td>
+                  <td class="p-2 text-slate-600">Gasto deportivo institucional: <strong>$650.00 USD</strong>.</td>
+                  <td class="p-2 text-emerald-800 bg-amber-100/50 font-semibold">
+                    <strong>Amortización colaborativa:</strong> con 4 marcas a $300 base ($1,200 total), La Paz recupera $600.<br/>
+                    <span class="text-emerald-700 font-bold">Costo neto final: solo $200.00 USD.</span>
+                  </td>
+                  <td class="p-2 text-emerald-800 font-semibold">
+                    <strong>Autonomía y superávit:</strong> comercializando los 4 espacios a $300 ($1,200) o $400 ($1,600), La Paz genera hasta <span class="font-bold text-emerald-700">+$300 USD de ganancia</span>.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Desglose de Inversión y Códigos QR en Grid Horizontal -->
+        <section class="avoid-break">
+          <h3 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+            <span class="w-1.5 h-3 bg-slate-900 rounded-full inline-block"></span>
+            2. Desglose de inversión y maquetas de visualización (Escanea el código QR)
+          </h3>
+
+          <div class="print-qr-grid grid grid-cols-1 md:grid-cols-3 gap-2">
+            
+            <!-- Opción 1 -->
+            <div class="border border-slate-200 rounded-xl p-2.5 bg-white shadow-2xs flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-slate-900 text-[11px]">Opción 1: Institucional</h4>
+                  <span class="text-[9px] bg-slate-100 text-slate-600 px-1 py-0.2 rounded font-semibold">Paz mental</span>
+                </div>
+                <div class="text-base font-black text-slate-900 mt-0.5">$650.00 <span class="text-[9px] font-medium text-slate-500">USD</span></div>
+                <div class="text-[9.5px] text-slate-500">Anticipo: $325.00 | Saldo: $325.00</div>
+                <ul class="text-[10px] text-slate-600 space-y-0.5 mt-1.5">
+                  <li>• 100% limpia sin publicidad</li>
+                  <li>• Fútbol, baloncesto y voleibol</li>
+                  <li>• Tablas de posiciones al día</li>
+                  <li>• Mural familiar para fotos</li>
+                </ul>
+              </div>
+
+              <div class="mt-2 pt-1.5 border-t border-slate-100 text-center">
+                <div class="inline-block p-1 bg-white border border-slate-200 rounded-lg">
+                  <img src="assets/qr/qr_prototipo1.png" alt="QR Prototipo 1" class="w-16 h-16 mx-auto" />
+                </div>
+                <div class="text-[9px] font-bold text-amber-600 mt-0.5">Maqueta institucional (limpia)</div>
+              </div>
+            </div>
+
+            <!-- Opción 2 -->
+            <div class="border-2 border-amber-500 rounded-xl p-2.5 bg-amber-50/20 shadow-xs flex flex-col justify-between relative">
+              <div class="absolute -top-2 right-2 bg-amber-600 text-white text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full">
+                Recomendada
+              </div>
+              <div>
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-slate-900 text-[11px]">Opción 2: Co-gestión</h4>
+                  <span class="text-[9px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-semibold">50/50</span>
+                </div>
+                <div class="text-base font-black text-amber-950 mt-0.5">$800.00 <span class="text-[9px] font-medium text-slate-500">USD</span></div>
+                <div class="text-[9.5px] text-slate-600">Anticipo: $400.00 | Saldo: $400.00</div>
+                <ul class="text-[10px] text-slate-700 space-y-0.5 mt-1.5">
+                  <li>• <strong>Todo lo de la Opción 1</strong></li>
+                  <li>• <strong>Videos cortos familiares (*Shorts*)</strong></li>
+                  <li>• 4 espacios para marcas locales</li>
+                  <li>• Votación de atleta del festival</li>
+                </ul>
+              </div>
+
+              <div class="mt-2 pt-1.5 border-t border-amber-200 text-center">
+                <div class="inline-block p-1 bg-white border border-amber-300 rounded-lg">
+                  <img src="assets/qr/qr_prototipo2.png" alt="QR Prototipo 2" class="w-16 h-16 mx-auto" />
+                </div>
+                <div class="text-[9px] font-bold text-amber-700 mt-0.5">Maqueta con aliados comerciales</div>
+              </div>
+            </div>
+
+            <!-- Opción 3 -->
+            <div class="border border-slate-200 rounded-xl p-2.5 bg-white shadow-2xs flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-slate-900 text-[11px]">Opción 3: Autónoma</h4>
+                  <span class="text-[9px] bg-slate-100 text-slate-600 px-1 py-0.2 rounded font-semibold">100% La Paz</span>
+                </div>
+                <div class="text-base font-black text-slate-900 mt-0.5">$1,300.00 <span class="text-[9px] font-medium text-slate-500">USD</span></div>
+                <div class="text-[9.5px] text-slate-500">Anticipo: $650.00 | Saldo: $650.00</div>
+                <ul class="text-[10px] text-slate-600 space-y-0.5 mt-1.5">
+                  <li>• <strong>Todo lo de la Opción 2</strong></li>
+                  <li>• Directorio con botón a WhatsApp</li>
+                  <li>• 100% de ingresos para La Paz</li>
+                  <li>• Espacio para patrocinador titular</li>
+                </ul>
+              </div>
+
+              <div class="mt-2 pt-1.5 border-t border-slate-100 text-center">
+                <div class="inline-block p-1 bg-white border border-slate-200 rounded-lg">
+                  <img src="assets/qr/qr_prototipo3.png" alt="QR Prototipo 3" class="w-16 h-16 mx-auto" />
+                </div>
+                <div class="text-[9px] font-bold text-amber-600 mt-0.5">Maqueta autónoma exclusiva</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-2 p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[9.5px] text-slate-500">
+            <strong>Nota de diseño:</strong> Los códigos QR permiten visualizar ejemplos conceptuales de portada. El diseño definitivo se adaptará a la identidad visual, tipografía y colores de La Paz Community School.
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Pie de página Pág 2 -->
+      <footer class="pt-2 border-t border-slate-200 flex justify-between items-center text-[9.5px] text-slate-400">
+        <span>Curiol Studio • Fotografía • Tecnología • Legado</span>
+        <span>Página 2 de 3</span>
+      </footer>
+    </div>
+
+
+    <!-- ==================== PÁGINA 3 ==================== -->
+    <div class="print-page-3 flex flex-col justify-between min-h-[260mm]">
+      <div class="space-y-3.5">
+        
+        <!-- Opciones Complementarias y Cobertura Audiovisual -->
+        <section class="avoid-break">
+          <h3 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+            <span class="w-1.5 h-3 bg-slate-900 rounded-full inline-block"></span>
+            3. Opciones complementarias y cobertura fotográfica profesional (USD)
+          </h3>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="min-w-full text-left text-[10.5px] border-collapse">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 divide-x divide-slate-200">
+                  <th class="p-2 font-bold uppercase w-1/3">Servicio</th>
+                  <th class="p-2 font-bold uppercase w-1/2">Detalle del alcance</th>
+                  <th class="p-2 font-bold uppercase text-right">Tarifa (USD)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900">Dirección web en subdominio Curiol Studio</td>
+                  <td class="p-2 text-slate-600">Dirección oficial segura (ejemplo: <code>ligacostadeoro.curiolstudio.com</code>) lista para compartir.</td>
+                  <td class="p-2 text-right font-bold text-emerald-700">$0.00 USD (Incluido)</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900">Dirección web propia exclusiva (.com / .cr)</td>
+                  <td class="p-2 text-slate-600">Compra y configuración de un nombre exclusivo por un año (ejemplo: <code>ligacostadeoro.com</code>).</td>
+                  <td class="p-2 text-right font-bold text-slate-800">$45.00 USD / año</td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900">Asistencia externa y digitación de actas por Curiol Studio</td>
+                  <td class="p-2 text-slate-600">Servicio opcional: el colegio envía foto del acta por WhatsApp y Curiol Studio ingresa los datos al formulario.</td>
+                  <td class="p-2 text-right font-bold text-slate-800">$150.00 USD <span class="text-[8.5px] text-slate-500 font-normal">(Temporada)</span></td>
+                </tr>
+                <tr class="divide-x divide-slate-200">
+                  <td class="p-2 font-semibold text-slate-900">Módulo de videos cortos familiares para Opción 1</td>
+                  <td class="p-2 text-slate-600">Habilitación de captura y subida directa de videos cortos familiares estilo Shorts en la Opción 1 (ya incluido en Opciones 2 y 3).</td>
+                  <td class="p-2 text-right font-bold text-slate-800">$220.00 USD</td>
+                </tr>
+                <tr class="divide-x divide-slate-200 bg-amber-50/30">
+                  <td class="p-2 font-semibold text-slate-900">Fotografía profesional deportiva (por jornada completa)</td>
+                  <td class="p-2 text-slate-600">Cobertura fotográfica profesional en alta resolución durante toda la jornada deportiva (previo, durante y posterior al partido).</td>
+                  <td class="p-2 text-right font-bold text-slate-800">$320.00 USD / evento</td>
+                </tr>
+                <tr class="divide-x divide-slate-200 bg-amber-100/40">
+                  <td class="p-2 font-extrabold text-amber-950">
+                    ⭐ Paquete de fotografía: semana de finales (5 días completos)
+                  </td>
+                  <td class="p-2 text-slate-700">
+                    <strong>Cobertura integral de la jornada completa durante los 5 días de finales (23 al 27 de noviembre):</strong> incluye los 3 momentos de cada final (calentamiento/llegada previa, partidos decisivos y ceremonia de premiación/podios). Entrega de galería digital en alta definición para familias y redes del colegio.
+                  </td>
+                  <td class="p-2 text-right font-black text-amber-900 text-xs">
+                    $290.00 USD<br/>
+                    <span class="text-[8.5px] text-emerald-700 font-bold uppercase">(Paquete especial)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Términos de Referencia, Derechos de Imagen y Formalización -->
+        <section class="bg-slate-50 border border-slate-200 rounded-xl p-3 avoid-break">
+          <h3 class="text-[11px] font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+            <span class="w-1.5 h-3 bg-amber-600 rounded-full inline-block"></span>
+            4. Términos de referencia, derechos de imagen y formalización
+          </h3>
+
+          <div class="space-y-2 text-[10.5px] text-slate-600 leading-relaxed">
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <strong class="text-slate-900 block mb-0.5">Estructura y coordinación de la cobertura fotográfica (3 momentos integrales):</strong>
+              La Paz Community School comunicará el rol oficial de horarios y cronograma de cada jornada con antelación. La cobertura fotográfica cubre la <strong>totalidad del evento deportivo del día</strong> en tres momentos:
+              <ul class="list-disc pl-4 mt-0.5 space-y-0.5 text-slate-600">
+                <li><strong>Momento 1 (Previo):</strong> Llegada de delegaciones, calentamiento de atletas y ambiente en graderías.</li>
+                <li><strong>Momento 2 (Durante):</strong> Cobertura exhaustiva de las acciones en cancha (partidos completos, goles, puntos, sets).</li>
+                <li><strong>Momento 3 (Posterior y cierre):</strong> Ceremonia de premiación, entrega de trofeos y medallas, podios y fotos de equipo.</li>
+              </ul>
+              En caso de variaciones de horario o suspensiones por lluvia, se reprogramarán de mutuo acuerdo sin penalización económica.
+            </div>
+
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <strong class="text-slate-900 block mb-0.5">Derechos de imagen y proyección institucional:</strong>
+              Toda la producción fotográfica y audiovisual generada se entregará a la comunidad escolar en la galería oficial. <strong>Curiol Studio</strong> se reserva el derecho de uso en su portafolio profesional y redes sociales oficiales. <strong>La Paz Community School</strong> asume la gestión de los consentimientos de derechos de imagen de los estudiantes según sus políticas internas.
+            </div>
+
+            <div class="p-2 bg-white rounded-lg border border-slate-200">
+              <strong class="text-slate-900 block mb-0.5">Condiciones de pago, formalización y vigencia:</strong>
+              Anticipo del 50% al aprobar la cotización para apartar el cupo de desarrollo y asegurar la entrega antes del 5 de octubre de 2026. El 50% restante se cancela contra entrega formal de la plataforma funcionando. Los términos se formalizarán en el contrato de servicios posterior. Vigencia de la oferta: 15 días naturales.
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Pie de página Pág 3 -->
+      <footer class="pt-2 border-t border-slate-200 flex justify-between items-center text-[9.5px] text-slate-400">
+        <span>Curiol Studio • Fotografía • Tecnología • Legado • Guanacaste, Costa Rica</span>
+        <span>Página 3 de 3</span>
+      </footer>
+    </div>
+
+  </div>
+
+</body>
+</html>

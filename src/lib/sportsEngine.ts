@@ -1,0 +1,173 @@
+import { Match, School, Standing, SportType } from '@/types/tournament';
+import { SCHOOLS_DATA } from '@/config/tournamentConfig';
+
+export function calculateStandings(
+  categoryId: string,
+  sport: SportType,
+  matches: Match[],
+  schools: School[] = SCHOOLS_DATA
+): Standing[] {
+  // Filter matches for this category and completed or live status
+  const categoryMatches = matches.filter(
+    (m) => m.categoryId === categoryId && (m.status === 'completed' || m.status === 'live')
+  );
+
+  // Initialize map of standings for all participating schools
+  const standingsMap = new Map<string, Standing>();
+
+  schools.forEach((school) => {
+    standingsMap.set(school.id, {
+      teamId: school.id,
+      school,
+      played: 0,
+      won: 0,
+      drawn: 0,
+      lost: 0,
+      pointsFor: 0,
+      pointsAgainst: 0,
+      diff: 0,
+      points: 0,
+      setsWon: sport === 'voleibol' ? 0 : undefined,
+      setsLost: sport === 'voleibol' ? 0 : undefined,
+      setsDiff: sport === 'voleibol' ? 0 : undefined,
+      form: [],
+    });
+  });
+
+  // Sort matches chronologically to build accurate form
+  const sortedMatches = [...categoryMatches].sort(
+    (a, b) => new Date(`${a.date}T${a.time}`).getTime() - new Date(`${b.date}T${b.time}`).getTime()
+  );
+
+  sortedMatches.forEach((match) => {
+    const home = standingsMap.get(match.homeTeamId);
+    const away = standingsMap.get(match.awayTeamId);
+
+    if (!home || !away) return;
+
+    home.played += 1;
+    away.played += 1;
+
+    home.pointsFor += match.homeScore;
+    home.pointsAgainst += match.awayScore;
+    away.pointsFor += match.awayScore;
+    away.pointsAgainst += match.homeScore;
+
+    if (sport === 'futbol') {
+      if (match.homeScore > match.awayScore) {
+        home.won += 1;
+        home.points += 3;
+        home.form.push('W');
+        away.lost += 1;
+        away.form.push('L');
+      } else if (match.homeScore < match.awayScore) {
+        away.won += 1;
+        away.points += 3;
+        away.form.push('W');
+        home.lost += 1;
+        home.form.push('L');
+      } else {
+        home.drawn += 1;
+        home.points += 1;
+        home.form.push('D');
+        away.drawn += 1;
+        away.points += 1;
+        away.form.push('D');
+      }
+    } else if (sport === 'baloncesto') {
+      // In basketball: Win = 2 pts, Loss = 1 pt (standard FIBA points system)
+      if (match.homeScore > match.awayScore) {
+        home.won += 1;
+        home.points += 2;
+        home.form.push('W');
+        away.lost += 1;
+        away.points += 1;
+        away.form.push('L');
+      } else if (match.homeScore < match.awayScore) {
+        away.won += 1;
+        away.points += 2;
+        away.form.push('W');
+        home.lost += 1;
+        home.points += 1;
+        home.form.push('L');
+      }
+    } else if (sport === 'voleibol') {
+      const homeSets = match.homeSetsWon ?? 0;
+      const awaySets = match.awaySetsWon ?? 0;
+
+      if (home.setsWon !== undefined) home.setsWon += homeSets;
+      if (home.setsLost !== undefined) home.setsLost += awaySets;
+      if (away.setsWon !== undefined) away.setsWon += awaySets;
+      if (away.setsLost !== undefined) away.setsLost += homeSets;
+
+      // Volleyball points: 2-0 / 3-0 / 3-1 = 3 pts win, 0 pts loss. 3-2 = 2 pts win, 1 pt loss.
+      if (homeSets > awaySets) {
+        home.won += 1;
+        home.form.push('W');
+        away.lost += 1;
+        away.form.push('L');
+
+        if (awaySets >= 2 || (homeSets === 2 && awaySets === 1)) {
+          home.points += 2;
+          away.points += 1;
+        } else {
+          home.points += 3;
+          away.points += 0;
+        }
+      } else if (awaySets > homeSets) {
+        away.won += 1;
+        away.form.push('W');
+        home.lost += 1;
+        home.form.push('L');
+
+        if (homeSets >= 2 || (awaySets === 2 && homeSets === 1)) {
+          away.points += 2;
+          home.points += 1;
+        } else {
+          away.points += 3;
+          home.points += 0;
+        }
+      }
+    }
+  });
+
+  // Calculate differentials
+  const standingsList = Array.from(standingsMap.values()).map((st) => {
+    st.diff = st.pointsFor - st.pointsAgainst;
+    if (st.setsWon !== undefined && st.setsLost !== undefined) {
+      st.setsDiff = st.setsWon - st.setsLost;
+    }
+    // Keep last 5 form results
+    st.form = st.form.slice(-5);
+    return st;
+  });
+
+  // Sort standings with official tie-breakers
+  standingsList.sort((a, b) => {
+    // 1. Points
+    if (b.points !== a.points) return b.points - a.points;
+
+    // 2. Volleyball: Sets Differential
+    if (sport === 'voleibol' && a.setsDiff !== undefined && b.setsDiff !== undefined) {
+      if (b.setsDiff !== a.setsDiff) return b.setsDiff - a.setsDiff;
+    }
+
+    // 3. Goal / Point Differential
+    if (b.diff !== a.diff) return b.diff - a.diff;
+
+    // 4. Points / Goals For (Most scored)
+    if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
+
+    // 5. Least points / goals against
+    if (a.pointsAgainst !== b.pointsAgainst) return a.pointsAgainst - b.pointsAgainst;
+
+    // 6. Alphabetical
+    return a.school.shortName.localeCompare(b.school.shortName);
+  });
+
+  // Assign 1-indexed position
+  return standingsList.map((item, index) => ({
+    ...item,
+    position: index + 1,
+  }));
+}
