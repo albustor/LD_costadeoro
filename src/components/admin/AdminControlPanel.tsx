@@ -11,8 +11,7 @@ import {
   Award, 
   CheckCircle2, 
   AlertTriangle,
-  SlidersHorizontal,
-  Flame
+  SlidersHorizontal
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 
@@ -36,7 +35,6 @@ export function AdminControlPanel() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Default PIN: 2026 or admin
     if (pin === '2026' || pin === 'admin') {
       setIsAuthenticated(true);
       setAuthError(false);
@@ -92,13 +90,13 @@ export function AdminControlPanel() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-md mx-auto my-12 p-8 bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl text-center">
-        <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto mb-4">
+      <div className="max-w-md mx-auto my-12 p-8 bg-white border border-slate-200 rounded-3xl shadow-xl text-center">
+        <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 mx-auto mb-4">
           <Lock className="w-7 h-7" />
         </div>
-        <h2 className="text-lg font-bold text-white mb-1">Mesa de Control y Actas</h2>
-        <p className="text-xs text-slate-400 mb-6">
-          Ingreso exclusivo para jueces de mesa y administradores autorizados de la Liga Costa de Oro.
+        <h2 className="text-lg font-bold text-slate-900 mb-1">Mesa de Control y Actas</h2>
+        <p className="text-xs text-slate-500 mb-6">
+          Ingreso exclusivo para jueces de mesa y coordinadores deportivos de la Liga Costa de Oro.
         </p>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -108,20 +106,20 @@ export function AdminControlPanel() {
               placeholder="Ingresa el PIN de acceso (2026)"
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              className="w-full text-center tracking-widest text-lg font-mono px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-400"
+              className="w-full text-center tracking-widest text-lg font-mono px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:border-amber-500"
             />
           </div>
 
           {authError && (
-            <p className="text-xs text-red-400 font-medium flex items-center justify-center gap-1">
+            <p className="text-xs text-red-600 font-medium flex items-center justify-center gap-1">
               <AlertTriangle className="w-3.5 h-3.5" />
-              PIN incorrecto. (PIN de prueba: 2026)
+              PIN incorrecto. (PIN oficial: 2026)
             </p>
           )}
 
           <button
             type="submit"
-            className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition-all shadow-md"
+            className="w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs sm:text-sm transition-all shadow-md"
           >
             Desbloquear Mesa de Control
           </button>
@@ -136,23 +134,23 @@ export function AdminControlPanel() {
   const category = selectedMatch ? getCategoryById(selectedMatch.categoryId) : null;
 
   return (
-    <div className="max-w-4xl mx-auto my-8 p-6 bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl space-y-6">
+    <div className="max-w-4xl mx-auto my-6 p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm space-y-6">
       {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30">
+          <div className="p-2 rounded-xl bg-amber-50 text-amber-700 border border-amber-200">
             <SlidersHorizontal className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-white">Mesa de Control Deportiva</h2>
-            <span className="text-xs text-slate-400">Actualización en tiempo real sin recarga</span>
+            <h2 className="text-base font-bold text-slate-900">Mesa de Control Deportiva</h2>
+            <span className="text-xs text-slate-500">Actualización en tiempo real sin hojas de cálculo</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={handleResetDefaults}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs flex items-center gap-1.5"
             title="Restaurar datos semilla"
           >
             <RefreshCw className="w-3.5 h-3.5" />
@@ -160,7 +158,7 @@ export function AdminControlPanel() {
           </button>
           <button
             onClick={() => setIsAuthenticated(false)}
-            className="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold border border-red-500/30 flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold border border-red-200 flex items-center gap-1.5"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>Cerrar Sesión</span>
@@ -170,13 +168,13 @@ export function AdminControlPanel() {
 
       {/* Match Selector */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
           Seleccionar Encuentro para Carga o Modificación
         </label>
         <select
           value={selectedMatchId}
           onChange={(e) => loadMatchData(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs sm:text-sm font-medium focus:outline-none focus:border-amber-400"
+          className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-amber-500"
         >
           {matches.map((m) => {
             const h = getSchoolById(m.homeTeamId);
@@ -195,25 +193,25 @@ export function AdminControlPanel() {
       {selectedMatch && (
         <form onSubmit={handleSave} className="space-y-6 pt-2">
           {/* Match Info Summary Card */}
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800/80 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-center">
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-center">
             <div className="flex items-center justify-center gap-2">
               <span className="text-2xl">{homeSchool?.logo}</span>
-              <span className="font-bold text-white text-sm">{homeSchool?.name}</span>
+              <span className="font-bold text-slate-900 text-sm">{homeSchool?.name}</span>
             </div>
             <div>
-              <span className="text-xs text-amber-400 font-bold block">{category?.name}</span>
-              <span className="text-[11px] text-slate-400">{selectedMatch.venue}</span>
+              <span className="text-xs text-amber-800 font-bold block">{category?.name}</span>
+              <span className="text-[11px] text-slate-500">{selectedMatch.venue}</span>
             </div>
             <div className="flex items-center justify-center gap-2">
-              <span className="font-bold text-white text-sm">{awaySchool?.name}</span>
+              <span className="font-bold text-slate-900 text-sm">{awaySchool?.name}</span>
               <span className="text-2xl">{awaySchool?.logo}</span>
             </div>
           </div>
 
           {/* Score Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-2">
-              <label className="block text-xs font-bold text-slate-300">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+              <label className="block text-xs font-bold text-slate-700">
                 Puntos / Goles: {homeSchool?.shortName}
               </label>
               <input
@@ -221,25 +219,25 @@ export function AdminControlPanel() {
                 min="0"
                 value={homeScore}
                 onChange={(e) => setHomeScore(Number(e.target.value))}
-                className="w-full text-center font-mono font-black text-2xl py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-amber-400"
+                className="w-full text-center font-mono font-black text-2xl py-2 rounded-xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-amber-500"
               />
               {selectedMatch.sport === 'voleibol' && (
                 <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Sets Ganados</label>
+                  <label className="block text-[11px] text-slate-500 mb-1">Sets Ganados</label>
                   <input
                     type="number"
                     min="0"
                     max="3"
                     value={homeSetsWon}
                     onChange={(e) => setHomeSetsWon(Number(e.target.value))}
-                    className="w-full text-center font-mono text-sm py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-white"
+                    className="w-full text-center font-mono text-sm py-1.5 rounded-lg bg-white border border-slate-300 text-slate-900"
                   />
                 </div>
               )}
             </div>
 
-            <div className="p-4 bg-slate-950/80 rounded-2xl border border-slate-800 space-y-2">
-              <label className="block text-xs font-bold text-slate-300">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+              <label className="block text-xs font-bold text-slate-700">
                 Puntos / Goles: {awaySchool?.shortName}
               </label>
               <input
@@ -247,18 +245,18 @@ export function AdminControlPanel() {
                 min="0"
                 value={awayScore}
                 onChange={(e) => setAwayScore(Number(e.target.value))}
-                className="w-full text-center font-mono font-black text-2xl py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-amber-400"
+                className="w-full text-center font-mono font-black text-2xl py-2 rounded-xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-amber-500"
               />
               {selectedMatch.sport === 'voleibol' && (
                 <div>
-                  <label className="block text-[11px] text-slate-400 mb-1">Sets Ganados</label>
+                  <label className="block text-[11px] text-slate-500 mb-1">Sets Ganados</label>
                   <input
                     type="number"
                     min="0"
                     max="3"
                     value={awaySetsWon}
                     onChange={(e) => setAwaySetsWon(Number(e.target.value))}
-                    className="w-full text-center font-mono text-sm py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-white"
+                    className="w-full text-center font-mono text-sm py-1.5 rounded-lg bg-white border border-slate-300 text-slate-900"
                   />
                 </div>
               )}
@@ -268,13 +266,13 @@ export function AdminControlPanel() {
           {/* Status, Period, Minute */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Estado del Encuentro
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as MatchStatus)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-amber-500"
               >
                 <option value="live">🔴 En Vivo (Activo)</option>
                 <option value="completed">🟢 Finalizado (Oficial)</option>
@@ -284,7 +282,7 @@ export function AdminControlPanel() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Tiempo / Periodo Actual
               </label>
               <input
@@ -292,12 +290,12 @@ export function AdminControlPanel() {
                 placeholder="Ej. 1.er Tiempo, Set 2, Q3"
                 value={currentPeriod}
                 onChange={(e) => setCurrentPeriod(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Minuto de Juego (si aplica)
               </label>
               <input
@@ -306,15 +304,15 @@ export function AdminControlPanel() {
                 max="120"
                 value={minute}
                 onChange={(e) => setMinute(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-400"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
 
           {/* MVP Player Award */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-              <Award className="w-3.5 h-3.5 text-amber-400" />
+            <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1.5">
+              <Award className="w-3.5 h-3.5 text-amber-600" />
               <span>Jugador Más Valioso (MVP Oficial del Partido)</span>
             </label>
             <input
@@ -322,14 +320,14 @@ export function AdminControlPanel() {
               placeholder="Ej. Sofía Brenes (La Paz CV)"
               value={mvpPlayerName}
               onChange={(e) => setMvpPlayerName(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-400"
+              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-amber-500"
             />
           </div>
 
           {/* Save Button */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-200">
             {savedSuccess ? (
-              <span className="text-xs text-emerald-400 font-bold flex items-center gap-1.5 animate-bounce">
+              <span className="text-xs text-emerald-700 font-bold flex items-center gap-1.5 animate-bounce">
                 <CheckCircle2 className="w-4 h-4" />
                 ¡Acta y marcadores actualizados instantáneamente!
               </span>
@@ -341,7 +339,7 @@ export function AdminControlPanel() {
 
             <button
               type="submit"
-              className="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl flex items-center gap-2 shadow-lg shadow-amber-500/10 transition-all"
+              className="px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-xs sm:text-sm font-bold rounded-xl flex items-center gap-2 shadow-sm transition-all"
             >
               <Save className="w-4 h-4" />
               <span>Guardar y Publicar Acta</span>

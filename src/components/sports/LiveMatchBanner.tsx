@@ -11,14 +11,14 @@ export function LiveMatchBanner() {
   if (liveMatches.length === 0) return null;
 
   return (
-    <div className="bg-gradient-to-r from-red-950/90 via-slate-900 to-red-950/90 border-y border-red-500/40 py-3 px-4 shadow-lg">
+    <div className="bg-red-50 border-y border-red-200 py-3 px-4 shadow-sm">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-2 mb-2">
-          <span className="flex h-3 w-3 relative">
+          <span className="flex h-2.5 w-2.5 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
           </span>
-          <span className="text-xs font-black uppercase tracking-wider text-red-400 flex items-center gap-1">
+          <span className="text-[11px] font-black uppercase tracking-wider text-red-700 flex items-center gap-1">
             <Flame className="w-3.5 h-3.5" />
             <span>Encuentro en Vivo Ahora Mismo</span>
           </span>
@@ -33,44 +33,42 @@ export function LiveMatchBanner() {
             return (
               <div
                 key={match.id}
-                className="bg-slate-900/90 rounded-xl p-3.5 border border-red-500/30 flex items-center justify-between shadow-inner"
+                className="bg-white rounded-xl p-3.5 border border-red-200 flex items-center justify-between shadow-sm"
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 text-[11px] text-slate-400 mb-1">
-                    <span className="font-semibold text-amber-400">{category?.name}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 text-[11px] text-slate-500 mb-1">
+                    <span className="font-bold text-slate-800">{category?.name}</span>
                     <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-slate-500" />
+                    <span className="flex items-center gap-1 truncate">
+                      <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
                       {match.venue}
                     </span>
                   </div>
 
                   {/* Team vs Team with Scores */}
                   <div className="grid grid-cols-5 items-center gap-2">
-                    <div className="col-span-2 flex items-center gap-2">
-                      <span className="text-xl">{home?.logo}</span>
-                      <span className="font-bold text-white text-sm truncate">{home?.shortName}</span>
+                    <div className="col-span-2 flex items-center gap-2 min-w-0">
+                      <span className="text-xl shrink-0">{home?.logo}</span>
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm truncate">{home?.shortName}</span>
                     </div>
 
-                    <div className="col-span-1 text-center bg-slate-950/80 py-1 px-2 rounded-lg border border-red-500/40">
-                      <span className="text-lg font-black text-white tracking-wider">
-                        {match.homeScore} : {match.awayScore}
-                      </span>
+                    <div className="col-span-1 text-center bg-red-600 text-white py-1 px-2 rounded-lg font-black font-mono text-sm sm:text-base tracking-wider shadow-sm">
+                      {match.homeScore} : {match.awayScore}
                     </div>
 
-                    <div className="col-span-2 flex items-center justify-end gap-2 text-right">
-                      <span className="font-bold text-white text-sm truncate">{away?.shortName}</span>
-                      <span className="text-xl">{away?.logo}</span>
+                    <div className="col-span-2 flex items-center justify-end gap-2 text-right min-w-0">
+                      <span className="font-bold text-slate-900 text-xs sm:text-sm truncate">{away?.shortName}</span>
+                      <span className="text-xl shrink-0">{away?.logo}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="ml-4 pl-4 border-l border-slate-800 text-center shrink-0">
-                  <span className="inline-block px-2 py-0.5 rounded bg-red-500/20 text-red-400 text-xs font-bold animate-pulse">
+                <div className="ml-3 pl-3 border-l border-slate-200 text-center shrink-0">
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-bold">
                     {match.currentPeriod || 'En Juego'}
                   </span>
                   {match.minute && (
-                    <span className="block text-[10px] text-slate-400 mt-0.5">Minuto {match.minute}&apos;</span>
+                    <span className="block text-[9.5px] text-slate-500 mt-0.5">Minuto {match.minute}&apos;</span>
                   )}
                 </div>
               </div>

@@ -7,15 +7,15 @@ export const TIERS_CATALOG: Record<TierOption, TierConfig> = {
     subtitle: 'Presencia Deportiva Oficial 100% Sin Publicidad',
     priceUSD: 650,
     priceLabel: '$650 USD',
-    badge: 'Institucional',
-    description: 'Diseño limpio y exclusivo enfocado en la identidad de La Paz Community School y los colegios participantes, sin banners comerciales.',
+    badge: 'Institucional Limpia',
+    description: 'Diseño minimalista y exclusivo enfocado en la identidad de La Paz Community School y los colegios participantes, sin banners comerciales.',
     features: {
       liveScores: true,
       fullStandings: true,
       cleanInstitutionalUI: true,
       sponsorBanners: false,
       interactiveCoupons: false,
-      officialPhotos: true,
+      officialPhotos: false,
       fanShortsVideo: false,
       communityMVPVoting: false,
       adminScoreControl: true,
@@ -37,7 +37,7 @@ export const TIERS_CATALOG: Record<TierOption, TierConfig> = {
       sponsorBanners: true,
       interactiveCoupons: false,
       officialPhotos: true,
-      fanShortsVideo: false, // Opcional adicional +$220 USD
+      fanShortsVideo: false,
       communityMVPVoting: false,
       adminScoreControl: true,
       commercialSharing: true,
@@ -49,8 +49,8 @@ export const TIERS_CATALOG: Record<TierOption, TierConfig> = {
     subtitle: 'Suite Completa con Video Fan Shorts y Monetización',
     priceUSD: 1300,
     priceLabel: '$1,300 USD',
-    badge: 'Comercial Autónoma (Completa)',
-    description: 'El paquete más robusto y rentable: 4 patrocinadores exclusivos con cupones WhatsApp, mural de videos cortos estilo Shorts y votación MVP.',
+    badge: 'Comercial Autónoma',
+    description: 'El paquete más robusto y rentable: 4 patrocinadores exclusivos con cupones WhatsApp, mural de videos cortos y votación MVP.',
     features: {
       liveScores: true,
       fullStandings: true,
@@ -66,11 +66,12 @@ export const TIERS_CATALOG: Record<TierOption, TierConfig> = {
   },
 };
 
-export const DEFAULT_ACTIVE_TIER: TierOption = 'option3';
+// Default active tier is Option 1 (Institucional Limpia) as chosen by the school
+export const DEFAULT_ACTIVE_TIER: TierOption = 'option1';
 
 export const ADDITIONAL_SERVICES = {
   shortVideoAddon: {
-    name: 'Módulo de Videos Cortos (Shorts de Familias)',
+    name: 'Módulo de Videos Cortos (Shorts de Familias en Bunny.net)',
     priceUSD: 220,
     priceLabel: '$220 USD',
   },

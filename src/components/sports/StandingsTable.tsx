@@ -13,15 +13,15 @@ export function StandingsTable() {
   const sport = currentCategory.sport;
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
+    <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
       {/* Category Pills Navigation */}
-      <div className="p-4 border-b border-slate-800 bg-slate-950/60">
+      <div className="p-4 border-b border-slate-200 bg-slate-50/70">
         <div className="flex items-center justify-between gap-2 mb-3">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-amber-400" />
+          <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-amber-600" />
             <span>Tabla de Posiciones Oficial</span>
           </h3>
-          <span className="text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-700">
+          <span className="text-xs text-slate-600 bg-white px-2.5 py-1 rounded-full border border-slate-200 font-medium">
             {currentCategory.division}
           </span>
         </div>
@@ -35,8 +35,8 @@ export function StandingsTable() {
                 onClick={() => setSelectedCategoryId(cat.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                   isSelected
-                    ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
-                    : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                    ? 'bg-amber-600 text-white shadow-sm font-bold'
+                    : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
                 {cat.name}
@@ -49,7 +49,7 @@ export function StandingsTable() {
       {/* Standings Data Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs sm:text-sm">
-          <thead className="bg-slate-950 text-slate-400 uppercase text-[11px] tracking-wider border-b border-slate-800">
+          <thead className="bg-slate-100/80 text-slate-700 uppercase text-[10.5px] tracking-wider border-b border-slate-200 font-bold">
             <tr>
               <th className="py-3 px-3 text-center w-10">Pos</th>
               <th className="py-3 px-4">Equipo / Institución</th>
@@ -78,32 +78,31 @@ export function StandingsTable() {
                   </th>
                 </>
               )}
-              <th className="py-3 px-3 text-center font-bold text-amber-400" title="Puntos Totales">PTS</th>
+              <th className="py-3 px-3 text-center font-bold text-slate-900" title="Puntos Totales">PTS</th>
               <th className="py-3 px-4 text-center hidden md:table-cell" title="Racha reciente (Últimos 5)">Racha</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-slate-100">
             {standings.map((row, idx) => {
               const isLeader = idx === 0;
-              const isPodium = idx < 3;
 
               return (
                 <tr
                   key={row.teamId}
-                  className={`transition-colors hover:bg-slate-800/40 ${
-                    isLeader ? 'bg-amber-500/5 font-medium' : ''
+                  className={`transition-colors hover:bg-slate-50/80 ${
+                    isLeader ? 'bg-amber-50/40 font-medium' : ''
                   }`}
                 >
                   <td className="py-3 px-3 text-center">
                     <span
                       className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
                         idx === 0
-                          ? 'bg-amber-500 text-slate-950 shadow'
+                          ? 'bg-amber-500 text-slate-950 shadow-sm'
                           : idx === 1
-                          ? 'bg-slate-300 text-slate-900'
+                          ? 'bg-slate-200 text-slate-800'
                           : idx === 2
-                          ? 'bg-amber-700/80 text-white'
-                          : 'text-slate-400 bg-slate-800'
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'text-slate-500 bg-slate-100'
                       }`}
                     >
                       {row.position}
@@ -114,43 +113,43 @@ export function StandingsTable() {
                     <div className="flex items-center gap-2.5">
                       <span className="text-xl shrink-0">{row.school.logo}</span>
                       <div>
-                        <span className="block font-bold text-white text-xs sm:text-sm">
+                        <span className="block font-bold text-slate-900 text-xs sm:text-sm">
                           {row.school.name}
                         </span>
-                        <span className="block text-[11px] text-slate-400">
+                        <span className="block text-[10.5px] text-slate-500">
                           {row.school.location}
                         </span>
                       </div>
                     </div>
                   </td>
 
-                  <td className="py-3 px-2 text-center text-slate-300 font-mono">{row.played}</td>
-                  <td className="py-3 px-2 text-center text-emerald-400 font-mono">{row.won}</td>
+                  <td className="py-3 px-2 text-center text-slate-700 font-mono">{row.played}</td>
+                  <td className="py-3 px-2 text-center text-emerald-600 font-mono font-bold">{row.won}</td>
                   {sport === 'futbol' && (
-                    <td className="py-3 px-2 text-center text-slate-400 font-mono">{row.drawn}</td>
+                    <td className="py-3 px-2 text-center text-slate-500 font-mono">{row.drawn}</td>
                   )}
-                  <td className="py-3 px-2 text-center text-red-400 font-mono">{row.lost}</td>
+                  <td className="py-3 px-2 text-center text-red-500 font-mono">{row.lost}</td>
 
                   {sport === 'voleibol' ? (
                     <>
-                      <td className="py-3 px-2 text-center text-slate-300 font-mono">{row.setsWon}</td>
-                      <td className="py-3 px-2 text-center text-slate-300 font-mono">{row.setsLost}</td>
-                      <td className="py-3 px-2 text-center font-mono font-semibold text-slate-200">
+                      <td className="py-3 px-2 text-center text-slate-700 font-mono">{row.setsWon}</td>
+                      <td className="py-3 px-2 text-center text-slate-700 font-mono">{row.setsLost}</td>
+                      <td className="py-3 px-2 text-center font-mono font-bold text-slate-800">
                         {row.setsDiff && row.setsDiff > 0 ? `+${row.setsDiff}` : row.setsDiff}
                       </td>
                     </>
                   ) : (
                     <>
-                      <td className="py-3 px-2 text-center text-slate-300 font-mono">{row.pointsFor}</td>
-                      <td className="py-3 px-2 text-center text-slate-300 font-mono">{row.pointsAgainst}</td>
-                      <td className="py-3 px-2 text-center font-mono font-semibold text-slate-200">
+                      <td className="py-3 px-2 text-center text-slate-700 font-mono">{row.pointsFor}</td>
+                      <td className="py-3 px-2 text-center text-slate-700 font-mono">{row.pointsAgainst}</td>
+                      <td className="py-3 px-2 text-center font-mono font-bold text-slate-800">
                         {row.diff > 0 ? `+${row.diff}` : row.diff}
                       </td>
                     </>
                   )}
 
                   <td className="py-3 px-3 text-center">
-                    <span className="inline-block px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 font-black font-mono text-sm border border-amber-500/30">
+                    <span className="inline-block px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-black font-mono text-xs sm:text-sm shadow-sm">
                       {row.points}
                     </span>
                   </td>
@@ -158,17 +157,17 @@ export function StandingsTable() {
                   <td className="py-3 px-4 text-center hidden md:table-cell">
                     <div className="flex items-center justify-center gap-1">
                       {row.form.length === 0 ? (
-                        <span className="text-slate-600">-</span>
+                        <span className="text-slate-400">-</span>
                       ) : (
                         row.form.map((res, fIdx) => (
                           <span
                             key={fIdx}
-                            className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black text-white ${
+                            className={`w-5 h-5 rounded-full flex items-center justify-center text-[9.5px] font-black text-white ${
                               res === 'W'
                                 ? 'bg-emerald-600'
                                 : res === 'D'
-                                ? 'bg-slate-500'
-                                : 'bg-red-600'
+                                ? 'bg-slate-400'
+                                : 'bg-red-500'
                             }`}
                           >
                             {res === 'W' ? 'G' : res === 'D' ? 'E' : 'P'}
@@ -185,16 +184,16 @@ export function StandingsTable() {
       </div>
 
       {/* Rules Legend Footnote */}
-      <div className="p-3 bg-slate-950 text-[11px] text-slate-400 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
+      <div className="p-3 bg-slate-50 text-[10.5px] text-slate-500 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
-          <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
+          <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
           <span>
-            {sport === 'futbol' && 'Reglamento: Victoria = 3 pts | Empate = 1 pt | Derrota = 0 pts. Criterio de desempate: GD, GF, Enfrentamiento directo.'}
-            {sport === 'baloncesto' && 'Reglamento FIBA: Victoria = 2 pts | Derrota = 1 pt. Criterio de desempate: Puntos tabla, Diferencia de Puntos, PF.'}
-            {sport === 'voleibol' && 'Reglamento: 2-0 / 3-0 / 3-1 = 3 pts ganador | 3-2 = 2 pts ganador, 1 pt perdedor. Criterio: Diferencia de Sets.'}
+            {sport === 'futbol' && 'Reglamento: Victoria = 3 pts | Empate = 1 pt | Derrota = 0 pts. Desempate: GD, GF, Duelo directo.'}
+            {sport === 'baloncesto' && 'Reglamento FIBA: Victoria = 2 pts | Derrota = 1 pt. Desempate: Puntos tabla, Diferencia, PF.'}
+            {sport === 'voleibol' && 'Reglamento: 2-0 / 3-0 / 3-1 = 3 pts | 3-2 = 2 pts / 1 pt. Desempate: Ratio de Sets.'}
           </span>
         </div>
-        <span className="text-amber-400 font-medium">Actualización automática al cierre de acta</span>
+        <span className="text-amber-700 font-semibold">Actualización en tiempo real</span>
       </div>
     </div>
   );

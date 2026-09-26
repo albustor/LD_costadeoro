@@ -36,7 +36,6 @@ export function Header() {
       enabled: isFeatureEnabled('fanShortsVideo'),
       badge: '9:16'
     },
-    { label: 'Galería', href: '/galeria', icon: Camera, enabled: isFeatureEnabled('officialPhotos') },
     { 
       label: 'Patrocinadores', 
       href: '/patrocinadores', 
@@ -48,21 +47,21 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-18 py-2">
           {/* Official Brand Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <img
               src="/logos/curiol_logo_oficial_transparente_hd.png"
               alt="Curiol Studio"
-              className="h-12 w-auto object-contain transition-transform group-hover:scale-105"
+              className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-102"
             />
-            <div className="hidden sm:block border-l border-slate-700 pl-3">
-              <span className="block text-xs font-bold uppercase tracking-wider text-amber-400">
-                Liga Deportiva
+            <div className="border-l border-slate-200 pl-3">
+              <span className="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600">
+                Liga Deportiva Oficial
               </span>
-              <span className="block text-sm font-extrabold text-white tracking-tight">
+              <span className="block text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">
                 Costa de Oro 2026
               </span>
             </div>
@@ -79,16 +78,16 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 relative ${
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 ${
                     isActive
-                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                      ? 'bg-amber-500/10 text-amber-700 border border-amber-500/30 font-bold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="text-[10px] px-1.5 py-0.2 bg-amber-500/20 text-amber-300 rounded font-semibold border border-amber-500/30">
+                    <span className="text-[10px] px-1.5 py-0.2 bg-amber-500/20 text-amber-800 rounded font-bold">
                       {item.badge}
                     </span>
                   )}
@@ -100,17 +99,17 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 border border-slate-200"
             aria-label="Alternar menú móvil"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-800 bg-slate-950 px-4 pt-2 pb-6 space-y-1">
+        <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-5 space-y-1 shadow-lg">
           {navItems.map((item) => {
             if (!item.enabled) return null;
             const isActive = pathname === item.href;
@@ -121,18 +120,18 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium ${
+                className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold ${
                   isActive
-                    ? 'bg-amber-500/15 text-amber-400 font-semibold'
-                    : 'text-slate-300 hover:bg-slate-800'
+                    ? 'bg-amber-50 text-amber-800 font-bold border border-amber-200'
+                    : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className="w-4 h-4" />
+                <div className="flex items-center gap-2.5">
+                  <Icon className="w-4 h-4 text-slate-600" />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className="text-[10px] px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded font-semibold">
+                  <span className="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded font-bold">
                     {item.badge}
                   </span>
                 )}
