@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useTournament } from '@/context/TournamentContext';
 import { MatchCard } from '@/components/sports/MatchCard';
+import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { Shield, MapPin, Calendar } from 'lucide-react';
 
 export default function ColegiosPage() {
@@ -50,7 +51,7 @@ export default function ColegiosPage() {
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-3xl">{s.logo}</span>
+                <SchoolEmblem schoolId={s.id} size="md" />
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 font-bold text-amber-700">
                   {s.acronym}
                 </span>
@@ -69,9 +70,7 @@ export default function ColegiosPage() {
         {/* Banner with school identity */}
         <div className="p-6 sm:p-8 bg-slate-50/80 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-4xl shadow-sm">
-              {activeSchool.logo}
-            </div>
+            <SchoolEmblem schoolId={activeSchool.id} size="xl" />
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
@@ -89,6 +88,7 @@ export default function ColegiosPage() {
               </p>
             </div>
           </div>
+
 
           {/* Quick Metrics */}
           <div className="flex items-center gap-2.5">

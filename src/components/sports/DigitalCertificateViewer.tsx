@@ -10,6 +10,8 @@ import {
   CheckCircle2, 
   Sparkles
 } from 'lucide-react';
+import { SchoolEmblem } from './SchoolEmblem';
+
 
 export function DigitalCertificateViewer() {
   const { schools, categories } = useTournament();
@@ -197,11 +199,12 @@ export function DigitalCertificateViewer() {
                   {certificate.athleteName}
                 </h2>
                 <div className="flex items-center justify-center gap-2 pt-1 text-sm text-amber-800 font-semibold">
-                  <span>{certificate.school.logo}</span>
+                  <SchoolEmblem schoolId={certificate.school.id} size="sm" />
                   <span>{certificate.school.name}</span>
                   <span>•</span>
                   <span>{certificate.category.name}</span>
                 </div>
+
               </div>
 
               {/* Distinction Badge */}

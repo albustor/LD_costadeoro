@@ -10,6 +10,7 @@ import { SponsorsBanner } from '@/components/sponsors/SponsorsBanner';
 import { VideoShortsWall } from '@/components/media/VideoShortsWall';
 import { PhotoGalleryGrid } from '@/components/media/PhotoGalleryGrid';
 import { DaySportFilterTabs, DayFilterValue } from '@/components/sports/DaySportFilterTabs';
+import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { 
   Trophy, 
   Calendar, 
@@ -19,6 +20,7 @@ import {
   Shield, 
   Flame
 } from 'lucide-react';
+
 
 export default function HomePage() {
   const { tournament, matches, schools, categories } = useTournament();
@@ -94,7 +96,7 @@ export default function HomePage() {
               href="/colegios"
               className="bg-white hover:bg-slate-50 p-3 rounded-2xl border border-slate-200 hover:border-amber-300 transition-all flex items-center gap-2.5 shadow-sm group"
             >
-              <span className="text-2xl shrink-0 group-hover:scale-105 transition-transform">{school.logo}</span>
+              <SchoolEmblem schoolId={school.id} size="sm" />
               <div className="min-w-0">
                 <span className="block font-bold text-slate-900 text-xs truncate group-hover:text-amber-700">{school.shortName}</span>
                 <span className="block text-[10px] text-slate-500 truncate">{school.location}</span>
@@ -102,6 +104,7 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+
       </section>
 
       {/* Day / Sport Selector Tabs */}

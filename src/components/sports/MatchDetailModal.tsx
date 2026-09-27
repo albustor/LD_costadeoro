@@ -17,6 +17,8 @@ import {
   Users
 } from 'lucide-react';
 import Link from 'next/link';
+import { SchoolEmblem } from './SchoolEmblem';
+
 
 interface MatchDetailModalProps {
   match: Match | null;
@@ -85,8 +87,8 @@ export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
           {/* Big Scoreboard Box */}
           <div className="grid grid-cols-7 items-center gap-3 py-4 bg-slate-50 rounded-2xl border border-slate-200 p-4">
             {/* Home */}
-            <div className="col-span-3 flex flex-col items-center text-center gap-1.5 min-w-0">
-              <span className="text-4xl">{home?.logo}</span>
+            <div className="col-span-3 flex flex-col items-center text-center gap-2 min-w-0">
+              <SchoolEmblem schoolId={home?.id || ''} size="lg" />
               <span className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight truncate">
                 {home?.name}
               </span>
@@ -114,14 +116,15 @@ export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
             </div>
 
             {/* Away */}
-            <div className="col-span-3 flex flex-col items-center text-center gap-1.5 min-w-0">
-              <span className="text-4xl">{away?.logo}</span>
+            <div className="col-span-3 flex flex-col items-center text-center gap-2 min-w-0">
+              <SchoolEmblem schoolId={away?.id || ''} size="lg" />
               <span className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight truncate">
                 {away?.name}
               </span>
               <span className="text-[11px] text-slate-500">{away?.city}</span>
             </div>
           </div>
+
 
           {/* Volleyball Sets Breakdown */}
           {match.sport === 'voleibol' && match.setScores && (

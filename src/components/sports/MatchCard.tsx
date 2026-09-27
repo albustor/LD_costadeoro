@@ -7,6 +7,8 @@ import { formatDateCostaRica } from '@/lib/utils';
 import { MapPin, Clock, Award, CheckCircle2, ChevronRight } from 'lucide-react';
 import { MatchDetailModal } from './MatchDetailModal';
 import { SportWatermark, getSportTheme } from './SportGlyphs';
+import { SchoolEmblem } from './SchoolEmblem';
+
 
 interface MatchCardProps {
   match: Match;
@@ -78,9 +80,7 @@ export function MatchCard({ match }: MatchCardProps) {
         <div className="grid grid-cols-7 items-center gap-2 my-2.5 relative z-10">
           {/* Home Team */}
           <div className="col-span-3 flex items-center gap-2.5 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shrink-0 shadow-2xs">
-              {home?.logo}
-            </div>
+            <SchoolEmblem schoolId={home?.id || ''} size="md" />
             <div className="min-w-0">
               <span className="block font-bold text-slate-900 text-xs sm:text-sm truncate">{home?.name}</span>
               <span className="block text-[10.5px] text-slate-500 truncate">{home?.city}</span>
@@ -112,11 +112,10 @@ export function MatchCard({ match }: MatchCardProps) {
               <span className="block font-bold text-slate-900 text-xs sm:text-sm truncate">{away?.name}</span>
               <span className="block text-[10.5px] text-slate-500 truncate">{away?.city}</span>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shrink-0 shadow-2xs">
-              {away?.logo}
-            </div>
+            <SchoolEmblem schoolId={away?.id || ''} size="md" />
           </div>
         </div>
+
 
         {/* Volleyball Sets Breakdown */}
         {match.sport === 'voleibol' && match.setScores && match.setScores.length > 0 && (

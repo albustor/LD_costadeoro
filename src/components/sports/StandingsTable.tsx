@@ -3,8 +3,10 @@
 import React from 'react';
 import { useTournament } from '@/context/TournamentContext';
 import { Trophy, HelpCircle } from 'lucide-react';
+import { SchoolEmblem } from './SchoolEmblem';
 
 export function StandingsTable() {
+
   const { categories, selectedCategoryId, setSelectedCategoryId, getStandingsForCategory, getCategoryById } =
     useTournament();
 
@@ -111,7 +113,7 @@ export function StandingsTable() {
 
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2.5">
-                      <span className="text-xl shrink-0">{row.school.logo}</span>
+                      <SchoolEmblem schoolId={row.school.id} size="sm" />
                       <div>
                         <span className="block font-bold text-slate-900 text-xs sm:text-sm">
                           {row.school.name}
@@ -122,6 +124,7 @@ export function StandingsTable() {
                       </div>
                     </div>
                   </td>
+
 
                   <td className="py-3 px-2 text-center text-slate-700 font-mono">{row.played}</td>
                   <td className="py-3 px-2 text-center text-emerald-600 font-mono font-bold">{row.won}</td>
