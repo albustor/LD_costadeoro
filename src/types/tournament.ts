@@ -155,3 +155,31 @@ export interface MVPVote {
   playerName: string;
   votesCount: number;
 }
+
+export interface SportDefinition {
+  id: string;
+  name: string;
+  iconName: 'futbol' | 'voleibol' | 'baloncesto' | 'generic';
+  primaryColor: string;
+  accentColor: string;
+  lightBg: string;
+  description: string;
+  isCustom?: boolean;
+}
+
+export interface FamilyPost {
+  id: string;
+  schoolId: string;
+  authorName: string;
+  authorRelation: 'Mamá' | 'Papá' | 'Abuelo/a' | 'Hermano/a' | 'Familia' | 'Compañero/a' | 'Entrenador';
+  message: string;
+  mediaType?: 'photo' | 'video' | 'none';
+  mediaUrl?: string;
+  thumbnailUrl?: string;
+  sportId?: string;
+  likesCount: number;
+  applauseCount: number;
+  featuredVotes: number;
+  isFeatured: boolean;
+  createdAt: string;
+}
