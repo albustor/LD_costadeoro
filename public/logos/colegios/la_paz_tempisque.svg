@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="lp-tp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <filter id="shadow-tp" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#lp-tp-bg)" filter="url(#shadow-tp)"/>
+  <circle cx="100" cy="100" r="86" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.6"/>
+  <!-- Central Sprout Stem -->
+  <path d="M100 156 V68" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+  <!-- Leaf Right -->
+  <path d="M100 96 C 124 96, 144 76, 144 52 C 116 52, 100 72, 100 96 Z" fill="#A7F3D0" stroke="#FFFFFF" stroke-width="4"/>
+  <!-- Leaf Left -->
+  <path d="M100 120 C 76 120, 56 100, 56 76 C 84 76, 100 96, 100 120 Z" fill="#FFFFFF"/>
+  <circle cx="100" cy="48" r="10" fill="#FDE047"/>
+  <text x="100" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" letter-spacing="1.5" fill="#FFFFFF" text-anchor="middle">TEMPISQUE</text>
+</svg>

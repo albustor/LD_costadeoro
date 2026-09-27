@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="edu-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#E11D48"/>
+    </linearGradient>
+    <filter id="shadow-edu" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#edu-bg)" filter="url(#shadow-edu)"/>
+  <!-- 12 Radiant Rays -->
+  <g stroke="#FFFFFF" stroke-width="8" stroke-linecap="round">
+    <line x1="100" y1="32" x2="100" y2="48"/>
+    <line x1="100" y1="152" x2="100" y2="168"/>
+    <line x1="32" y1="100" x2="48" y2="100"/>
+    <line x1="152" y1="100" x2="168" y2="100"/>
+    <line x1="52" y1="52" x2="64" y2="64"/>
+    <line x1="136" y1="136" x2="148" y2="148"/>
+    <line x1="52" y1="148" x2="64" y2="136"/>
+    <line x1="136" y1="64" x2="148" y2="52"/>
+  </g>
+  <!-- Inner White Core -->
+  <circle cx="100" cy="100" r="36" fill="#FFFFFF"/>
+  <polygon points="90,88 114,100 90,112" fill="#E11D48"/>
+  <text x="100" y="184" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" letter-spacing="1.5" fill="#FFFFFF" text-anchor="middle">EDUCARTE</text>
+</svg>
