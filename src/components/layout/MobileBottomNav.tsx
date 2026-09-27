@@ -3,21 +3,21 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Trophy, Calendar, Heart, ShieldCheck, Award } from 'lucide-react';
+import { Home, Trophy, Calendar, Heart, SlidersHorizontal } from 'lucide-react';
 
 export function MobileBottomNav() {
   const pathname = usePathname();
 
   const items = [
-    { label: 'Avance', href: '/', icon: Trophy },
+    { label: 'Inicio', href: '/', icon: Home },
+    { label: 'Avance', href: '/tabla', icon: Trophy },
     { label: 'Deportes', href: '/calendario', icon: Calendar },
     { label: 'Familias', href: '/mural', icon: Heart },
-    { label: 'Colegios', href: '/colegios', icon: ShieldCheck },
-    { label: 'Diplomas', href: '/certificados', icon: Award },
+    { label: 'Panel', href: '/admin', icon: SlidersHorizontal },
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-xl safe-bottom">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-xl safe-bottom">
       <div className="grid grid-cols-5 items-center h-14 px-1">
         {items.map((item) => {
           const isActive = pathname === item.href;

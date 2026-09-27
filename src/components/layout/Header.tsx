@@ -3,60 +3,41 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTier } from '@/context/TierContext';
 import { 
+  Home,
   Trophy, 
   Calendar, 
-  Table2, 
-  Film, 
-  Camera, 
-  Sparkles, 
+  Heart, 
+  ShieldCheck, 
   SlidersHorizontal,
-  ShieldCheck,
-  Award,
   Menu,
   X
 } from 'lucide-react';
 
 export function Header() {
   const pathname = usePathname();
-  const { isFeatureEnabled } = useTier();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { label: 'En Vivo', href: '/', icon: Trophy, enabled: true },
-    { label: 'Tablas', href: '/tabla', icon: Table2, enabled: true },
-    { label: 'Calendario', href: '/calendario', icon: Calendar, enabled: true },
-    { label: 'Colegios', href: '/colegios', icon: ShieldCheck, enabled: true },
-    { label: 'Certificados', href: '/certificados', icon: Award, enabled: true },
-    { 
-      label: 'Fan Shorts', 
-      href: '/mural', 
-      icon: Film, 
-      enabled: isFeatureEnabled('fanShortsVideo'),
-      badge: '9:16'
-    },
-    { 
-      label: 'Patrocinadores', 
-      href: '/patrocinadores', 
-      icon: Sparkles, 
-      enabled: isFeatureEnabled('sponsorBanners'),
-      badge: 'Cupones'
-    },
-    { label: 'Mesa de Control', href: '/admin', icon: SlidersHorizontal, enabled: true },
+    { label: 'Inicio', href: '/', icon: Home },
+    { label: 'Avance Global', href: '/tabla', icon: Trophy },
+    { label: 'Deportes y Horarios', href: '/calendario', icon: Calendar },
+    { label: 'Muro Familiar', href: '/mural', icon: Heart },
+    { label: 'Colegios', href: '/colegios', icon: ShieldCheck },
+    { label: 'Panel de Control', href: '/admin', icon: SlidersHorizontal },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-18 py-2">
-          {/* Official Brand Logo & Coastal Watermark */}
-          <div className="flex items-center gap-3 relative">
+        <div className="flex items-center justify-between h-16 sm:h-18 py-2">
+          {/* Logo Oficial Curiol Studio & Costa de Oro */}
+          <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/logos/curiol_logo_oficial_transparente_hd.png"
                 alt="Curiol Studio"
-                className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-102"
+                className="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-102"
               />
               <div className="border-l border-slate-200 pl-3">
                 <span className="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600">
@@ -68,25 +49,16 @@ export function Header() {
               </div>
             </Link>
 
-            {/* Host Tag */}
-            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-800 ml-2 shadow-2xs">
+            {/* Sede Anfitriona */}
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-800 ml-2">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
               <span>LA PAZ ANFITRIÓN</span>
             </div>
-
-            {/* Coastal Shell / Marine Wave Micro-texture (Opacity 9%) */}
-            <div className="absolute -right-16 top-1/2 -translate-y-1/2 pointer-events-none opacity-8 text-sky-600 hidden xl:block">
-              <svg viewBox="0 0 80 80" className="w-14 h-14" fill="none" stroke="currentColor">
-                <path d="M 40 10 C 60 10, 70 28, 68 48 C 66 63, 55 70, 40 70 C 25 70, 14 63, 12 48 C 10 28, 20 10, 40 10 Z M 40 10 L 40 70 M 40 10 Q 55 38 53 67 M 40 10 Q 25 38 27 67" strokeWidth="1.4" />
-              </svg>
-            </div>
           </div>
 
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Navegación Desktop Limpia */}
+          <nav className="hidden lg:flex items-center gap-1.5">
             {navItems.map((item) => {
-              if (!item.enabled) return null;
               const isActive = pathname === item.href;
               const Icon = item.icon;
 
@@ -94,40 +66,36 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 ${
+                  className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
                     isActive
-                      ? 'bg-amber-500/10 text-amber-700 border border-amber-500/30 font-bold'
+                      ? 'bg-amber-50 text-amber-900 border border-amber-300 shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4 text-amber-600" />
                   <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="text-[10px] px-1.5 py-0.2 bg-amber-500/20 text-amber-800 rounded font-bold">
-                      {item.badge}
-                    </span>
-                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 border border-slate-200"
-            aria-label="Alternar menú móvil"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Botón Menú Móvil */}
+          <div className="flex items-center lg:hidden gap-2">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+              aria-label="Abrir menú"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Menú Desplegable Móvil */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-5 space-y-1 shadow-lg">
+        <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-2 shadow-lg animate-fade-in">
           {navItems.map((item) => {
-            if (!item.enabled) return null;
             const isActive = pathname === item.href;
             const Icon = item.icon;
 
@@ -136,21 +104,14 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-colors ${
                   isActive
-                    ? 'bg-amber-50 text-amber-800 font-bold border border-amber-200'
+                    ? 'bg-amber-50 text-amber-900 border border-amber-300'
                     : 'text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon className="w-4 h-4 text-slate-600" />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded font-bold">
-                    {item.badge}
-                  </span>
-                )}
+                <Icon className="w-5 h-5 text-amber-600" />
+                <span>{item.label}</span>
               </Link>
             );
           })}
