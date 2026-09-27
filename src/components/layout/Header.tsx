@@ -50,22 +50,38 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-18 py-2">
-          {/* Official Brand Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <img
-              src="/logos/curiol_logo_oficial_transparente_hd.png"
-              alt="Curiol Studio"
-              className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-102"
-            />
-            <div className="border-l border-slate-200 pl-3">
-              <span className="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600">
-                Liga Deportiva Oficial
-              </span>
-              <span className="block text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">
-                Costa de Oro 2026
-              </span>
+          {/* Official Brand Logo & Coastal Watermark */}
+          <div className="flex items-center gap-3 relative">
+            <Link href="/" className="flex items-center gap-3 group">
+              <img
+                src="/logos/curiol_logo_oficial_transparente_hd.png"
+                alt="Curiol Studio"
+                className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-102"
+              />
+              <div className="border-l border-slate-200 pl-3">
+                <span className="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600">
+                  Liga Deportiva Oficial
+                </span>
+                <span className="block text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">
+                  Costa de Oro 2026
+                </span>
+              </div>
+            </Link>
+
+            {/* Host Tag */}
+            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-800 ml-2 shadow-2xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+              <span>LA PAZ ANFITRIÓN</span>
             </div>
-          </Link>
+
+            {/* Coastal Shell / Marine Wave Micro-texture (Opacity 9%) */}
+            <div className="absolute -right-16 top-1/2 -translate-y-1/2 pointer-events-none opacity-8 text-sky-600 hidden xl:block">
+              <svg viewBox="0 0 80 80" className="w-14 h-14" fill="none" stroke="currentColor">
+                <path d="M 40 10 C 60 10, 70 28, 68 48 C 66 63, 55 70, 40 70 C 25 70, 14 63, 12 48 C 10 28, 20 10, 40 10 Z M 40 10 L 40 70 M 40 10 Q 55 38 53 67 M 40 10 Q 25 38 27 67" strokeWidth="1.4" />
+              </svg>
+            </div>
+          </div>
+
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">

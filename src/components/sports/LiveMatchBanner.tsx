@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTournament } from '@/context/TournamentContext';
 import { Flame, MapPin, Clock } from 'lucide-react';
+import { SportWatermark } from './SportGlyphs';
 
 export function LiveMatchBanner() {
   const { matches, getSchoolById, getCategoryById } = useTournament();
@@ -33,9 +34,14 @@ export function LiveMatchBanner() {
             return (
               <div
                 key={match.id}
-                className="bg-white rounded-xl p-3.5 border border-red-200 flex items-center justify-between shadow-sm"
+                className="bg-white rounded-xl p-3.5 border border-red-200 flex items-center justify-between shadow-sm relative overflow-hidden"
               >
-                <div className="flex-1 min-w-0">
+                {/* Discrete Sport Watermark */}
+                <div className="absolute -right-2 -bottom-2 pointer-events-none opacity-8 text-red-700">
+                  <SportWatermark sport={match.sport} size={70} />
+                </div>
+
+                <div className="flex-1 min-w-0 relative z-10">
                   <div className="flex items-center gap-2 text-[11px] text-slate-500 mb-1">
                     <span className="font-bold text-slate-800">{category?.name}</span>
                     <span>•</span>
@@ -63,7 +69,7 @@ export function LiveMatchBanner() {
                   </div>
                 </div>
 
-                <div className="ml-3 pl-3 border-l border-slate-200 text-center shrink-0">
+                <div className="ml-3 pl-3 border-l border-slate-200 text-center shrink-0 relative z-10">
                   <span className="inline-block px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-bold">
                     {match.currentPeriod || 'En Juego'}
                   </span>
@@ -74,6 +80,7 @@ export function LiveMatchBanner() {
               </div>
             );
           })}
+
         </div>
       </div>
     </div>

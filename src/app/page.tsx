@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTournament } from '@/context/TournamentContext';
 import { useTier } from '@/context/TierContext';
@@ -9,6 +9,7 @@ import { StandingsTable } from '@/components/sports/StandingsTable';
 import { SponsorsBanner } from '@/components/sponsors/SponsorsBanner';
 import { VideoShortsWall } from '@/components/media/VideoShortsWall';
 import { PhotoGalleryGrid } from '@/components/media/PhotoGalleryGrid';
+import { DaySportFilterTabs, DayFilterValue } from '@/components/sports/DaySportFilterTabs';
 import { 
   Trophy, 
   Calendar, 
@@ -20,11 +21,20 @@ import {
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { tournament, matches, schools } = useTournament();
+  const { tournament, matches, schools, categories } = useTournament();
   const { isFeatureEnabled } = useTier();
+  const [selectedDay, setSelectedDay] = useState<DayFilterValue>('all');
 
   const recentMatches = matches.filter((m) => m.status === 'completed').slice(0, 4);
   const upcomingMatches = matches.filter((m) => m.status === 'scheduled').slice(0, 4);
+
+  const displayedMatches = selectedDay === 'all'
+    ? recentMatches
+    : matches.filter((m) => {
+        const cat = categories.find((c) => c.id === m.categoryId);
+        return cat?.dayOfWeek === selectedDay;
+      });
+
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -94,7 +104,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Main Content Grid: Standings + Recent Matches */}
+      {/* Day / Sport Selector Tabs */}
+      <section className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+        <DaySportFilterTabs
+          selectedDay={selectedDay}
+          onSelectDay={(day) => setSelectedDay(day)}
+        />
+      </section>
+
+      {/* Main Content Grid: Standings + Matches */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* Standings Table (2 Columns) */}
         <div className="lg:col-span-2 space-y-4">
@@ -108,26 +126,34 @@ export default function HomePage() {
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Flame className="w-4 h-4 text-amber-600" />
-                <span>Resultados Recientes</span>
+                <span>
+                  {selectedDay === 'all' ? 'Resultados Recientes' : `Partidos (${selectedDay})`}
+                </span>
               </h3>
               <Link
                 href="/calendario"
                 className="text-xs text-amber-700 hover:text-amber-800 font-bold flex items-center gap-0.5"
               >
-                <span>Ver todos</span>
+                <span>Ver calendario completo</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
             <div className="space-y-3">
-              {recentMatches.map((match) => (
-                <MatchCard key={match.id} match={match} />
-              ))}
+              {displayedMatches.length === 0 ? (
+                <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">
+                  No hay partidos registrados para este día.
+                </div>
+              ) : (
+                displayedMatches.map((match) => (
+                  <MatchCard key={match.id} match={match} />
+                ))
+              )}
             </div>
           </div>
 
           {/* Upcoming Matches */}
-          {upcomingMatches.length > 0 && (
+          {selectedDay === 'all' && upcomingMatches.length > 0 && (
             <div className="space-y-3 pt-2">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
@@ -144,6 +170,7 @@ export default function HomePage() {
           )}
         </div>
       </section>
+
 
       {/* Sponsors & Shorts (Conditioned on feature flags) */}
       {isFeatureEnabled('sponsorBanners') && <SponsorsBanner />}
