@@ -34,8 +34,8 @@ export default function HomePage() {
       <section className="rounded-3xl overflow-hidden bg-gradient-to-br from-white via-slate-50 to-amber-50/40 border border-slate-200 p-5 sm:p-7 shadow-xs space-y-4">
         <div className="space-y-2.5 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-bold text-xs border border-amber-200 flex items-center gap-1.5">
-              <Trophy className="w-3.5 h-3.5 text-amber-700" />
+            <span className="px-3 py-1 rounded-full bg-slate-950 text-amber-400 font-black text-xs border border-amber-500/40 flex items-center gap-1.5 shadow-2xs">
+              <Trophy className="w-3.5 h-3.5 text-amber-400" />
               <span>{tournament.name}</span>
             </span>
             <span className="px-3 py-1 rounded-full bg-white text-slate-700 font-medium text-xs border border-slate-200 flex items-center gap-1.5 shadow-2xs">
@@ -105,17 +105,17 @@ export default function HomePage() {
 
       {/* 🗂️ 2. PESTAÑAS DE SELECCIÓN: VIDEO INTRODUCTORIO VS INFORMACIÓN GENERAL */}
       <section className="space-y-4">
-        {/* Selector de Pestañas */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200">
+        {/* Selector de Pestañas con Negro y Dorado */}
+        <div className="flex items-center gap-2 p-1.5 bg-slate-200/70 rounded-2xl border border-slate-300/80">
           <button
             onClick={() => setActiveTab('video')}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeTab === 'video'
-                ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-300'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                ? 'bg-slate-950 text-amber-300 border border-amber-500/40 shadow-sm ring-1 ring-amber-500/20'
+                : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
             }`}
           >
-            <Film className="w-4 h-4 text-amber-600" />
+            <Film className={`w-4 h-4 ${activeTab === 'video' ? 'text-amber-400' : 'text-amber-600'}`} />
             <span>Video Introductorio del Evento</span>
           </button>
 
@@ -123,11 +123,11 @@ export default function HomePage() {
             onClick={() => setActiveTab('info')}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
               activeTab === 'info'
-                ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-300'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                ? 'bg-slate-950 text-amber-300 border border-amber-500/40 shadow-sm ring-1 ring-amber-500/20'
+                : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
             }`}
           >
-            <Info className="w-4 h-4 text-amber-600" />
+            <Info className={`w-4 h-4 ${activeTab === 'info' ? 'text-amber-400' : 'text-amber-600'}`} />
             <span>Información General del Evento</span>
           </button>
         </div>

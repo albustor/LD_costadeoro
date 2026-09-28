@@ -76,9 +76,9 @@ export function EventIntroVideo() {
           <button
             onClick={togglePlay}
             aria-label="Reproducir Video"
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-2xl transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-slate-950/90 hover:bg-black text-amber-400 border-2 border-amber-500/80 flex items-center justify-center shadow-2xl shadow-amber-500/20 transition-all transform hover:scale-108 active:scale-95 cursor-pointer ring-4 ring-black/40"
           >
-            <Play className="w-7 h-7 sm:w-9 sm:h-9 fill-slate-950 ml-1" />
+            <Play className="w-7 h-7 sm:w-9 sm:h-9 fill-amber-400 ml-1" />
           </button>
         </div>
       )}
