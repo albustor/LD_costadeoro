@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTournament } from '@/context/TournamentContext';
 import { EventIntroVideo } from '@/components/home/EventIntroVideo';
+import { EventGeneralInfoCards } from '@/components/home/EventGeneralInfoCards';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
-import { SportIconRenderer } from '@/components/sports/SportGraphicIcons';
 import { 
   Trophy, 
   MapPin, 
@@ -13,18 +13,13 @@ import {
   Heart, 
   SlidersHorizontal, 
   ChevronRight, 
-  Sparkles, 
-  Users, 
-  Shield, 
   Film, 
   Info,
-  Flame,
-  Clock,
-  CheckCircle2
+  Flame
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { tournament, schools, categories, matches, getSchoolById, getCategoryById } = useTournament();
+  const { tournament, schools, matches, getSchoolById, getCategoryById } = useTournament();
   const [activeTab, setActiveTab] = useState<'video' | 'info'>('video');
 
   // Encontrar el partido en vivo o el encuentro destacado del momento (Fútbol Femenino Abierto)
@@ -152,107 +147,9 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* CONTENIDO PESTAÑA 2: INFORMACIÓN GENERAL DEL EVENTO */}
+        {/* CONTENIDO PESTAÑA 2: INFORMACIÓN GENERAL CON TARJETAS INTERACTIVAS Y EXPANDIBLES */}
         {activeTab === 'info' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Tarjeta de Métricas Generales */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block">6</span>
-                <span className="text-[11px] text-slate-500 font-semibold">Colegios Participantes</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block">3</span>
-                <span className="text-[11px] text-slate-500 font-semibold">Disciplinas Base</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block">4</span>
-                <span className="text-[11px] text-slate-500 font-semibold">Festivales Oficiales</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-                <span className="text-xl sm:text-2xl font-black text-amber-600 font-mono block">100%</span>
-                <span className="text-[11px] text-slate-500 font-semibold">Familiar y Abierto</span>
-              </div>
-            </div>
-
-            {/* Instituciones Educativas Participantes con Escudos */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-2xs space-y-4">
-              <div className="border-b border-slate-100 pb-2">
-                <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-amber-600" />
-                  <span>Instituciones Educativas Participantes</span>
-                </h3>
-                <p className="text-xs text-slate-500">
-                  6 colegios bilingües y formativos de la provincia de Guanacaste
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {schools.map((school) => (
-                  <Link
-                    key={school.id}
-                    href="/colegios"
-                    className="bg-slate-50/80 hover:bg-slate-100/90 p-3.5 rounded-2xl border border-slate-200 transition-all flex items-center gap-3 group"
-                  >
-                    <SchoolEmblem schoolId={school.id} size="md" />
-                    <div className="min-w-0">
-                      <span className="block font-bold text-slate-900 text-xs sm:text-sm truncate group-hover:text-amber-700">
-                        {school.name}
-                      </span>
-                      <span className="block text-[11px] text-slate-500 truncate">
-                        {school.location} • {school.city}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Disciplinas Deportivas Oficiales */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-2xs space-y-4">
-              <div className="border-b border-slate-100 pb-2">
-                <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-amber-600" />
-                  <span>Disciplinas Deportivas y Sedes</span>
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Espacios de juego y categorías oficiales del torneo
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <SportIconRenderer sportId="futbol" size={28} />
-                    <span className="font-extrabold text-xs sm:text-sm text-slate-900">Fútbol</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600">
-                    Canchas de césped natural en Campus Cabo Velas. Categorías C, D y Abierta Femenina/Masculina.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-sky-50/60 border border-sky-200 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <SportIconRenderer sportId="voleibol" size={28} />
-                    <span className="font-extrabold text-xs sm:text-sm text-slate-900">Voleibol</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600">
-                    Gimnasio Techado en Campus Tempisque. Partidos al mejor de 3 sets con rotación de mesa.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-orange-50/60 border border-orange-200 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <SportIconRenderer sportId="baloncesto" size={28} />
-                    <span className="font-extrabold text-xs sm:text-sm text-slate-900">Baloncesto</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600">
-                    Cancha Multiuso en Campus Tempisque. 4 periodos con reloj oficial y mesa técnica.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <EventGeneralInfoCards schools={schools} />
         )}
       </section>
 
