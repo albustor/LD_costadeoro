@@ -31,19 +31,21 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 sm:h-18 py-2">
-          {/* Logo Oficial Curiol Studio & Costa de Oro */}
+          {/* Logo Oficial de la Liga Deportiva Costa de Oro 2026 */}
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3 group">
-              <img
-                src="/logos/curiol_logo_oficial_transparente_hd.png"
-                alt="Curiol Studio"
-                className="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-102"
-              />
-              <div className="border-l border-slate-200 pl-3">
-                <span className="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600">
+              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl overflow-hidden border border-amber-300 shadow-2xs bg-white shrink-0 flex items-center justify-center transition-transform group-hover:scale-105">
+                <img
+                  src="/logos/costa_de_oro_logo_oficial.jpg"
+                  alt="Liga Deportiva Costa de Oro 2026"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-600 leading-none">
                   Liga Deportiva Oficial
                 </span>
-                <span className="block text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight">
+                <span className="text-sm sm:text-base font-black text-slate-900 tracking-tight leading-tight">
                   Costa de Oro 2026
                 </span>
               </div>
