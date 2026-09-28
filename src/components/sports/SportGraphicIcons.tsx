@@ -436,6 +436,134 @@ export function CustomSportGraphic({ className = '', size = 48, badge = false }:
 }
 
 /**
+ * 🏄 SURFING: Tabla de surf y ola del Pacífico de Guanacaste
+ */
+export function SurfingGraphic({ className = '', size = 48, badge = false }: SportGraphicProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <defs>
+        <linearGradient id="waveGrad" x1="10" y1="20" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#38BDF8" />
+          <stop offset="60%" stopColor="#0284C7" />
+          <stop offset="100%" stopColor="#0369A1" />
+        </linearGradient>
+        <linearGradient id="boardGrad" x1="16" y1="16" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FEF08A" />
+          <stop offset="50%" stopColor="#F59E0B" />
+          <stop offset="100%" stopColor="#EA580C" />
+        </linearGradient>
+      </defs>
+
+      {badge && <circle cx="32" cy="32" r="30" fill="#F0F9FF" stroke="#BAE6FD" strokeWidth="2" />}
+
+      {/* Ola del Mar */}
+      <path
+        d="M 8 48 C 16 32, 28 22, 42 24 C 48 25, 52 28, 54 34 C 48 30, 42 32, 38 38 C 32 46, 20 50, 8 48 Z"
+        fill="url(#waveGrad)"
+      />
+      <path d="M 42 24 C 46 22, 52 24, 56 30 C 53 28, 48 28, 44 32" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+
+      {/* Tabla de Surf */}
+      <g transform="rotate(-35 32 30)">
+        <path
+          d="M 32 10 C 37 18, 38 36, 35 50 C 34 54, 30 54, 29 50 C 26 36, 27 18, 32 10 Z"
+          fill="url(#boardGrad)"
+          stroke="#0F172A"
+          strokeWidth="1.5"
+        />
+        <line x1="32" y1="12" x2="32" y2="48" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" />
+        <path d="M 28 32 Q 32 30, 36 32" stroke="#1E293B" strokeWidth="1.5" />
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * ♟️ AJEDREZ: Caballo / Rey de ajedrez deportivo
+ */
+export function ChessGraphic({ className = '', size = 48, badge = false }: SportGraphicProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      {badge && <circle cx="32" cy="32" r="30" fill="#F8FAFC" stroke="#E2E8F0" strokeWidth="2" />}
+
+      {/* Tablero base */}
+      <rect x="18" y="46" width="28" height="6" rx="2" fill="#1E293B" stroke="#0F172A" strokeWidth="1.5" />
+      <rect x="22" y="42" width="20" height="4" fill="#475569" stroke="#0F172A" strokeWidth="1.2" />
+
+      {/* Pieza de Caballo (Knight) */}
+      <path
+        d="M 24 42 C 24 36, 22 30, 26 24 C 28 20, 34 16, 38 14 C 40 18, 38 22, 42 24 C 44 26, 44 32, 40 36 C 41 38, 42 40, 40 42 Z"
+        fill="#334155"
+        stroke="#0F172A"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      {/* Ojo y crin */}
+      <circle cx="32" cy="22" r="1.5" fill="#FEF08A" />
+      <path d="M 36 18 C 35 22, 36 26, 38 28" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/**
+ * 🏃 ATLETISMO DE PLAYA: Pista y zapatilla con alas
+ */
+export function AthleticsGraphic({ className = '', size = 48, badge = false }: SportGraphicProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      {badge && <circle cx="32" cy="32" r="30" fill="#FEFCE8" stroke="#FEF08A" strokeWidth="2" />}
+      <path d="M 12 46 C 24 38, 40 38, 52 46" stroke="#EAB308" strokeWidth="3" strokeLinecap="round" strokeDasharray="3 3" />
+      <path d="M 18 36 C 24 30, 34 26, 46 28 L 44 34 C 36 32, 28 34, 22 40 Z" fill="#CA8A04" stroke="#0F172A" strokeWidth="1.2" />
+      <circle cx="44" cy="20" r="4" fill="#F59E0B" />
+      <path d="M 32 26 L 38 32 L 32 38" stroke="#EAB308" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/**
+ * 🏊 NATACIÓN: Nadador y ondas de agua
+ */
+export function SwimmingGraphic({ className = '', size = 48, badge = false }: SportGraphicProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      {badge && <circle cx="32" cy="32" r="30" fill="#F0FDFA" stroke="#99F6E4" strokeWidth="2" />}
+      <path d="M 10 40 Q 20 34, 30 40 T 50 40" stroke="#0D9488" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M 14 48 Q 24 42, 34 48 T 54 48" stroke="#14B8A6" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <circle cx="26" cy="24" r="4" fill="#0F766E" />
+      <path d="M 28 28 L 42 22 L 46 26" stroke="#0F766E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/**
  * Selector Universal de Gráfico por Deporte
  */
 export function SportIconRenderer({
@@ -458,6 +586,18 @@ export function SportIconRenderer({
   }
   if (normalized.includes('baloncesto') || normalized.includes('basket') || normalized.includes('basketball')) {
     return <BasketballGraphic size={size} badge={badge} className={className} />;
+  }
+  if (normalized.includes('surf') || normalized.includes('surfing')) {
+    return <SurfingGraphic size={size} badge={badge} className={className} />;
+  }
+  if (normalized.includes('ajedrez') || normalized.includes('chess')) {
+    return <ChessGraphic size={size} badge={badge} className={className} />;
+  }
+  if (normalized.includes('atletismo') || normalized.includes('atlet') || normalized.includes('running')) {
+    return <AthleticsGraphic size={size} badge={badge} className={className} />;
+  }
+  if (normalized.includes('natacion') || normalized.includes('natación') || normalized.includes('swimming')) {
+    return <SwimmingGraphic size={size} badge={badge} className={className} />;
   }
   if (normalized.includes('global') || normalized.includes('general') || normalized.includes('todos')) {
     return <TrophyGlobalGraphic size={size} badge={badge} className={className} />;

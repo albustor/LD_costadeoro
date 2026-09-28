@@ -18,7 +18,10 @@ import {
   Clock, 
   Users, 
   CheckCircle2,
-  Leaf
+  Leaf,
+  Lock,
+  Flame,
+  Award
 } from 'lucide-react';
 
 interface EventGeneralInfoCardsProps {
@@ -26,15 +29,14 @@ interface EventGeneralInfoCardsProps {
 }
 
 export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
-  // Estados de acordeón para cada sección
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    schools: true, // Abierto por defecto
-    sports: true,  // Abierto por defecto
+    schools: true,
+    sports: true,
+    upcomingSports: false,
     festivals: false,
     philosophy: false,
   });
 
-  // Estado para desplegar detalles de un colegio individual
   const [expandedSchoolId, setExpandedSchoolId] = useState<string | null>(null);
 
   const toggleSection = (sectionKey: string) => {
@@ -53,22 +55,21 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
           <span className="text-[11px] text-slate-500 font-semibold">Colegios Oficiales</span>
         </div>
         <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs text-center">
-          <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block">3</span>
-          <span className="text-[11px] text-slate-500 font-semibold">Disciplinas Base</span>
+          <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block">3 + 4</span>
+          <span className="text-[11px] text-slate-500 font-semibold">3 Base + 4 Próximas</span>
         </div>
         <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs text-center">
           <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block">4</span>
           <span className="text-[11px] text-slate-500 font-semibold">Festivales Oficiales</span>
         </div>
         <div className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-2xs text-center">
-          <span className="text-xl sm:text-2xl font-black text-amber-600 font-mono block">100%</span>
-          <span className="text-[11px] text-slate-500 font-semibold">Formato Familiar</span>
+          <span className="text-xl sm:text-2xl font-black text-amber-600 font-mono block">43+</span>
+          <span className="text-[11px] text-slate-500 font-semibold">Partidos Programados</span>
         </div>
       </div>
 
-      {/* 🏫 SECCIÓN 1: INSTITUCIONES EDUCATIVAS PARTICIPANTES (EXPANDIBLE / CONTRAÍBLE) */}
+      {/* 🏫 SECCIÓN 1: INSTITUCIONES EDUCATIVAS PARTICIPANTES */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
-        {/* Cabecera Táctil del Acordeón */}
         <button
           type="button"
           onClick={() => toggleSection('schools')}
@@ -86,7 +87,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                 </span>
               </h3>
               <p className="text-xs text-slate-500">
-                Toca para ver o contraer las fichas de los 6 colegios de Guanacaste
+                CRIA (Tiburones 🦈), Journey, Vittorino, Educarte, La Paz Cabo Velas y La Paz Tempisque (Pumas 🐾)
               </p>
             </div>
           </div>
@@ -96,12 +97,13 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
           </div>
         </button>
 
-        {/* Contenido Desplegable: Tarjetas Resumidas e Interactivas de Colegios */}
         {openSections.schools && (
           <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {schools.map((school) => {
                 const isExpanded = expandedSchoolId === school.id;
+                const mascot = school.id.includes('la-paz') ? 'Pumas 🐾' : school.id === 'cria' ? 'Tiburones / Sharks 🦈' : 'Atletas';
+
                 return (
                   <div
                     key={school.id}
@@ -111,7 +113,6 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                         : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200'
                     }`}
                   >
-                    {/* Fila Principal de la Tarjeta */}
                     <div
                       onClick={() => setExpandedSchoolId(isExpanded ? null : school.id)}
                       className="flex items-center justify-between gap-3 cursor-pointer"
@@ -123,7 +124,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                             {school.name}
                           </span>
                           <span className="block text-[11px] text-slate-500 truncate">
-                            {school.location}
+                            {school.location} • {mascot}
                           </span>
                         </div>
                       </div>
@@ -137,7 +138,6 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                       </button>
                     </div>
 
-                    {/* Despliegue de Información Resumida al Tocar la Tarjeta */}
                     {isExpanded && (
                       <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-600 space-y-2 animate-fade-in">
                         <div className="grid grid-cols-2 gap-1.5">
@@ -146,15 +146,15 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                             <span className="font-bold text-slate-800">{school.city}</span>
                           </div>
                           <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                            <span className="text-[10px] text-slate-400 font-semibold block uppercase">Acrónimo</span>
-                            <span className="font-bold text-slate-800">{school.acronym}</span>
+                            <span className="text-[10px] text-slate-400 font-semibold block uppercase">Mascota Oficial</span>
+                            <span className="font-bold text-slate-800">{mascot}</span>
                           </div>
                         </div>
 
                         <div className="flex items-center justify-between pt-1">
                           <span className="text-[10.5px] text-emerald-700 font-semibold flex items-center gap-1">
                             <CheckCircle2 className="w-3.5 h-3.5" />
-                            Inscrito en 3 Disciplinas
+                            Inscrito en Fútbol, Voley y Basket
                           </span>
                           <Link
                             href="/colegios"
@@ -174,7 +174,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
         )}
       </div>
 
-      {/* ⚽ SECCIÓN 2: DISCIPLINAS DEPORTIVAS Y SEDES (EXPANDIBLE / CONTRAÍBLE) */}
+      {/* ⚽ SECCIÓN 2: DISCIPLINAS OFICIALES Y DÍAS DE COMPETENCIA */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
         <button
           type="button"
@@ -187,13 +187,13 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
             </div>
             <div>
               <h3 className="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-2">
-                <span>Disciplinas Oficiales y Sedes de Juego</span>
-                <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-900 text-[10px] font-bold">
-                  3 Deportes
+                <span>Disciplinas Oficiales y Cronograma Semanal</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold">
+                  Lunes a Viernes
                 </span>
               </h3>
               <p className="text-xs text-slate-500">
-                Fútbol, Voleibol y Baloncesto con reglamentos formativos
+                Fútbol (Lun-Mié), Voleibol (Jue) y Baloncesto (Vie)
               </p>
             </div>
           </div>
@@ -213,19 +213,18 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                     <SportIconRenderer sportId="futbol" size={32} />
                     <div>
                       <span className="font-black text-xs sm:text-sm text-slate-900 block">Fútbol</span>
-                      <span className="text-[10px] font-semibold text-emerald-800">Césped Natural</span>
+                      <span className="text-[10px] font-semibold text-emerald-800">Lunes, Martes y Miércoles</span>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded-full bg-white text-emerald-800 text-[10px] font-bold border border-emerald-200">
-                    Cabo Velas
+                    Fase de Grupos
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  2 tiempos de 25 minutos con balón reglamentario. Canchas principales del Campus Cabo Velas.
-                </p>
-                <div className="text-[10.5px] font-semibold text-slate-500 pt-1 border-t border-emerald-200/60">
-                  Categorías: Fem / Masc (C, D y Abierta)
-                </div>
+                <ul className="text-[11px] text-slate-600 space-y-1">
+                  <li><strong>Lunes:</strong> Fútbol Femenino Abierto</li>
+                  <li><strong>Martes:</strong> Fútbol Categoría C (2012-2014)</li>
+                  <li><strong>Miércoles:</strong> Fútbol Categoría D (2009-2011)</li>
+                </ul>
               </div>
 
               {/* Tarjeta Voleibol */}
@@ -235,19 +234,18 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                     <SportIconRenderer sportId="voleibol" size={32} />
                     <div>
                       <span className="font-black text-xs sm:text-sm text-slate-900 block">Voleibol</span>
-                      <span className="text-[10px] font-semibold text-sky-800">Gimnasio Techado</span>
+                      <span className="text-[10px] font-semibold text-sky-800">Jueves</span>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded-full bg-white text-sky-800 text-[10px] font-bold border border-sky-200">
-                    Tempisque
+                    Gimnasio Techado
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Partidos al mejor de 3 sets (25 pts cada uno, tie-break a 15 pts). Rotación técnica oficial.
-                </p>
-                <div className="text-[10.5px] font-semibold text-slate-500 pt-1 border-t border-sky-200/60">
-                  Categorías: Fem / Masc / Mixto
-                </div>
+                <ul className="text-[11px] text-slate-600 space-y-1">
+                  <li><strong>Jueves:</strong> Voleibol Femenino Categoría C</li>
+                  <li><strong>Jueves:</strong> Voleibol Femenino Categoría D</li>
+                  <li>Al mejor de 3 sets (25 pts cada uno)</li>
+                </ul>
               </div>
 
               {/* Tarjeta Baloncesto */}
@@ -257,26 +255,118 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                     <SportIconRenderer sportId="baloncesto" size={32} />
                     <div>
                       <span className="font-black text-xs sm:text-sm text-slate-900 block">Baloncesto</span>
-                      <span className="text-[10px] font-semibold text-orange-800">Cancha Multiuso</span>
+                      <span className="text-[10px] font-semibold text-orange-800">Viernes</span>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded-full bg-white text-orange-800 text-[10px] font-bold border border-orange-200">
-                    Tempisque
+                    Cancha Multiuso
                   </span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  4 periodos de 10 minutos con reloj oficial FIBA y mesa de control arbitral.
-                </p>
-                <div className="text-[10.5px] font-semibold text-slate-500 pt-1 border-t border-orange-200/60">
-                  Categorías: Categoría C y D
-                </div>
+                <ul className="text-[11px] text-slate-600 space-y-1">
+                  <li><strong>Viernes:</strong> Baloncesto Categoría C</li>
+                  <li><strong>Viernes:</strong> Baloncesto Categoría D</li>
+                  <li>4 periodos con reloj oficial y mesa técnica</li>
+                </ul>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* 📅 SECCIÓN 3: CRONOGRAMA DE FESTIVALES Y FECHAS (EXPANDIBLE / CONTRAÍBLE) */}
+      {/* 🏄 SECCIÓN 3: PRÓXIMAS MODALIDADES EN PREPARACIÓN (CON CANDADO 🔒) */}
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
+        <button
+          type="button"
+          onClick={() => toggleSection('upcomingSports')}
+          className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left hover:bg-slate-50/60 transition-colors cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 shrink-0">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-2">
+                <span>Próximas Modalidades Deportivas</span>
+                <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black flex items-center gap-1">
+                  <Lock className="w-3 h-3" />
+                  <span>En Preparación</span>
+                </span>
+              </h3>
+              <p className="text-xs text-slate-500">
+                Surfing, Ajedrez, Atletismo de Playa y Natación en Aguas Abiertas (Se habilitarán posteriormente)
+              </p>
+            </div>
+          </div>
+
+          <div className="p-2 rounded-xl bg-slate-100 text-slate-600">
+            {openSections.upcomingSports ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </div>
+        </button>
+
+        {openSections.upcomingSports && (
+          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Surfing */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 opacity-90">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <SportIconRenderer sportId="surfing" size={26} />
+                    <span className="font-bold text-xs text-slate-900">Surfing</span>
+                  </div>
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed">
+                  Festival de olas y maniobras en Playa Tamarindo. Se habilitará posteriormente.
+                </p>
+              </div>
+
+              {/* Ajedrez */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 opacity-90">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <SportIconRenderer sportId="ajedrez" size={26} />
+                    <span className="font-bold text-xs text-slate-900">Ajedrez</span>
+                  </div>
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed">
+                  Torneo de ajedrez rápido y clásico. Se habilitará en la siguiente fase.
+                </p>
+              </div>
+
+              {/* Atletismo */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 opacity-90">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <SportIconRenderer sportId="atletismo" size={26} />
+                    <span className="font-bold text-xs text-slate-900">Atletismo</span>
+                  </div>
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed">
+                  Pruebas de pista y arena en Playa Brasilito. En fase de coordinación.
+                </p>
+              </div>
+
+              {/* Natación */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 opacity-90">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <SportIconRenderer sportId="natacion" size={26} />
+                    <span className="font-bold text-xs text-slate-900">Natación</span>
+                  </div>
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed">
+                  Travesía formativa en Bahía Flamingo. Próximamente disponible.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 📅 SECCIÓN 4: FECHAS OFICIALES DE LOS 4 FESTIVALES */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
         <button
           type="button"
@@ -289,13 +379,13 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
             </div>
             <div>
               <h3 className="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-2">
-                <span>Cronograma de los 4 Festivales Deportivos</span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold">
-                  Temporada 2026
+                <span>Fechas Oficiales de los 4 Festivales</span>
+                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold">
+                  Octubre - Noviembre 2026
                 </span>
               </h3>
               <p className="text-xs text-slate-500">
-                Fechas oficiales de inauguración, jornadas intermedias y finales
+                Cronograma exacto de las 3 jornadas clasificatorias y la gran final
               </p>
             </div>
           </div>
@@ -308,43 +398,44 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
         {openSections.festivals && (
           <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[9.5px] font-bold">
-                  Festival 1 • Octubre
+              <div className="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200 space-y-1">
+                <span className="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-[9.5px] font-black">
+                  🔹 1.ª Jornada
                 </span>
-                <h4 className="font-bold text-xs text-slate-900">Inauguración y 1.ª Jornada</h4>
-                <p className="text-[11px] text-slate-500">
-                  Desfile de delegaciones y primeros partidos de clasificación.
+                <h4 className="font-black text-xs text-slate-900">5 al 9 de Octubre</h4>
+                <p className="text-[11px] text-slate-600">
+                  15 partidos inaugurales en todas las disciplinas.
                 </p>
               </div>
 
-              <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 text-[9.5px] font-bold">
-                  Festival 2 • Octubre
+              <div className="p-3.5 bg-blue-50/60 rounded-2xl border border-blue-200 space-y-1">
+                <span className="px-2 py-0.5 rounded-full bg-blue-200/80 text-blue-900 text-[9.5px] font-black">
+                  🔹 2.ª Jornada
                 </span>
-                <h4 className="font-bold text-xs text-slate-900">Cruces Inter-Sedes</h4>
-                <p className="text-[11px] text-slate-500">
-                  Rotación de partidos en Campus Cabo Velas y Tempisque.
+                <h4 className="font-black text-xs text-slate-900">2 al 6 de Noviembre</h4>
+                <p className="text-[11px] text-slate-600">
+                  14 partidos de rotación inter-sedes.
                 </p>
               </div>
 
-              <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[9.5px] font-bold">
-                  Festival 3 • Noviembre
+              <div className="p-3.5 bg-purple-50/60 rounded-2xl border border-purple-200 space-y-1">
+                <span className="px-2 py-0.5 rounded-full bg-purple-200/80 text-purple-900 text-[9.5px] font-black">
+                  🔹 3.ª Jornada
                 </span>
-                <h4 className="font-bold text-xs text-slate-900">Semifinales Deportivas</h4>
-                <p className="text-[11px] text-slate-500">
-                  Definición de posiciones y pases a la gran final.
+                <h4 className="font-black text-xs text-slate-900">16 al 20 de Noviembre</h4>
+                <p className="text-[11px] text-slate-600">
+                  14 partidos de definición de grupos y clasificación.
                 </p>
               </div>
 
-              <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[9.5px] font-bold">
-                  Festival 4 • Noviembre
+              <div className="p-3.5 bg-emerald-50/70 rounded-2xl border border-emerald-300 space-y-1 ring-1 ring-emerald-400/20">
+                <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-950 text-[9.5px] font-black flex items-center gap-1 w-fit">
+                  <Award className="w-3 h-3 text-emerald-800" />
+                  🏆 GRANDES FINALES
                 </span>
-                <h4 className="font-bold text-xs text-slate-900">Gran Clausura y Premiación</h4>
-                <p className="text-[11px] text-slate-500">
-                  Finales de todas las categorías y entrega del trofeo general.
+                <h4 className="font-black text-xs text-slate-900">23 al 27 de Noviembre</h4>
+                <p className="text-[11px] text-slate-700">
+                  Finales por categoría, tercer puesto y ceremonia de premiación.
                 </p>
               </div>
             </div>
@@ -352,7 +443,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
         )}
       </div>
 
-      {/* 🤝 SECCIÓN 4: FILOSOFÍA FORMATIVA Y CONVIVENCIA (EXPANDIBLE / CONTRAÍBLE) */}
+      {/* 🤝 SECCIÓN 5: FILOSOFÍA FORMATIVA Y REGLAMENTO */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
         <button
           type="button"
@@ -371,7 +462,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                 </span>
               </h3>
               <p className="text-xs text-slate-500">
-                Principios de respeto, apoyo positivo familiar y sostenibilidad
+                Respeto arbitral, apoyo familiar positivo y sostenibilidad
               </p>
             </div>
           </div>
@@ -399,10 +490,10 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
               <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                 <span className="font-bold text-slate-900 flex items-center gap-1">
                   <Leaf className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>3. Cero Plásticos de un Solo Uso</span>
+                  <span>3. Sostenibilidad en Cancha</span>
                 </span>
                 <p className="text-[11px] text-slate-500">
-                  Instalaciones con estaciones de hidratación para botellas reutilizables.
+                  Estaciones de hidratación para botellas reutilizables y cero plásticos de un solo uso.
                 </p>
               </div>
             </div>
