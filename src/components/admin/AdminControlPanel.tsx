@@ -21,10 +21,13 @@ import {
   UploadCloud,
   FileCheck,
   ImageIcon,
-  Video
+  Video,
+  KeyRound,
+  ShieldCheck
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
+import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById } = useTournament();
@@ -34,7 +37,16 @@ export function AdminControlPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Open access by default for convenience
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin'>('results');
+
+  // Event-wide Family PIN Configuration State
+  const [eventPinInput, setEventPinInput] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('costa_de_oro_event_pin') || TOURNAMENT_CONFIG.security?.defaultFamilyPin || 'COSTA2026';
+    }
+    return TOURNAMENT_CONFIG.security?.defaultFamilyPin || 'COSTA2026';
+  });
+  const [pinSavedSuccess, setPinSavedSuccess] = useState<boolean>(false);
 
   // Bunny.net & Firebase Media Upload State
   const [bunnyFile, setBunnyFile] = useState<File | null>(null);
@@ -221,7 +233,18 @@ export function AdminControlPanel() {
             }`}
           >
             <UploadCloud className="w-3.5 h-3.5" />
-            <span>4. Multimedia Bunny.net & Firebase</span>
+            <span>4. Multimedia</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('event_pin')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'event_pin'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <KeyRound className="w-3.5 h-3.5" />
+            <span>5. PIN de Familias</span>
           </button>
         </div>
       </div>
@@ -833,6 +856,88 @@ export function AdminControlPanel() {
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🔑 PESTAÑA 5: CONFIGURACIÓN DEL PIN DE FAMILIAS PARA TODO EL EVENTO */}
+      {activeTab === 'event_pin' && (
+        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <KeyRound className="w-5 h-5 text-amber-600" />
+                <span>Configuración de PIN para Familias y Padres</span>
+              </h2>
+              <p className="text-xs text-slate-500">
+                Define el código de seguridad oficial que utilizarán las familias para publicar porras, fotografías y videos en el Muro durante todas las fechas del evento.
+              </p>
+            </div>
+
+            {pinSavedSuccess && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300 animate-bounce">
+                <CheckCircle2 className="w-4 h-4" />
+                ¡PIN actualizado correctamente!
+              </span>
+            )}
+          </div>
+
+          <div className="max-w-xl space-y-4">
+            <div className="p-4 bg-amber-50/70 rounded-2xl border border-amber-200 text-xs text-amber-950 space-y-1">
+              <span className="font-bold block text-sm text-amber-900">
+                PIN de Evento Universal
+              </span>
+              <p>
+                Este PIN habilita a todas las familias para publicar en cualquier fecha del torneo sin restricciones de calendario.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-slate-700">
+                PIN Principal del Evento:
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={eventPinInput}
+                  onChange={(e) => setEventPinInput(e.target.value.toUpperCase())}
+                  placeholder="Ej: COSTA2026"
+                  className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono font-black text-slate-900 w-64 focus:outline-hidden focus:ring-2 focus:ring-amber-500 uppercase"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!eventPinInput.trim()) return;
+                    if (typeof window !== 'undefined') {
+                      localStorage.setItem('costa_de_oro_event_pin', eventPinInput.trim().toUpperCase());
+                      localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
+                    }
+                    setPinSavedSuccess(true);
+                    setTimeout(() => setPinSavedSuccess(false), 3000);
+                  }}
+                  className="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer"
+                >
+                  Guardar PIN
+                </button>
+              </div>
+            </div>
+
+            {/* PINs Oficiales Aceptados por Defecto */}
+            <div className="space-y-2 pt-3 border-t border-slate-100">
+              <span className="text-xs font-bold text-slate-700 block">
+                PINs Activos y Compatibles:
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {(TOURNAMENT_CONFIG.security?.validPins || ['COSTA2026', 'ORO2026', '2026', 'PAZ2026', '8421']).map((p) => (
+                  <span
+                    key={p}
+                    className="px-2.5 py-1 bg-slate-100 text-slate-800 text-xs font-mono font-bold rounded-lg border border-slate-200"
+                  >
+                    {p}
+                  </span>
+                ))}
               </div>
             </div>
           </div>

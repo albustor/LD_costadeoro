@@ -15,7 +15,8 @@ import {
   ChevronRight, 
   Film, 
   Info,
-  Flame
+  Flame,
+  Shield
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -107,7 +108,47 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 🚀 3. ACCESOS DIRECTOS COMPACTOS (TIPO ICONOS / ACCIONES RÁPIDAS) */}
+      {/* 🏫 3. BOTONES OFICIALES DE INSTITUCIONES EDUCATIVAS (ESCUDO Y NOMBRE) */}
+      <section className="space-y-3 pt-1">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <Shield className="w-4 h-4 text-amber-600" />
+            <span>Colegios e Instituciones Participantes</span>
+          </h2>
+          <Link
+            href="/colegios"
+            className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1 group"
+          >
+            <span>Ver detalles</span>
+            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Cuadrícula interactiva con los 6 colegios: Escudo + Nombre */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+          {schools.map((school) => (
+            <Link
+              key={school.id}
+              href="/colegios"
+              className="bg-white hover:bg-amber-50/60 p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 hover:border-amber-400 shadow-2xs hover:shadow-md transition-all flex flex-col items-center text-center gap-2 group cursor-pointer"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-50 border border-slate-200/80 group-hover:border-amber-300 flex items-center justify-center p-1 shadow-2xs group-hover:scale-105 transition-transform">
+                <SchoolEmblem schoolId={school.id} size="sm" showBorder={false} />
+              </div>
+              <div className="min-w-0 w-full space-y-0.5">
+                <span className="font-extrabold text-slate-900 text-xs sm:text-[13px] leading-tight block truncate group-hover:text-amber-900 transition-colors">
+                  {school.shortName || school.name}
+                </span>
+                <span className="text-[10px] text-slate-500 block truncate">
+                  {school.location || school.city}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 🚀 4. ACCESOS DIRECTOS COMPACTOS (TIPO ICONOS / ACCIONES RÁPIDAS) */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-1">
         {/* Acceso 1: Avance y Puntuación */}
         <Link

@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { uploadMediaToBunny } from '@/lib/bunnyMediaService';
 import { useLanguage } from '@/context/LanguageContext';
+import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 
 const VALID_PINS: Record<string, string | 'all'> = {
   '2026': 'all',
@@ -208,24 +209,29 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         setIsPinVerified(true);
       }
 
-      // 3. Comprobar parámetros de URL para acceso por QR (?pin=8421 o ?pass=2026)
+      // 3. Comprobar parámetros de URL para acceso por QR (?pin=COSTA2026 o ?pass=2026)
       const params = new URLSearchParams(window.location.search);
       const urlPin = params.get('pass') || params.get('pin') || params.get('code');
-      if (urlPin && VALID_PINS[urlPin.toUpperCase()]) {
-        setIsPinVerified(true);
-        localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
-        const matchedSchool = VALID_PINS[urlPin.toUpperCase()];
-        if (matchedSchool && matchedSchool !== 'all') {
-          setSelectedSchoolId(matchedSchool);
+      const customPin = localStorage.getItem('costa_de_oro_event_pin');
+      
+      if (urlPin) {
+        const cleanUrlPin = urlPin.toUpperCase();
+        if (
+          VALID_PINS[cleanUrlPin] || 
+          TOURNAMENT_CONFIG.security.validPins.includes(cleanUrlPin) ||
+          (customPin && customPin.toUpperCase() === cleanUrlPin)
+        ) {
+          setIsPinVerified(true);
+          localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
+          const matchedSchool = VALID_PINS[cleanUrlPin];
+          if (matchedSchool && matchedSchool !== 'all') {
+            setSelectedSchoolId(matchedSchool);
+          }
         }
       }
 
-      // 4. Evaluar si hoy es fecha oficial de festival
-      const todayStr = new Date().toISOString().split('T')[0];
-      const isOfficialDay = OFFICIAL_FESTIVAL_RANGES.some(
-        (range) => todayStr >= range.start && todayStr <= range.end
-      );
-      setIsFestivalActiveDay(isOfficialDay);
+      // 4. Todas las fechas del evento están habilitadas para familias con PIN
+      setIsFestivalActiveDay(true);
     }
   }, []);
 
@@ -239,10 +245,16 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     }
   };
 
-  // Validar PIN ingresado
+  // Validar PIN ingresado a nivel de todo el evento
   const handleValidatePin = (pinToTest: string) => {
     const cleanPin = pinToTest.trim().toUpperCase();
-    if (VALID_PINS[cleanPin]) {
+    const customEventPin = typeof window !== 'undefined' ? localStorage.getItem('costa_de_oro_event_pin') : null;
+
+    if (
+      VALID_PINS[cleanPin] ||
+      TOURNAMENT_CONFIG.security.validPins.includes(cleanPin) ||
+      (customEventPin && customEventPin.toUpperCase() === cleanPin)
+    ) {
       setIsPinVerified(true);
       setPinError(null);
       if (typeof window !== 'undefined') {
@@ -253,7 +265,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         setSelectedSchoolId(matchedSchool);
       }
     } else {
-      setPinError('PIN no reconocido. Ingresa el código oficial del festival (ej: 8421 o 2026).');
+      setPinError('PIN no reconocido. Ingresa el PIN oficial del evento (ej: COSTA2026 o 2026).');
     }
   };
 
@@ -490,14 +502,28 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             {/* Badges de Estado */}
             <div className="flex items-center gap-2 flex-wrap">
               {isPinVerified ? (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>PIN Verificado</span>
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <span>PIN de Familias Activo</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsPinVerified(false);
+                      if (typeof window !== 'undefined') {
+                        localStorage.removeItem('costa_de_oro_family_pin_verified');
+                      }
+                    }}
+                    className="text-[11px] text-slate-400 hover:text-slate-600 underline cursor-pointer"
+                  >
+                    Cambiar PIN
+                  </button>
+                </div>
               ) : (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-xs font-bold border border-amber-200">
                   <Lock className="w-3.5 h-3.5 text-amber-700" />
-                  <span>Requiere PIN del Día</span>
+                  <span>Requiere PIN del Evento</span>
                 </span>
               )}
 
@@ -512,23 +538,13 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             </div>
           </div>
 
-          {/* Aviso sobre Carga Multimedia (Fotos/Videos) */}
-          <div className={`p-3 rounded-2xl border text-xs flex items-start sm:items-center gap-2.5 ${
-            isFestivalActiveDay 
-              ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
-              : 'bg-amber-50/80 border-amber-200 text-amber-950'
-          }`}>
-            <Info className={`w-4 h-4 shrink-0 mt-0.5 sm:mt-0 ${isFestivalActiveDay ? 'text-emerald-600' : 'text-amber-600'}`} />
+          {/* Aviso sobre Carga Multimedia (Fotos/Videos) y PIN General */}
+          <div className="p-3 rounded-2xl border text-xs flex items-start sm:items-center gap-2.5 bg-amber-50/70 border-amber-200 text-amber-950">
+            <Info className="w-4 h-4 shrink-0 mt-0.5 sm:mt-0 text-amber-700" />
             <div className="min-w-0">
-              {isFestivalActiveDay ? (
-                <span>
-                  <strong>Jornada Activa en Cancha:</strong> La subida de fotos y videos está habilitada para las familias presentes en la sede del festival.
-                </span>
-              ) : (
-                <span>
-                  <strong>Carga Multimedia en Pausa:</strong> La subida de fotos y videos se habilita exclusivamente en las fechas oficiales de festival (5-9 Oct, 2-6 Nov, 16-20 Nov, 23-27 Nov). <strong>Los mensajes de texto y comentarios están 100% activos siempre.</strong>
-                </span>
-              )}
+              <span>
+                <strong>PIN de Evento Habilitado para Todas las Fechas:</strong> Las familias y padres con el PIN oficial pueden compartir mensajes, fotografías y videos durante todas las fechas de la Liga Costa de Oro. <em>(PIN predeterminado: <strong>COSTA2026</strong> o <strong>2026</strong>)</em>.
+              </span>
             </div>
           </div>
 
@@ -625,29 +641,32 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
               {/* Fila de PIN de Seguridad si no está verificado */}
               {!isPinVerified && (
-                <div className="p-3.5 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-2">
-                  <div className="flex items-center gap-2 text-amber-900 text-xs font-bold">
+                <div className="p-3.5 bg-amber-50/80 border border-amber-300/80 rounded-2xl space-y-2">
+                  <div className="flex items-center gap-2 text-amber-950 text-xs font-bold">
                     <KeyRound className="w-4 h-4 text-amber-700" />
-                    <span>PIN Oficial del Festival Requerido:</span>
+                    <span>PIN Oficial del Evento Requerido para Publicar:</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <input
                       type="text"
-                      placeholder="Código del Día (Ej: 8421 o 2026)"
+                      placeholder="PIN del Evento (Ej: COSTA2026 o 2026)"
                       value={enteredPin}
                       onChange={(e) => {
                         setEnteredPin(e.target.value);
                         setPinError(null);
                       }}
-                      className="px-3 py-2 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 w-56 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
+                      className="px-3.5 py-2 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 w-64 focus:outline-hidden focus:ring-2 focus:ring-amber-500 uppercase"
                     />
                     <button
                       type="button"
                       onClick={() => handleValidatePin(enteredPin)}
-                      className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer transition shadow-xs"
                     >
                       Validar PIN
                     </button>
+                    <span className="text-[11px] text-amber-900/80 font-medium">
+                      (Válido para todas las fechas)
+                    </span>
                   </div>
                   {pinError && (
                     <p className="text-[11px] text-red-600 font-semibold flex items-center gap-1">

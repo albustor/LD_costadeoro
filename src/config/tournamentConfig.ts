@@ -24,6 +24,10 @@ export const TOURNAMENT_CONFIG = {
     whatsapp: '+506 8888-0000',
     logoUrl: '/logos/curiol_logo_oficial_transparente_hd.png',
   },
+  security: {
+    defaultFamilyPin: 'COSTA2026',
+    validPins: ['COSTA2026', 'ORO2026', '2026', 'PAZ2026', '8421'],
+  },
 };
 
 export const SCHOOLS_DATA: School[] = [
