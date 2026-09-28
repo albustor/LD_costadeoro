@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Category, Match, School, Standing } from '@/types/tournament';
 import { SchoolEmblem } from './SchoolEmblem';
-import { VisualProgressBars, VisualBarItem } from './VisualProgressBars';
 import { SportIconRenderer } from './SportGraphicIcons';
 import { 
   Calendar, 
@@ -154,50 +153,6 @@ export function SportScheduleView({
   const sportMatches = matches.filter(
     (m) => m.sport === selectedSport || sportCategories.some((c) => c.id === m.categoryId)
   );
-
-  // Calcular tabla acumulada para este deporte
-  const schoolScoresMap = new Map<string, { points: number; played: number; won: number; drawn: number; lost: number; diff: number }>();
-
-  schools.forEach((school) => {
-    schoolScoresMap.set(school.id, { points: 0, played: 0, won: 0, drawn: 0, lost: 0, diff: 0 });
-  });
-
-  sportCategories.forEach((cat) => {
-    const standings = getStandingsForCategory(cat.id);
-    standings.forEach((st) => {
-      const current = schoolScoresMap.get(st.teamId) || { points: 0, played: 0, won: 0, drawn: 0, lost: 0, diff: 0 };
-      current.points += st.points;
-      current.played += st.played;
-      current.won += st.won;
-      current.drawn += st.drawn;
-      current.lost += st.lost;
-      current.diff += st.diff;
-      schoolScoresMap.set(st.teamId, current);
-    });
-  });
-
-  const sortedSportStandings: VisualBarItem[] = Array.from(schoolScoresMap.entries())
-    .map(([schoolId, stats]) => {
-      const school = schools.find((s) => s.id === schoolId) || schools[0];
-      return {
-        school,
-        points: stats.points,
-        maxPoints: 1,
-        played: stats.played,
-        won: stats.won,
-        drawn: stats.drawn,
-        lost: stats.lost,
-        diff: stats.diff,
-        rank: 1,
-      };
-    })
-    .sort((a, b) => b.points - a.points || b.diff - a.diff);
-
-  const maxPointsSport = Math.max(...sortedSportStandings.map((s) => s.points), 1);
-  sortedSportStandings.forEach((item, index) => {
-    item.rank = index + 1;
-    item.maxPoints = maxPointsSport;
-  });
 
   // Handler para agregar nueva modalidad deportiva
   const handleAddCustomSport = (e: React.FormEvent) => {
@@ -538,15 +493,6 @@ export function SportScheduleView({
             );
           })()}
 
-          {/* 📊 BARRAS VISUALES DE PUNTUACIÓN DE ESTE DEPORTE (ABAJO DEL CALENDARIO) */}
-          <VisualProgressBars
-            items={sortedSportStandings}
-            title={`Avance y Puntos en ${currentSportConfig.name}`}
-            subtitle="Barras de progreso de los colegios en esta disciplina específica"
-            sportColor={currentSportConfig.color}
-            sportAccent={currentSportConfig.accent}
-            sportLightBg={currentSportConfig.lightBg}
-          />
         </div>
       )}
 

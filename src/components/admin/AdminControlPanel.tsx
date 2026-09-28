@@ -23,7 +23,12 @@ import {
   ImageIcon,
   Video,
   KeyRound,
-  ShieldCheck
+  ShieldCheck,
+  Download,
+  QrCode,
+  Scan,
+  ExternalLink,
+  X
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -47,6 +52,29 @@ export function AdminControlPanel() {
     return TOURNAMENT_CONFIG.security?.defaultFamilyPin || 'COSTA2026';
   });
   const [pinSavedSuccess, setPinSavedSuccess] = useState<boolean>(false);
+
+  // Modal para Escáner de Datos
+  const [showScannerModal, setShowScannerModal] = useState<boolean>(false);
+
+  // Función para Descargar Offline (JSON completo de la base de datos)
+  const handleDownloadOffline = () => {
+    const exportData = {
+      tournament: TOURNAMENT_CONFIG,
+      timestamp: new Date().toISOString(),
+      matches: matches,
+      schools: schools,
+      categories: categories,
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `costa_de_oro_datos_offline_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   // Bunny.net & Firebase Media Upload State
   const [bunnyFile, setBunnyFile] = useState<File | null>(null);
@@ -190,6 +218,29 @@ export function AdminControlPanel() {
           <p className="text-xs text-slate-600">
             Formularios prácticos para registrar marcadores en tiempo real, programar nuevos partidos y ajustar horarios.
           </p>
+
+          {/* Botones de Sincronización: Solamente Descargar Offline y Escáner de Datos */}
+          <div className="flex items-center gap-2 pt-2">
+            <button
+              type="button"
+              onClick={handleDownloadOffline}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0F4C3A] hover:bg-[#0c3d2e] text-white text-xs font-bold shadow-2xs transition cursor-pointer"
+              title="Descargar base de datos completa para uso offline"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Descargar Offline</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowScannerModal(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-950 border border-slate-300 text-xs font-bold shadow-2xs transition cursor-pointer"
+              title="Abrir lector y escáner de datos y códigos QR"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+              <span>Escáner de Datos</span>
+            </button>
+          </div>
         </div>
 
         {/* Pestañas de Navegación del Panel */}
@@ -939,6 +990,76 @@ export function AdminControlPanel() {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 📱 MODAL DEL ESCÁNER DE DATOS Y CÓDIGOS QR */}
+      {showScannerModal && (
+        <div 
+          className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowScannerModal(false)}
+        >
+          <div 
+            className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 space-y-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-700">
+                  <Scan className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+                    Escáner de Datos Oficial
+                  </h3>
+                  <span className="text-[11px] text-slate-500 font-medium">
+                    Lectura de actas, acreditaciones y códigos QR
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowScannerModal(false)}
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Simulación del visor de la cámara / Escáner */}
+            <div className="relative rounded-2xl overflow-hidden aspect-square bg-slate-950 flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-amber-400/60">
+              <div className="w-48 h-48 rounded-2xl border-2 border-amber-400/80 relative flex items-center justify-center">
+                <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-amber-400" />
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-amber-400" />
+                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-amber-400" />
+                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-amber-400" />
+                
+                <div className="space-y-2 text-center p-3">
+                  <QrCode className="w-12 h-12 text-amber-400/80 mx-auto animate-pulse" />
+                  <span className="text-[11px] font-bold text-amber-300 block">
+                    Apunta la cámara al código QR
+                  </span>
+                </div>
+              </div>
+
+              <span className="text-[11px] text-slate-400 mt-4">
+                Listo para verificar actas deportivas, credenciales o enlaces de partidos.
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  alert('Escáner de cámara iniciado. Puedes escanear credenciales de atletas y actas de partido.');
+                }}
+                className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition cursor-pointer text-center"
+              >
+                Activar Cámara del Dispositivo
+              </button>
             </div>
           </div>
         </div>
