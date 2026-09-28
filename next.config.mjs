@@ -5,6 +5,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: isGithubActions ? 'export' : undefined,
   basePath: isGithubActions ? '/LD_costadeoro' : '',
+  trailingSlash: true,
   images: {
     unoptimized: true,
     remotePatterns: [
