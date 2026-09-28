@@ -9,12 +9,12 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/logos/curiol_logo_oficial_transparente_hd.png",
+      "src": "/logos/logo_oficial_subido.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/logos/curiol_logo_oficial_transparente_hd.png",
+      "src": "/logos/logo_oficial_subido.png",
       "sizes": "512x512",
       "type": "image/png"
     }

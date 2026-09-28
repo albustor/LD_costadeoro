@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useTournament } from '@/context/TournamentContext';
+import { formatDateCostaRica } from '@/lib/utils';
 import { Flame, MapPin, Clock } from 'lucide-react';
 import { SportWatermark } from './SportGlyphs';
 import { SchoolEmblem } from './SchoolEmblem';
@@ -35,19 +36,20 @@ export function LiveMatchBanner() {
             return (
               <div
                 key={match.id}
-                className="bg-white rounded-xl p-3.5 border border-red-200 flex items-center justify-between shadow-sm relative overflow-hidden"
+                className="bg-white rounded-xl p-3.5 border border-red-200 flex items-center justify-between shadow-sm relative"
               >
-                {/* Discrete Sport Watermark */}
-                <div className="absolute -right-2 -bottom-2 pointer-events-none opacity-8 text-red-700">
-                  <SportWatermark sport={match.sport} size={70} />
-                </div>
-
                 <div className="flex-1 min-w-0 relative z-10">
-                  <div className="flex items-center gap-2 text-[11px] text-slate-500 mb-1">
-                    <span className="font-bold text-slate-800">{category?.name}</span>
+                  <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-600 mb-1.5">
+                    <span className="font-extrabold text-slate-900 bg-amber-100/90 border border-amber-300/80 px-2 py-0.5 rounded-md text-[10px]">
+                      📅 {match.date ? formatDateCostaRica(match.date) : '5 Oct 2026'}
+                    </span>
+                    <span className="font-extrabold text-slate-800 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md text-[10.5px] flex items-center gap-1">
+                      <span>{match.sport === 'futbol' ? '⚽' : match.sport === 'voleibol' ? '🏐' : '🏀'}</span>
+                      <span>{category?.name}</span>
+                    </span>
                     <span>•</span>
-                    <span className="flex items-center gap-1 truncate">
-                      <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                    <span className="flex items-center gap-1 truncate text-slate-500">
+                      <MapPin className="w-3 h-3 text-amber-600 shrink-0" />
                       {match.venue}
                     </span>
                   </div>
@@ -70,14 +72,13 @@ export function LiveMatchBanner() {
                   </div>
                 </div>
 
-
-                <div className="ml-3 pl-3 border-l border-slate-200 text-center shrink-0 relative z-10">
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-[10px] font-bold">
+                <div className="ml-3 pl-3 border-l border-slate-200 text-center shrink-0 relative z-10 flex flex-col items-center justify-center gap-1">
+                  <span className="inline-block px-2.5 py-1 rounded-full bg-red-100 border border-red-200 text-red-700 text-[10px] font-black uppercase tracking-wider">
                     {match.currentPeriod || 'En Juego'}
                   </span>
-                  {match.minute && (
-                    <span className="block text-[9.5px] text-slate-500 mt-0.5">Minuto {match.minute}&apos;</span>
-                  )}
+                  <span className="text-[9.5px] font-bold text-slate-500 uppercase tracking-wide">
+                    {match.jornadaName || 'Jornada 1'}
+                  </span>
                 </div>
               </div>
             );

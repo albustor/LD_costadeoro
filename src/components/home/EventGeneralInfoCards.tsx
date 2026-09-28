@@ -30,9 +30,9 @@ interface EventGeneralInfoCardsProps {
 
 export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    schools: true,
-    venues: true,
-    sports: true,
+    schools: false,
+    venues: false,
+    sports: false,
     upcomingSports: false,
     festivals: false,
     philosophy: false,
@@ -99,10 +99,11 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
         </button>
 
         {openSections.schools && (
-          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="p-4 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-3">
+            {/* 🏫 DISTRIBUCIÓN EN 2 COLUMNAS TIPO ICONOS (IGUAL A CAPTURA 1) */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {schools.map((school) => {
-                const isExpanded = expandedSchoolId === school.id;
+                const isSelected = expandedSchoolId === school.id;
                 const mascot = 
                   school.id === 'la-paz-cabo-velas'
                     ? 'Pumas 🐾'
@@ -132,65 +133,64 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                 return (
                   <div
                     key={school.id}
-                    className={`rounded-2xl border transition-all p-3.5 space-y-2.5 ${
-                      isExpanded
-                        ? 'bg-amber-50/40 border-amber-300 shadow-sm'
-                        : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200'
+                    className={`p-4 rounded-2xl border transition-all flex flex-col items-center justify-center text-center group cursor-pointer ${
+                      isSelected
+                        ? 'bg-amber-50/60 border-amber-400 shadow-md ring-2 ring-amber-400/20'
+                        : 'bg-white hover:bg-amber-50/30 border-slate-200/90 hover:border-amber-300 shadow-xs hover:shadow-sm'
                     }`}
                   >
-                    <div
-                      onClick={() => setExpandedSchoolId(isExpanded ? null : school.id)}
-                      className="flex items-center justify-between gap-3 cursor-pointer"
+                    {/* Botón Principal: Icono Centrado + Nombre + Subtítulo */}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedSchoolId(isSelected ? null : school.id)}
+                      className="w-full flex flex-col items-center justify-center text-center gap-2 cursor-pointer"
+                      aria-expanded={isSelected}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
+                      {/* Icono / Escudo en Badge Redondeado Suave */}
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-105 group-hover:bg-amber-100/70 transition-transform">
                         <SchoolEmblem schoolId={school.id} size="sm" />
-                        <div className="min-w-0">
-                          <span className="block font-bold text-xs sm:text-sm text-slate-900 truncate">
-                            {school.name}
-                          </span>
-                          <span className="block text-[11px] text-slate-500 truncate">
-                            {school.location} • {mascot}
-                          </span>
-                        </div>
                       </div>
 
-                      <button
-                        type="button"
-                        aria-label="Ver más información del colegio"
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700"
-                      >
-                        {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
+                      {/* Nombre del Colegio */}
+                      <span className="font-extrabold text-slate-800 text-xs sm:text-sm group-hover:text-amber-800 transition-colors leading-tight">
+                        {school.shortName || school.name}
+                      </span>
 
-                    {isExpanded && (
-                      <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-600 space-y-2 animate-fade-in">
-                        <div className="grid grid-cols-2 gap-1.5">
-                          <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                            <span className="text-[10px] text-slate-400 font-semibold block uppercase">Sede / Ubicación</span>
-                            <span className="font-bold text-slate-800">{school.city}</span>
-                          </div>
-                          <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                            <span className="text-[10px] text-slate-400 font-semibold block uppercase">Identidad / Mascota</span>
-                            <span className="font-bold text-slate-800">{mascot}</span>
-                          </div>
+                      {/* Sede y Mascota */}
+                      <span className="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 -mt-0.5">
+                        {school.city} • {mascot}
+                      </span>
+
+                      {/* Botón Indicador de Despliegue */}
+                      <div className="flex items-center gap-1 text-[10px] font-bold text-amber-700 mt-1">
+                        <span>{isSelected ? 'Contraer' : 'Detalles'}</span>
+                        <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isSelected ? 'rotate-180' : ''}`} />
+                      </div>
+                    </button>
+
+                    {/* Contenido Desplegable Tipo Acordeón */}
+                    {isSelected && (
+                      <div className="w-full pt-3 mt-3 border-t border-amber-200/80 text-left text-xs text-slate-600 space-y-2 animate-fade-in">
+                        <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs text-[10.5px]">
+                          <span className="text-[9px] text-slate-400 font-bold uppercase block tracking-wider">Ubicación y Mascota</span>
+                          <span className="font-bold text-slate-800 block mt-0.5">{school.location}, {school.city} • {mascot}</span>
                         </div>
 
-                        <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
-                          <span className="text-[10px] text-slate-400 font-semibold block uppercase mb-0.5">Modalidades Inscritas</span>
-                          <span className="font-semibold text-slate-800 text-[10.5px] block">{sportParticipation}</span>
+                        <div className="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs text-[10.5px]">
+                          <span className="text-[9px] text-slate-400 font-bold uppercase block tracking-wider">Modalidades Inscritas</span>
+                          <span className="font-semibold text-slate-800 block mt-0.5 leading-snug">{sportParticipation}</span>
                         </div>
 
                         <div className="flex items-center justify-between pt-1">
-                          <span className="text-[10.5px] text-emerald-700 font-semibold flex items-center gap-1">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                            Delegación Oficial Confirmada
+                          <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>Confirmada</span>
                           </span>
                           <Link
                             href="/colegios"
-                            className="text-amber-700 font-bold hover:underline flex items-center gap-0.5"
+                            className="px-2 py-1 bg-slate-950 text-amber-300 font-bold text-[10px] rounded-lg text-center flex items-center justify-center gap-0.5 hover:bg-slate-900 shadow-2xs"
                           >
-                            <span>Ver perfil</span>
+                            <span>Ver Perfil</span>
                             <ChevronRight className="w-3 h-3" />
                           </Link>
                         </div>

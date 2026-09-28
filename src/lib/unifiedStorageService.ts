@@ -49,7 +49,7 @@ export function getBunnyThumbnailUrl(videoId: string): string {
 }
 
 /**
- * Builds high-resolution JPG download URL with optional dimensions
+ * Builds high-resolution JPG download URL with optional dimensions via Bunny.net Edge
  */
 export function getOptimizedJpgUrl(
   originalUrl: string,
@@ -57,10 +57,10 @@ export function getOptimizedJpgUrl(
 ): string {
   if (!originalUrl) return '';
 
-  if (originalUrl.includes('cloudinary.com')) {
-    const widthParam = options?.width ? `w_${options.width},` : '';
-    const qualityParam = options?.quality ? `q_${options.quality},` : 'q_auto,';
-    return originalUrl.replace('/upload/', `/upload/${widthParam}${qualityParam}f_jpg/`);
+  if (originalUrl.includes('b-cdn.net')) {
+    const widthParam = options?.width ? `?width=${options.width}` : '';
+    const qualityParam = options?.quality ? `&quality=${options.quality}` : '';
+    return `${originalUrl}${widthParam}${qualityParam}`;
   }
 
   return originalUrl;

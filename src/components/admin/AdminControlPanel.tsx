@@ -17,9 +17,14 @@ import {
   Flame, 
   Trophy, 
   RefreshCw,
-  Edit3
+  Edit3,
+  UploadCloud,
+  FileCheck,
+  ImageIcon,
+  Video
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
+import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
 
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById } = useTournament();
@@ -29,7 +34,15 @@ export function AdminControlPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Open access by default for convenience
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media'>('results');
+
+  // Bunny.net & Firebase Media Upload State
+  const [bunnyFile, setBunnyFile] = useState<File | null>(null);
+  const [bunnyPreview, setBunnyPreview] = useState<string | null>(null);
+  const [bunnyUploading, setBunnyUploading] = useState<boolean>(false);
+  const [bunnyProgress, setBunnyProgress] = useState<number>(0);
+  const [bunnyResult, setBunnyResult] = useState<BunnyUploadResult | null>(null);
+  const [uploadedList, setUploadedList] = useState<BunnyUploadResult[]>([]);
 
   // Form 1: Result Editing State
   const [selectedMatchId, setSelectedMatchId] = useState<string>(matches[0]?.id || '');
@@ -198,6 +211,17 @@ export function AdminControlPanel() {
             }`}
           >
             3. Ajustes de Horario
+          </button>
+          <button
+            onClick={() => setActiveTab('bunny_media')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'bunny_media'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <UploadCloud className="w-3.5 h-3.5" />
+            <span>4. Multimedia Bunny.net & Firebase</span>
           </button>
         </div>
       </div>
@@ -633,6 +657,184 @@ export function AdminControlPanel() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* 🐰 PESTAÑA 4: GESTIÓN MULTIMEDIA Y ALMACENAMIENTO BUNNY.NET & FIREBASE */}
+      {activeTab === 'bunny_media' && (
+        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <UploadCloud className="w-5 h-5 text-amber-600" />
+                <span>Gestor de Medios Bunny.net & Firebase CDN</span>
+              </h2>
+              <p className="text-xs text-slate-500">
+                Transcodificación de videos con Bunny Stream (Biblioteca 629005) y almacenamiento de fotos con Bunny Edge Storage & Firebase.
+              </p>
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 self-start sm:self-auto">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Bunny.net (629005) Activo • Lectura / Escritura OK</span>
+            </div>
+          </div>
+
+          {/* Zona de Carga / Drag and Drop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-slate-300 hover:border-amber-400 rounded-3xl p-6 bg-slate-50/70 hover:bg-amber-50/20 transition-all text-center flex flex-col items-center justify-center min-h-[220px]">
+                <UploadCloud className="w-12 h-12 text-slate-400 mb-2" />
+                <h4 className="text-sm font-bold text-slate-800 mb-1">
+                  Selecciona una Foto o Video para Bunny.net
+                </h4>
+                <p className="text-xs text-slate-500 max-w-xs mb-4">
+                  Videos: Bunny Stream HLS (hasta 100MB) | Fotos: Bunny Edge Storage (hasta 15MB).
+                </p>
+
+                <input
+                  type="file"
+                  id="adminBunnyInput"
+                  accept="image/*,video/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const validation = validateMediaFile(file);
+                      if (!validation.valid) {
+                        alert(validation.error);
+                        return;
+                      }
+                      setBunnyFile(file);
+                      setBunnyPreview(URL.createObjectURL(file));
+                    }
+                  }}
+                  className="hidden"
+                />
+
+                <label
+                  htmlFor="adminBunnyInput"
+                  className="px-4 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl cursor-pointer shadow-md transition"
+                >
+                  Examinar Archivo Local
+                </label>
+              </div>
+
+              {/* Botón de Carga */}
+              {bunnyFile && (
+                <div className="bg-slate-100 rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-800 truncate max-w-[200px]">
+                      {bunnyFile.name}
+                    </span>
+                    <span className="font-mono text-slate-500">
+                      {(bunnyFile.size / (1024 * 1024)).toFixed(2)} MB
+                    </span>
+                  </div>
+
+                  {bunnyUploading && (
+                    <div className="space-y-1">
+                      <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="bg-amber-500 h-2 transition-all duration-200"
+                          style={{ width: `${bunnyProgress}%` }}
+                        />
+                      </div>
+                      <div className="text-[10px] text-right font-mono text-slate-500">
+                        {bunnyProgress}%
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    disabled={bunnyUploading}
+                    onClick={async () => {
+                      if (!bunnyFile) return;
+                      setBunnyUploading(true);
+                      setBunnyProgress(15);
+                      const res = await uploadMediaToBunny(
+                        bunnyFile,
+                        { folder: 'costa_de_oro_2026/oficial' },
+                        (p) => setBunnyProgress(p)
+                      );
+                      setBunnyUploading(false);
+                      setBunnyResult(res);
+                      if (res.success) {
+                        setUploadedList((prev) => [res, ...prev]);
+                        setBunnyFile(null);
+                        setBunnyPreview(null);
+                      }
+                    }}
+                    className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-slate-950 font-bold rounded-xl text-xs transition shadow"
+                  >
+                    {bunnyUploading ? 'Cargando a Bunny.net CDN...' : 'Iniciar Carga a Bunny.net'}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Vista Previa y Metadatos */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Vista Previa & CDN Bunny.net
+              </h4>
+
+              {bunnyPreview ? (
+                <div className="border border-slate-200 rounded-2xl overflow-hidden bg-black flex items-center justify-center max-h-[220px]">
+                  {bunnyFile?.type.startsWith('video') ? (
+                    <video src={bunnyPreview} controls className="max-h-[220px] w-full" />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={bunnyPreview} alt="Previa" className="max-h-[220px] object-contain" />
+                  )}
+                </div>
+              ) : (
+                <div className="border border-slate-200 rounded-2xl p-6 bg-slate-50 text-center text-xs text-slate-400">
+                  Selecciona una foto o video para previsualizar antes de procesar en Bunny.net.
+                </div>
+              )}
+
+              {/* Lista de archivos subidos en Bunny.net */}
+              <div className="space-y-2 pt-2">
+                <h5 className="text-[11px] font-bold text-slate-600">
+                  Archivos Almacenados en Bunny.net ({uploadedList.length}):
+                </h5>
+
+                {uploadedList.length === 0 ? (
+                  <p className="text-[11px] text-slate-400 italic">No hay archivos subidos a Bunny.net en esta sesión aún.</p>
+                ) : (
+                  <div className="space-y-2 max-h-[160px] overflow-y-auto">
+                    {uploadedList.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 flex items-center justify-between text-xs gap-2"
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          {item.resourceType === 'video' ? (
+                            <Video className="w-4 h-4 text-sky-600 shrink-0" />
+                          ) : (
+                            <ImageIcon className="w-4 h-4 text-amber-600 shrink-0" />
+                          )}
+                          <span className="font-mono text-[11px] text-slate-700 truncate">
+                            {item.publicId} ({item.provider})
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(item.secureUrl);
+                            alert('URL CDN de Bunny.net copiada al portapapeles.');
+                          }}
+                          className="px-2 py-1 bg-slate-200 hover:bg-slate-300 rounded text-[10px] font-bold shrink-0"
+                        >
+                          Copiar URL
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

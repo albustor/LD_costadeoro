@@ -2,10 +2,12 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { TierProvider } from '@/context/TierContext';
 import { TournamentProvider } from '@/context/TournamentContext';
+import { LanguageProvider } from '@/context/LanguageContext';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { LiveMatchBanner } from '@/components/sports/LiveMatchBanner';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
+import { DevViewportBar } from '@/components/dev/DevViewportBar';
 
 export const metadata: Metadata = {
   title: 'Liga Deportiva Costa de Oro 2026 | Portal Oficial',
@@ -43,24 +45,29 @@ export default function RootLayout({
     <html lang="es" className="light">
       <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-20 md:pb-0">
         <TierProvider>
-          <TournamentProvider>
-            {/* Minimalist Sticky Header */}
-            <Header />
+          <LanguageProvider>
+            <TournamentProvider>
+              {/* Minimalist Sticky Header */}
+              <Header />
 
-            {/* Dynamic Live Match Indicator */}
-            <LiveMatchBanner />
+              {/* Dynamic Live Match Indicator */}
+              <LiveMatchBanner />
 
-            {/* Main Content Area */}
-            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
-              {children}
-            </main>
+              {/* Main Content Area */}
+              <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+                {children}
+              </main>
 
-            {/* Minimalist Footer */}
-            <Footer />
+              {/* Minimalist Footer */}
+              <Footer />
 
-            {/* Mobile PWA Bottom Navigation */}
-            <MobileBottomNav />
-          </TournamentProvider>
+              {/* Mobile PWA Bottom Navigation */}
+              <MobileBottomNav />
+
+              {/* Floating Multi-Device Dev Viewport Toolbar */}
+              <DevViewportBar />
+            </TournamentProvider>
+          </LanguageProvider>
         </TierProvider>
       </body>
     </html>

@@ -35,19 +35,12 @@ export function MatchCard({ match }: MatchCardProps) {
           isLive ? 'ring-2 ring-red-400 border-red-300' : ''
         }`}
       >
-        {/* Discrete Sport Watermark Glyph (Stroke 1.5px, <300 bytes, Opacity 12%-14%) */}
-        <div
-          className="absolute top-2 right-2 pointer-events-none transition-opacity duration-300 opacity-12 group-hover:opacity-22 text-slate-800"
-          style={{ color: theme.accentColor }}
-        >
-          <SportWatermark sport={match.sport} size={85} />
-        </div>
-
         {/* Header with category badge and status */}
         <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-200/70 text-xs relative z-10">
           <div className="flex items-center gap-1.5 min-w-0">
-            <span className={`px-2.5 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wide ${theme.badgeBgClass} ${theme.badgeTextClass}`}>
-              {category?.name || theme.name}
+            <span className={`px-2.5 py-0.5 rounded-md text-[10.5px] font-bold uppercase tracking-wide flex items-center gap-1.5 ${theme.badgeBgClass} ${theme.badgeTextClass}`}>
+              <span>{match.sport === 'futbol' ? '⚽' : match.sport === 'voleibol' ? '🏐' : '🏀'}</span>
+              <span>{category?.name || theme.name}</span>
             </span>
             <span className="text-slate-400">•</span>
             <span className="text-slate-500 font-medium text-[11px] truncate">{match.jornadaName}</span>

@@ -1,78 +1,50 @@
 import React from 'react';
-import Link from 'next/link';
 import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
-import { ShieldCheck, Trophy, Sparkles } from 'lucide-react';
+import { Trophy, MapPin } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="bg-slate-100 border-t border-slate-200 pt-10 pb-8 text-slate-600 text-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
-        {/* PARTE SUPERIOR: SEDE, ORGANIZACIÓN E INFORMACIÓN DEL EVENTO */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-200">
-          {/* Identidad de la Liga Deportiva Costa de Oro */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-10 rounded-xl overflow-hidden bg-black border border-amber-500/50 shadow-2xs shrink-0 flex items-center justify-center p-0.5">
-                <img
-                  src="/logos/liga_costa_de_oro_gold_black.jpg"
-                  alt="Liga Deportiva Costa de Oro 2026"
-                  className="h-full w-full object-contain"
-                />
-              </div>
-              <div>
-                <span className="block text-[10px] font-black uppercase tracking-widest text-amber-600 leading-none">
-                  Liga Deportiva Oficial
-                </span>
-                <span className="block text-sm font-black text-slate-900 tracking-tight leading-tight">
-                  Costa de Oro 2026
-                </span>
-              </div>
+    <footer className="bg-slate-100/90 border-t border-slate-200 py-6 text-slate-600 text-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-4">
+        {/* FILA PRINCIPAL COMPACTA: EVENTO + SEDE */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          {/* Identidad de la Liga */}
+          <div className="flex items-center gap-2.5">
+            <div className="h-7 w-6 rounded-lg overflow-hidden bg-black border border-amber-500/50 shadow-2xs shrink-0 flex items-center justify-center p-0.5">
+              <img
+                src="/logos/liga_costa_de_oro_gold_black.jpg"
+                alt="Liga Deportiva Costa de Oro"
+                className="h-full w-full object-contain"
+              />
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Festival deportivo y formativo intercolegial de Guanacaste. Marcadores en vivo, actas oficiales, calendario de partidos y seguimiento deportivo para familias y estudiantes.
-            </p>
+            <div>
+              <span className="font-extrabold text-slate-900 text-xs tracking-tight">
+                Liga Deportiva Costa de Oro 2026
+              </span>
+              <span className="hidden sm:inline text-slate-400 mx-2">•</span>
+              <span className="block sm:inline text-[11px] text-slate-500 font-medium">
+                Festival Formativo Intercolegial · Guanacaste
+              </span>
+            </div>
           </div>
 
-          {/* Sede y Organización Oficial */}
-          <div>
-            <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-1.5">
-              <Trophy className="w-4 h-4 text-amber-600" />
-              <span>Sede y Organización</span>
-            </h4>
-            <ul className="text-xs space-y-1.5 text-slate-600">
-              <li><strong>Institución Anfitriona:</strong> {TOURNAMENT_CONFIG.host.name}</li>
-              <li><strong>Sedes Oficiales:</strong> Campus Cabo Velas (Brasilito) y Campus Tempisque (Comunidad)</li>
-              <li><strong>Temporada:</strong> Octubre - Noviembre 2026 (4 Festivales Oficiales)</li>
-              <li><strong>Colegios Participantes:</strong> 6 Instituciones Bilingües de la Costa de Oro</li>
-            </ul>
-          </div>
-
-          {/* Modalidad Institucional Limpia */}
-          <div>
-            <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 mb-3 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Modalidad Institucional Formativa</span>
-            </h4>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Plataforma desarrollada con formato institucional exclusivo para <strong>La Paz Community School</strong> y las delegaciones participantes, garantizando un entorno educativo 100% libre de publicidad comercial.
-            </p>
+          {/* Sede Oficial */}
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-600 bg-white border border-slate-200 px-3 py-1 rounded-full shadow-2xs">
+            <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span>Sede Anfitriona: <strong className="text-slate-800 font-bold">{TOURNAMENT_CONFIG.host.name}</strong></span>
           </div>
         </div>
 
-        {/* PARTE INFERIOR: CRÉDITOS TECNOLÓGICOS Y PRODUCCIÓN DE CURIOL STUDIO */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-[11px]">
-          <div className="flex items-center gap-3">
-            <img
-              src="/logos/curiol_logo_oficial_transparente_hd.png"
-              alt="Curiol Studio"
-              className="h-7 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity"
-            />
-            <span>
-              Plataforma deportiva desarrollada y producida por <strong className="text-slate-700 font-bold">Curiol Studio</strong> • Fotografía • Tecnología • Legado
-            </span>
-          </div>
+        {/* LÍNEA DIVISORIA SUTIL */}
+        <div className="h-[1px] w-full bg-slate-200/80" />
 
-          <p className="shrink-0 text-slate-400">
+        {/* FILA INFERIOR: DERECHOS INSTITUCIONALES */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 text-slate-500 text-[11px]">
+          <span className="text-slate-600 font-medium">
+            Plataforma Oficial del Festival Formativo Intercolegial · Guanacaste 2026
+          </span>
+
+          <p className="text-slate-400 text-center sm:text-right">
             © 2026 {TOURNAMENT_CONFIG.name}. Todos los derechos reservados.
           </p>
         </div>

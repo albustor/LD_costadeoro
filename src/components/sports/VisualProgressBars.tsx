@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Standing, School } from '@/types/tournament';
 import { SchoolEmblem } from './SchoolEmblem';
-import { Trophy, ChevronRight, Sparkles, TrendingUp, Info } from 'lucide-react';
+import { Trophy, ChevronDown, ChevronRight, Sparkles, TrendingUp, Info } from 'lucide-react';
 
 export interface VisualBarItem {
   school: School;
@@ -42,9 +42,7 @@ export function VisualProgressBars({
   sportLightBg = '#F8FAFC',
   showBreakdown = false,
 }: VisualProgressBarsProps) {
-  const [selectedSchoolId, setSelectedSchoolId] = useState<string | null>(
-    items.length > 0 ? items[0].school.id : null
-  );
+  const [selectedSchoolId, setSelectedSchoolId] = useState<string | null>(null);
 
   // Encontrar el colegio líder
   const leader = items.length > 0 ? items[0] : null;
@@ -124,17 +122,35 @@ export function VisualProgressBars({
                   </div>
                 </div>
 
-                {/* Puntaje Prominente */}
-                <div className="text-right shrink-0">
-                  <div className="flex items-baseline gap-1 justify-end">
-                    <span className="text-lg sm:text-xl font-black text-slate-900 font-mono">
-                      {item.points}
+                {/* Puntaje Prominente + Flechita de Despliegue */}
+                <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                  <div className="text-right">
+                    <div className="flex items-baseline gap-1 justify-end">
+                      <span className="text-lg sm:text-xl font-black text-slate-900 font-mono">
+                        {item.points}
+                      </span>
+                      <span className="text-[10px] uppercase font-bold text-slate-400">pts</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 font-medium block">
+                      {percentage}% avance
                     </span>
-                    <span className="text-[10px] uppercase font-bold text-slate-400">pts</span>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-medium">
-                    {percentage}% avance
-                  </span>
+
+                  {/* Flechita Indicadora Expandir/Contraer */}
+                  <div
+                    className={`w-7 h-7 rounded-xl border flex items-center justify-center transition-all ${
+                      isSelected
+                        ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
+                        : 'bg-slate-100 text-slate-500 border-slate-200 group-hover:bg-amber-50 group-hover:text-amber-700'
+                    }`}
+                    title={isSelected ? 'Contraer información' : 'Expandir información'}
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isSelected ? 'rotate-180 text-amber-900' : 'text-slate-500 group-hover:text-amber-700'
+                      }`}
+                    />
+                  </div>
                 </div>
               </div>
 

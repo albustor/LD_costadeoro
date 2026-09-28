@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { School, FamilyPost } from '@/types/tournament';
+import { School, FamilyPost, PostComment } from '@/types/tournament';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { 
   Heart, 
@@ -20,13 +20,24 @@ import {
   Lock,
   KeyRound,
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  FileText,
+  Info,
+  X,
+  Calendar,
+  Clock,
+  ShieldAlert,
+  ChevronDown,
+  UploadCloud
 } from 'lucide-react';
+import { uploadMediaToBunny } from '@/lib/bunnyMediaService';
+import { useLanguage } from '@/context/LanguageContext';
 
 const VALID_PINS: Record<string, string | 'all'> = {
   '2026': 'all',
   'PAZ2026': 'all',
   'COSTA2026': 'all',
+  '8421': 'all',
   '1001': 'la-paz-cabo-velas',
   '1002': 'la-paz-tempisque',
   '2001': 'cria',
@@ -34,6 +45,14 @@ const VALID_PINS: Record<string, string | 'all'> = {
   '4001': 'vittorino',
   '5001': 'educarte',
 };
+
+// Días oficiales registrados para los festivales
+const OFFICIAL_FESTIVAL_RANGES = [
+  { name: '1.ª Jornada Oficial', start: '2026-10-05', end: '2026-10-09' },
+  { name: '2.ª Jornada Oficial', start: '2026-11-02', end: '2026-11-06' },
+  { name: '3.ª Jornada Oficial', start: '2026-11-16', end: '2026-11-20' },
+  { name: 'Grandes Finales', start: '2026-11-23', end: '2026-11-27' },
+];
 
 const INITIAL_FAMILY_POSTS: FamilyPost[] = [
   {
@@ -50,6 +69,15 @@ const INITIAL_FAMILY_POSTS: FamilyPost[] = [
     featuredVotes: 9,
     isFeatured: true,
     createdAt: 'Hace 20 min',
+    comments: [
+      {
+        id: 'c-1',
+        authorName: 'Coach Diego',
+        authorRelation: 'Entrenador',
+        text: '¡Gran trabajo de las atletas! El respeto y la disciplina ante todo.',
+        createdAt: 'Hace 10 min',
+      },
+    ],
   },
   {
     id: 'fp-2',
@@ -65,6 +93,7 @@ const INITIAL_FAMILY_POSTS: FamilyPost[] = [
     featuredVotes: 7,
     isFeatured: true,
     createdAt: 'Hace 45 min',
+    comments: [],
   },
   {
     id: 'fp-3',
@@ -79,6 +108,15 @@ const INITIAL_FAMILY_POSTS: FamilyPost[] = [
     featuredVotes: 4,
     isFeatured: false,
     createdAt: 'Hace 1 hora',
+    comments: [
+      {
+        id: 'c-2',
+        authorName: 'Laura V.',
+        authorRelation: 'Mamá',
+        text: '¡Totalmente de acuerdo! Qué hermosa fiesta deportiva familiar.',
+        createdAt: 'Hace 30 min',
+      },
+    ],
   },
   {
     id: 'fp-4',
@@ -93,6 +131,7 @@ const INITIAL_FAMILY_POSTS: FamilyPost[] = [
     featuredVotes: 6,
     isFeatured: true,
     createdAt: 'Hace 2 horas',
+    comments: [],
   },
   {
     id: 'fp-5',
@@ -108,6 +147,7 @@ const INITIAL_FAMILY_POSTS: FamilyPost[] = [
     featuredVotes: 3,
     isFeatured: false,
     createdAt: 'Hace 3 horas',
+    comments: [],
   },
 ];
 
@@ -125,27 +165,50 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [enteredPin, setEnteredPin] = useState<string>('');
   const [pinError, setPinError] = useState<string | null>(null);
 
-  // Formulario de apoyo en 2 toques
+  // Términos y Normas de Convivencia Familiar (Se guarda 1 sola vez por celular)
+  const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+  const [termsCheckbox, setTermsCheckbox] = useState<boolean>(false);
+
+  // Estado de fecha activa para multimedia
+  // Fuera de las fechas oficiales del evento, la carga de fotos/videos se bloquea
+  const [isFestivalActiveDay, setIsFestivalActiveDay] = useState<boolean>(false);
+
+  // Formulario de apoyo
   const [selectedSchoolId, setSelectedSchoolId] = useState<string>(schools[0]?.id || 'la-paz-cabo-velas');
   const [authorName, setAuthorName] = useState<string>('');
   const [authorRelation, setAuthorRelation] = useState<FamilyPost['authorRelation']>('Familia');
   const [message, setMessage] = useState<string>('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<'photo' | 'video' | 'none'>('none');
   const [selectedSport, setSelectedSport] = useState<string>('futbol');
   const [isPosting, setIsPosting] = useState<boolean>(false);
   const [showSuccessBadge, setShowSuccessBadge] = useState<boolean>(false);
 
-  // Verificar si ya tiene PIN en localStorage o en la URL (?pass=2026 o ?pin=2026)
+  // Comentarios en publicaciones existentes
+  const [openCommentsPostId, setOpenCommentsPostId] = useState<string | null>(null);
+  const [commentText, setCommentText] = useState<string>('');
+  const [commentAuthor, setCommentAuthor] = useState<string>('');
+
+  // Cargar estado inicial desde localStorage (PIN y Términos aceptados una sola vez)
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('costa_de_oro_family_pin_verified');
-      if (stored === 'true') {
-        setIsPinVerified(true);
-        return;
+      // 1. Verificar si ya aceptó las normas en este dispositivo
+      const acceptedTerms = localStorage.getItem('costa_de_oro_terms_accepted');
+      if (acceptedTerms === 'true') {
+        setIsTermsAccepted(true);
+        setTermsCheckbox(true);
       }
 
-      // Comprobar parámetros de URL para acceso por QR
+      // 2. Verificar PIN en localStorage
+      const storedPin = localStorage.getItem('costa_de_oro_family_pin_verified');
+      if (storedPin === 'true') {
+        setIsPinVerified(true);
+      }
+
+      // 3. Comprobar parámetros de URL para acceso por QR (?pin=8421 o ?pass=2026)
       const params = new URLSearchParams(window.location.search);
       const urlPin = params.get('pass') || params.get('pin') || params.get('code');
       if (urlPin && VALID_PINS[urlPin.toUpperCase()]) {
@@ -156,8 +219,25 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
           setSelectedSchoolId(matchedSchool);
         }
       }
+
+      // 4. Evaluar si hoy es fecha oficial de festival
+      const todayStr = new Date().toISOString().split('T')[0];
+      const isOfficialDay = OFFICIAL_FESTIVAL_RANGES.some(
+        (range) => todayStr >= range.start && todayStr <= range.end
+      );
+      setIsFestivalActiveDay(isOfficialDay);
     }
   }, []);
+
+  // Guardar aceptación formal de términos en este dispositivo
+  const handleAcceptTerms = () => {
+    setIsTermsAccepted(true);
+    setTermsCheckbox(true);
+    setShowTermsModal(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('costa_de_oro_terms_accepted', 'true');
+    }
+  };
 
   // Validar PIN ingresado
   const handleValidatePin = (pinToTest: string) => {
@@ -173,7 +253,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         setSelectedSchoolId(matchedSchool);
       }
     } else {
-      setPinError('PIN no reconocido. Ingresa el código de 4 dígitos oficial (ej: 2026).');
+      setPinError('PIN no reconocido. Ingresa el código oficial del festival (ej: 8421 o 2026).');
     }
   };
 
@@ -199,11 +279,44 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     );
   };
 
+  // Agregar comentario a una publicación existente (siempre habilitado)
+  const handleAddComment = (postId: string) => {
+    if (!commentText.trim()) return;
+
+    const newComment: PostComment = {
+      id: `comm-${Date.now()}`,
+      authorName: commentAuthor.trim() || 'Familiar Acompañante',
+      text: commentText.trim(),
+      createdAt: 'Justo ahora',
+    };
+
+    setPosts((prev) =>
+      prev.map((p) => {
+        if (p.id === postId) {
+          return {
+            ...p,
+            comments: [...(p.comments || []), newComment],
+          };
+        }
+        return p;
+      })
+    );
+
+    setCommentText('');
+  };
+
   // Manejador de archivo de foto o video del celular
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Si no es día oficial de festival, la carga está bloqueada
+    if (!isFestivalActiveDay) {
+      alert('La subida de fotos y videos se habilita exclusivamente durante las fechas oficiales de festival en cancha.');
+      return;
+    }
+
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setSelectedFile(file);
     const isVid = file.type.startsWith('video');
     setMediaType(isVid ? 'video' : 'photo');
 
@@ -215,44 +328,75 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   };
 
   // Enviar mensaje / foto
-  const handleSubmitPost = (e: React.FormEvent) => {
+  const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Si aún no está verificado el PIN
+    // 1. Exigir aceptación de términos si es primera vez
+    if (!isTermsAccepted && !termsCheckbox) {
+      setShowTermsModal(true);
+      return;
+    }
+
+    // Si marcó la casilla en el formulario pero no estaba guardado
+    if (!isTermsAccepted && termsCheckbox) {
+      handleAcceptTerms();
+    }
+
+    // 2. Validar PIN
     if (!isPinVerified) {
       handleValidatePin(enteredPin);
       return;
     }
 
-    if (!message.trim() && !mediaPreview) return;
+    if (!message.trim() && !mediaPreview && !selectedFile) return;
 
     setIsPosting(true);
+    setUploadProgress(10);
 
-    setTimeout(() => {
-      const newPost: FamilyPost = {
-        id: `fp-${Date.now()}`,
-        schoolId: selectedSchoolId,
-        authorName: authorName.trim() || 'Familia Acompañante',
-        authorRelation,
-        message: message.trim(),
-        mediaType,
-        mediaUrl: mediaPreview || undefined,
-        sportId: selectedSport,
-        likesCount: 1,
-        applauseCount: 1,
-        featuredVotes: 1,
-        isFeatured: false,
-        createdAt: 'Justo ahora',
-      };
+    let finalMediaUrl: string | undefined = mediaPreview || undefined;
 
-      setPosts((prev) => [newPost, ...prev]);
-      setMessage('');
-      setMediaPreview(null);
-      setMediaType('none');
-      setIsPosting(false);
-      setShowSuccessBadge(true);
-      setTimeout(() => setShowSuccessBadge(false), 3000);
-    }, 400);
+    // Si hay archivo seleccionado y es día activo, procesar carga en Bunny.net (Stream o Storage)
+    if (selectedFile && isFestivalActiveDay) {
+      try {
+        const bunnyResult = await uploadMediaToBunny(
+          selectedFile,
+          { folder: 'costa_de_oro_2026/mural_familiar' },
+          (percent) => setUploadProgress(percent)
+        );
+        if (bunnyResult.success && bunnyResult.secureUrl) {
+          finalMediaUrl = bunnyResult.secureUrl;
+        }
+      } catch (uploadErr) {
+        console.warn('Fallback a vista previa local:', uploadErr);
+      }
+    }
+
+    const newPost: FamilyPost = {
+      id: `fp-${Date.now()}`,
+      schoolId: selectedSchoolId,
+      authorName: authorName.trim() || 'Familia Acompañante',
+      authorRelation,
+      message: message.trim(),
+      mediaType: isFestivalActiveDay ? mediaType : 'none',
+      mediaUrl: isFestivalActiveDay ? finalMediaUrl : undefined,
+      sportId: selectedSport,
+      likesCount: 1,
+      applauseCount: 1,
+      featuredVotes: 1,
+      isFeatured: false,
+      createdAt: 'Justo ahora',
+      comments: [],
+    };
+
+    setPosts((prev) => [newPost, ...prev]);
+    setMessage('');
+    setSelectedFile(null);
+    setMediaPreview(null);
+    setMediaType('none');
+    setUploadProgress(0);
+    setIsPosting(false);
+    setShowSuccessBadge(true);
+    setTimeout(() => setShowSuccessBadge(false), 3000);
   };
 
   // Filtro de posts
@@ -327,7 +471,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* ✍️ FORMULARIO DE APOYO CON SEGURIDAD PIN (CERO FRICCIÓN / 2 TOQUES) */}
+      {/* ✍️ FORMULARIO DE APOYO CON SEGURIDAD PIN, NORMAS Y BLOQUEO MULTIMEDIA */}
       {!featuredOnly && (
         <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
@@ -339,33 +483,57 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 </h3>
               </div>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Envía una porra, foto o video de tu hijo. Protegido para la comunidad escolar.
+                Envía porras y comentarios a los deportistas. Protegido con normas de respeto y PIN del festival.
               </p>
             </div>
 
-            {/* Badge de Seguridad / Estado de PIN */}
-            {isPinVerified ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>PIN de Familia Verificado</span>
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-xs font-bold border border-amber-200">
-                <Lock className="w-3.5 h-3.5 text-amber-700" />
-                <span>Requiere PIN de Cancha (Ej: 2026)</span>
-              </span>
-            )}
+            {/* Badges de Estado */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {isPinVerified ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>PIN Verificado</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-xs font-bold border border-amber-200">
+                  <Lock className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Requiere PIN del Día</span>
+                </span>
+              )}
 
-            {showSuccessBadge && (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs animate-bounce border border-emerald-300">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                ¡Publicado con éxito!
-              </span>
-            )}
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(true)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5 text-slate-500" />
+                <span>Normas de Publicación</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Aviso sobre Carga Multimedia (Fotos/Videos) */}
+          <div className={`p-3 rounded-2xl border text-xs flex items-start sm:items-center gap-2.5 ${
+            isFestivalActiveDay 
+              ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+              : 'bg-amber-50/80 border-amber-200 text-amber-950'
+          }`}>
+            <Info className={`w-4 h-4 shrink-0 mt-0.5 sm:mt-0 ${isFestivalActiveDay ? 'text-emerald-600' : 'text-amber-600'}`} />
+            <div className="min-w-0">
+              {isFestivalActiveDay ? (
+                <span>
+                  <strong>Jornada Activa en Cancha:</strong> La subida de fotos y videos está habilitada para las familias presentes en la sede del festival.
+                </span>
+              ) : (
+                <span>
+                  <strong>Carga Multimedia en Pausa:</strong> La subida de fotos y videos se habilita exclusivamente en las fechas oficiales de festival (5-9 Oct, 2-6 Nov, 16-20 Nov, 23-27 Nov). <strong>Los mensajes de texto y comentarios están 100% activos siempre.</strong>
+                </span>
+              )}
+            </div>
           </div>
 
           <form onSubmit={handleSubmitPost} className="space-y-4">
-            {/* Paso 1: Selecciona a tu Colegio (1 Toque) */}
+            {/* Paso 1: Selecciona a tu Colegio */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-2">
                 1. Selecciona a tu Colegio / Equipo:
@@ -394,10 +562,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               </div>
             </div>
 
-            {/* Paso 2: Mensaje y Foto / Video */}
+            {/* Paso 2: Mensaje y Porras */}
             <div className="space-y-3">
               <label className="block text-xs font-bold text-slate-700">
-                2. Mensaje de Aliento y Foto/Video Opcional:
+                2. Mensaje de Aliento y Felicitaciones:
               </label>
 
               {/* Botones de Porras Rápidas */}
@@ -408,6 +576,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   '¡Vamos con garra! 🔥',
                   '¡Gran partido chicos! ⚽',
                   '¡Fuerza Sharks! 🦈',
+                  '¡Juego limpio y pasión! ✨'
                 ].map((chip) => (
                   <button
                     key={chip}
@@ -423,13 +592,13 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               {/* Área de Texto */}
               <textarea
                 rows={2}
-                placeholder="Escribe tu mensaje de apoyo para los chicos..."
+                placeholder="Escribe tu mensaje de apoyo para los chicos y familias..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
               />
 
-              {/* Vista previa de foto o video adjunto */}
+              {/* Vista previa de foto o video si está habilitado y seleccionado */}
               {mediaPreview && (
                 <div className="relative rounded-2xl overflow-hidden aspect-video max-h-48 bg-slate-900 border border-slate-200">
                   {mediaType === 'photo' ? (
@@ -459,18 +628,18 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 <div className="p-3.5 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-2">
                   <div className="flex items-center gap-2 text-amber-900 text-xs font-bold">
                     <KeyRound className="w-4 h-4 text-amber-700" />
-                    <span>PIN de Seguridad Familiar Requerido:</span>
+                    <span>PIN Oficial del Festival Requerido:</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
-                      placeholder="Código de 4 dígitos (Ej: 2026)"
+                      placeholder="Código del Día (Ej: 8421 o 2026)"
                       value={enteredPin}
                       onChange={(e) => {
                         setEnteredPin(e.target.value);
                         setPinError(null);
                       }}
-                      className="px-3 py-2 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 w-48 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
+                      className="px-3 py-2 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 w-56 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                     />
                     <button
                       type="button"
@@ -486,6 +655,34 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       <span>{pinError}</span>
                     </p>
                   )}
+                </div>
+              )}
+
+              {/* Casilla de Normas de Responsabilidad (Si es primera vez en el celular) */}
+              {!isTermsAccepted && (
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1">
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={termsCheckbox}
+                      onChange={(e) => setTermsCheckbox(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500"
+                    />
+                    <span className="text-slate-700">
+                      He leído y acepto las{' '}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowTermsModal(true);
+                        }}
+                        className="text-amber-700 font-bold underline hover:text-amber-800"
+                      >
+                        Normas de Publicación, Convivencia y Responsabilidad Familiar
+                      </button>{' '}
+                      de la Liga Costa de Oro. *(Se aplica una sola vez por celular)*
+                    </span>
+                  </label>
                 </div>
               )}
 
@@ -508,28 +705,40 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     <option value="Mamá">Mamá</option>
                     <option value="Papá">Papá</option>
                     <option value="Abuelo/a">Abuelo/a</option>
+                    <option value="Hermano/a">Hermano/a</option>
                     <option value="Familia">Familia</option>
                     <option value="Compañero/a">Compañero/a</option>
                     <option value="Entrenador">Entrenador</option>
                   </select>
                 </div>
 
-                {/* Botón de Adjuntar Foto/Video + Publicar */}
+                {/* Botón de Adjuntar Foto/Video (con bloqueo inteligente) + Publicar */}
                 <div className="flex items-center gap-2 justify-end">
-                  <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all">
-                    <Camera className="w-4 h-4 text-amber-600" />
-                    <span>Foto / Video</span>
-                    <input
-                      type="file"
-                      accept="image/*,video/*"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </label>
+                  {isFestivalActiveDay ? (
+                    <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all">
+                      <Camera className="w-4 h-4 text-amber-600" />
+                      <span>Foto / Video</span>
+                      <input
+                        type="file"
+                        accept="image/*,video/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                  ) : (
+                    <div
+                      title="La carga de fotos y videos se activa exclusivamente en días oficiales de festival en cancha."
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed border border-slate-200"
+                    >
+                      <Lock className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="hidden sm:inline">Fotos/Videos en Pausa</span>
+                      <span className="sm:hidden">Multimedia 🔒</span>
+                    </div>
+                  )}
 
                   <button
                     type="submit"
-                    disabled={isPosting || (!message.trim() && !mediaPreview)}
+                    disabled={isPosting || (!message.trim() && !mediaPreview) || (!isTermsAccepted && !termsCheckbox)}
                     className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-black shadow-sm transition-all cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
@@ -542,7 +751,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* 💬 FEED DE PORRAS Y MENSAJES DE LAS FAMILIAS */}
+      {/* 💬 FEED DE PORRAS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
       {!featuredOnly && (
         <div className="space-y-4">
           {/* Filtro por Colegio */}
@@ -581,6 +790,9 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredPosts.map((post) => {
               const school = schools.find((s) => s.id === post.schoolId) || schools[0];
+              const isCommentsOpen = openCommentsPostId === post.id;
+              const postComments = post.comments || [];
+
               return (
                 <div
                   key={post.id}
@@ -628,12 +840,13 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     {post.message}
                   </p>
 
-                  {/* Barra de Reacciones y Votos Familiares */}
+                  {/* Barra de Reacciones, Votos y Comentarios */}
                   <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleReaction(post.id, 'like')}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 transition-all cursor-pointer"
+                        title="Enviar corazón de apoyo"
                       >
                         <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
                         <span className="font-bold">{post.likesCount}</span>
@@ -642,9 +855,23 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       <button
                         onClick={() => handleReaction(post.id, 'applause')}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 transition-all cursor-pointer"
+                        title="Aplausos al juego limpio"
                       >
                         <span className="text-xs">👏</span>
                         <span className="font-bold">{post.applauseCount}</span>
+                      </button>
+
+                      <button
+                        onClick={() => setOpenCommentsPostId(isCommentsOpen ? null : post.id)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                          isCommentsOpen 
+                            ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold' 
+                            : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                        }`}
+                        title="Comentar esta publicación"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
+                        <span>{postComments.length > 0 ? postComments.length : 'Comentar'}</span>
                       </button>
                     </div>
 
@@ -656,9 +883,145 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       <span>Votar Destacado ({post.featuredVotes})</span>
                     </button>
                   </div>
+
+                  {/* Sección Desplegable de Comentarios (Siempre activa) */}
+                  {isCommentsOpen && (
+                    <div className="pt-3 mt-3 border-t border-slate-100 space-y-2.5 animate-fade-in">
+                      <span className="text-[11px] font-bold text-slate-600 block">
+                        Comentarios Familiares ({postComments.length}):
+                      </span>
+
+                      {/* Lista de comentarios existentes */}
+                      {postComments.length > 0 ? (
+                        <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                          {postComments.map((comm) => (
+                            <div key={comm.id} className="p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                              <div className="flex items-center justify-between text-[10px] text-slate-400 mb-0.5">
+                                <span className="font-bold text-slate-700">{comm.authorName}</span>
+                                <span>{comm.createdAt}</span>
+                              </div>
+                              <p className="text-slate-800 text-[11px]">{comm.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[11px] text-slate-400 italic">
+                          Aún no hay comentarios. ¡Sé el primero en dejar unas palabras de aliento!
+                        </p>
+                      )}
+
+                      {/* Campo para responder / comentar */}
+                      <div className="flex items-center gap-1.5 pt-1">
+                        <input
+                          type="text"
+                          placeholder="Tu nombre..."
+                          value={commentAuthor}
+                          onChange={(e) => setCommentAuthor(e.target.value)}
+                          className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] w-28 focus:outline-hidden"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Escribe un comentario..."
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleAddComment(post.id);
+                            }
+                          }}
+                          className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] focus:outline-hidden focus:ring-1 focus:ring-amber-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddComment(post.id)}
+                          className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[11px] font-bold cursor-pointer"
+                        >
+                          Enviar
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* 🪟 MODAL DE NORMAS DE PUBLICACIÓN Y RESPONSABILIDAD FAMILIAR */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-4 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-slate-900">
+                <ShieldCheck className="w-6 h-6 text-amber-600" />
+                <h3 className="font-extrabold text-base sm:text-lg">
+                  Normas de Convivencia y Publicación
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowTermsModal(false)}
+                className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 leading-relaxed">
+              La <strong>Liga Deportiva Costa de Oro 2026</strong> es un espacio formativo, escolar y familiar. Al publicar mensajes, fotos o videos, cada padre, madre o familiar acepta las siguientes directrices:
+            </p>
+
+            <div className="space-y-2.5 text-xs text-slate-700">
+              <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl">
+                <h5 className="font-bold text-emerald-950 flex items-center gap-1.5 mb-1">
+                  <span>1. Espíritu Deportivo y Apoyo Positivo</span>
+                </h5>
+                <p className="text-[11px] text-slate-600">
+                  Las publicaciones deben celebrar el esfuerzo, compañerismo y respeto entre todas las 6 delegaciones escolares participantes.
+                </p>
+              </div>
+
+              <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-2xl">
+                <h5 className="font-bold text-amber-950 flex items-center gap-1.5 mb-1">
+                  <span>2. Protección de la Niñez y Privacidad</span>
+                </h5>
+                <p className="text-[11px] text-slate-600">
+                  Las fotos y videos deben ser estrictamente del ámbito deportivo en cancha. Queda prohibida cualquier imagen o dato que vulnere la intimidad de los estudiantes menores de edad.
+                </p>
+              </div>
+
+              <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-2xl">
+                <h5 className="font-bold text-rose-950 flex items-center gap-1.5 mb-1">
+                  <span>3. Cero Tolerancia a la Agresividad</span>
+                </h5>
+                <p className="text-[11px] text-slate-600">
+                  Se prohíben descalificaciones, reclamos arbitrales ofensivos, lenguaje vulgar o agresiones entre barras. El comité organizador se reserva el derecho de retirar cualquier contenido inapropiado.
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl">
+                <h5 className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
+                  <span>4. Responsabilidad del Usuario</span>
+                </h5>
+                <p className="text-[11px] text-slate-600">
+                  Cada usuario es responsable del contenido transmitido desde su dispositivo mediante el PIN de seguridad del festival.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+              <span className="text-[10.5px] text-slate-400 italic">
+                *Aplica una sola vez por celular en todo el torneo.
+              </span>
+              <button
+                type="button"
+                onClick={handleAcceptTerms}
+                className="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all cursor-pointer"
+              >
+                Comprendo y Acepto las Normas
+              </button>
+            </div>
           </div>
         </div>
       )}

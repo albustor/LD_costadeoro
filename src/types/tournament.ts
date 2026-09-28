@@ -35,6 +35,7 @@ export interface School {
   location: string;
   city: string;
   founded?: number;
+  mascot?: string;
 }
 
 export interface Category {
@@ -167,6 +168,14 @@ export interface SportDefinition {
   isCustom?: boolean;
 }
 
+export interface PostComment {
+  id: string;
+  authorName: string;
+  authorRelation?: string;
+  text: string;
+  createdAt: string;
+}
+
 export interface FamilyPost {
   id: string;
   schoolId: string;
@@ -182,4 +191,5 @@ export interface FamilyPost {
   featuredVotes: number;
   isFeatured: boolean;
   createdAt: string;
+  comments?: PostComment[];
 }

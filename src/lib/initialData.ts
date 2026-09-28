@@ -180,9 +180,9 @@ export const INITIAL_MATCHES: Match[] = [
     notes: 'Sólida defensa en zona de CRIA durante los 4 cuartos.',
     updatedAt: '2026-10-09T16:00:00Z',
   },
-  // MATCH EN VIVO ACTIVO (Simulación de tiempo real)
+  // PRÓXIMO ENCUENTRO OFICIAL PROGRAMADO (JORNADA 2)
   {
-    id: 'm-live-01',
+    id: 'm-fem-j2-01',
     tournamentId: 'costa-de-oro-2026',
     jornada: 2,
     jornadaName: '2.ª Jornada - Festival Noviembre',
@@ -193,13 +193,12 @@ export const INITIAL_MATCHES: Match[] = [
     venue: 'Cancha Principal, Campus Tempisque',
     homeTeamId: 'la-paz-tempisque',
     awayTeamId: 'la-paz-cabo-velas',
-    homeScore: 1,
-    awayScore: 2,
-    status: 'live',
-    currentPeriod: '2.° Tiempo',
-    minute: 38,
-    notes: 'Clásico institucional en vivo con gran ambiente en las gradas.',
-    updatedAt: '2026-11-02T14:38:00Z',
+    homeScore: 0,
+    awayScore: 0,
+    status: 'scheduled',
+    currentPeriod: 'Por Iniciar',
+    notes: 'Clásico institucional programado para la 2.ª Jornada Oficial.',
+    updatedAt: '2026-10-15T10:00:00Z',
   },
   // PRÓXIMOS ENCUENTROS (Jornadas 2, 3 y Finales)
   {
