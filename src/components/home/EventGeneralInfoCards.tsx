@@ -31,6 +31,7 @@ interface EventGeneralInfoCardsProps {
 export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     schools: true,
+    venues: true,
     sports: true,
     upcomingSports: false,
     festivals: false,
@@ -174,7 +175,208 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
         )}
       </div>
 
-      {/* ⚽ SECCIÓN 2: DISCIPLINAS OFICIALES Y DÍAS DE COMPETENCIA */}
+      {/* 📍 SECCIÓN 2: SEDES OFICIALES Y ESTADO DE ASIGNACIÓN POR SORTEO / RIFA */}
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
+        <button
+          type="button"
+          onClick={() => toggleSection('venues')}
+          className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left hover:bg-slate-50/60 transition-colors cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
+              <MapPin className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-2">
+                <span>Sedes Deportivas y Estado de Asignación</span>
+                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold flex items-center gap-1">
+                  <span>🎲 Sorteo Oficial</span>
+                </span>
+              </h3>
+              <p className="text-xs text-slate-500">
+                Asignación por rifa rotativa entre instituciones con canchas disponibles (Reglamento PDF)
+              </p>
+            </div>
+          </div>
+
+          <div className="p-2 rounded-xl bg-slate-100 text-slate-600">
+            {openSections.venues ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </div>
+        </button>
+
+        {openSections.venues && (
+          <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-4">
+            {/* Explicación resumida del mecanismo oficial */}
+            <div className="p-4 bg-amber-50/50 rounded-2xl border border-amber-200 text-xs text-slate-700 space-y-2">
+              <div className="flex items-center gap-2 font-bold text-amber-950">
+                <Sparkles className="w-4 h-4 text-amber-600" />
+                <span>Protocolo Oficial de Asignación de Sedes (Liga Costa de Oro 2026)</span>
+              </div>
+              <p className="text-[11.5px] leading-relaxed text-slate-600">
+                Cada <strong>festival diario</strong> se disputa en una <strong>sola sede central</strong>. Las sedes se sortean por rifa equitativa entre los colegios que ofrecen instalaciones. Una sede no repite hasta que todas las participantes con cancha hayan sido anfitrionas.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                <div className="p-2 bg-white rounded-xl border border-amber-200/80 text-[11px]">
+                  <strong className="text-slate-900 block mb-0.5">1. Registro de Canchas</strong>
+                  <span className="text-slate-500">Cada institución confirma su disponibilidad de fútbol, baloncesto y voleibol.</span>
+                </div>
+                <div className="p-2 bg-white rounded-xl border border-amber-200/80 text-[11px]">
+                  <strong className="text-slate-900 block mb-0.5">2. Rifa por Disciplina</strong>
+                  <span className="text-slate-500">15 fechas de grupos sorteadas sin repetición de anfitrión.</span>
+                </div>
+                <div className="p-2 bg-white rounded-xl border border-amber-200/80 text-[11px]">
+                  <strong className="text-slate-900 block mb-0.5">3. Gran Final</strong>
+                  <span className="text-slate-500">Las 5 fechas finales se rifan al culminar la J3 o en sede neutral.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Matriz interactiva de oferta de canchas e instituciones */}
+            <div className="space-y-2">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-500">
+                Estado Actual de Sedes e Instalaciones Ofrecidas
+              </h4>
+              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-2xs">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold">
+                      <th className="py-2.5 px-3">Institución</th>
+                      <th className="py-2.5 px-3">Cancha Fútbol</th>
+                      <th className="py-2.5 px-3">Cancha Baloncesto</th>
+                      <th className="py-2.5 px-3">Cancha Voleibol</th>
+                      <th className="py-2.5 px-3 text-right">Estado Rifa</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-slate-600">
+                    <tr className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-2">
+                        <SchoolEmblem schoolId="cria" size="sm" />
+                        <span>CRIA (Tiburones 🦈)</span>
+                      </td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3 text-right">
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">
+                          🎲 Pendiente de rifa
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-2">
+                        <SchoolEmblem schoolId="la-paz-cabo-velas" size="sm" />
+                        <span>La Paz Cabo Velas & Tempisque (Pumas 🐾)</span>
+                      </td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold">Disponible</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold">Disponible</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold">Disponible</span></td>
+                      <td className="py-2.5 px-3 text-right">
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">
+                          🎲 Pendiente de rifa
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-2">
+                        <SchoolEmblem schoolId="journey-school" size="sm" />
+                        <span>The Journey School</span>
+                      </td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3 text-right">
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">
+                          🎲 Pendiente de rifa
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-2">
+                        <SchoolEmblem schoolId="vittorino" size="sm" />
+                        <span>Instituto Vittorino Prep</span>
+                      </td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3 text-right">
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">
+                          🎲 Pendiente de rifa
+                        </span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-50/50">
+                      <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-2">
+                        <SchoolEmblem schoolId="educarte" size="sm" />
+                        <span>Educarte High School</span>
+                      </td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3"><span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-semibold">Por confirmar</span></td>
+                      <td className="py-2.5 px-3 text-right">
+                        <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">
+                          🎲 Pendiente de rifa
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Asignación práctica por disciplina deportiva */}
+            <div className="space-y-2 pt-1">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-500">
+                Traducción Práctica por Deporte e Instituciones
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Fútbol */}
+                <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-slate-900">⚽ Fútbol (Fem, C, D)</span>
+                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">Por rifar</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    <strong>Participantes:</strong> CRIA, La Paz Cabo Velas, La Paz Tempisque, Vittorino, Journey.
+                  </p>
+                  <p className="text-[10.5px] text-slate-600 bg-white p-2 rounded-xl border border-slate-200">
+                    📍 <strong>Sedes elegibles:</strong> Campus Cabo Velas / Tempisque y colegios con cancha de fútbol habilitada.
+                  </p>
+                </div>
+
+                {/* Voleibol */}
+                <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-slate-900">🏐 Voleibol (C y D Fem)</span>
+                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">Por rifar</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    <strong>Participantes:</strong> Journey, Educarte, Vittorino, La Paz Cabo Velas.
+                  </p>
+                  <p className="text-[10.5px] text-slate-600 bg-white p-2 rounded-xl border border-slate-200">
+                    📍 <strong>Sedes elegibles:</strong> Gimnasios techados y canchas reglamentarias multiuso de los colegios inscritos.
+                  </p>
+                </div>
+
+                {/* Baloncesto */}
+                <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-slate-900">🏀 Baloncesto (C y D)</span>
+                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">Por rifar</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    <strong>Participantes:</strong> CRIA, La Paz Cabo Velas, La Paz Tempisque, Educarte, Journey.
+                  </p>
+                  <p className="text-[10.5px] text-slate-600 bg-white p-2 rounded-xl border border-slate-200">
+                    📍 <strong>Sedes elegibles:</strong> Canchas con tableros oficiales y mesa de control técnico de las sedes registradas.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ⚽ SECCIÓN 3: DISCIPLINAS OFICIALES Y DÍAS DE COMPETENCIA */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden transition-all">
         <button
           type="button"

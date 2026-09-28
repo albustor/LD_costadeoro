@@ -377,6 +377,17 @@ export function SportScheduleView({
               </span>
             </div>
 
+            {/* Aviso de asignación de sedes por sorteo */}
+            <div className="flex items-center gap-2 p-3 bg-amber-50/60 rounded-2xl border border-amber-200 text-xs text-amber-950">
+              <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
+              <div className="min-w-0">
+                <span className="font-bold">Asignación de Sedes: </span>
+                <span className="text-slate-600">
+                  Las sedes se definen por rifa rotativa entre las instituciones con cancha disponible (CRIA, La Paz, Journey, Vittorino y Educarte). Cada festival diario se disputa en una sola sede anfitriona.
+                </span>
+              </div>
+            </div>
+
             {/* Lista de Partidos Limpia */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {sportMatches.length === 0 ? (
