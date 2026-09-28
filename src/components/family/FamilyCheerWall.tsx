@@ -16,8 +16,24 @@ import {
   Flame, 
   Share2, 
   ThumbsUp, 
-  Smile 
+  Smile,
+  Lock,
+  KeyRound,
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
+
+const VALID_PINS: Record<string, string | 'all'> = {
+  '2026': 'all',
+  'PAZ2026': 'all',
+  'COSTA2026': 'all',
+  '1001': 'la-paz-cabo-velas',
+  '1002': 'la-paz-tempisque',
+  '2001': 'cria',
+  '3001': 'journey-school',
+  '4001': 'vittorino',
+  '5001': 'educarte',
+};
 
 const INITIAL_FAMILY_POSTS: FamilyPost[] = [
   {
@@ -104,6 +120,11 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [posts, setPosts] = useState<FamilyPost[]>(INITIAL_FAMILY_POSTS);
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   
+  // PIN de Seguridad y Verificación Familiar
+  const [isPinVerified, setIsPinVerified] = useState<boolean>(false);
+  const [enteredPin, setEnteredPin] = useState<string>('');
+  const [pinError, setPinError] = useState<string | null>(null);
+
   // Formulario de apoyo en 2 toques
   const [selectedSchoolId, setSelectedSchoolId] = useState<string>(schools[0]?.id || 'la-paz-cabo-velas');
   const [authorName, setAuthorName] = useState<string>('');
@@ -115,6 +136,47 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [isPosting, setIsPosting] = useState<boolean>(false);
   const [showSuccessBadge, setShowSuccessBadge] = useState<boolean>(false);
 
+  // Verificar si ya tiene PIN en localStorage o en la URL (?pass=2026 o ?pin=2026)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('costa_de_oro_family_pin_verified');
+      if (stored === 'true') {
+        setIsPinVerified(true);
+        return;
+      }
+
+      // Comprobar parámetros de URL para acceso por QR
+      const params = new URLSearchParams(window.location.search);
+      const urlPin = params.get('pass') || params.get('pin') || params.get('code');
+      if (urlPin && VALID_PINS[urlPin.toUpperCase()]) {
+        setIsPinVerified(true);
+        localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
+        const matchedSchool = VALID_PINS[urlPin.toUpperCase()];
+        if (matchedSchool && matchedSchool !== 'all') {
+          setSelectedSchoolId(matchedSchool);
+        }
+      }
+    }
+  }, []);
+
+  // Validar PIN ingresado
+  const handleValidatePin = (pinToTest: string) => {
+    const cleanPin = pinToTest.trim().toUpperCase();
+    if (VALID_PINS[cleanPin]) {
+      setIsPinVerified(true);
+      setPinError(null);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
+      }
+      const matchedSchool = VALID_PINS[cleanPin];
+      if (matchedSchool && matchedSchool !== 'all') {
+        setSelectedSchoolId(matchedSchool);
+      }
+    } else {
+      setPinError('PIN no reconocido. Ingresa el código de 4 dígitos oficial (ej: 2026).');
+    }
+  };
+
   // Reacciones locales
   const handleReaction = (postId: string, type: 'like' | 'applause' | 'feature') => {
     setPosts((prev) =>
@@ -123,7 +185,6 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
           const updatedLikes = type === 'like' ? p.likesCount + 1 : p.likesCount;
           const updatedApplause = type === 'applause' ? p.applauseCount + 1 : p.applauseCount;
           const updatedVotes = type === 'feature' ? p.featuredVotes + 1 : p.featuredVotes;
-          // Auto-promover a destacado si supera umbral
           const isFeatured = updatedLikes + updatedApplause >= 35 || updatedVotes >= 8 || p.isFeatured;
           return {
             ...p,
@@ -156,6 +217,13 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   // Enviar mensaje / foto
   const handleSubmitPost = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Si aún no está verificado el PIN
+    if (!isPinVerified) {
+      handleValidatePin(enteredPin);
+      return;
+    }
+
     if (!message.trim() && !mediaPreview) return;
 
     setIsPosting(true);
@@ -259,19 +327,34 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* ✍️ FORMULARIO DE APOYO EN 2 TOQUES (CERO LOGIN) */}
+      {/* ✍️ FORMULARIO DE APOYO CON SEGURIDAD PIN (CERO FRICCIÓN / 2 TOQUES) */}
       {!featuredOnly && (
         <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
-              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
-                <span>Muro de Familias y Mensajes de Apoyo</span>
-              </h3>
-              <p className="text-xs text-slate-500 font-medium">
-                Envía una porra, foto o video de tu hijo en 2 toques sin registro ni contraseñas.
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+                  Muro de Familias y Mensajes de Apoyo
+                </h3>
+              </div>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
+                Envía una porra, foto o video de tu hijo. Protegido para la comunidad escolar.
               </p>
             </div>
+
+            {/* Badge de Seguridad / Estado de PIN */}
+            {isPinVerified ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>PIN de Familia Verificado</span>
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-xs font-bold border border-amber-200">
+                <Lock className="w-3.5 h-3.5 text-amber-700" />
+                <span>Requiere PIN de Cancha (Ej: 2026)</span>
+              </span>
+            )}
 
             {showSuccessBadge && (
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs animate-bounce border border-emerald-300">
@@ -368,6 +451,41 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   >
                     Eliminar
                   </button>
+                </div>
+              )}
+
+              {/* Fila de PIN de Seguridad si no está verificado */}
+              {!isPinVerified && (
+                <div className="p-3.5 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-2">
+                  <div className="flex items-center gap-2 text-amber-900 text-xs font-bold">
+                    <KeyRound className="w-4 h-4 text-amber-700" />
+                    <span>PIN de Seguridad Familiar Requerido:</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Código de 4 dígitos (Ej: 2026)"
+                      value={enteredPin}
+                      onChange={(e) => {
+                        setEnteredPin(e.target.value);
+                        setPinError(null);
+                      }}
+                      className="px-3 py-2 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 w-48 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleValidatePin(enteredPin)}
+                      className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer"
+                    >
+                      Validar PIN
+                    </button>
+                  </div>
+                  {pinError && (
+                    <p className="text-[11px] text-red-600 font-semibold flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      <span>{pinError}</span>
+                    </p>
+                  )}
                 </div>
               )}
 
