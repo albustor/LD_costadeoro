@@ -23,47 +23,51 @@ const sizeMap = {
   sm: 'w-8 h-8',
   md: 'w-10 h-10',
   lg: 'w-14 h-14',
-  xl: 'w-18 h-18',
+  xl: 'w-20 h-20',
 };
 
-// Direct mapping to official files stored in public/logos/colegios/
-const schoolLogoFiles: Record<string, { src: string; alt: string; name: string }> = {
+// Mapeo directo a los archivos oficiales locales de alta resolución en public/logos/colegios/
+const schoolLogoFiles: Record<string, { src: string; fallbackSrc?: string; alt: string; name: string }> = {
   'la-paz-cabo-velas': {
-    src: '/logos/colegios/la_paz_cabo_velas.svg',
-    alt: 'La Paz Community School - Cabo Velas',
-    name: 'La Paz CV',
+    src: '/logos/colegios/la_paz_cabo_velas.png',
+    fallbackSrc: '/logos/colegios/la_paz_cabo_velas.svg',
+    alt: 'Logo Oficial La Paz Community School - Cabo Velas',
+    name: 'La Paz Cabo Velas',
   },
   'la-paz-tempisque': {
-    src: '/logos/colegios/la_paz_tempisque.svg',
-    alt: 'La Paz Community School - Tempisque',
-    name: 'La Paz TP',
+    src: '/logos/colegios/la_paz_tempisque.png',
+    fallbackSrc: '/logos/colegios/la_paz_tempisque.svg',
+    alt: 'Logo Oficial La Paz Community School - Tempisque',
+    name: 'La Paz Tempisque',
   },
   'cria': {
-    src: '/logos/colegios/cria.svg',
-    alt: 'Costa Rica International Academy',
+    src: '/logos/colegios/cria.png',
+    fallbackSrc: '/logos/colegios/cria.svg',
+    alt: 'Logo Oficial Costa Rica International Academy (CRIA)',
     name: 'CRIA',
   },
   'journey-school': {
-    src: '/logos/colegios/journey_school.svg',
-    alt: 'The Journey School of Costa Rica',
+    src: '/logos/colegios/journey_school.png',
+    fallbackSrc: '/logos/colegios/journey_school.svg',
+    alt: 'Logo Oficial The Journey School of Costa Rica',
     name: 'The Journey School',
   },
   'vittorino': {
     src: '/logos/colegios/vittorino.svg',
-    alt: 'Centro Educativo Monseñor Vittorino Girardi',
+    alt: 'Logo Oficial Centro Educativo Monseñor Vittorino Girardi',
     name: 'Vittorino Prep',
   },
   'educarte': {
-    src: '/logos/colegios/educarte.svg',
-    alt: 'Educarte Bilingual High School',
+    src: '/logos/colegios/educarte.png',
+    fallbackSrc: '/logos/colegios/educarte.svg',
+    alt: 'Logo Oficial Educarte Bilingual High School',
     name: 'Educarte',
   },
 };
 
 /**
- * Official School Emblem Component:
- * Renders the official stored SVG/PNG logo files from /logos/colegios/
- * with automatic fallback to native inline vector geometry.
+ * Componente de Emblema Oficial Institucional:
+ * Renderiza los logos oficiales en alta resolución (PNG/SVG) almacenados localmente en /logos/colegios/
  */
 export function SchoolEmblem({
   schoolId,
@@ -71,24 +75,35 @@ export function SchoolEmblem({
   className = '',
   showBorder = true,
 }: SchoolEmblemProps) {
-  const [hasError, setHasError] = useState(false);
+  const [currentSrcIndex, setCurrentSrcIndex] = useState<number>(0);
   const sizeClass = sizeMap[size] || sizeMap.md;
   const logoInfo = schoolLogoFiles[schoolId];
 
+  const handleImageError = () => {
+    if (logoInfo?.fallbackSrc && currentSrcIndex === 0) {
+      setCurrentSrcIndex(1);
+    } else {
+      setCurrentSrcIndex(2); // Fallback final
+    }
+  };
+
+  const imageSrc =
+    currentSrcIndex === 0 ? logoInfo?.src : currentSrcIndex === 1 ? logoInfo?.fallbackSrc : null;
+
   return (
     <div
-      className={`inline-flex items-center justify-center shrink-0 rounded-2xl overflow-hidden shadow-2xs transition-transform ${
-        showBorder ? 'border border-slate-200/90 bg-white p-0.5' : ''
+      className={`inline-flex items-center justify-center shrink-0 rounded-2xl overflow-hidden shadow-2xs transition-transform bg-white ${
+        showBorder ? 'border border-slate-200/90 p-0.5' : ''
       } ${sizeClass} ${className}`}
       title={logoInfo?.name || schoolId}
     >
-      {logoInfo && !hasError ? (
+      {logoInfo && imageSrc ? (
         <img
-          src={logoInfo.src}
+          src={imageSrc}
           alt={logoInfo.alt}
-          className="w-full h-full object-contain rounded-xl"
+          className="w-full h-full object-contain rounded-xl p-0.5"
           loading="eager"
-          onError={() => setHasError(true)}
+          onError={handleImageError}
         />
       ) : (
         <div className="w-full h-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-700">
