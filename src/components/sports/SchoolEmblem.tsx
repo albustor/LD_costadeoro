@@ -19,11 +19,11 @@ interface SchoolEmblemProps {
 }
 
 const sizeMap = {
-  xs: 'w-6 h-6',
-  sm: 'w-8 h-8',
-  md: 'w-10 h-10',
-  lg: 'w-14 h-14',
-  xl: 'w-20 h-20',
+  xs: 'w-8 h-8',
+  sm: 'w-12 h-12',
+  md: 'w-20 h-20',
+  lg: 'w-28 h-28',
+  xl: 'w-36 h-36',
 };
 
 // Mapeo directo a los archivos oficiales locales de alta resolución en public/logos/colegios/

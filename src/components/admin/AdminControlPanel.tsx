@@ -28,12 +28,16 @@ import {
   QrCode,
   Scan,
   ExternalLink,
+  Users,
   X
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
 import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 import { LiveDeskScorer } from './LiveDeskScorer';
+import { RosterUploaderModal } from './RosterUploaderModal';
+import { CertificateGeneratorModal } from './CertificateGeneratorModal';
+import { Award } from 'lucide-react';
 
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById } = useTournament();
@@ -54,8 +58,10 @@ export function AdminControlPanel() {
   });
   const [pinSavedSuccess, setPinSavedSuccess] = useState<boolean>(false);
 
-  // Modal para Escáner de Datos
+  // Modal para Escáner de Datos, Carga de Rosters y Certificados
   const [showScannerModal, setShowScannerModal] = useState<boolean>(false);
+  const [showRosterModal, setShowRosterModal] = useState<boolean>(false);
+  const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
 
   // Función para Descargar Offline (JSON completo de la base de datos)
   const handleDownloadOffline = () => {
@@ -230,6 +236,26 @@ export function AdminControlPanel() {
             >
               <Download className="w-3.5 h-3.5" />
               <span>Descargar Offline</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowRosterModal(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black shadow-2xs transition cursor-pointer"
+              title="Cargar listas de jugadores y cuerpos técnicos por colegio"
+            >
+              <Users className="w-3.5 h-3.5 text-slate-950" />
+              <span>Carga Masiva de Rosters</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowCertificateModal(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs font-black shadow-2xs transition cursor-pointer"
+              title="Generar e imprimir diplomas y certificados oficiales con código QR"
+            >
+              <Award className="w-3.5 h-3.5 text-amber-400" />
+              <span>Generar Diplomas</span>
             </button>
 
             <button
@@ -865,6 +891,20 @@ export function AdminControlPanel() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal de Carga Masiva de Rosters */}
+      <RosterUploaderModal
+        isOpen={showRosterModal}
+        onClose={() => setShowRosterModal(false)}
+      />
+
+      {/* Modal de Generación de Diplomas y Certificados con QR */}
+      {showCertificateModal && (
+        <CertificateGeneratorModal
+          schools={schools}
+          onClose={() => setShowCertificateModal(false)}
+        />
       )}
     </div>
   );

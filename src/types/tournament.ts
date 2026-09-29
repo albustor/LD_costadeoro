@@ -226,5 +226,28 @@ export interface FamilyPost {
   featuredVotes: number;
   isFeatured: boolean;
   createdAt: string;
+  humanValueTag?: 'esfuerzo' | 'companerismo' | 'resiliencia' | 'fairplay' | 'alegria';
+  aiModerationStatus?: 'approved' | 'flagged' | 'pending';
   comments?: PostComment[];
 }
+
+export interface Player {
+  id: string;
+  jerseyNumber: number;
+  fullName: string;
+  position?: string;
+  isCaptain?: boolean;
+  birthYear?: number;
+  categoryDivision?: string;
+}
+
+export interface TeamRoster {
+  schoolId: string;
+  sport: SportType;
+  categoryId: string;
+  coachName?: string;
+  assistantCoachName?: string;
+  players: Player[];
+  updatedAt?: string;
+}
+

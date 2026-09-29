@@ -147,8 +147,8 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                       aria-expanded={isSelected}
                     >
                       {/* Icono / Escudo en Badge Redondeado Suave */}
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center p-1.5 shadow-2xs group-hover:scale-105 group-hover:bg-amber-100/70 transition-transform">
-                        <SchoolEmblem schoolId={school.id} size="sm" />
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border border-slate-200/90 group-hover:border-amber-400 flex items-center justify-center p-2 shadow-2xs group-hover:scale-105 transition-all">
+                        <SchoolEmblem schoolId={school.id} size="md" showBorder={false} />
                       </div>
 
                       {/* Nombre del Colegio */}

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTournament } from '@/context/TournamentContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { EventIntroVideo } from '@/components/home/EventIntroVideo';
 import { EventGeneralInfoCards } from '@/components/home/EventGeneralInfoCards';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
@@ -21,6 +22,7 @@ import {
 
 export default function HomePage() {
   const { tournament, schools, matches, getSchoolById, getCategoryById } = useTournament();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'video' | 'info'>('video');
 
   // Encontrar el partido en vivo o el encuentro destacado del momento (Fútbol Femenino Abierto)
@@ -37,7 +39,7 @@ export default function HomePage() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-3 py-1 rounded-full bg-slate-950 text-amber-300 font-bold text-xs border border-amber-500/40 flex items-center gap-1.5 shadow-2xs">
               <Trophy className="w-3.5 h-3.5 text-amber-400" />
-              <span>{tournament.name}</span>
+              <span>{t('hero.welcomeBadge')}</span>
             </span>
             <span className="px-3 py-1 rounded-full bg-white text-slate-700 font-medium text-xs border border-slate-200 flex items-center gap-1.5 shadow-2xs">
               <MapPin className="w-3.5 h-3.5 text-amber-600" />
@@ -49,11 +51,11 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Bienvenidos a la Liga Deportiva Costa de Oro
+            {t('hero.title')}
           </h1>
 
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Festival formativo intercolegial de Guanacaste que une a 6 instituciones educativas en torno al compañerismo, el juego limpio y la sana competencia en Fútbol, Voleibol y Baloncesto.
+            {t('hero.tagline')}
           </p>
         </div>
       </section>
@@ -71,7 +73,7 @@ export default function HomePage() {
             }`}
           >
             <Film className={`w-4 h-4 ${activeTab === 'video' ? 'text-amber-400' : 'text-amber-600'}`} />
-            <span>Video Introductorio del Evento</span>
+            <span>{t('hero.tab.video')}</span>
           </button>
 
           <button
@@ -83,7 +85,7 @@ export default function HomePage() {
             }`}
           >
             <Info className={`w-4 h-4 ${activeTab === 'info' ? 'text-amber-400' : 'text-amber-600'}`} />
-            <span>Información General del Evento</span>
+            <span>{t('hero.tab.info')}</span>
           </button>
         </div>
 
@@ -93,10 +95,10 @@ export default function HomePage() {
             <EventIntroVideo />
             <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center space-y-1 shadow-2xs">
               <span className="text-xs font-bold text-slate-800">
-                Video Oficial de la Liga Costa de Oro 2026
+                {t('hero.videoTitle')}
               </span>
               <p className="text-[11px] text-slate-500">
-                Revive la emoción, el compañerismo y la inauguración de la temporada deportiva intercolegial.
+                {t('hero.videoSubtitle')}
               </p>
             </div>
           </div>
@@ -113,13 +115,13 @@ export default function HomePage() {
         <div className="flex items-center justify-between">
           <h2 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
             <Shield className="w-4 h-4 text-amber-600" />
-            <span>Colegios e Instituciones Participantes</span>
+            <span>{t('hero.schools.title')}</span>
           </h2>
           <Link
             href="/colegios"
             className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1 group"
           >
-            <span>Ver detalles</span>
+            <span>{t('hero.schools.viewDetails')}</span>
             <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -130,16 +132,16 @@ export default function HomePage() {
             <Link
               key={school.id}
               href="/colegios"
-              className="bg-white hover:bg-amber-50/60 p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 hover:border-amber-400 shadow-2xs hover:shadow-md transition-all flex flex-col items-center text-center gap-2 group cursor-pointer"
+              className="bg-white hover:bg-amber-50/60 p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 hover:border-amber-400 shadow-2xs hover:shadow-md transition-all flex flex-col items-center text-center gap-2.5 group cursor-pointer"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-50 border border-slate-200/80 group-hover:border-amber-300 flex items-center justify-center p-1 shadow-2xs group-hover:scale-105 transition-transform">
-                <SchoolEmblem schoolId={school.id} size="sm" showBorder={false} />
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border border-slate-200/90 group-hover:border-amber-400 flex items-center justify-center p-2 shadow-2xs group-hover:scale-105 transition-all">
+                <SchoolEmblem schoolId={school.id} size="md" showBorder={false} />
               </div>
               <div className="min-w-0 w-full space-y-0.5">
                 <span className="font-extrabold text-slate-900 text-xs sm:text-[13px] leading-tight block truncate group-hover:text-amber-900 transition-colors">
                   {school.shortName || school.name}
                 </span>
-                <span className="text-[10px] text-slate-500 block truncate">
+                <span className="text-[10.5px] text-slate-500 block truncate">
                   {school.location || school.city}
                 </span>
               </div>
@@ -150,20 +152,20 @@ export default function HomePage() {
 
       {/* 🚀 4. ACCESOS DIRECTOS COMPACTOS (TIPO ICONOS / ACCIONES RÁPIDAS) */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-1">
-        {/* Acceso 1: Avance y Puntuación */}
+        {/* Acceso 1: Deportes */}
         <Link
-          href="/tabla"
+          href="/deportes"
           className="bg-white hover:bg-amber-50/60 p-4 rounded-2xl border border-slate-200/90 hover:border-amber-400 shadow-xs hover:shadow-md transition-all flex flex-col items-center justify-center text-center gap-2.5 group cursor-pointer"
         >
           <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 group-hover:scale-110 group-hover:bg-amber-100 transition-transform shadow-2xs">
             <Trophy className="w-6 h-6" />
           </div>
           <span className="font-extrabold text-slate-800 text-xs sm:text-sm group-hover:text-amber-800 transition-colors">
-            Avance y Puntuación
+            {t('hero.quickAccess.sports')}
           </span>
         </Link>
 
-        {/* Acceso 2: Deportes y Horarios */}
+        {/* Acceso 2: Horarios */}
         <Link
           href="/calendario"
           className="bg-white hover:bg-sky-50/60 p-4 rounded-2xl border border-slate-200/90 hover:border-sky-400 shadow-xs hover:shadow-md transition-all flex flex-col items-center justify-center text-center gap-2.5 group cursor-pointer"
@@ -172,7 +174,7 @@ export default function HomePage() {
             <Calendar className="w-6 h-6" />
           </div>
           <span className="font-extrabold text-slate-800 text-xs sm:text-sm group-hover:text-sky-800 transition-colors">
-            Deportes y Horarios
+            {t('hero.quickAccess.schedule')}
           </span>
         </Link>
 
@@ -185,7 +187,7 @@ export default function HomePage() {
             <Heart className="w-6 h-6 fill-rose-500" />
           </div>
           <span className="font-extrabold text-slate-800 text-xs sm:text-sm group-hover:text-rose-800 transition-colors">
-            Muro Familiar
+            {t('hero.quickAccess.mural')}
           </span>
         </Link>
 
@@ -198,7 +200,7 @@ export default function HomePage() {
             <SlidersHorizontal className="w-6 h-6" />
           </div>
           <span className="font-extrabold text-slate-800 text-xs sm:text-sm group-hover:text-slate-950 transition-colors">
-            Panel de Control
+            {t('hero.quickAccess.admin')}
           </span>
         </Link>
       </section>

@@ -1,0 +1,20 @@
+# ==============================================================================
+# LIGA DEPORTIVA COSTA DE ORO 2026 - PLANTILLA OFICIAL DE CARGA DE JUGADORES
+# INSTRUCCIONES:
+# 1. Complete una fila por cada estudiante/jugador inscrito.
+# 2. 'colegio_id': la-paz-cabo-velas | la-paz-tempisque | cria | journey-school | vittorino | educarte
+# 3. 'deporte': futbol | voleibol | baloncesto
+# 4. 'categoria_id': cat-fem-futbol | cat-c-futbol | cat-d-futbol | cat-fem-c-voley | cat-fem-d-voley | cat-c-basket | cat-d-basket
+# 5. 'capitan': SI | NO
+# ==============================================================================
+colegio_id,colegio_nombre,deporte,categoria_id,categoria_nombre,dorsal,nombre_completo,posicion,capitan,ano_nacimiento,entrenador_principal
+la-paz-cabo-velas,La Paz Cabo Velas,futbol,cat-fem-futbol,Fútbol Femenino Abierto,1,Sofía Morales,Portera,NO,2010,Carlos Santana
+la-paz-cabo-velas,La Paz Cabo Velas,futbol,cat-fem-futbol,Fútbol Femenino Abierto,10,Valentina Soto,Delantera,SI,2009,Carlos Santana
+la-paz-cabo-velas,La Paz Cabo Velas,futbol,cat-fem-futbol,Fútbol Femenino Abierto,7,Mariana Vargas,Mediocampista,NO,2010,Carlos Santana
+la-paz-tempisque,La Paz Tempisque,futbol,cat-fem-futbol,Fútbol Femenino Abierto,1,Lucía Méndez,Portera,NO,2010,Andrés Castro
+la-paz-tempisque,La Paz Tempisque,futbol,cat-fem-futbol,Fútbol Femenino Abierto,9,Elena Solano,Delantera,SI,2009,Andrés Castro
+cria,CRIA,futbol,cat-c-futbol,Fútbol Masculino Cat C,10,Mateo Jiménez,Delantero,SI,2012,Roberto Gómez
+cria,CRIA,futbol,cat-c-futbol,Fútbol Masculino Cat C,4,Daniel Obregón,Defensa Central,NO,2013,Roberto Gómez
+journey-school,The Journey School,futbol,cat-fem-futbol,Fútbol Femenino Abierto,8,Camila Rojas,Mediocampista,SI,2009,Esteban Arias
+vittorino,Vittorino Prep,baloncesto,cat-c-basket,Baloncesto Cat C,5,Sebastián Cordero,Base,SI,2012,Felipe Navarro
+educarte,Educarte,voleibol,cat-fem-c-voley,Voleibol Femenino Cat C,11,Valeria Alvarado,Armadora,SI,2012,Karla Mora

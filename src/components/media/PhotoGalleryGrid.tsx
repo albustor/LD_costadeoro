@@ -2,20 +2,22 @@
 
 import React, { useState } from 'react';
 import { useTournament } from '@/context/TournamentContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { PhotoItem } from '@/types/tournament';
 import { Camera, Download, Eye } from 'lucide-react';
 import { PinchZoomPhotoModal } from './PinchZoomPhotoModal';
 
 export function PhotoGalleryGrid() {
   const { photos } = useTournament();
+  const { t } = useLanguage();
   const [selectedMoment, setSelectedMoment] = useState<string>('all');
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
 
   const moments = [
-    { id: 'all', label: 'Todas las Tomas' },
-    { id: 'previo', label: '1. Previo (Calentamiento)' },
-    { id: 'durante', label: '2. Durante (Acción Pura)' },
-    { id: 'final_premiacion', label: '3. Posterior & Celebración' },
+    { id: 'all', label: t('gallery.all') },
+    { id: 'previo', label: t('gallery.warmup') },
+    { id: 'durante', label: t('gallery.action') },
+    { id: 'final_premiacion', label: t('gallery.celebration') },
   ];
 
   const filteredPhotos = selectedMoment === 'all'
@@ -29,10 +31,10 @@ export function PhotoGalleryGrid() {
         <div>
           <div className="flex items-center gap-2">
             <Camera className="w-5 h-5 text-amber-600" />
-            <h3 className="text-xl font-bold text-slate-900">Galería Fotográfica Oficial</h3>
+            <h3 className="text-xl font-bold text-slate-900">{t('gallery.title')}</h3>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Cobertura y registro deportivo en alta resolución
+            {t('gallery.subtitle')}
           </p>
         </div>
 
@@ -76,7 +78,7 @@ export function PhotoGalleryGrid() {
 
               <div className="absolute bottom-2 right-2 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-[11px] bg-slate-950/80 px-2 py-0.5 rounded shadow">
                 <Eye className="w-3.5 h-3.5" />
-                <span>Ver HD</span>
+                <span>{t('gallery.viewHd')}</span>
               </div>
             </div>
 
@@ -86,7 +88,7 @@ export function PhotoGalleryGrid() {
                   {photo.title}
                 </h4>
                 <span className="text-[10px] text-slate-500 block mt-0.5">
-                  Foto: {photo.photographer}
+                  {t('gallery.by')} {photo.photographer}
                 </span>
               </div>
 
@@ -96,7 +98,7 @@ export function PhotoGalleryGrid() {
                 rel="noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className="p-1.5 rounded-lg bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition-all"
-                title="Descargar Foto Oficial"
+                title={t('gallery.download')}
               >
                 <Download className="w-4 h-4" />
               </a>

@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
-const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
+const isProdExport = process.env.NODE_ENV === 'production' && process.env.GITHUB_ACTIONS === 'true';
 
 const nextConfig = {
   reactStrictMode: true,
-  output: isGithubActions ? 'export' : undefined,
-  basePath: isGithubActions ? '/LD_costadeoro' : '',
+  output: isProdExport ? 'export' : undefined,
+  basePath: isProdExport ? '/LD_costadeoro' : '',
   trailingSlash: true,
   images: {
     unoptimized: true,

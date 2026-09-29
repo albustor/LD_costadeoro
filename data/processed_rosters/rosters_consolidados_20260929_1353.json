@@ -1,0 +1,148 @@
+[
+  {
+    "schoolId": "la-paz-cabo-velas",
+    "schoolName": "La Paz Cabo Velas",
+    "sport": "futbol",
+    "categoryId": "cat-fem-futbol",
+    "categoryName": "Fútbol Femenino Abierto",
+    "coachName": "Carlos Santana",
+    "players": [
+      {
+        "id": "p-la-p-1-1",
+        "jerseyNumber": 1,
+        "fullName": "Sofía Morales",
+        "position": "Portera",
+        "isCaptain": false,
+        "birthYear": 2010
+      },
+      {
+        "id": "p-la-p-10-2",
+        "jerseyNumber": 10,
+        "fullName": "Valentina Soto",
+        "position": "Delantera",
+        "isCaptain": true,
+        "birthYear": 2009
+      },
+      {
+        "id": "p-la-p-7-3",
+        "jerseyNumber": 7,
+        "fullName": "Mariana Vargas",
+        "position": "Mediocampista",
+        "isCaptain": false,
+        "birthYear": 2010
+      }
+    ],
+    "updatedAt": "2026-09-29T13:53:41.773555"
+  },
+  {
+    "schoolId": "la-paz-tempisque",
+    "schoolName": "La Paz Tempisque",
+    "sport": "futbol",
+    "categoryId": "cat-fem-futbol",
+    "categoryName": "Fútbol Femenino Abierto",
+    "coachName": "Andrés Castro",
+    "players": [
+      {
+        "id": "p-la-p-1-1",
+        "jerseyNumber": 1,
+        "fullName": "Lucía Méndez",
+        "position": "Portera",
+        "isCaptain": false,
+        "birthYear": 2010
+      },
+      {
+        "id": "p-la-p-9-2",
+        "jerseyNumber": 9,
+        "fullName": "Elena Solano",
+        "position": "Delantera",
+        "isCaptain": true,
+        "birthYear": 2009
+      }
+    ],
+    "updatedAt": "2026-09-29T13:53:41.773555"
+  },
+  {
+    "schoolId": "cria",
+    "schoolName": "CRIA",
+    "sport": "futbol",
+    "categoryId": "cat-c-futbol",
+    "categoryName": "Fútbol Masculino Cat C",
+    "coachName": "Roberto Gómez",
+    "players": [
+      {
+        "id": "p-cria-10-1",
+        "jerseyNumber": 10,
+        "fullName": "Mateo Jiménez",
+        "position": "Delantero",
+        "isCaptain": true,
+        "birthYear": 2012
+      },
+      {
+        "id": "p-cria-4-2",
+        "jerseyNumber": 4,
+        "fullName": "Daniel Obregón",
+        "position": "Defensa Central",
+        "isCaptain": false,
+        "birthYear": 2013
+      }
+    ],
+    "updatedAt": "2026-09-29T13:53:41.773555"
+  },
+  {
+    "schoolId": "journey-school",
+    "schoolName": "The Journey School",
+    "sport": "futbol",
+    "categoryId": "cat-fem-futbol",
+    "categoryName": "Fútbol Femenino Abierto",
+    "coachName": "Esteban Arias",
+    "players": [
+      {
+        "id": "p-jour-8-1",
+        "jerseyNumber": 8,
+        "fullName": "Camila Rojas",
+        "position": "Mediocampista",
+        "isCaptain": true,
+        "birthYear": 2009
+      }
+    ],
+    "updatedAt": "2026-09-29T13:53:41.773555"
+  },
+  {
+    "schoolId": "vittorino",
+    "schoolName": "Vittorino Prep",
+    "sport": "baloncesto",
+    "categoryId": "cat-c-basket",
+    "categoryName": "Baloncesto Cat C",
+    "coachName": "Felipe Navarro",
+    "players": [
+      {
+        "id": "p-vitt-5-1",
+        "jerseyNumber": 5,
+        "fullName": "Sebastián Cordero",
+        "position": "Base",
+        "isCaptain": true,
+        "birthYear": 2012
+      }
+    ],
+    "updatedAt": "2026-09-29T13:53:41.773555"
+  },
+  {
+    "schoolId": "educarte",
+    "schoolName": "Educarte",
+    "sport": "voleibol",
+    "categoryId": "cat-fem-c-voley",
+    "categoryName": "Voleibol Femenino Cat C",
+    "coachName": "Karla Mora",
+    "players": [
+      {
+        "id": "p-educ-11-1",
+        "jerseyNumber": 11,
+        "fullName": "Valeria Alvarado",
+        "position": "Armadora",
+        "isCaptain": true,
+        "birthYear": 2012
+      }
+    ],
+    "updatedAt": "2026-09-29T13:53:41.773555"
+  }
+]

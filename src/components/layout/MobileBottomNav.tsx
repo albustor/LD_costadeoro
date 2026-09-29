@@ -10,8 +10,8 @@ export function MobileBottomNav() {
 
   const items = [
     { label: 'Inicio', href: '/', icon: Home },
-    { label: 'Posiciones', href: '/tabla', icon: Trophy },
-    { label: 'Calendario', href: '/calendario', icon: Calendar },
+    { label: 'Deportes', href: '/deportes', icon: Trophy },
+    { label: 'Horarios', href: '/calendario', icon: Calendar },
     { label: 'Muro', href: '/mural', icon: Heart },
     { label: 'Colegios', href: '/colegios', icon: Shield },
     { label: 'Admin', href: '/admin', icon: SlidersHorizontal },

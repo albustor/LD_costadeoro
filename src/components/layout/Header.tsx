@@ -23,8 +23,8 @@ export function Header() {
 
   const navItems = [
     { label: t('nav.home'), shortLabel: 'Inicio', href: '/', icon: Home },
-    { label: t('nav.standings.full'), shortLabel: 'Posiciones', href: '/tabla', icon: Trophy },
-    { label: t('nav.schedule.full'), shortLabel: 'Calendario', href: '/calendario', icon: Calendar },
+    { label: t('nav.standings.full'), shortLabel: 'Deportes', href: '/deportes', icon: Trophy },
+    { label: t('nav.schedule.full'), shortLabel: 'Horarios', href: '/calendario', icon: Calendar },
     { label: t('nav.mural.full'), shortLabel: 'Muro', href: '/mural', icon: Heart },
     { label: t('nav.schools'), shortLabel: 'Colegios', href: '/colegios', icon: Shield },
     { label: t('nav.admin'), shortLabel: 'Admin', href: '/admin', icon: SlidersHorizontal },

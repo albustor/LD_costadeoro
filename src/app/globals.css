@@ -40,3 +40,32 @@ body {
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 12px);
 }
+
+/* 🖨️ Professional High-Fidelity Print & PDF Stylesheet */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  header, 
+  footer, 
+  nav, 
+  .dev-viewport-bar, 
+  .no-print {
+    display: none !important;
+  }
+
+  @page {
+    size: letter portrait;
+    margin: 8mm;
+  }
+
+  .print-break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+

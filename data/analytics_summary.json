@@ -1,0 +1,143 @@
+{
+  "timestamp": "2026-09-29T10:22:52.241718",
+  "summary": {
+    "total_matches": 12,
+    "completed_matches": 7,
+    "live_matches": 0,
+    "scheduled_matches": 5,
+    "progress_percent": 58.3
+  },
+  "sports": {
+    "futbol": {
+      "total_matches": 6,
+      "completed": 6,
+      "total_score": 27,
+      "avg_score_per_match": 4.5,
+      "categories": [
+        "cat-c-futbol",
+        "cat-fem-futbol",
+        "cat-d-futbol"
+      ],
+      "highest_scoring_match": {
+        "match_id": "m-fut-d-01",
+        "teams": "Vittorino vs Journey School",
+        "score": "5 - 3",
+        "total": 8
+      }
+    },
+    "baloncesto": {
+      "total_matches": 1,
+      "completed": 1,
+      "total_score": 84,
+      "avg_score_per_match": 84.0,
+      "categories": [
+        "cat-c-baloncesto"
+      ],
+      "highest_scoring_match": {
+        "match_id": "m-bal-c-01",
+        "teams": "CRIA vs Vittorino",
+        "score": "48 - 36",
+        "total": 84
+      }
+    }
+  },
+  "schools_performance": {
+    "la-paz-cabo-velas": {
+      "name": "La Paz Cabo Velas",
+      "short_name": "La Paz CV",
+      "matches_played": 2,
+      "wins": 2,
+      "draws": 0,
+      "losses": 0,
+      "points_for": 6,
+      "points_against": 2,
+      "diff": 4,
+      "mvp_count": 2,
+      "sports_participated": [
+        "futbol"
+      ]
+    },
+    "la-paz-tempisque": {
+      "name": "La Paz Tempisque",
+      "short_name": "La Paz TP",
+      "matches_played": 2,
+      "wins": 1,
+      "draws": 0,
+      "losses": 1,
+      "points_for": 3,
+      "points_against": 4,
+      "diff": -1,
+      "mvp_count": 1,
+      "sports_participated": [
+        "futbol"
+      ]
+    },
+    "cria": {
+      "name": "Costa Rica International Academy",
+      "short_name": "CRIA",
+      "matches_played": 3,
+      "wins": 2,
+      "draws": 0,
+      "losses": 1,
+      "points_for": 53,
+      "points_against": 41,
+      "diff": 12,
+      "mvp_count": 2,
+      "sports_participated": [
+        "baloncesto",
+        "futbol"
+      ]
+    },
+    "journey-school": {
+      "name": "The Journey School",
+      "short_name": "Journey School",
+      "matches_played": 2,
+      "wins": 0,
+      "draws": 1,
+      "losses": 1,
+      "points_for": 5,
+      "points_against": 7,
+      "diff": -2,
+      "mvp_count": 1,
+      "sports_participated": [
+        "futbol"
+      ]
+    },
+    "vittorino": {
+      "name": "Instituto Vittorino Prep",
+      "short_name": "Vittorino",
+      "matches_played": 3,
+      "wins": 1,
+      "draws": 0,
+      "losses": 2,
+      "points_for": 41,
+      "points_against": 52,
+      "diff": -11,
+      "mvp_count": 1,
+      "sports_participated": [
+        "baloncesto",
+        "futbol"
+      ]
+    },
+    "educarte": {
+      "name": "Educarte Bilingual High School",
+      "short_name": "Educarte",
+      "matches_played": 2,
+      "wins": 0,
+      "draws": 1,
+      "losses": 1,
+      "points_for": 3,
+      "points_against": 5,
+      "diff": -2,
+      "mvp_count": 0,
+      "sports_participated": [
+        "futbol"
+      ]
+    }
+  },
+  "integrity_audit": {
+    "status": "PASSED",
+    "warnings_count": 0,
+    "warnings": []
+  }
+}

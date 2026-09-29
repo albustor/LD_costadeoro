@@ -2,11 +2,13 @@
 
 import React from 'react';
 import { useTournament } from '@/context/TournamentContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { SportScheduleView } from '@/components/sports/SportScheduleView';
 import { Calendar } from 'lucide-react';
 
 export default function CalendarioPage() {
   const { matches, categories, schools, getStandingsForCategory } = useTournament();
+  const { t } = useLanguage();
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
@@ -14,10 +16,10 @@ export default function CalendarioPage() {
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2.5">
             <Calendar className="w-6 h-6 text-amber-600" />
-            <span>Deportes, Horarios y Calendario Oficial</span>
+            <span>{t('schedule.title')}</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Programación de partidos por cancha, barras de puntuación por disciplina y nuevas modalidades.
+            {t('schedule.subtitle')}
           </p>
         </div>
       </div>
