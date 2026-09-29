@@ -43,6 +43,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="light">
+      <head>
+        {/* Cache-Buster & Legacy PWA Service Worker Purge */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                  for(let registration of registrations) {
+                    registration.unregister();
+                  }
+                });
+              }
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  for (let name of names) {
+                    caches.delete(name);
+                  }
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-20 md:pb-0">
         <TierProvider>
           <LanguageProvider>

@@ -17,13 +17,11 @@ import {
 
 const AVAILABLE_ROUTES = [
   { path: '/', label: '🏠 Inicio (Portal)' },
-  { path: '/tabla', label: '📊 Avance Global (Tabla)' },
+  { path: '/tabla', label: '📊 Posiciones por Deporte' },
   { path: '/calendario', label: '📅 Deportes y Horarios' },
   { path: '/mural', label: '📸 Muro Familiar' },
   { path: '/colegios', label: '🏫 Colegios Participantes' },
   { path: '/admin', label: '⚙️ Panel Administrador' },
-  { path: '/certificados', label: '🏆 Certificados y Premios' },
-  { path: '/patrocinadores', label: '🤝 Patrocinadores' },
 ];
 
 function PreviewContent() {
