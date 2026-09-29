@@ -44,34 +44,13 @@ export function Header() {
             className="flex items-center gap-2 sm:gap-3 group shrink-0 transition-opacity hover:opacity-90"
             title="Liga Deportiva Costa de Oro 2026"
           >
-            {/* Emblema Dorado Sol y Olas */}
-            <div className="h-8 sm:h-9 w-auto aspect-[1.2/1] shrink-0 flex items-center justify-center">
-              <svg
-                viewBox="0 0 76 64"
-                className="h-full w-auto drop-shadow-[0_1px_8px_rgba(245,158,11,0.4)]"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="minGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFFBEB" />
-                    <stop offset="30%" stopColor="#FCD34D" />
-                    <stop offset="70%" stopColor="#D97706" />
-                    <stop offset="100%" stopColor="#92400E" />
-                  </linearGradient>
-                </defs>
-                <path d="M 38 2 L 41 7 L 47 5 L 43.5 11 L 32.5 11 L 29 5 L 35 7 Z" fill="url(#minGold)" />
-                <circle cx="38" cy="1.2" r="1.3" fill="#FFFDF0" />
-                <line x1="38" y1="13" x2="38" y2="18" stroke="url(#minGold)" strokeWidth="1.8" strokeLinecap="round" />
-                <line x1="30" y1="14.5" x2="32.5" y2="19.5" stroke="url(#minGold)" strokeWidth="1.6" strokeLinecap="round" />
-                <line x1="46" y1="14.5" x2="43.5" y2="19.5" stroke="url(#minGold)" strokeWidth="1.6" strokeLinecap="round" />
-                <line x1="22" y1="18" x2="26" y2="22" stroke="url(#minGold)" strokeWidth="1.6" strokeLinecap="round" />
-                <line x1="54" y1="18" x2="50" y2="22" stroke="url(#minGold)" strokeWidth="1.6" strokeLinecap="round" />
-                <path d="M 21 37.5 A 17 17 0 0 1 55 37.5 Z" fill="url(#minGold)" />
-                <path d="M 6 41 Q 22 37 38 41 T 70 41" stroke="url(#minGold)" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-                <path d="M 10 47 Q 24 43 38 47 T 66 47" stroke="url(#minGold)" strokeWidth="1.8" strokeLinecap="round" fill="none" />
-                <path d="M 16 53 Q 27 49 38 53 T 60 53" stroke="url(#minGold)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-              </svg>
+            {/* Emblema Oficial Dorado y Negro */}
+            <div className="h-8 w-7 sm:h-9 sm:w-8 rounded-lg overflow-hidden bg-black border border-amber-500/60 shadow-xs shrink-0 flex items-center justify-center p-0.5">
+              <img
+                src="/logos/liga_costa_de_oro_gold_black.jpg"
+                alt="Liga Deportiva Costa de Oro"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             {/* Tipografía Minimalista */}
