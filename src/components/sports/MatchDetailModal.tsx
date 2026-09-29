@@ -14,10 +14,12 @@ import {
   CheckCircle2, 
   Film, 
   Sparkles,
-  Users
+  Users,
+  FileText
 } from 'lucide-react';
 import Link from 'next/link';
 import { SchoolEmblem } from './SchoolEmblem';
+import { OfficialMatchSheet } from './OfficialMatchSheet';
 
 
 interface MatchDetailModalProps {
@@ -28,6 +30,7 @@ interface MatchDetailModalProps {
 export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
   const { getSchoolById, getCategoryById } = useTournament();
   const { isFeatureEnabled } = useTier();
+  const [showOfficialSheet, setShowOfficialSheet] = useState(false);
 
   // Local state for MVP voting
   const [votedPlayer, setVotedPlayer] = useState<string | null>(null);
@@ -247,8 +250,24 @@ export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
               )}
             </div>
           )}
+
+          {/* 📄 Botón para Abrir el Acta Oficial */}
+          <div className="pt-2 border-t border-slate-200 flex justify-center">
+            <button
+              onClick={() => setShowOfficialSheet(true)}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
+            >
+              <FileText className="w-4 h-4 text-amber-400" />
+              <span>Ver Acta Oficial de Encuentro (PDF / Imprimir)</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Modal de Acta Oficial */}
+      {showOfficialSheet && (
+        <OfficialMatchSheet match={match} onClose={() => setShowOfficialSheet(false)} />
+      )}
     </div>
   );
 }

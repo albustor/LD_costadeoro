@@ -50,9 +50,40 @@ export interface Category {
 
 export type MatchStatus = 'scheduled' | 'live' | 'completed' | 'postponed';
 
+export interface MatchEvent {
+  id: string;
+  minute?: number;
+  period?: string;
+  type: 'goal' | 'point' | 'yellow_card' | 'red_card' | 'foul' | 'mvp' | 'set_end';
+  teamSide: 'home' | 'away';
+  playerName?: string;
+  playerNumber?: number;
+  description?: string;
+}
+
 export interface SetScore {
   home: number;
   away: number;
+}
+
+export interface QuarterScore {
+  home: number;
+  away: number;
+}
+
+export interface MatchOfficialReport {
+  refereeName?: string;
+  refereeAssistant?: string;
+  tableOfficial?: string;
+  homeDelegate?: string;
+  awayDelegate?: string;
+  homeCaptain?: string;
+  awayCaptain?: string;
+  incidentsNotes?: string;
+  fairPlayHomeScore?: number; // 1 to 5
+  fairPlayAwayScore?: number; // 1 to 5
+  isSigned?: boolean;
+  signedAt?: string;
 }
 
 export interface Match {
@@ -72,6 +103,10 @@ export interface Match {
   homeSetsWon?: number;
   awaySetsWon?: number;
   setScores?: SetScore[];
+  quarterScores?: QuarterScore[]; // For Basketball (Q1, Q2, Q3, Q4, OT)
+  halfScores?: { home1T: number; away1T: number; home2T: number; away2T: number }; // For Football
+  events?: MatchEvent[];
+  officialReport?: MatchOfficialReport;
   status: MatchStatus;
   currentPeriod?: string; // '1.er Tiempo', '2.° Tiempo', 'Set 2', 'Q3', 'Final'
   minute?: number;
