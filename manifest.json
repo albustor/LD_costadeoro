@@ -1,0 +1,22 @@
+{
+  "name": "Liga Deportiva Costa de Oro 2026",
+  "short_name": "Costa de Oro 2026",
+  "description": "Portal deportivo oficial de la Liga Costa de Oro 2026 en Guanacaste",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#0b1120",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logos/logo_oficial_subido.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/logo_oficial_subido.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

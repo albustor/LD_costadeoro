@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="lp-cv-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0369A1"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#lp-cv-bg)" filter="url(#shadow)"/>
+  <circle cx="100" cy="100" r="86" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.6"/>
+  <!-- Pacific Waves -->
+  <path d="M35 112 C 50 90, 75 90, 90 110 C 105 130, 130 130, 145 106 C 153 94, 160 94, 168 102" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M42 136 C 54 116, 76 116, 92 132 C 108 148, 128 148, 144 128 C 152 118, 158 118, 164 124" stroke="#BAE6FD" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <!-- Dove & Peace Symbol -->
+  <path d="M100 44 C 84 44 72 56 72 68 C 72 84 92 88 100 96 C 108 88 128 84 128 68 C 128 56 116 44 100 44 Z" fill="#FFFFFF"/>
+  <circle cx="100" cy="60" r="7" fill="#0284C7"/>
+  <!-- Typography curve or badge -->
+  <text x="100" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" letter-spacing="1.5" fill="#FFFFFF" text-anchor="middle">CABO VELAS</text>
+</svg>

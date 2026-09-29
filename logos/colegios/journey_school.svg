@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tjs-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <filter id="shadow-tjs" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#tjs-bg)" filter="url(#shadow-tjs)"/>
+  <circle cx="100" cy="100" r="76" stroke="#FEF3C7" stroke-width="5" stroke-dasharray="6 6"/>
+  <!-- 4-Point Nautical Compass Star -->
+  <polygon points="100,32 112,88 168,100 112,112 100,168 88,112 32,100 88,88" fill="#FFFFFF"/>
+  <polygon points="100,32 112,88 100,100 88,88" fill="#0D9488"/>
+  <polygon points="168,100 112,112 100,100 112,88" fill="#0F766E"/>
+  <polygon points="100,168 88,112 100,100 112,112" fill="#0D9488"/>
+  <polygon points="32,100 88,88 100,100 88,112" fill="#0F766E"/>
+  <circle cx="100" cy="100" r="10" fill="#FDE047" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="100" y="184" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="900" letter-spacing="1.5" fill="#FEF3C7" text-anchor="middle">THE JOURNEY</text>
+</svg>
