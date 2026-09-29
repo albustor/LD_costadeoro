@@ -1,23 +1,19 @@
-name: Deploy to GitHub Pages
+name: CI & Production Build Check
 
 on:
   push:
     branches:
       - main
       - master
+  pull_request:
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: 'pages'
-  cancel-in-progress: false
-
 jobs:
-  build-and-deploy:
+  build-and-verify:
+    name: Build & TypeScript Verification
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -27,36 +23,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci || npm install
 
-      - name: Build Static Export with Next.js
+      - name: Validate TypeScript
+        run: npx tsc --noEmit
+
+      - name: Production Build Check (Next.js)
         run: npm run build
         env:
-          GITHUB_ACTIONS: 'true'
-          NEXT_PUBLIC_BASE_PATH: '/LD_costadeoro'
-
-      - name: Add .nojekyll to prevent Jekyll from ignoring _next directory
-        run: touch ./out/.nojekyll
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Artifact for GitHub Actions Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
-      - name: Deploy to GitHub Pages (GitHub Actions Engine)
-        id: deployment
-        uses: actions/deploy-pages@v4
-        continue-on-error: true
-
-      - name: Deploy to gh-pages branch (Fallback for Branch Deploy Mode)
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          publish_branch: gh-pages
-          force_orphan: true
+          NEXT_PUBLIC_SITE_URL: 'https://costadeoro.curiol.studio'
+          BUNNY_LIBRARY_ID: '629005'
