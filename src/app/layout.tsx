@@ -93,7 +93,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-20 md:pb-0 w-full overflow-x-hidden relative">
+      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-28 lg:pb-0 w-full overflow-x-hidden relative">
         <TierProvider>
           <LanguageProvider>
             <TournamentProvider>
