@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { EventIntroVideo } from '@/components/home/EventIntroVideo';
@@ -9,12 +8,8 @@ import { EventGeneralInfoCards } from '@/components/home/EventGeneralInfoCards';
 import { 
   Trophy, 
   MapPin, 
-  Calendar, 
-  Heart, 
-  SlidersHorizontal, 
   Film, 
-  Info,
-  ChevronRight
+  Info
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -97,88 +92,7 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 🚀 3. ACCESOS DIRECTOS */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-2">
-        <Link
-          href="/deportes"
-          className="bg-white hover:bg-amber-50/50 p-5 rounded-3xl border border-slate-200 hover:border-amber-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shadow-2xs">
-              <Trophy className="w-6 h-6" />
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-amber-600 transition-transform group-hover:translate-x-1" />
-          </div>
-          <div>
-            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-amber-800">
-              {t('hero.quickAccess.sports')}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
-              Posiciones, tabla general y actas de partido.
-            </p>
-          </div>
-        </Link>
-
-        <Link
-          href="/calendario"
-          className="bg-white hover:bg-sky-50/50 p-5 rounded-3xl border border-slate-200 hover:border-sky-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700 shadow-2xs">
-              <Calendar className="w-6 h-6" />
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-sky-600 transition-transform group-hover:translate-x-1" />
-          </div>
-          <div>
-            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-sky-800">
-              {t('hero.quickAccess.schedule')}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
-              Fútbol, voleibol y baloncesto por jornada.
-            </p>
-          </div>
-        </Link>
-
-        <Link
-          href="/mural"
-          className="bg-white hover:bg-rose-50/50 p-5 rounded-3xl border border-slate-200 hover:border-rose-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shadow-2xs">
-              <Heart className="w-6 h-6 fill-rose-500" />
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-rose-600 transition-transform group-hover:translate-x-1" />
-          </div>
-          <div>
-            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-rose-800">
-              {t('hero.quickAccess.mural')}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
-              Fotos, mensajes y porras familiares en vivo.
-            </p>
-          </div>
-        </Link>
-
-        <Link
-          href="/admin"
-          className="bg-white hover:bg-slate-50 p-5 rounded-3xl border border-slate-200 hover:border-slate-400 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 shadow-2xs">
-              <SlidersHorizontal className="w-6 h-6" />
-            </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-900 transition-transform group-hover:translate-x-1" />
-          </div>
-          <div>
-            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-slate-950">
-              {t('hero.quickAccess.admin')}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
-              Control de marcadores, actas y configuración.
-            </p>
-          </div>
-        </Link>
-      </section>
     </div>
   );
 }
+

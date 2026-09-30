@@ -18,8 +18,8 @@ export function MobileBottomNav() {
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-0 inset-x-0 w-full z-50 bg-slate-950 border-t border-amber-500/40 shadow-[0_-4px_25px_rgba(0,0,0,0.6)] px-1.5 py-2 safe-bottom text-white select-none">
-      <div className="w-full grid grid-cols-6 items-center max-w-md mx-auto">
+    <nav className="lg:hidden fixed bottom-0 inset-x-0 w-full z-[60] bg-slate-950/98 backdrop-blur-md border-t border-amber-500/40 shadow-[0_-6px_30px_rgba(0,0,0,0.85)] px-1 py-2 safe-bottom text-white select-none">
+      <div className="w-full grid grid-cols-6 items-center max-w-lg mx-auto">
         {items.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -37,11 +37,11 @@ export function MobileBottomNav() {
               <div
                 className={`p-1.5 rounded-2xl transition-all flex items-center justify-center ${
                   isActive
-                    ? 'bg-amber-400/20 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.3)] ring-1 ring-amber-400/30'
+                    ? 'bg-amber-400/20 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.4)] ring-1 ring-amber-400/40'
                     : 'text-slate-400'
                 }`}
               >
-                <Icon className={`w-6 h-6 ${isActive ? 'text-amber-400 stroke-[2.2]' : 'stroke-[1.8]'}`} />
+                <Icon className={`w-7 h-7 ${isActive ? 'text-amber-400 stroke-[2.4]' : 'stroke-[1.9]'}`} />
               </div>
               <span
                 className={`text-[11px] sm:text-xs mt-1 tracking-tight leading-none text-center truncate w-full px-0.5 ${

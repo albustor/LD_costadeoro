@@ -74,8 +74,8 @@ export function DevViewportBar() {
 
   return (
     <>
-      {/* FLOATING EXACT TOOLBAR (As in user's image) */}
-      <aside aria-label="Barra de herramientas de prueba multidispositivo" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300">
+      {/* FLOATING EXACT TOOLBAR (As in user's image) - Oculto en pantallas móviles para no tapar el menú inferior */}
+      <aside aria-label="Barra de herramientas de prueba multidispositivo" className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300">
         <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-[0_10px_35px_-5px_rgba(0,0,0,0.25)] rounded-full px-4 py-2 flex items-center gap-3">
           
           {/* 1. Mobile Icon (Celular) */}

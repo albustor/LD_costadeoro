@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { PwaInstallButton } from '@/components/pwa/PwaInstallButton';
+import { DuaAccessibilityBar } from '@/components/accessibility/DuaAccessibilityBar';
 
 export function Header() {
   const pathname = usePathname();
@@ -123,6 +124,10 @@ export function Header() {
               <span>{language === 'es' ? 'ES' : 'EN'}</span>
             </button>
 
+            {/* Accesibilidad DUA Desktop */}
+            <div className="h-4 w-[1px] bg-slate-800 mx-1" />
+            <DuaAccessibilityBar />
+
             {/* Botón PWA Desktop */}
             <div className="h-4 w-[1px] bg-slate-800 mx-1" />
             <PwaInstallButton variant="header" />
@@ -130,6 +135,7 @@ export function Header() {
 
           {/* Acciones Móviles Minimalistas */}
           <div className="flex items-center lg:hidden gap-1.5 sm:gap-2">
+            <DuaAccessibilityBar />
             <PwaInstallButton variant="header" />
 
             <button
@@ -154,7 +160,7 @@ export function Header() {
 
       {/* Menú Desplegable Móvil Minimalista */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950/98 border-t border-slate-800 px-4 py-3 space-y-1 shadow-2xl animate-fade-in">
+        <div className="lg:hidden bg-slate-950/98 border-t border-slate-800 px-4 py-3 space-y-2 shadow-2xl animate-fade-in">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
