@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
+import { SchoolRosterManager } from '@/components/sports/SchoolRosterManager';
 import { MatchDetailModal } from '@/components/sports/MatchDetailModal';
 import { formatDateCostaRica } from '@/lib/utils';
 import { Match } from '@/types/tournament';
@@ -160,9 +161,15 @@ export default function ColegiosPage() {
             </div>
           </div>
         </div>
+      </div>
 
+      {/* 📋 MÓDULO DE NÓMINA OFICIAL Y GESTIÓN DE EXCEL DE LA INSTITUCIÓN */}
+      <SchoolRosterManager activeSchool={activeSchool} />
+
+      {/* 📅 CALENDARIO Y ENCUENTROS DE LA INSTITUCIÓN */}
+      <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs space-y-6">
         {/* ⚽ FILTROS POR DEPORTE (CÓDIGO DE COLORES) */}
-        <div className="px-5 sm:px-7 space-y-4">
+        <div className="p-5 sm:p-7 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-amber-600" />

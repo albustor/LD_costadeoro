@@ -37,7 +37,8 @@ import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 import { LiveDeskScorer } from './LiveDeskScorer';
 import { RosterUploaderModal } from './RosterUploaderModal';
 import { CertificateGeneratorModal } from './CertificateGeneratorModal';
-import { Award } from 'lucide-react';
+import { AdminRosterManager } from './AdminRosterManager';
+import { Award, FileSpreadsheet } from 'lucide-react';
 
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById } = useTournament();
@@ -47,7 +48,7 @@ export function AdminControlPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Open access by default for convenience
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters'>('results');
 
   // Event-wide Family PIN Configuration State
   const [eventPinInput, setEventPinInput] = useState<string>(() => {
@@ -323,6 +324,17 @@ export function AdminControlPanel() {
           >
             <KeyRound className="w-3.5 h-3.5" />
             <span>5. PIN de Familias</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('rosters')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'rosters'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5" />
+            <span>6. Nóminas Excel y Listas</span>
           </button>
         </div>
       </div>
@@ -821,6 +833,11 @@ export function AdminControlPanel() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 📊 PESTAÑA 6: GESTOR DE NÓMINAS EXCEL Y FORMULARIOS */}
+      {activeTab === 'rosters' && (
+        <AdminRosterManager />
       )}
 
       {/* 📱 MODAL DEL ESCÁNER DE DATOS Y CÓDIGOS QR */}

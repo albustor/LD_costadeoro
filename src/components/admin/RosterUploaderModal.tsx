@@ -19,6 +19,7 @@ import {
   Save,
   ChevronDown
 } from 'lucide-react';
+import { rosterService } from '@/lib/rosterService';
 
 interface RosterUploaderModalProps {
   isOpen: boolean;
@@ -128,14 +129,13 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
     }
   };
 
-  // Guardar en almacenamiento local
+  // Guardar en almacenamiento local y sincronizar
   const handleSaveRoster = () => {
     if (parsedPlayers.length === 0) {
       setStatusMessage({ type: 'error', text: 'No hay jugadores en la lista para guardar.' });
       return;
     }
 
-    const rosterKey = `roster_${selectedSchoolId}_${selectedSport}_${selectedCategoryId}`;
     const newRoster: TeamRoster = {
       schoolId: selectedSchoolId,
       sport: selectedSport,
@@ -146,7 +146,7 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
     };
 
     try {
-      localStorage.setItem(rosterKey, JSON.stringify(newRoster));
+      rosterService.saveCategoryRoster(newRoster);
       setStatusMessage({
         type: 'success',
         text: `¡Nómina de ${parsedPlayers.length} jugadores guardada con éxito para la categoría!`,
@@ -353,14 +353,25 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
 
               {/* Botones de Soporte y Plantilla */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-                <a
-                  href="/plantillas/plantilla_roster_oficial.csv"
-                  download="plantilla_roster_oficial.csv"
-                  className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors border border-amber-300"
+                <button
+                  type="button"
+                  onClick={() => {
+                    const sch = schools.find((s) => s.id === selectedSchoolId);
+                    const blob = rosterService.generateExcelWorkbook(sch);
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `plantilla_roster_${selectedSchoolId}_2026.xls`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors border border-amber-300 cursor-pointer"
                 >
-                  <Download className="w-4 h-4 text-amber-800" />
-                  <span>Descargar Plantilla Oficial CSV</span>
-                </a>
+                  <Download className="w-4 h-4 text-emerald-700" />
+                  <span>Descargar Plantilla Excel (.xls)</span>
+                </button>
 
                 <button
                   onClick={handleGenerateEmergencyRoster}
