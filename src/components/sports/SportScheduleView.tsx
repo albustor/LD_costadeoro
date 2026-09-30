@@ -8,28 +8,18 @@ import {
   Calendar, 
   Clock, 
   MapPin, 
-  Plus, 
-  Flame, 
   CheckCircle2, 
   Hourglass, 
-  ChevronRight, 
-  X,
-  Sparkles,
-  Lock,
-  AlertCircle,
-  Bell
+  Sparkles
 } from 'lucide-react';
 
-interface CustomSport {
+interface OfficialSportConfig {
   id: string;
   name: string;
   color: string;
   accent: string;
   lightBg: string;
-  badgeText?: string;
-  isLocked?: boolean;
-  lockedMessage?: string;
-  location?: string;
+  badgeText: string;
 }
 
 interface SportScheduleViewProps {
@@ -46,13 +36,8 @@ export function SportScheduleView({
   getStandingsForCategory,
 }: SportScheduleViewProps) {
   const [selectedSport, setSelectedSport] = useState<string>('futbol');
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-  const [customSports, setCustomSports] = useState<CustomSport[]>([]);
-  const [newSportName, setNewSportName] = useState<string>('');
-  const [newSportColor, setNewSportColor] = useState<string>('#6366F1');
-
-  // Base Sports Configuration (Activos)
-  const baseSports: CustomSport[] = [
+  // 3 Disciplinas Oficiales del Festival Deportivo Costa de Oro 2026
+  const officialSports: OfficialSportConfig[] = [
     {
       id: 'futbol',
       name: 'Fútbol',
@@ -60,7 +45,6 @@ export function SportScheduleView({
       accent: '#22C55E',
       lightBg: '#F0FDF4',
       badgeText: 'Fútbol 7 & 11',
-      isLocked: false,
     },
     {
       id: 'voleibol',
@@ -69,7 +53,6 @@ export function SportScheduleView({
       accent: '#38BDF8',
       lightBg: '#F0F9FF',
       badgeText: 'Gimnasio techado',
-      isLocked: false,
     },
     {
       id: 'baloncesto',
@@ -78,71 +61,10 @@ export function SportScheduleView({
       accent: '#FB923C',
       lightBg: '#FFF7ED',
       badgeText: 'Cancha multiuso',
-      isLocked: false,
     },
   ];
 
-  // Locked Upcoming Sports (Surfing, Ajedrez, Atletismo, Natación)
-  const upcomingLockedSports: CustomSport[] = [
-    {
-      id: 'surfing',
-      name: 'Surfing',
-      color: '#0284C7',
-      accent: '#38BDF8',
-      lightBg: '#F0F9FF',
-      isLocked: true,
-      lockedMessage: 'Esta modalidad deportiva se habilitará posteriormente para las fases especiales y exhibiciones de olas de la Liga Costa de Oro.',
-      location: 'Playa Tamarindo / Playa Grande',
-    },
-    {
-      id: 'ajedrez',
-      name: 'Ajedrez',
-      color: '#475569',
-      accent: '#64748B',
-      lightBg: '#F8FAFC',
-      isLocked: true,
-      lockedMessage: 'Torneo de ajedrez rápido y clásico intercolegial. Se habilitará en la siguiente fase del festival.',
-      location: 'Salón multiuso campus Tempisque',
-    },
-    {
-      id: 'atletismo',
-      name: 'Atletismo de playa',
-      color: '#CA8A04',
-      accent: '#EAB308',
-      lightBg: '#FEFCE8',
-      isLocked: true,
-      lockedMessage: 'Pruebas de velocidad, relevos y resistencia en arena. Calendario en fase de coordinación.',
-      location: 'Playa Brasilito / Conchal',
-    },
-    {
-      id: 'natacion',
-      name: 'Natación en aguas abiertas',
-      color: '#0D9488',
-      accent: '#14B8A6',
-      lightBg: '#F0FDFA',
-      isLocked: true,
-      lockedMessage: 'Circuito de travesía y natación costera formativa. Próximamente disponible.',
-      location: 'Bahía Flamingo',
-    },
-  ];
-
-  const allSports: CustomSport[] = [
-    ...baseSports,
-    ...upcomingLockedSports,
-    ...customSports.map((cs) => ({
-      id: cs.id,
-      name: cs.name,
-      color: cs.color,
-      accent: cs.accent,
-      lightBg: cs.lightBg,
-      badgeText: 'Nueva modalidad',
-      isLocked: cs.isLocked ?? false,
-      lockedMessage: cs.lockedMessage,
-      location: cs.location,
-    })),
-  ];
-
-  const currentSportConfig = allSports.find((s) => s.id === selectedSport) || allSports[0];
+  const currentSportConfig = officialSports.find((s) => s.id === selectedSport) || officialSports[0];
 
   // Filtrar categorías del deporte actual
   const sportCategories = categories.filter(
@@ -154,138 +76,52 @@ export function SportScheduleView({
     (m) => m.sport === selectedSport || sportCategories.some((c) => c.id === m.categoryId)
   );
 
-  // Handler para agregar nueva modalidad deportiva
-  const handleAddCustomSport = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newSportName.trim()) return;
-
-    const id = newSportName.toLowerCase().replace(/\s+/g, '-');
-    const newSport: CustomSport = {
-      id,
-      name: newSportName.trim(),
-      color: newSportColor,
-      accent: newSportColor,
-      lightBg: '#F8FAFC',
-      isLocked: false,
-    };
-
-    setCustomSports((prev) => [...prev, newSport]);
-    setSelectedSport(id);
-    setNewSportName('');
-    setShowAddModal(false);
-  };
-
   return (
     <div className="space-y-6">
-      {/* 🏅 SELECTOR DE DISCIPLINAS: ACTIVAS + PRÓXIMAS CON CANDADO (🔒) */}
+      {/* 🏅 SELECTOR DE DISCIPLINAS OFICIALES 2026 */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            Disciplinas y modalidades deportivas:
+          <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-700">
+            Disciplinas y Modalidades Oficiales:
           </span>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-all cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-amber-600" />
-            <span>+ Agregar deporte</span>
-          </button>
+          <span className="text-xs font-bold text-amber-800 bg-amber-100/80 px-2.5 py-0.5 rounded-full border border-amber-300">
+            3 Deportes Oficiales
+          </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100/80 rounded-2xl border border-slate-200">
-          {allSports.map((sport) => {
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-2 bg-slate-100/90 rounded-2xl border border-slate-200">
+          {officialSports.map((sport) => {
             const isSelected = selectedSport === sport.id;
-            const isLocked = sport.isLocked;
 
-            // Colores activos específicos por deporte
             const activeSportStyle = 
               sport.id === 'futbol'
                 ? 'bg-emerald-600 text-white shadow-md ring-2 ring-emerald-300'
                 : sport.id === 'voleibol'
                 ? 'bg-sky-600 text-white shadow-md ring-2 ring-sky-300'
-                : sport.id === 'baloncesto'
-                ? 'bg-orange-600 text-white shadow-md ring-2 ring-orange-300'
-                : isLocked
-                ? 'bg-slate-900 text-white shadow-sm'
-                : 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-300';
+                : 'bg-orange-600 text-white shadow-md ring-2 ring-orange-300';
 
             return (
               <button
                 key={sport.id}
                 onClick={() => setSelectedSport(sport.id)}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+                className={`flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl font-black text-sm sm:text-base transition-all duration-200 cursor-pointer ${
                   isSelected
                     ? activeSportStyle
-                    : isLocked
-                    ? 'text-slate-500 hover:text-slate-800 hover:bg-white/50 bg-slate-200/50'
-                    : 'text-slate-700 hover:text-slate-900 hover:bg-white/70'
+                    : 'text-slate-700 hover:text-slate-950 hover:bg-white bg-white/60 shadow-2xs'
                 }`}
               >
-                <SportIconRenderer sportId={sport.id} size={20} />
+                <SportIconRenderer sportId={sport.id} size={22} />
                 <span>{sport.name}</span>
-                {isLocked && (
-                  <span className="px-1.5 py-0.5 rounded-md bg-slate-800/10 text-slate-600 text-[10px] font-black flex items-center gap-0.5">
-                    <Lock className="w-3 h-3" />
-                  </span>
-                )}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* 🔒 SI ES UN DEPORTE BLOQUEADO / PRÓXIMO A HABILITARSE */}
-      {currentSportConfig.isLocked ? (
-        <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white border border-slate-700 shadow-lg space-y-5 animate-fade-in relative overflow-hidden">
-          {/* Gráfico deportivo grande semitransparente de fondo */}
-          <div className="absolute right-4 -bottom-4 opacity-10 pointer-events-none">
-            <SportIconRenderer sportId={currentSportConfig.id} size={200} />
-          </div>
-
-          <div className="relative z-10 max-w-2xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black border border-amber-500/30">
-              <Lock className="w-3.5 h-3.5" />
-              <span>Se habilitará posteriormente • Próxima fase</span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                <SportIconRenderer sportId={currentSportConfig.id} size={36} />
-              </div>
-              <div>
-                <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-                  Modalidad de {currentSportConfig.name}
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-300">
-                  {currentSportConfig.lockedMessage}
-                </p>
-              </div>
-            </div>
-
-            {currentSportConfig.location && (
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 border border-white/10 text-xs text-slate-200">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                <span>Sede prevista: <strong>{currentSportConfig.location}</strong></span>
-              </div>
-            )}
-
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-300 space-y-2">
-              <span className="font-bold text-white flex items-center gap-1.5">
-                <Bell className="w-3.5 h-3.5 text-amber-400" />
-                <span>Aviso para familias y delegaciones:</span>
-              </span>
-              <p className="text-[11px] leading-relaxed text-slate-400">
-                El comité organizador de La Paz Community School y los colegios participantes publicarán las convocatorias, instructivos técnicos y horarios de competencia una vez concluida la primera fase de los 4 festivales base.
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* ⚽ SI ES UN DEPORTE ACTIVO (FÚTBOL, VOLEIBOL, BALONCESTO) */
-        <div className="space-y-6 animate-fade-in">
-          {/* 📅 PRESENTADO ARRIBA: CALENDARIO Y HORARIOS DEL DEPORTE CON ENFASIS CROMÁTICO */}
-          {(() => {
-            const isFutbol = selectedSport === 'futbol';
+      {/* 📅 CALENDARIO Y HORARIOS DEL DEPORTE SELECCIONADO */}
+      <div className="space-y-6 animate-fade-in">
+        {(() => {
+          const isFutbol = selectedSport === 'futbol';
             const isVoleibol = selectedSport === 'voleibol';
             const isBaloncesto = selectedSport === 'baloncesto';
 
@@ -502,80 +338,7 @@ export function SportScheduleView({
               </div>
             );
           })()}
-
         </div>
-      )}
-
-      {/* 🪟 MODAL PARA AGREGAR NUEVA MODALIDAD */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 animate-fade-in space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                <Plus className="w-5 h-5 text-amber-600" />
-                <span>Agregar modalidad deportiva</span>
-              </h3>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-600">
-              Registra una nueva disciplina deportiva (ej: Pádel, Tenis de Mesa, etc.) para habilitar su calendario y barras de puntuación.
-            </p>
-
-            <form onSubmit={handleAddCustomSport} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Nombre del deporte
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Ej: Pádel Intercolegial..."
-                  value={newSportName}
-                  onChange={(e) => setNewSportName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Color identificador
-                </label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="color"
-                    value={newSportColor}
-                    onChange={(e) => setNewSportColor(e.target.value)}
-                    className="w-10 h-10 rounded-xl border border-slate-300 cursor-pointer p-0.5"
-                  />
-                  <span className="text-xs text-slate-500 font-mono">{newSportColor}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-sm"
-                >
-                  Habilitar deporte
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
