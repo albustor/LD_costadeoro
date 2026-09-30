@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -21,7 +21,33 @@ import { DuaAccessibilityBar } from '@/components/accessibility/DuaAccessibility
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
   const { language, toggleLanguage, t } = useLanguage();
+
+  // Ocultar suavemente al bajar el scroll y mostrar al subir o en el tope
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Si estamos muy cerca del tope, siempre visible
+      if (currentScrollY < 40) {
+        setVisible(true);
+      } else if (currentScrollY > lastScrollY.current + 10) {
+        // Bajando -> ocultar
+        setVisible(false);
+        setMobileMenuOpen(false);
+      } else if (currentScrollY < lastScrollY.current - 10) {
+        // Subiendo -> mostrar
+        setVisible(true);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { label: t('nav.home'), shortLabel: 'Inicio', href: '/', icon: Home },
@@ -33,27 +59,29 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/98 text-white backdrop-blur-md border-b border-amber-500/30 transition-all shadow-md">
+    <header className={`sticky top-0 z-50 bg-black text-white border-b border-amber-500/40 shadow-[0_4px_25px_rgba(0,0,0,0.8)] transition-transform duration-300 ${
+      visible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       {/* Filete superior dorado ultra-fino */}
       <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-90" />
 
-      <div className="max-w-7xl mx-auto px-2.5 sm:px-6">
-        <div className="flex items-center justify-between h-14 sm:h-20 gap-2 sm:gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
-          {/* Logo e Identidad Adaptativa (No se corta en móviles) */}
+          {/* Logo e Identidad Oficial (Enfocada exclusivamente en Liga Costa de Oro con fondo negro) */}
           <Link 
             href="/" 
-            className="flex items-center gap-2 sm:gap-3.5 group shrink-0 transition-opacity hover:opacity-90 min-w-0"
-            title="Liga Deportiva Costa de Oro 2026 - La Paz Community School"
+            className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0 transition-opacity hover:opacity-90 min-w-0"
+            title="Liga Deportiva Costa de Oro 2026"
           >
             {/* Emblema Original Dorado Sol y Olas */}
-            <div className="w-[34px] h-[28px] sm:w-[50px] sm:h-[42px] shrink-0 flex items-center justify-center overflow-hidden">
+            <div className="w-[42px] h-[36px] sm:w-[54px] sm:h-[46px] shrink-0 flex items-center justify-center overflow-hidden">
               <svg
                 viewBox="0 0 76 64"
-                width="34"
-                height="28"
-                style={{ width: '34px', height: '28px', minWidth: '34px', maxWidth: '50px' }}
-                className="w-full h-full drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)] block shrink-0"
+                width="42"
+                height="36"
+                style={{ width: '42px', height: '36px', minWidth: '42px', maxWidth: '54px' }}
+                className="w-full h-full drop-shadow-[0_2px_12px_rgba(245,158,11,0.6)] block shrink-0"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -79,20 +107,20 @@ export function Header() {
               </svg>
             </div>
 
-            {/* Tipografía Destacada con ajuste responsive */}
+            {/* Tipografía Exclusiva Liga Costa de Oro */}
             <div className="flex flex-col justify-center leading-tight select-none min-w-0">
-              <div className="flex items-center gap-1 font-serif font-black tracking-tight text-xs sm:text-lg whitespace-nowrap">
+              <div className="flex items-center gap-1.5 font-serif font-black tracking-tight text-sm sm:text-xl whitespace-nowrap">
                 <span className="text-white">LIGA</span>
                 <span className="text-amber-400">COSTA DE ORO</span>
               </div>
-              <span className="text-[8.5px] sm:text-[11px] font-sans font-bold uppercase tracking-wider text-amber-300/90 whitespace-nowrap">
-                La Paz Community School
+              <span className="text-[9.5px] sm:text-[11.5px] font-sans font-bold uppercase tracking-wider text-amber-300/90 whitespace-nowrap">
+                Festival Formativo · Guanacaste 2026
               </span>
             </div>
           </Link>
 
           {/* Navegación Desktop */}
-          <nav className="hidden lg:flex items-center gap-1.5 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800">
+          <nav className="hidden lg:flex items-center gap-1.5 p-1.5 bg-slate-950/90 rounded-2xl border border-slate-800">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
@@ -133,7 +161,7 @@ export function Header() {
             <PwaInstallButton variant="header" />
           </nav>
 
-          {/* Acciones Móviles Compactas (Sin desbordamiento) */}
+          {/* Acciones Móviles */}
           <div className="flex items-center lg:hidden gap-1.5 shrink-0">
             {/* Audio DUA Compacto */}
             <DuaAccessibilityBar compact={true} />
@@ -162,9 +190,9 @@ export function Header() {
 
       {/* Menú Desplegable Móvil */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950/98 border-t border-slate-800 px-4 py-4 space-y-4 shadow-2xl animate-fade-in">
+        <div className="lg:hidden bg-black border-t border-slate-800 px-4 py-4 space-y-4 shadow-2xl animate-fade-in">
           {/* Panel de Accesibilidad DUA Móvil Completo (Zoom + Audio) */}
-          <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2">
+          <div className="p-3 rounded-2xl bg-slate-900/95 border border-slate-800 flex items-center justify-between gap-2">
             <span className="text-xs font-bold text-slate-300">Accesibilidad DUA:</span>
             <DuaAccessibilityBar compact={false} />
           </div>
