@@ -10,10 +10,36 @@ import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { DevViewportBar } from '@/components/dev/DevViewportBar';
 
 export const metadata: Metadata = {
-  title: 'Liga Deportiva Costa de Oro 2026 | Portal Oficial',
+  metadataBase: new URL('https://costadeoro.curiol.studio'),
+  title: 'Liga Deportiva Costa de Oro 2026 | Portal oficial',
   description:
     'Plataforma digital oficial de la Liga Costa de Oro 2026. Marcadores en tiempo real, tablas de posiciones oficiales, calendario y actas de partido.',
   manifest: '/manifest.json',
+  openGraph: {
+    title: 'Liga Deportiva Costa de Oro 2026 | Portal oficial',
+    description:
+      'Plataforma digital oficial de la Liga Costa de Oro 2026. Marcadores en tiempo real, tablas de posiciones oficiales, calendario y actas de partido.',
+    url: 'https://costadeoro.curiol.studio',
+    siteName: 'Liga Deportiva Costa de Oro 2026',
+    images: [
+      {
+        url: '/logos/liga_costa_de_oro_gold_black.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Liga Deportiva Costa de Oro 2026',
+        type: 'image/jpeg',
+      },
+    ],
+    locale: 'es_CR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Liga Deportiva Costa de Oro 2026 | Portal oficial',
+    description:
+      'Plataforma digital oficial de la Liga Costa de Oro 2026. Marcadores en tiempo real, tablas de posiciones y estadísticas.',
+    images: ['/logos/liga_costa_de_oro_gold_black.jpg'],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

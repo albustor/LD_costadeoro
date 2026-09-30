@@ -15,6 +15,7 @@ import {
   Globe
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { PwaInstallButton } from '@/components/pwa/PwaInstallButton';
 
 export function Header() {
   const pathname = usePathname();
@@ -121,14 +122,20 @@ export function Header() {
               <Globe className="w-3.5 h-3.5 text-amber-400" />
               <span>{language === 'es' ? 'ES' : 'EN'}</span>
             </button>
+
+            {/* Botón PWA Desktop */}
+            <div className="h-4 w-[1px] bg-slate-800 mx-1" />
+            <PwaInstallButton variant="header" />
           </nav>
 
           {/* Acciones Móviles Minimalistas */}
-          <div className="flex items-center lg:hidden gap-2">
+          <div className="flex items-center lg:hidden gap-1.5 sm:gap-2">
+            <PwaInstallButton variant="header" />
+
             <button
               onClick={toggleLanguage}
               title="Cambiar idioma"
-              className="h-9 px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs"
+              className="h-9 px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>{language.toUpperCase()}</span>

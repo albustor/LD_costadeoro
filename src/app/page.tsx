@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -14,22 +14,12 @@ import {
   Heart, 
   SlidersHorizontal, 
   ChevronRight, 
-  Film, 
-  Info,
-  Flame,
   Shield
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { tournament, schools, matches, getSchoolById, getCategoryById } = useTournament();
+  const { tournament, schools } = useTournament();
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'video' | 'info'>('video');
-
-  // Encontrar el partido en vivo o el encuentro destacado del momento (Fútbol Femenino Abierto)
-  const currentLiveMatch = matches.find((m) => m.status === 'live') || matches[0];
-  const homeSchool = getSchoolById(currentLiveMatch?.homeTeamId);
-  const awaySchool = getSchoolById(currentLiveMatch?.awayTeamId);
-  const currentCategory = getCategoryById(currentLiveMatch?.categoryId);
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
@@ -46,7 +36,7 @@ export default function HomePage() {
               <span>Sede: {tournament.host.name}</span>
             </span>
             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-semibold text-xs border border-emerald-200">
-              Octubre - Noviembre 2026
+              Octubre - noviembre 2026
             </span>
           </div>
 
@@ -60,57 +50,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🗂️ 2. PESTAÑAS DE SELECCIÓN: VIDEO INTRODUCTORIO VS INFORMACIÓN GENERAL */}
-      <section className="space-y-4">
-        {/* Selector de Pestañas con Negro y Dorado */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-200/70 rounded-2xl border border-slate-300/80">
-          <button
-            onClick={() => setActiveTab('video')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
-              activeTab === 'video'
-                ? 'bg-slate-950 text-amber-300 border border-amber-500/40 shadow-sm ring-1 ring-amber-500/20'
-                : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-            }`}
-          >
-            <Film className={`w-4 h-4 ${activeTab === 'video' ? 'text-amber-400' : 'text-amber-600'}`} />
-            <span>{t('hero.tab.video')}</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('info')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
-              activeTab === 'info'
-                ? 'bg-slate-950 text-amber-300 border border-amber-500/40 shadow-sm ring-1 ring-amber-500/20'
-                : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
-            }`}
-          >
-            <Info className={`w-4 h-4 ${activeTab === 'info' ? 'text-amber-400' : 'text-amber-600'}`} />
-            <span>{t('hero.tab.info')}</span>
-          </button>
-        </div>
-
-        {/* CONTENIDO PESTAÑA 1: VIDEO INTRODUCTORIO */}
-        {activeTab === 'video' && (
-          <div className="space-y-4 animate-fade-in">
-            <EventIntroVideo />
-            <div className="p-4 bg-white rounded-2xl border border-slate-200 text-center space-y-1 shadow-2xs">
-              <span className="text-xs font-bold text-slate-800">
-                {t('hero.videoTitle')}
-              </span>
-              <p className="text-[11px] text-slate-500">
-                {t('hero.videoSubtitle')}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* CONTENIDO PESTAÑA 2: INFORMACIÓN GENERAL CON TARJETAS INTERACTIVAS Y EXPANDIBLES */}
-        {activeTab === 'info' && (
-          <EventGeneralInfoCards schools={schools} />
-        )}
+      {/* 🎬 2. VIDEO OFICIAL EN EL ENCABEZADO (AL PURO INICIO ANTES DE LAS TARJETAS) */}
+      <section className="space-y-2">
+        <EventIntroVideo />
       </section>
 
-      {/* 🏫 3. BOTONES OFICIALES DE INSTITUCIONES EDUCATIVAS (ESCUDO Y NOMBRE) */}
+      {/* 🗂️ 3. TARJETAS INFORMATIVAS Y MODALIDADES DEL EVENTO */}
+      <section className="space-y-3 pt-1">
+        <EventGeneralInfoCards schools={schools} />
+      </section>
+
+      {/* 🏫 4. INSTITUCIONES EDUCATIVAS PARTICIPANTES */}
       <section className="space-y-3 pt-1">
         <div className="flex items-center justify-between">
           <h2 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -150,7 +100,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 🚀 4. ACCESOS DIRECTOS COMPACTOS (TIPO ICONOS / ACCIONES RÁPIDAS) */}
+      {/* 🚀 5. ACCESOS DIRECTOS COMPACTOS (TIPO ICONOS / ACCIONES RÁPIDAS) */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-1">
         {/* Acceso 1: Deportes */}
         <Link

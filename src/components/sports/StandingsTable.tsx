@@ -21,7 +21,7 @@ export function StandingsTable() {
         <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-600" />
-            <span>Tabla de Posiciones Oficial</span>
+            <span>Tabla de posiciones oficial</span>
           </h3>
           <span className="text-xs text-slate-600 bg-white px-2.5 py-1 rounded-full border border-slate-200 font-medium">
             {currentCategory.division}
@@ -49,8 +49,8 @@ export function StandingsTable() {
 
         {/* ℹ️ Nota Oficial de Prueba */}
         <div className="mt-3 flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-[11px]">
-          <span className="font-extrabold px-1.5 py-0.5 rounded bg-amber-200 text-amber-950 uppercase text-[9.5px]">Modo Pruebas</span>
-          <span className="font-medium">Información de prueba de marcadores · Entorno de simulación previa al evento oficial (Puntos y Marcadores en 0).</span>
+          <span className="font-extrabold px-1.5 py-0.5 rounded bg-amber-200 text-amber-950 uppercase text-[9.5px]">Modo de pruebas</span>
+          <span className="font-medium">Información de prueba de marcadores · Entorno de simulación previa al evento oficial (puntos y marcadores en 0).</span>
         </div>
       </div>
 
@@ -60,34 +60,34 @@ export function StandingsTable() {
           <thead className="bg-slate-100/80 text-slate-700 uppercase text-[10.5px] tracking-wider border-b border-slate-200 font-bold">
             <tr>
               <th className="py-3 px-3 text-center w-10">Pos</th>
-              <th className="py-3 px-4">Equipo / Institución</th>
-              <th className="py-3 px-2 text-center" title="Partidos Jugados">PJ</th>
-              <th className="py-3 px-2 text-center" title="Partidos Ganados">PG</th>
+              <th className="py-3 px-4">Equipo o institución</th>
+              <th className="py-3 px-2 text-center" title="Partidos jugados">PJ</th>
+              <th className="py-3 px-2 text-center" title="Partidos ganados">PG</th>
               {sport === 'futbol' && (
-                <th className="py-3 px-2 text-center" title="Partidos Empatados">PE</th>
+                <th className="py-3 px-2 text-center" title="Partidos empatados">PE</th>
               )}
-              <th className="py-3 px-2 text-center" title="Partidos Perdidos">PP</th>
+              <th className="py-3 px-2 text-center" title="Partidos perdidos">PP</th>
               {sport === 'voleibol' ? (
                 <>
-                  <th className="py-3 px-2 text-center" title="Sets Ganados">SG</th>
-                  <th className="py-3 px-2 text-center" title="Sets Perdidos">SP</th>
-                  <th className="py-3 px-2 text-center" title="Diferencia de Sets">DS</th>
+                  <th className="py-3 px-2 text-center" title="Sets ganados">SG</th>
+                  <th className="py-3 px-2 text-center" title="Sets perdidos">SP</th>
+                  <th className="py-3 px-2 text-center" title="Diferencia de sets">DS</th>
                 </>
               ) : (
                 <>
-                  <th className="py-3 px-2 text-center" title="Goles/Puntos a Favor">
+                  <th className="py-3 px-2 text-center" title="Goles o puntos a favor">
                     {sport === 'futbol' ? 'GF' : 'PF'}
                   </th>
-                  <th className="py-3 px-2 text-center" title="Goles/Puntos en Contra">
+                  <th className="py-3 px-2 text-center" title="Goles o puntos en contra">
                     {sport === 'futbol' ? 'GC' : 'PC'}
                   </th>
-                  <th className="py-3 px-2 text-center" title="Diferencia de Goles/Puntos">
+                  <th className="py-3 px-2 text-center" title="Diferencia de goles o puntos">
                     {sport === 'futbol' ? 'DG' : 'DIF'}
                   </th>
                 </>
               )}
-              <th className="py-3 px-3 text-center font-bold text-slate-900" title="Puntos Totales">PTS</th>
-              <th className="py-3 px-4 text-center hidden md:table-cell" title="Racha reciente (Últimos 5)">Racha</th>
+              <th className="py-3 px-3 text-center font-bold text-slate-900" title="Puntos totales">PTS</th>
+              <th className="py-3 px-4 text-center hidden md:table-cell" title="Racha reciente (últimos 5)">Racha</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -197,9 +197,9 @@ export function StandingsTable() {
         <div className="flex items-center gap-1.5">
           <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
           <span>
-            {sport === 'futbol' && 'Reglamento: Victoria = 3 pts | Empate = 1 pt | Derrota = 0 pts. Desempate: GD, GF, Duelo directo.'}
-            {sport === 'baloncesto' && 'Reglamento FIBA: Victoria = 2 pts | Derrota = 1 pt. Desempate: Puntos tabla, Diferencia, PF.'}
-            {sport === 'voleibol' && 'Reglamento: 2-0 / 3-0 / 3-1 = 3 pts | 3-2 = 2 pts / 1 pt. Desempate: Ratio de Sets.'}
+            {sport === 'futbol' && 'Reglamento: victoria = 3 pts | empate = 1 pt | derrota = 0 pts. Desempate: GD, GF, duelo directo.'}
+            {sport === 'baloncesto' && 'Reglamento FIBA: victoria = 2 pts | derrota = 1 pt. Desempate: puntos en tabla, diferencia, PF.'}
+            {sport === 'voleibol' && 'Reglamento: 2-0 / 3-0 / 3-1 = 3 pts | 3-2 = 2 pts / 1 pt. Desempate: ratio de sets.'}
           </span>
         </div>
         <span className="text-amber-700 font-semibold">Actualización en tiempo real</span>

@@ -58,7 +58,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-amber-400" />
             <span className="font-extrabold text-xs sm:text-sm tracking-wide">
-              Acta Oficial de Encuentro · Liga Deportiva Costa de Oro 2026
+              Acta oficial de encuentro · Liga Deportiva Costa de Oro 2026
             </span>
           </div>
 
@@ -74,7 +74,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
             <button
               onClick={onClose}
               className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
-              title="Cerrar Acta"
+              title="Cerrar acta"
             >
               <X className="w-4 h-4" />
             </button>
@@ -101,10 +101,10 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                     Liga Deportiva Costa de Oro 2026
                   </h1>
                   <span className="text-[11px] font-bold text-slate-600 block mt-0.5">
-                    Festival Formativo Intercolegial · Guanacaste
+                    Festival formativo intercolegial · Guanacaste
                   </span>
                   <span className="text-[10px] text-amber-800 font-semibold block">
-                    Sede Anfitriona: {tournament.host.name}
+                    Sede anfitriona: {tournament.host.name}
                   </span>
                 </div>
               </div>
@@ -113,21 +113,21 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
               <div className="text-right">
                 <div className="inline-block px-3 py-1 rounded-lg bg-slate-100 border border-slate-300 text-right">
                   <span className="text-[9px] font-mono font-bold text-slate-500 block uppercase">
-                    Folio de Encuentro
+                    Folio de encuentro
                   </span>
                   <span className="text-xs font-mono font-black text-slate-900">
                     ACT-{match.id.toUpperCase()}
                   </span>
                 </div>
                 <span className="text-[10px] font-bold text-emerald-700 block mt-1">
-                  ● {match.status === 'completed' ? 'RESULTADO OFICIAL RATIFICADO' : match.status === 'live' ? 'PARTIDO EN DISPUTA (EN VIVO)' : 'PROGRAMACIÓN PREVIA'}
+                  ● {match.status === 'completed' ? 'Resultado oficial ratificado' : match.status === 'live' ? 'Partido en disputa (en vivo)' : 'Programación previa'}
                 </span>
               </div>
             </div>
 
             <div className="text-center pt-2">
               <span className="inline-block px-4 py-1 rounded-full bg-slate-950 text-amber-300 font-extrabold text-xs uppercase tracking-widest border border-amber-500/30">
-                Acta Técnica Oficial de Competición
+                Acta técnica oficial de competición
               </span>
             </div>
           </div>
@@ -139,19 +139,19 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
               <span className="font-extrabold text-slate-900">{match.jornadaName}</span>
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">Disciplina y Categoría</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase block">Disciplina y categoría</span>
               <span className="font-extrabold text-slate-900 capitalize">
                 {match.sport} · {category?.name || 'Abierta'}
               </span>
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">Fecha y Hora</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase block">Fecha y hora</span>
               <span className="font-extrabold text-slate-900">
                 {formatDateCostaRica(match.date)} · {match.time}
               </span>
             </div>
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">Sede y Cancha</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase block">Sede y cancha</span>
               <span className="font-extrabold text-slate-900 truncate block">
                 {match.venue}
               </span>
@@ -180,7 +180,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                   {match.homeScore} : {match.awayScore}
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  {match.status === 'completed' ? 'Final' : match.currentPeriod || 'En Curso'}
+                  {match.status === 'completed' ? 'Final' : match.currentPeriod || 'En curso'}
                 </span>
               </div>
 
@@ -201,7 +201,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
             {/* 📊 DESGLOSE POR PERIODOS / SETS / CUARTOS */}
             <div className="pt-3 border-t border-slate-200">
               <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 text-center">
-                Desglose Reglamentario por Periodos
+                Desglose reglamentario por periodos
               </h3>
 
               {isVolleyball && (
@@ -244,13 +244,13 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
               {isSoccer && (
                 <div className="grid grid-cols-2 gap-3 text-center text-xs">
                   <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
-                    <span className="text-[10px] font-bold text-emerald-800 uppercase block">1.er Tiempo (1T)</span>
+                    <span className="text-[10px] font-bold text-emerald-800 uppercase block">1.er tiempo (1T)</span>
                     <span className="font-mono font-extrabold text-sm text-slate-900">
                       {match.halfScores ? `${match.halfScores.home1T} - ${match.halfScores.away1T}` : `${Math.floor(match.homeScore / 2)} - ${Math.floor(match.awayScore / 2)}`}
                     </span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
-                    <span className="text-[10px] font-bold text-emerald-800 uppercase block">2.° Tiempo (2T)</span>
+                    <span className="text-[10px] font-bold text-emerald-800 uppercase block">2.° tiempo (2T)</span>
                     <span className="font-mono font-extrabold text-sm text-slate-900">
                       {match.halfScores ? `${match.halfScores.home2T} - ${match.halfScores.away2T}` : `${match.homeScore - Math.floor(match.homeScore / 2)} - ${match.awayScore - Math.floor(match.awayScore / 2)}`}
                     </span>
@@ -268,10 +268,10 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
               </div>
               <div>
                 <span className="text-[10px] font-bold text-amber-800 uppercase block">
-                  Jugador Más Valioso Oficial (MVP)
+                  Jugador más valioso oficial (MVP)
                 </span>
                 <span className="text-sm font-extrabold text-slate-900">
-                  {match.mvpPlayerName || 'Designado por Comisión Técnica'}
+                  {match.mvpPlayerName || 'Designado por la comisión técnica'}
                 </span>
               </div>
             </div>
@@ -282,11 +282,11 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
               </div>
               <div>
                 <span className="text-[10px] font-bold text-slate-600 uppercase block">
-                  Calificación de Juego Limpio (Fair Play)
+                  Calificación de juego limpio (fair play)
                 </span>
                 <span className="text-xs font-extrabold text-emerald-700 flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  Excelente Comportamiento y Respeto Mutuo
+                  Excelente comportamiento y respeto mutuo
                 </span>
               </div>
             </div>
@@ -295,7 +295,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
           {/* 📝 5. OBSERVACIONES E INCIDENCIAS DE MESA */}
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1.5">
             <span className="font-extrabold text-slate-900 text-[11px] uppercase tracking-wider block">
-              Observaciones e Incidencias Técnicas:
+              Observaciones e incidencias técnicas:
             </span>
             <p className="text-slate-700 leading-relaxed italic">
               {match.notes || 'Encuentro disputado conforme a las directrices y reglamento oficial de la Liga Deportiva Costa de Oro 2026. Sin reclamos técnicos ni incidentes arbitrales.'}
@@ -305,7 +305,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
           {/* ✍️ 6. CUADRO DE FIRMAS Y RATIFICACIÓN ARBITRAL */}
           <div className="pt-4 border-t-2 border-slate-300 space-y-3">
             <span className="text-[11px] font-black uppercase tracking-widest text-slate-500 block text-center">
-              Ratificación y Firmas Oficiales
+              Ratificación y firmas oficiales
             </span>
 
             <div className="grid grid-cols-3 gap-4 text-center text-xs pt-4">
@@ -315,8 +315,8 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                 <div className="h-12 w-full border-b border-dashed border-slate-400 flex items-end justify-center pb-1 font-serif italic text-slate-800 text-xs">
                   {match.officialReport?.refereeName || 'Lic. Árbitro Principal FCF/FECOBA'}
                 </div>
-                <span className="font-bold text-slate-900 mt-1 block">Árbitro Central</span>
-                <span className="text-[10px] text-slate-500">Comisión Técnica Arbitral</span>
+                <span className="font-bold text-slate-900 mt-1 block">Árbitro central</span>
+                <span className="text-[10px] text-slate-500">Comisión técnica arbitral</span>
               </div>
 
               {/* Firma Delegado Local */}
@@ -324,7 +324,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                 <div className="h-12 w-full border-b border-dashed border-slate-400 flex items-end justify-center pb-1 font-serif italic text-slate-800 text-xs">
                   {match.officialReport?.homeDelegate || `Delegado Oficial (${home?.shortName})`}
                 </div>
-                <span className="font-bold text-slate-900 mt-1 block">Delegado Local</span>
+                <span className="font-bold text-slate-900 mt-1 block">Delegado local</span>
                 <span className="text-[10px] text-slate-500">{home?.name}</span>
               </div>
 
@@ -333,7 +333,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                 <div className="h-12 w-full border-b border-dashed border-slate-400 flex items-end justify-center pb-1 font-serif italic text-slate-800 text-xs">
                   {match.officialReport?.awayDelegate || `Delegado Oficial (${away?.shortName})`}
                 </div>
-                <span className="font-bold text-slate-900 mt-1 block">Delegado Visitante</span>
+                <span className="font-bold text-slate-900 mt-1 block">Delegado visitante</span>
                 <span className="text-[10px] text-slate-500">{away?.name}</span>
               </div>
             </div>
@@ -341,7 +341,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
 
           {/* Pie de Página Institucional */}
           <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500">
-            <span>Liga Deportiva Costa de Oro 2026 · Documento Oficial Emitido Digitalmente</span>
+            <span>Liga Deportiva Costa de Oro 2026 · Documento oficial emitido digitalmente</span>
             <span>Generado: {new Date().toLocaleDateString('es-CR')} {new Date().toLocaleTimeString('es-CR')}</span>
           </div>
         </div>
