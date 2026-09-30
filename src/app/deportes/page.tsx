@@ -99,6 +99,19 @@ export default function DeportesPage() {
         </button>
       </div>
 
+      {/* 🏅 ESPACIO INTERMEDIO: LOGOTIPO NEXTPLAY ARMONIOSO */}
+      <div className="flex items-center justify-center -my-1 sm:-my-2">
+        <div className="flex items-center gap-3 w-full max-w-sm px-2">
+          <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-slate-200 to-slate-300" />
+          <img
+            src="/logos/nextplay_logo.png"
+            alt="NextPlay"
+            className="h-6 sm:h-7 w-auto object-contain transition-transform hover:scale-105"
+          />
+          <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent via-slate-200 to-slate-300" />
+        </div>
+      </div>
+
       {/* 📋 2. FICHA TÉCNICA Y CATEGORÍAS DE LA DISCIPLINA ACTIVA */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden">
         {/* Cabecera del Deporte */}
