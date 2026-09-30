@@ -28,50 +28,55 @@ async function handleAudit(request: NextRequest) {
   if (!geminiKey) {
     testResults.push({
       provider: 'Google Gemini',
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.7-flash',
       status: 'NO_API_KEY',
       latencyMs: 0,
       error: 'GEMINI_API_KEY no detectada en variables de entorno',
     });
   } else {
     const t0 = Date.now();
-    try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: 'Ping salud modelo' }] }],
-          }),
-          signal: AbortSignal.timeout(12000),
+    const modelsToPing = ['gemini-3.7-flash', 'gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-flash-latest'];
+    let pingSuccess = false;
+    let finalModel = 'gemini-3.7-flash';
+    let lastError = '';
+
+    for (const model of modelsToPing) {
+      try {
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: 'Ping salud modelo' }] }],
+            }),
+            signal: AbortSignal.timeout(12000),
+          }
+        );
+        if (res.ok) {
+          testResults.push({
+            provider: 'Google Gemini',
+            model,
+            status: 'ONLINE',
+            latencyMs: Date.now() - t0,
+          });
+          pingSuccess = true;
+          break;
+        } else {
+          lastError = `HTTP ${res.status}: ${await res.text()}`;
         }
-      );
-      if (res.ok) {
-        testResults.push({
-          provider: 'Google Gemini',
-          model: 'gemini-2.5-flash',
-          status: 'ONLINE',
-          latencyMs: Date.now() - t0,
-        });
-      } else {
-        const errorText = await res.text();
-        const isDecommissioned = res.status === 404 || res.status === 410 || errorText.includes('decommissioned');
-        testResults.push({
-          provider: 'Google Gemini',
-          model: 'gemini-2.5-flash',
-          status: isDecommissioned ? 'DECOMMISSIONED' : 'OFFLINE',
-          latencyMs: Date.now() - t0,
-          error: `HTTP ${res.status}: ${errorText.slice(0, 120)}`,
-        });
+      } catch (e) {
+        lastError = (e as Error).message;
       }
-    } catch (e) {
+    }
+
+    if (!pingSuccess) {
       testResults.push({
         provider: 'Google Gemini',
-        model: 'gemini-2.5-flash',
+        model: finalModel,
         status: 'OFFLINE',
         latencyMs: Date.now() - t0,
-        error: (e as Error).message,
+        error: lastError.slice(0, 120),
       });
     }
   }

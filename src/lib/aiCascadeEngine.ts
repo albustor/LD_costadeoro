@@ -37,13 +37,13 @@ function calculateHash(messages: AiMessage[], responseFormat?: string): string {
 }
 
 /**
- * ⚡ Nivel 1: Google Gemini (gemini-2.5-flash, gemini-1.5-flash)
+ * ⚡ Nivel 1: Google Gemini (gemini-3.7-flash, gemini-3.6-flash, gemini-3.5-flash, gemini-flash-latest)
  */
 async function queryGemini(request: AiCompletionRequest): Promise<{ content: string; model: string }> {
   const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY no configurada');
 
-  const model = 'gemini-2.5-flash';
+  const modelsToTry = ['gemini-3.7-flash', 'gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
   const systemMessage = request.messages.find((m) => m.role === 'system')?.content;
   const userMessages = request.messages.filter((m) => m.role !== 'system');
 
@@ -51,8 +51,6 @@ async function queryGemini(request: AiCompletionRequest): Promise<{ content: str
     role: m.role === 'assistant' ? 'model' : 'user',
     parts: [{ text: m.content }],
   }));
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const payload: Record<string, any> = {
     contents,
@@ -72,23 +70,30 @@ async function queryGemini(request: AiCompletionRequest): Promise<{ content: str
     payload.generationConfig.responseMimeType = 'application/json';
   }
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(8000),
-  });
+  let lastError = '';
+  for (const model of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(10000),
+      });
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Gemini API Error ${res.status}: ${errorText}`);
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) return { content: text, model };
+      } else {
+        lastError = `HTTP ${res.status}: ${await res.text()}`;
+      }
+    } catch (err) {
+      lastError = (err as Error).message;
+    }
   }
 
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Gemini retornó una respuesta vacía');
-
-  return { content: text, model };
+  throw new Error(`Gemini API Error en todos los modelos: ${lastError}`);
 }
 
 /**
