@@ -3,10 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 3014",
     "build": "next build",
-    "start": "next start --port 3000",
+    "start": "next start --port 3014",
     "lint": "next lint"
+  },
+  "curiolHub": {
+    "name": "Liga Costa de Oro 2026 · Festival Deportivo",
+    "category": "Proyectos",
+    "status": "terminado",
+    "color": "amber",
+    "port": 3014,
+    "icon": "ph-trophy",
+    "description": "Festival Deportivo Intercolegial Guanacaste 2026 (La Paz Cabo Velas & Tempisque), cronogramas, mural, streaming y accesibilidad DUA",
+    "route": "/"
   },
   "dependencies": {
     "clsx": "^2.1.1",
