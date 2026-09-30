@@ -54,7 +54,7 @@ export function Header() {
     { label: t('nav.standings.full'), shortLabel: 'Deportes', href: '/deportes', icon: Trophy },
     { label: t('nav.schedule.full'), shortLabel: 'Horarios', href: '/calendario', icon: Calendar },
     { label: t('nav.mural.full'), shortLabel: 'Muro', href: '/mural', icon: Heart },
-    { label: t('nav.schools'), shortLabel: 'Colegios', href: '/colegios', icon: Shield },
+    { label: t('nav.schools'), shortLabel: 'Instituciones', href: '/colegios', icon: Shield },
     { label: t('nav.admin'), shortLabel: 'Admin', href: '/admin', icon: SlidersHorizontal },
   ];
 

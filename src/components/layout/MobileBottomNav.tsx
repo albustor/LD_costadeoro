@@ -13,7 +13,7 @@ export function MobileBottomNav() {
     { label: 'Deportes', href: '/deportes', icon: Trophy },
     { label: 'Horarios', href: '/calendario', icon: Calendar },
     { label: 'Muro', href: '/mural', icon: Heart },
-    { label: 'Colegios', href: '/colegios', icon: Shield },
+    { label: 'Instituciones', href: '/colegios', icon: Shield },
     { label: 'Admin', href: '/admin', icon: SlidersHorizontal },
   ];
 

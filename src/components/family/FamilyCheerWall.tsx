@@ -761,7 +761,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-black shadow-sm transition-all cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>{isPosting ? 'Publicando...' : 'Publicar Porra'}</span>
+                    <span>{isPosting ? 'Publicando...' : 'Publicar'}</span>
                   </button>
                 </div>
               </div>
