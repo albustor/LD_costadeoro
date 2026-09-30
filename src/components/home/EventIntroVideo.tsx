@@ -21,12 +21,12 @@ export function EventIntroVideo() {
       </div>
 
       {/* Pie descriptivo del video */}
-      <div className="p-3.5 bg-white rounded-2xl border border-slate-200 text-center space-y-0.5 shadow-2xs">
-        <span className="text-xs sm:text-sm font-extrabold text-slate-800 flex items-center justify-center gap-1.5">
+      <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 text-center space-y-1 shadow-2xs">
+        <span className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center justify-center gap-2">
           <Sparkles className="w-4 h-4 text-amber-600" />
           <span>Presentación oficial · Liga Costa de Oro 2026</span>
         </span>
-        <p className="text-xs text-slate-500 font-medium leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
           Festival deportivo y formativo intercolegial de Guanacaste. Transmisión y video oficial.
         </p>
       </div>

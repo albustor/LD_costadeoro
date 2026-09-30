@@ -48,7 +48,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs text-center">
           <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono block">6</span>
-          <span className="text-xs sm:text-sm text-slate-600 font-bold">Colegios oficiales</span>
+          <span className="text-xs sm:text-sm text-slate-700 font-bold">Instituciones oficiales</span>
         </div>
         <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs text-center">
           <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono block">3</span>
