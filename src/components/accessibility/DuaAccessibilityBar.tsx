@@ -13,7 +13,11 @@ const PAGE_AUDIO_SUMMARIES: Record<string, string> = {
   '/admin': 'Mesa técnica y panel de control. Espacio para registrar y validar los marcadores oficiales de los encuentros con total transparencia y precisión formativa.',
 };
 
-export function DuaAccessibilityBar() {
+interface DuaAccessibilityBarProps {
+  compact?: boolean;
+}
+
+export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProps) {
   const pathname = usePathname();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [textScale, setTextScale] = useState<number>(100);
@@ -88,6 +92,33 @@ export function DuaAccessibilityBar() {
     window.speechSynthesis.speak(utterance);
     setIsPlaying(true);
   };
+
+  if (compact) {
+    return (
+      <button
+        type="button"
+        onClick={toggleAudioSummary}
+        title={isPlaying ? 'Detener audio resumen' : 'Escuchar audio resumen emotivo de la página (DUA)'}
+        className={`h-9 px-2.5 rounded-xl border font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs ${
+          isPlaying
+            ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md animate-pulse'
+            : 'bg-slate-900 border-slate-800 text-amber-300 hover:text-white hover:bg-slate-800'
+        }`}
+      >
+        {isPlaying ? (
+          <>
+            <VolumeX className="w-4 h-4 text-slate-950" />
+            <span className="text-[11px] font-black">Pausar</span>
+          </>
+        ) : (
+          <>
+            <Volume2 className="w-4 h-4 text-amber-400" />
+            <span className="text-[11px] font-bold">Audio</span>
+          </>
+        )}
+      </button>
+    );
+  }
 
   return (
     <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-800 rounded-2xl p-1 shadow-2xs">

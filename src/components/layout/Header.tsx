@@ -37,23 +37,23 @@ export function Header() {
       {/* Filete superior dorado ultra-fino */}
       <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-90" />
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-20 gap-2 sm:gap-4">
           
-          {/* Logo e Identidad Minimalista y Amplia */}
+          {/* Logo e Identidad Adaptativa (No se corta en móviles) */}
           <Link 
             href="/" 
-            className="flex items-center gap-3 sm:gap-4 group shrink-0 transition-opacity hover:opacity-90"
+            className="flex items-center gap-2 sm:gap-3.5 group shrink-0 transition-opacity hover:opacity-90 min-w-0"
             title="Liga Deportiva Costa de Oro 2026 - La Paz Community School"
           >
             {/* Emblema Original Dorado Sol y Olas */}
-            <div className="w-[44px] h-[38px] sm:w-[52px] sm:h-[44px] shrink-0 flex items-center justify-center overflow-hidden">
+            <div className="w-[34px] h-[28px] sm:w-[50px] sm:h-[42px] shrink-0 flex items-center justify-center overflow-hidden">
               <svg
                 viewBox="0 0 76 64"
-                width="44"
-                height="38"
-                style={{ width: '44px', height: '38px', minWidth: '44px', maxWidth: '52px' }}
-                className="w-full h-full drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)] block shrink-0"
+                width="34"
+                height="28"
+                style={{ width: '34px', height: '28px', minWidth: '34px', maxWidth: '50px' }}
+                className="w-full h-full drop-shadow-[0_2px_8px_rgba(245,158,11,0.5)] block shrink-0"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -79,14 +79,14 @@ export function Header() {
               </svg>
             </div>
 
-            {/* Tipografía Destacada */}
-            <div className="flex flex-col justify-center leading-none select-none">
-              <div className="flex items-center gap-1.5 font-serif font-black tracking-wide text-base sm:text-xl">
+            {/* Tipografía Destacada con ajuste responsive */}
+            <div className="flex flex-col justify-center leading-tight select-none min-w-0">
+              <div className="flex items-center gap-1 font-serif font-black tracking-tight text-xs sm:text-lg whitespace-nowrap">
                 <span className="text-white">LIGA</span>
                 <span className="text-amber-400">COSTA DE ORO</span>
               </div>
-              <span className="text-[10px] sm:text-[11.5px] font-sans font-bold uppercase tracking-wider text-amber-300/90 mt-1">
-                La Paz Community School · Guanacaste
+              <span className="text-[8.5px] sm:text-[11px] font-sans font-bold uppercase tracking-wider text-amber-300/90 whitespace-nowrap">
+                La Paz Community School
               </span>
             </div>
           </Link>
@@ -113,7 +113,7 @@ export function Header() {
               );
             })}
 
-            {/* Selector Bilingüe */}
+            {/* Selector Bilingüe Desktop */}
             <div className="h-5 w-[1px] bg-slate-800 mx-1" />
             <button
               onClick={toggleLanguage}
@@ -126,30 +126,32 @@ export function Header() {
 
             {/* Accesibilidad DUA Desktop */}
             <div className="h-5 w-[1px] bg-slate-800 mx-1" />
-            <DuaAccessibilityBar />
+            <DuaAccessibilityBar compact={false} />
 
             {/* Botón PWA Desktop */}
             <div className="h-5 w-[1px] bg-slate-800 mx-1" />
             <PwaInstallButton variant="header" />
           </nav>
 
-          {/* Acciones Móviles */}
-          <div className="flex items-center lg:hidden gap-1.5 sm:gap-2">
-            <DuaAccessibilityBar />
-            <PwaInstallButton variant="header" />
+          {/* Acciones Móviles Compactas (Sin desbordamiento) */}
+          <div className="flex items-center lg:hidden gap-1.5 shrink-0">
+            {/* Audio DUA Compacto */}
+            <DuaAccessibilityBar compact={true} />
 
+            {/* Selector Idioma Móvil */}
             <button
               onClick={toggleLanguage}
               title="Cambiar idioma"
-              className="h-10 px-3 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs cursor-pointer"
+              className="h-9 px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs cursor-pointer"
             >
-              <Globe className="w-4 h-4" />
+              <Globe className="w-3.5 h-3.5 text-amber-400" />
               <span>{language.toUpperCase()}</span>
             </button>
 
+            {/* Botón Menú Hamburguesa */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer shadow-2xs"
+              className="h-9 w-9 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer shadow-2xs"
               aria-label="Menú de navegación"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -160,27 +162,41 @@ export function Header() {
 
       {/* Menú Desplegable Móvil */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950/98 border-t border-slate-800 px-4 py-3.5 space-y-2.5 shadow-2xl animate-fade-in">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+        <div className="lg:hidden bg-slate-950/98 border-t border-slate-800 px-4 py-4 space-y-4 shadow-2xl animate-fade-in">
+          {/* Panel de Accesibilidad DUA Móvil Completo (Zoom + Audio) */}
+          <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2">
+            <span className="text-xs font-bold text-slate-300">Accesibilidad DUA:</span>
+            <DuaAccessibilityBar compact={false} />
+          </div>
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
-                  isActive
-                    ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-xs'
-                    : 'text-slate-300 hover:bg-slate-900 hover:text-white'
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+          {/* Botón Instalar PWA en Móvil */}
+          <div className="w-full">
+            <PwaInstallButton variant="header" />
+          </div>
+
+          {/* Enlaces de Navegación */}
+          <div className="space-y-1.5 pt-1">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                    isActive
+                      ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-xs'
+                      : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       )}
     </header>
