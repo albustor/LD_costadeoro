@@ -35,7 +35,7 @@ export function Footer() {
               <span>Sede anfitriona: <strong className="text-slate-900 font-bold">{TOURNAMENT_CONFIG.host.name}</strong></span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium">
-              © 2026 {TOURNAMENT_CONFIG.name}. Festival formativo intercolegial. Guanacaste, Costa Rica.
+              © 2026 {TOURNAMENT_CONFIG.name}. Festival deportivo intercolegial. Guanacaste, Costa Rica.
             </p>
           </div>
 

@@ -21,9 +21,9 @@ export const translations = {
     'header.subtitle': 'La Paz Community School • Guanacaste',
 
     // Home / Hero
-    'hero.welcomeBadge': 'Festival intercolegial 2026',
+    'hero.welcomeBadge': 'Festival deportivo 2026',
     'hero.title': 'Bienvenidos a la Liga Deportiva Costa de Oro',
-    'hero.tagline': 'Festival formativo intercolegial de Guanacaste que une a 6 instituciones educativas en torno al compañerismo, el juego limpio y la sana competencia en fútbol, voleibol y baloncesto.',
+    'hero.tagline': 'Festival deportivo intercolegial de Guanacaste que une a 6 instituciones educativas en torno al compañerismo, el juego limpio y la sana competencia en fútbol, voleibol y baloncesto.',
     'hero.tab.video': 'Video introductorio del evento',
     'hero.tab.info': 'Información general del evento',
     'hero.videoTitle': 'Video oficial de la Liga Costa de Oro 2026',
@@ -38,7 +38,7 @@ export const translations = {
     // Deportes / Sports Page
     'sports.badge': 'Disciplinas oficiales',
     'sports.season': 'Temporada 2026',
-    'sports.title': 'Deportes, categorías y valores formativos',
+    'sports.title': 'Deportes, categorías y disciplinas',
     'sports.subtitle': 'Conoce los días de juego, divisiones escolares por edad y la vivencia deportiva intercolegial de la Liga Costa de Oro.',
     'sports.soccer': 'Fútbol',
     'sports.soccerDays': 'Lun, mar y mié',
@@ -156,9 +156,9 @@ export const translations = {
     'header.subtitle': 'La Paz Community School • Guanacaste',
 
     // Home / Hero
-    'hero.welcomeBadge': '2026 Inter-School Festival',
+    'hero.welcomeBadge': '2026 Sports Festival',
     'hero.title': 'Welcome to Costa de Oro Sports League',
-    'hero.tagline': 'Guanacaste’s formative inter-school athletic festival bringing together 6 educational institutions around sportsmanship, fair play, and healthy competition in Soccer, Volleyball, and Basketball.',
+    'hero.tagline': 'Guanacaste’s inter-school athletic festival bringing together 6 educational institutions around sportsmanship, fair play, and healthy competition in Soccer, Volleyball, and Basketball.',
     'hero.tab.video': 'Official Intro Video',
     'hero.tab.info': 'General Event Information',
     'hero.videoTitle': 'Official Costa de Oro 2026 League Video',
@@ -173,7 +173,7 @@ export const translations = {
     // Deportes / Sports Page
     'sports.badge': 'Official Disciplines',
     'sports.season': '2026 Season',
-    'sports.title': 'Sports, Categories & Formative Values',
+    'sports.title': 'Sports, Categories & Disciplines',
     'sports.subtitle': 'Explore game days, age divisions, and the inter-school sports experience across Costa de Oro League.',
     'sports.soccer': 'Soccer',
     'sports.soccerDays': 'Mon, Tue & Wed',

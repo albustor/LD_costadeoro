@@ -71,17 +71,17 @@ export function Header() {
           {/* Logo e Identidad Oficial (Enfocada exclusivamente en Liga Costa de Oro con fondo negro) */}
           <Link 
             href="/" 
-            className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0 transition-opacity hover:opacity-90 min-w-0"
+            className="flex items-center gap-2 sm:gap-3.5 group transition-opacity hover:opacity-90 min-w-0 flex-1 overflow-hidden"
             title="Liga Deportiva Costa de Oro 2026"
           >
             {/* Emblema Original Dorado Sol y Olas */}
-            <div className="w-[42px] h-[36px] sm:w-[54px] sm:h-[46px] shrink-0 flex items-center justify-center overflow-hidden">
+            <div className="w-[36px] h-[32px] sm:w-[50px] sm:h-[42px] shrink-0 flex items-center justify-center overflow-hidden">
               <svg
                 viewBox="0 0 76 64"
-                width="42"
-                height="36"
-                style={{ width: '42px', height: '36px', minWidth: '42px', maxWidth: '54px' }}
-                className="w-full h-full drop-shadow-[0_2px_12px_rgba(245,158,11,0.6)] block shrink-0"
+                width="36"
+                height="32"
+                style={{ width: '36px', height: '32px', minWidth: '36px', maxWidth: '50px' }}
+                className="w-full h-full drop-shadow-[0_2px_10px_rgba(245,158,11,0.6)] block shrink-0"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -109,18 +109,18 @@ export function Header() {
 
             {/* Tipografía Exclusiva Liga Costa de Oro */}
             <div className="flex flex-col justify-center leading-tight select-none min-w-0">
-              <div className="flex items-center gap-1.5 font-serif font-black tracking-tight text-sm sm:text-xl whitespace-nowrap">
+              <div className="flex items-center gap-1 font-serif font-black tracking-tight text-xs sm:text-lg whitespace-nowrap">
                 <span className="text-white">LIGA</span>
                 <span className="text-amber-400">COSTA DE ORO</span>
               </div>
-              <span className="text-[9.5px] sm:text-[11.5px] font-sans font-bold uppercase tracking-wider text-amber-300/90 whitespace-nowrap">
-                Festival Formativo · Guanacaste 2026
+              <span className="text-[8.5px] sm:text-[11px] font-sans font-bold uppercase tracking-wider text-amber-300/90 truncate block">
+                Festival Deportivo · Guanacaste 2026
               </span>
             </div>
           </Link>
 
           {/* Navegación Desktop */}
-          <nav className="hidden lg:flex items-center gap-1.5 p-1.5 bg-slate-950/90 rounded-2xl border border-slate-800">
+          <nav className="hidden lg:flex items-center gap-1.5 p-1.5 bg-slate-950/90 rounded-2xl border border-slate-800 shrink-0">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
@@ -162,7 +162,7 @@ export function Header() {
           </nav>
 
           {/* Acciones Móviles */}
-          <div className="flex items-center lg:hidden gap-1.5 shrink-0">
+          <div className="flex items-center lg:hidden gap-1.5 shrink-0 ml-auto">
             {/* Audio DUA Compacto */}
             <DuaAccessibilityBar compact={true} />
 
@@ -170,7 +170,7 @@ export function Header() {
             <button
               onClick={toggleLanguage}
               title="Cambiar idioma"
-              className="h-9 px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs cursor-pointer"
+              className="h-9 px-2 sm:px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5 text-amber-400" />
               <span>{language.toUpperCase()}</span>

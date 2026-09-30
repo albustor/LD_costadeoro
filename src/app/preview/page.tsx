@@ -64,10 +64,10 @@ function PreviewContent() {
 
   // Adjust zoom automatically if focusing on solo device
   useEffect(() => {
-    if (viewMode === 'mobile') setGlobalZoom(0.9);
-    else if (viewMode === 'tablet') setGlobalZoom(0.75);
-    else if (viewMode === 'laptop') setGlobalZoom(0.7);
-    else setGlobalZoom(0.6);
+    if (viewMode === 'mobile') setGlobalZoom(0.75);
+    else if (viewMode === 'tablet') setGlobalZoom(0.68);
+    else if (viewMode === 'laptop') setGlobalZoom(0.65);
+    else setGlobalZoom(0.55);
   }, [viewMode]);
 
   // Sync route input with selection
