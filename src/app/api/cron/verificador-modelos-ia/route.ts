@@ -44,7 +44,7 @@ async function handleAudit(request: NextRequest) {
           body: JSON.stringify({
             contents: [{ parts: [{ text: 'Ping salud modelo' }] }],
           }),
-          signal: AbortSignal.timeout(6000),
+          signal: AbortSignal.timeout(12000),
         }
       );
       if (res.ok) {
@@ -81,7 +81,7 @@ async function handleAudit(request: NextRequest) {
   if (!groqKey) {
     testResults.push({
       provider: 'Groq LPU',
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.8-27b',
       status: 'NO_API_KEY',
       latencyMs: 0,
       error: 'GROQ_API_KEY no detectada en variables de entorno',
@@ -96,16 +96,16 @@ async function handleAudit(request: NextRequest) {
           Authorization: `Bearer ${groqKey}`,
         },
         body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
+          model: 'qwen/qwen3.8-27b',
           messages: [{ role: 'user', content: 'Ping' }],
           max_tokens: 5,
         }),
-        signal: AbortSignal.timeout(6000),
+        signal: AbortSignal.timeout(10000),
       });
       if (res.ok) {
         testResults.push({
           provider: 'Groq LPU',
-          model: 'llama-3.3-70b-versatile',
+          model: 'qwen/qwen3.8-27b',
           status: 'ONLINE',
           latencyMs: Date.now() - t0,
         });
@@ -114,7 +114,7 @@ async function handleAudit(request: NextRequest) {
         const isDecommissioned = res.status === 404 || res.status === 410;
         testResults.push({
           provider: 'Groq LPU',
-          model: 'llama-3.3-70b-versatile',
+          model: 'qwen/qwen3.8-27b',
           status: isDecommissioned ? 'DECOMMISSIONED' : 'OFFLINE',
           latencyMs: Date.now() - t0,
           error: `HTTP ${res.status}: ${errorText.slice(0, 120)}`,
@@ -123,7 +123,7 @@ async function handleAudit(request: NextRequest) {
     } catch (e) {
       testResults.push({
         provider: 'Groq LPU',
-        model: 'llama-3.3-70b-versatile',
+        model: 'qwen/qwen3.8-27b',
         status: 'OFFLINE',
         latencyMs: Date.now() - t0,
         error: (e as Error).message,

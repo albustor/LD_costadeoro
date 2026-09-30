@@ -92,39 +92,46 @@ async function queryGemini(request: AiCompletionRequest): Promise<{ content: str
 }
 
 /**
- * ⚡ Nivel 2: Groq LPU (llama-3.3-70b-versatile, llama-3.1-8b-instant)
+ * ⚡ Nivel 2: Groq LPU (Ultra-baja latencia con fallback multinúcleo)
  */
 async function queryGroq(request: AiCompletionRequest): Promise<{ content: string; model: string }> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error('GROQ_API_KEY no configurada');
 
-  const model = 'llama-3.3-70b-versatile';
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages: request.messages,
-      temperature: request.temperature ?? 0.4,
-      max_tokens: request.maxTokens ?? 1024,
-      response_format: request.responseFormat === 'json_object' ? { type: 'json_object' } : undefined,
-    }),
-    signal: AbortSignal.timeout(8000),
-  });
+  const modelsToTry = ['qwen/qwen3.8-27b', 'llama-3.3-70b-versatile', 'openai/gpt-oss-120b'];
+  let lastError = '';
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Groq API Error ${res.status}: ${errorText}`);
+  for (const model of modelsToTry) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: request.messages,
+          temperature: request.temperature ?? 0.4,
+          max_tokens: request.maxTokens ?? 1024,
+          response_format: request.responseFormat === 'json_object' ? { type: 'json_object' } : undefined,
+        }),
+        signal: AbortSignal.timeout(10000),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.choices?.[0]?.message?.content;
+        if (text) return { content: text, model };
+      } else {
+        lastError = `HTTP ${res.status}: ${await res.text()}`;
+      }
+    } catch (err) {
+      lastError = (err as Error).message;
+    }
   }
 
-  const data = await res.json();
-  const text = data.choices?.[0]?.message?.content;
-  if (!text) throw new Error('Groq retornó una respuesta vacía');
-
-  return { content: text, model };
+  throw new Error(`Groq API Error en todos los modelos: ${lastError}`);
 }
 
 /**
