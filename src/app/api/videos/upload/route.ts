@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
-const OFFICIAL_LIBRARY_ID = process.env.BUNNY_LIBRARY_ID || '629005';
-const OFFICIAL_STREAM_KEY = process.env.BUNNY_STREAM_API_KEY || '3667ba08-0c14-4014-a69a-0facf55b9eff';
+const OFFICIAL_LIBRARY_ID = process.env.BUNNY_LIBRARY_ID || '766057';
+const OFFICIAL_STREAM_KEY = process.env.BUNNY_STREAM_API_KEY || 'fbff0463-c54f-4b48-90cc53b4bf12-16dd-4206';
 
 export async function POST(req: NextRequest) {
   try {

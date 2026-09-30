@@ -24,10 +24,10 @@ export interface BunnyUploadResult {
 }
 
 export const BUNNY_MEDIA_CONFIG = {
-  streamLibraryId: process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID || '629005',
-  streamApiKey: process.env.BUNNY_STREAM_API_KEY || '3667ba08-0c14-4014-a69a-0facf55b9eff',
+  streamLibraryId: process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID || '766057',
+  streamApiKey: process.env.BUNNY_STREAM_API_KEY || 'fbff0463-c54f-4b48-90cc53b4bf12-16dd-4206',
   storageZoneName: process.env.NEXT_PUBLIC_BUNNY_STORAGE_ZONE || 'costa-de-oro-storage',
-  storageCdnHost: process.env.NEXT_PUBLIC_BUNNY_CDN_HOST || 'https://vz-629005.b-cdn.net',
+  storageCdnHost: process.env.NEXT_PUBLIC_BUNNY_CDN_HOST || 'https://vz-94be8347-e18.b-cdn.net',
   maxImageSizeBytes: 20 * 1024 * 1024, // 20 MB
   maxVideoSizeBytes: 150 * 1024 * 1024, // 150 MB
   allowedImageTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/gif'],

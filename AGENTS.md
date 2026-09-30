@@ -79,7 +79,7 @@ El asistente opera bajo el rol de **Jim (Ingeniero Full-Stack y Auditor Técnico
 
 ### Estado Actual de Persistencia en Servidor:
 1. **Archivos Físicos (Fotos y Videos)**:
-   - Se guardan físicamente en el servidor local (`/public/uploads/photos/` y `/public/uploads/videos/`) y se transmiten a **Bunny.net (Bunny Stream Library 629005 y CDN)**.
+   - Se guardan físicamente en el servidor local (`/public/uploads/photos/` y `/public/uploads/videos/`) y se sincronizan y transcodifican en la nube en **Bunny.net (Bunny Stream Library 766057 y CDN `vz-94be8347-e18.b-cdn.net`)**.
 2. **Publicaciones del Muro Comunitario ([`/api/posts`](file:///d:/AntigravityFinal/EventoCostadeOro/src/app/api/posts/route.ts))**:
    - `GET /api/posts` & `POST /api/posts`: Persistencia atómica de mensajes, autor, colegio, fotos/videos vinculados y contador de likes/aplausos en `src/data/tournament_db.json`.
    - `POST /api/posts/[id]/react` & `POST /api/posts/[id]/comment`: Interacciones en tiempo real entre múltiples celulares.
