@@ -53,7 +53,7 @@ export const SCHOOLS_DATA: School[] = [
     secondaryColor: '#047857',
     location: 'Comunidad, Carrillo',
     city: 'Guanacaste',
-    founded: 2019,
+    founded: 2021,
   },
   {
     id: 'cria',

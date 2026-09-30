@@ -53,32 +53,32 @@ export default function HomePage() {
 
       {/* 🗂️ 2. PESTAÑAS DE CONTENIDO SECCIONADO: VIDEO VS INFORMACIÓN GENERAL */}
       <section className="space-y-4">
-        {/* Selector de pestañas */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-200/70 rounded-2xl border border-slate-300/80">
+        {/* Selector de pestañas con mayor área táctil y textos grandes */}
+        <div className="flex items-center gap-2 p-2 bg-slate-200/80 rounded-2xl border border-slate-300">
           <button
             type="button"
             onClick={() => setActiveTab('video')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex-1 flex items-center justify-center gap-2.5 py-3 sm:py-3.5 px-3 sm:px-4 rounded-xl font-extrabold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
               activeTab === 'video'
-                ? 'bg-slate-950 text-amber-300 border border-amber-500/40 shadow-sm ring-1 ring-amber-500/20'
-                : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
+                ? 'bg-slate-950 text-amber-300 border border-amber-500/50 shadow-md ring-1 ring-amber-500/20'
+                : 'text-slate-800 hover:text-slate-950 hover:bg-white/70 font-bold'
             }`}
           >
-            <Film className={`w-4 h-4 ${activeTab === 'video' ? 'text-amber-400' : 'text-amber-600'}`} />
-            <span>Video introductorio del evento</span>
+            <Film className={`w-4 h-4 sm:w-5 sm:h-5 ${activeTab === 'video' ? 'text-amber-400' : 'text-amber-700'}`} />
+            <span>Video del evento</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('info')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            className={`flex-1 flex items-center justify-center gap-2.5 py-3 sm:py-3.5 px-3 sm:px-4 rounded-xl font-extrabold text-xs sm:text-sm md:text-base transition-all cursor-pointer ${
               activeTab === 'info'
-                ? 'bg-slate-950 text-amber-300 border border-amber-500/40 shadow-sm ring-1 ring-amber-500/20'
-                : 'text-slate-700 hover:text-slate-950 hover:bg-white/60'
+                ? 'bg-slate-950 text-amber-300 border border-amber-500/50 shadow-md ring-1 ring-amber-500/20'
+                : 'text-slate-800 hover:text-slate-950 hover:bg-white/70 font-bold'
             }`}
           >
-            <Info className={`w-4 h-4 ${activeTab === 'info' ? 'text-amber-400' : 'text-amber-600'}`} />
-            <span>Información general del evento</span>
+            <Info className={`w-4 h-4 sm:w-5 sm:h-5 ${activeTab === 'info' ? 'text-amber-400' : 'text-amber-700'}`} />
+            <span>Información general</span>
           </button>
         </div>
 
@@ -98,22 +98,22 @@ export default function HomePage() {
       </section>
 
       {/* 🚀 3. ACCESOS DIRECTOS */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-2">
         <Link
           href="/deportes"
-          className="bg-white hover:bg-amber-50/40 p-5 rounded-3xl border border-slate-200 hover:border-amber-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
+          className="bg-white hover:bg-amber-50/50 p-5 rounded-3xl border border-slate-200 hover:border-amber-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shadow-2xs">
               <Trophy className="w-6 h-6" />
             </div>
             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-amber-600 transition-transform group-hover:translate-x-1" />
           </div>
           <div>
-            <h3 className="font-extrabold text-slate-900 text-base group-hover:text-amber-800">
+            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-amber-800">
               {t('hero.quickAccess.sports')}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
               Posiciones, tabla general y actas de partido.
             </p>
           </div>
@@ -121,19 +121,19 @@ export default function HomePage() {
 
         <Link
           href="/calendario"
-          className="bg-white hover:bg-sky-50/40 p-5 rounded-3xl border border-slate-200 hover:border-sky-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
+          className="bg-white hover:bg-sky-50/50 p-5 rounded-3xl border border-slate-200 hover:border-sky-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700">
+            <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-700 shadow-2xs">
               <Calendar className="w-6 h-6" />
             </div>
             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-sky-600 transition-transform group-hover:translate-x-1" />
           </div>
           <div>
-            <h3 className="font-extrabold text-slate-900 text-base group-hover:text-sky-800">
+            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-sky-800">
               {t('hero.quickAccess.schedule')}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
               Fútbol, voleibol y baloncesto por jornada.
             </p>
           </div>
@@ -141,19 +141,19 @@ export default function HomePage() {
 
         <Link
           href="/mural"
-          className="bg-white hover:bg-rose-50/40 p-5 rounded-3xl border border-slate-200 hover:border-rose-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
+          className="bg-white hover:bg-rose-50/50 p-5 rounded-3xl border border-slate-200 hover:border-rose-300 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shadow-2xs">
               <Heart className="w-6 h-6 fill-rose-500" />
             </div>
             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-rose-600 transition-transform group-hover:translate-x-1" />
           </div>
           <div>
-            <h3 className="font-extrabold text-slate-900 text-base group-hover:text-rose-800">
+            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-rose-800">
               {t('hero.quickAccess.mural')}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
               Fotos, mensajes y porras familiares en vivo.
             </p>
           </div>
@@ -164,16 +164,16 @@ export default function HomePage() {
           className="bg-white hover:bg-slate-50 p-5 rounded-3xl border border-slate-200 hover:border-slate-400 transition-all shadow-2xs space-y-3 group flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 shadow-2xs">
               <SlidersHorizontal className="w-6 h-6" />
             </div>
             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-900 transition-transform group-hover:translate-x-1" />
           </div>
           <div>
-            <h3 className="font-extrabold text-slate-900 text-base group-hover:text-slate-950">
+            <h3 className="font-black text-slate-900 text-base sm:text-lg group-hover:text-slate-950">
               {t('hero.quickAccess.admin')}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
               Control de marcadores, actas y configuración.
             </p>
           </div>
