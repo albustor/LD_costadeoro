@@ -19,7 +19,7 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'video' | 'info'>('video');
 
   return (
-    <div className="space-y-6 animate-fade-in pb-12">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in pb-2 sm:pb-4">
       {/* 🛠️ Modal emergente de retroalimentación y desarrollo */}
       <DevelopmentFeedbackModal />
 

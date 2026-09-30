@@ -104,7 +104,7 @@ export default function RootLayout({
               <LiveMatchBanner />
 
               {/* Main Content Area */}
-              <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 overflow-x-hidden">
+              <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3 sm:pt-5 pb-2 sm:pb-4 overflow-x-hidden">
                 {children}
               </main>
 
