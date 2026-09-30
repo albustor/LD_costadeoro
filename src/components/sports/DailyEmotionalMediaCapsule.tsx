@@ -97,8 +97,8 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
           pillarLabel: 'Esfuerzo y Superación',
           pillarEmoji: '💪',
           caption: 'Entrega total en la recuperación del balón. Cada jugada se defiende con el corazón.',
-          author: 'Familia Ramírez (La Paz Cabo Velas)',
-          schoolName: 'La Paz Cabo Velas',
+          author: 'Familia Ramírez (La Paz Community School Cabo Velas)',
+          schoolName: 'La Paz Community School Cabo Velas',
         },
         {
           id: 'fut-p2',
@@ -183,8 +183,8 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
           pillarLabel: 'Dedicación y Concentración',
           pillarEmoji: '🎯',
           caption: 'Máxima concentración en el tiro libre en los segundos finales del 4.º cuarto.',
-          author: 'Familia Vargas (La Paz Tempisque)',
-          schoolName: 'La Paz Tempisque',
+          author: 'Familia Vargas (La Paz Community School Tempisque)',
+          schoolName: 'La Paz Community School Tempisque',
         },
         {
           id: 'bas-v1',

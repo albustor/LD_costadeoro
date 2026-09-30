@@ -31,14 +31,14 @@ const schoolLogoFiles: Record<string, { src: string; fallbackSrc?: string; alt: 
   'la-paz-cabo-velas': {
     src: '/logos/colegios/la_paz_cabo_velas.png',
     fallbackSrc: '/logos/colegios/la_paz_cabo_velas.svg',
-    alt: 'Logo Oficial La Paz Community School - Cabo Velas',
-    name: 'La Paz Cabo Velas',
+    alt: 'Logo Oficial La Paz Community School Cabo Velas',
+    name: 'La Paz Community School Cabo Velas',
   },
   'la-paz-tempisque': {
     src: '/logos/colegios/la_paz_tempisque.png',
     fallbackSrc: '/logos/colegios/la_paz_tempisque.svg',
-    alt: 'Logo Oficial La Paz Community School - Tempisque',
-    name: 'La Paz Tempisque',
+    alt: 'Logo Oficial La Paz Community School Tempisque',
+    name: 'La Paz Community School Tempisque',
   },
   'cria': {
     src: '/logos/colegios/cria.png',

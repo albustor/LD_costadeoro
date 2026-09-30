@@ -370,7 +370,7 @@ export function SportScheduleView({
                   <div className="min-w-0">
                     <span className="font-bold">Asignación de sedes: </span>
                     <span className="opacity-90">
-                      Las sedes se definen por rifa rotativa entre las instituciones con cancha disponible (CRIA, La Paz, Journey, Vittorino y Educarte). Cada festival diario se disputa en una sola sede anfitriona.
+                      Las sedes se definen por rifa rotativa entre las instituciones con cancha disponible (CRIA, La Paz Community School Cabo Velas, La Paz Community School Tempisque, The Journey School, Instituto Vittorino y Educarte). Cada festival diario se disputa en una sola sede anfitriona.
                     </span>
                   </div>
                 </div>
