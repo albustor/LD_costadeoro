@@ -73,6 +73,16 @@ export default function ColegiosPage() {
         <p className="text-xs text-slate-500 mt-1">
           {t('schools.headerSubtitle')}
         </p>
+
+        {/* ℹ️ Banner de Modo de Pruebas */}
+        <div className="mt-3 flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/90 border border-amber-200 text-amber-950 text-xs">
+          <span className="font-black px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] uppercase shrink-0">
+            Modo Pruebas
+          </span>
+          <span className="font-medium text-[11.5px]">
+            Información de prueba de marcadores · Entorno de simulación previa al evento oficial (Marcadores y Estadísticas en 0).
+          </span>
+        </div>
       </div>
 
       {/* 🏫 SELECTOR DE COLEGIOS (2 EN 2 / GRID SIMÉTRICO) */}
@@ -86,13 +96,13 @@ export default function ColegiosPage() {
                 setSelectedSchoolId(s.id);
                 setSportFilter('all');
               }}
-              className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2 cursor-pointer shadow-2xs ${
+              className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2.5 cursor-pointer shadow-2xs ${
                 isSelected
                   ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-500/20 shadow-sm'
                   : 'bg-white border-slate-200 hover:border-amber-300 hover:bg-slate-50'
               }`}
             >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shadow-2xs">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-2 shadow-2xs">
                 <SchoolEmblem schoolId={s.id} size="sm" showBorder={false} />
               </div>
               <div className="min-w-0 w-full">

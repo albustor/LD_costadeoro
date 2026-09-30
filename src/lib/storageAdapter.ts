@@ -6,7 +6,7 @@ import { DEFAULT_ACTIVE_TIER } from '@/config/tierConfig';
 
 const KEYS = {
   TIER: 'costa_de_oro_tier_active',
-  MATCHES: 'costa_de_oro_matches',
+  MATCHES: 'costa_de_oro_matches_v3',
   SPONSORS: 'costa_de_oro_sponsors',
   VIDEOS: 'costa_de_oro_videos',
   PHOTOS: 'costa_de_oro_photos',

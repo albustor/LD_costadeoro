@@ -46,6 +46,12 @@ export function StandingsTable() {
             );
           })}
         </div>
+
+        {/* ℹ️ Nota Oficial de Prueba */}
+        <div className="mt-3 flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-[11px]">
+          <span className="font-extrabold px-1.5 py-0.5 rounded bg-amber-200 text-amber-950 uppercase text-[9.5px]">Modo Pruebas</span>
+          <span className="font-medium">Información de prueba de marcadores · Entorno de simulación previa al evento oficial (Puntos y Marcadores en 0).</span>
+        </div>
       </div>
 
       {/* Standings Data Table */}

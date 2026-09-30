@@ -375,6 +375,16 @@ export function SportScheduleView({
                   </div>
                 </div>
 
+                {/* ℹ️ Nota Oficial de Prueba y Calibración */}
+                <div className="flex items-center gap-2 p-3 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-950 text-xs">
+                  <span className="font-black px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] uppercase shrink-0">
+                    Modo Pruebas
+                  </span>
+                  <span className="font-medium text-[11.5px]">
+                    Información de prueba de marcadores · Entorno de simulación previa al evento oficial. Todos los marcadores y puntos inician en 0.
+                  </span>
+                </div>
+
                 {/* Lista de Partidos Limpia y Tematizada */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                   {sportMatches.length === 0 ? (
