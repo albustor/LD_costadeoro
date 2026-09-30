@@ -33,7 +33,7 @@ export default function HomePage() {
             </span>
             <span className="px-3 py-1 rounded-full bg-white text-slate-700 font-medium text-xs border border-slate-200 flex items-center gap-1.5 shadow-2xs">
               <MapPin className="w-3.5 h-3.5 text-amber-600" />
-              <span>Sede: {tournament.host.name}</span>
+              <span>Sedes rotativas · Guanacaste</span>
             </span>
             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-semibold text-xs border border-emerald-200">
               Octubre - noviembre 2026

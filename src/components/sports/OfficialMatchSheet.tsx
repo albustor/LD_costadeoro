@@ -104,7 +104,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                     Festival formativo intercolegial · Guanacaste
                   </span>
                   <span className="text-[10px] text-amber-800 font-semibold block">
-                    Sede anfitriona: {tournament.host.name}
+                    Sede del encuentro: {match.venue || 'Por definir (Rifa rotativa)'}
                   </span>
                 </div>
               </div>

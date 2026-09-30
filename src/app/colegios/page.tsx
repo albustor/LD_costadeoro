@@ -54,11 +54,11 @@ export default function ColegiosPage() {
   );
 
   const getSchoolMascot = (schoolId: string) => {
-    if (schoolId === 'la-paz-cabo-velas') return 'Pumas 🐾';
-    if (schoolId === 'la-paz-tempisque') return 'Tiburones 🦈';
+    if (schoolId === 'la-paz-cabo-velas') return 'Tiburones (Sharks) 🦈';
+    if (schoolId === 'la-paz-tempisque') return 'Pumas 🐾';
     if (schoolId === 'cria') return 'CRIA Oficial';
     if (schoolId === 'journey-school') return 'The Journey School';
-    if (schoolId === 'vittorino') return 'Vittorino Prep';
+    if (schoolId === 'vittorino') return 'Centro Educativo Vittorino Girardi';
     return 'Educarte High';
   };
 

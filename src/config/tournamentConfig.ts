@@ -81,12 +81,12 @@ export const SCHOOLS_DATA: School[] = [
   },
   {
     id: 'vittorino',
-    name: 'Instituto Vittorino Prep',
-    shortName: 'Vittorino',
+    name: 'Centro Educativo Católico Monseñor Vittorino Girardi Stellin',
+    shortName: 'Instituto Vittorino',
     acronym: 'VIT',
     logo: '🛡️',
-    primaryColor: '#7c3aed', // Royal Violet
-    secondaryColor: '#6d28d9',
+    primaryColor: '#0284c7', // Cyan Blue
+    secondaryColor: '#0369a1',
     location: 'Huacas',
     city: 'Santa Cruz, Guanacaste',
     founded: 2012,

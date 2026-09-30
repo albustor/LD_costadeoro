@@ -591,7 +591,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   '¡Orgullo total! 💙',
                   '¡Vamos con garra! 🔥',
                   '¡Gran partido chicos! ⚽',
-                  '¡Fuerza Sharks! 🦈',
+                  '¡A darlo todo en la cancha! 🏆',
                   '¡Juego limpio y pasión! ✨'
                 ].map((chip) => (
                   <button

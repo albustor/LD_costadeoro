@@ -53,9 +53,10 @@ const schoolLogoFiles: Record<string, { src: string; fallbackSrc?: string; alt: 
     name: 'The Journey School',
   },
   'vittorino': {
-    src: '/logos/colegios/vittorino.svg',
-    alt: 'Logo Oficial Centro Educativo Monseñor Vittorino Girardi',
-    name: 'Vittorino Prep',
+    src: '/logos/vittorino_logo_oficial.jpg',
+    fallbackSrc: '/logos/colegios/vittorino.svg',
+    alt: 'Logo Oficial Centro Educativo Católico Monseñor Vittorino Girardi Stellin',
+    name: 'Centro Educativo Católico Monseñor Vittorino Girardi Stellin',
   },
   'educarte': {
     src: '/logos/colegios/educarte.png',

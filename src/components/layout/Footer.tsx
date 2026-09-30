@@ -22,7 +22,7 @@ export function Footer() {
             </h4>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-700 bg-white border border-slate-200 px-3.5 py-1 rounded-full shadow-2xs mt-2">
               <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-              <span>Sede anfitriona: <strong className="text-slate-900 font-bold">{TOURNAMENT_CONFIG.host.name}</strong></span>
+              <span>Sedes rotativas · <strong className="text-slate-900 font-bold">Guanacaste, Costa Rica</strong></span>
             </div>
           </div>
         </div>

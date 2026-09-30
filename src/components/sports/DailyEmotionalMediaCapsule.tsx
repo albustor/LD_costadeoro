@@ -173,7 +173,7 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
           pillarEmoji: '🏀',
           caption: 'Respeto mutuo y choque de puños entre capitanes antes del salto inicial.',
           author: 'Familia Cordero (Vittorino)',
-          schoolName: 'Vittorino Prep',
+          schoolName: 'Centro Educativo Vittorino Girardi',
         },
         {
           id: 'bas-p2',

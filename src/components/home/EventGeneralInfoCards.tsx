@@ -94,15 +94,15 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                 const isSelected = expandedSchoolId === school.id;
                 const mascot = 
                   school.id === 'la-paz-cabo-velas'
-                    ? 'Pumas 🐾 (Fundado 2007)'
+                    ? 'Tiburones (Sharks) 🦈 (Fundado 2007)'
                     : school.id === 'la-paz-tempisque'
-                    ? 'Tiburones 🦈 (Fundado 2021)'
+                    ? 'Pumas 🐾 (Fundado 2021)'
                     : school.id === 'cria'
                     ? 'CRIA Oficial (Fundado 2000)'
                     : school.id === 'journey-school'
                     ? 'The Journey School (Fundado 2015)'
                     : school.id === 'vittorino'
-                    ? 'Vittorino Prep (Fundado 2012)'
+                    ? 'Centro Educativo Vittorino Girardi (Fundado 2012)'
                     : 'Educarte High (Fundado 2008)';
 
                 const sportParticipation = 
@@ -276,7 +276,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                         <SchoolEmblem schoolId="la-paz-cabo-velas" size="sm" />
                         <div>
                           <span className="block font-extrabold">La Paz Community School - Cabo Velas</span>
-                          <span className="block text-xs text-slate-500 font-normal">Brasilito • Pumas 🐾 (2007)</span>
+                          <span className="block text-xs text-slate-500 font-normal">Brasilito • Tiburones (Sharks) 🦈 (2007)</span>
                         </div>
                       </td>
                       <td className="py-3 px-3.5"><span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-bold">Disponible</span></td>
@@ -294,7 +294,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                         <SchoolEmblem schoolId="la-paz-tempisque" size="sm" />
                         <div>
                           <span className="block font-extrabold">La Paz Community School - Tempisque</span>
-                          <span className="block text-xs text-slate-500 font-normal">Comunidad, Carrillo • Tiburones 🦈 (2021)</span>
+                          <span className="block text-xs text-slate-500 font-normal">Comunidad, Carrillo • Pumas 🐾 (2021)</span>
                         </div>
                       </td>
                       <td className="py-3 px-3.5"><span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-bold">Disponible</span></td>
@@ -329,7 +329,7 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                       <td className="py-3 px-3.5 font-bold text-slate-900 flex items-center gap-2.5">
                         <SchoolEmblem schoolId="vittorino" size="sm" />
                         <div>
-                          <span className="block font-extrabold">Instituto Vittorino Prep</span>
+                          <span className="block font-extrabold">Centro Educativo Vittorino Girardi</span>
                           <span className="block text-xs text-slate-500 font-normal">Huacas</span>
                         </div>
                       </td>
