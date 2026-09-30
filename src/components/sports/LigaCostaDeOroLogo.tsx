@@ -9,7 +9,7 @@ interface LigaCostaDeOroLogoProps {
 }
 
 /**
- * Logotipo Vectorial Oficial de la Liga Deportiva Costa de Oro 2026:
+ * Logotipo Vectorial Oficial de la Liga Costa de Oro 2026:
  * Renderizado nítido en SVG vectorial de alta resolución con gradientes dorados metálicos,
  * sol naciente guanacasteco y variantes en Escudo Flotante (Floating Badge) y Formato Horizontal.
  */

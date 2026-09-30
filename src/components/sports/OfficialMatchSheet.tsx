@@ -58,7 +58,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-amber-400" />
             <span className="font-extrabold text-xs sm:text-sm tracking-wide">
-              Acta oficial de encuentro · Liga Deportiva Costa de Oro 2026
+              Acta oficial de encuentro · Liga Costa de Oro 2026
             </span>
           </div>
 
@@ -92,13 +92,13 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
                 <div className="h-12 w-10 rounded-lg overflow-hidden bg-black border border-amber-500/60 p-0.5 shrink-0 flex items-center justify-center shadow-xs">
                   <img
                     src="/logos/liga_costa_de_oro_gold_black.jpg"
-                    alt="Liga Deportiva Costa de Oro"
+                    alt="Liga Costa de Oro"
                     className="h-full w-full object-contain"
                   />
                 </div>
                 <div>
                   <h1 className="text-base sm:text-lg font-black tracking-tight text-slate-950 uppercase leading-none">
-                    Liga Deportiva Costa de Oro 2026
+                    Liga Costa de Oro 2026
                   </h1>
                   <span className="text-[11px] font-bold text-slate-600 block mt-0.5">
                     Festival formativo intercolegial · Guanacaste
@@ -298,7 +298,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
               Observaciones e incidencias técnicas:
             </span>
             <p className="text-slate-700 leading-relaxed italic">
-              {match.notes || 'Encuentro disputado conforme a las directrices y reglamento oficial de la Liga Deportiva Costa de Oro 2026. Sin reclamos técnicos ni incidentes arbitrales.'}
+              {match.notes || 'Encuentro disputado conforme a las directrices y reglamento oficial de la Liga Costa de Oro 2026. Sin reclamos técnicos ni incidentes arbitrales.'}
             </p>
           </div>
 
@@ -341,7 +341,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
 
           {/* Pie de Página Institucional */}
           <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500">
-            <span>Liga Deportiva Costa de Oro 2026 · Documento oficial emitido digitalmente</span>
+            <span>Liga Costa de Oro 2026 · Documento oficial emitido digitalmente</span>
             <span>Generado: {new Date().toLocaleDateString('es-CR')} {new Date().toLocaleTimeString('es-CR')}</span>
           </div>
         </div>

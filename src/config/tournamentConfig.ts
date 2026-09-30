@@ -2,7 +2,7 @@ import { Category, School } from '@/types/tournament';
 
 export const TOURNAMENT_CONFIG = {
   id: 'costa-de-oro-2026',
-  name: 'Liga Deportiva Costa de Oro 2026',
+  name: 'Liga Costa de Oro 2026',
   shortName: 'Costa de Oro 2026',
   edition: 'Edición 2026',
   host: {
@@ -21,7 +21,7 @@ export const TOURNAMENT_CONFIG = {
     name: 'Curiol Studio',
     subtitle: 'Fotografía • Tecnología • Legado',
     contactEmail: 'contacto@curiolstudio.com',
-    whatsapp: '+506 8888-0000',
+    whatsapp: '+506 6060-2617',
     logoUrl: '/logos/curiol_logo_oficial_transparente_hd.png',
   },
   security: {

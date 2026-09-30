@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     let generatedDesc = '';
     let providerUsed = 'Heurística Periodística Local';
 
-    const systemPrompt = `Eres el redactor deportivo oficial de la Liga Deportiva Costa de Oro 2026 para Curiol Studio en Guanacaste, Costa Rica. Genera un título impactante de máximo 10 palabras y una descripción breve (1 o 2 oraciones) en español neutro latinoamericano con tono enérgico para un video corto familiar. Responde estrictamente en formato JSON con las claves "title" y "description".`;
+    const systemPrompt = `Eres el redactor deportivo oficial de la Liga Costa de Oro 2026 para Curiol Studio en Guanacaste, Costa Rica. Genera un título impactante de máximo 10 palabras y una descripción breve (1 o 2 oraciones) en español neutro latinoamericano con tono enérgico para un video corto familiar. Responde estrictamente en formato JSON con las claves "title" y "description".`;
     const userPrompt = `Colegio: ${schoolName}, Categoría: ${categoryName}, Tipo de Acción: ${actionType}, Detalle adicional: ${details || 'Jugada del partido'}`;
 
     // Nivel 1: Google Gemini

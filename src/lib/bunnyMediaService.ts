@@ -1,6 +1,6 @@
 /**
  * Servicio Oficial de Almacenamiento y CDN Multimedia con Bunny.net & Firebase
- * Liga Deportiva Costa de Oro 2026
+ * Liga Costa de Oro 2026
  * 
  * - Videos: Bunny Stream (Biblioteca 629005) con transcodificación automática y HLS.
  * - Fotografías: Bunny Storage Edge CDN / Firebase Storage.

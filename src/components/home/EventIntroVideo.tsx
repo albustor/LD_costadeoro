@@ -15,7 +15,7 @@ export function EventIntroVideo() {
             style={{ border: 0, position: 'absolute', top: 0, height: '100%', width: '100%' }}
             allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
             allowFullScreen={true}
-            title="Video oficial Liga Deportiva Costa de Oro 2026"
+            title="Video oficial Liga Costa de Oro 2026"
           />
         </div>
       </div>
@@ -24,7 +24,7 @@ export function EventIntroVideo() {
       <div className="p-3.5 bg-white rounded-2xl border border-slate-200 text-center space-y-0.5 shadow-2xs">
         <span className="text-xs sm:text-sm font-extrabold text-slate-800 flex items-center justify-center gap-1.5">
           <Sparkles className="w-4 h-4 text-amber-600" />
-          <span>Presentación oficial · Liga Deportiva Costa de Oro 2026</span>
+          <span>Presentación oficial · Liga Costa de Oro 2026</span>
         </span>
         <p className="text-xs text-slate-500 font-medium leading-relaxed">
           Festival deportivo y formativo intercolegial de Guanacaste. Transmisión y video oficial.

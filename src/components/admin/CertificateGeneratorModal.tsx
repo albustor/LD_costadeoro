@@ -87,7 +87,7 @@ export function CertificateGeneratorModal({ schools, onClose }: CertificateGener
                 Generador de Certificados y Diplomas Oficiales
               </span>
               <span className="text-[11px] text-slate-400">
-                Liga Deportiva Costa de Oro 2026 · Formato de Alta Resolución
+                Liga Costa de Oro 2026 · Formato de Alta Resolución
               </span>
             </div>
           </div>
@@ -215,7 +215,7 @@ export function CertificateGeneratorModal({ schools, onClose }: CertificateGener
                   Festival Formativo Intercolegial · Guanacaste
                 </span>
                 <h2 className="text-lg sm:text-xl font-black text-slate-900 uppercase tracking-tight">
-                  Liga Deportiva Costa de Oro 2026
+                  Liga Costa de Oro 2026
                 </h2>
                 <span className="text-xs text-slate-500 font-medium block">
                   La Paz Community School · Cabo Velas & Tempisque

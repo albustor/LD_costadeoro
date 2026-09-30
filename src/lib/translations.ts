@@ -22,7 +22,7 @@ export const translations = {
 
     // Home / Hero
     'hero.welcomeBadge': 'Festival deportivo 2026',
-    'hero.title': 'Bienvenidos a la Liga Deportiva Costa de Oro',
+    'hero.title': 'Bienvenidos a la Liga Costa de Oro',
     'hero.tagline': 'Festival deportivo intercolegial de Guanacaste que une a 6 instituciones educativas en torno al compañerismo, el juego limpio y la sana competencia en fútbol, voleibol y baloncesto.',
     'hero.tab.video': 'Video introductorio del evento',
     'hero.tab.info': 'Información general del evento',
@@ -157,7 +157,7 @@ export const translations = {
 
     // Home / Hero
     'hero.welcomeBadge': '2026 Sports Festival',
-    'hero.title': 'Welcome to Costa de Oro Sports League',
+    'hero.title': 'Welcome to Liga Costa de Oro',
     'hero.tagline': 'Guanacaste’s inter-school athletic festival bringing together 6 educational institutions around sportsmanship, fair play, and healthy competition in Soccer, Volleyball, and Basketball.',
     'hero.tab.video': 'Official Intro Video',
     'hero.tab.info': 'General Event Information',

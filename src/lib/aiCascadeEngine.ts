@@ -152,8 +152,8 @@ async function queryOpenRouter(request: AiCompletionRequest): Promise<{ content:
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${apiKey}`,
-      'HTTP-Referer': 'https://costadeoro.app',
-      'X-Title': 'Liga Deportiva Costa de Oro',
+      'HTTP-Referer': 'https://costadeoro.curiol.studio',
+      'X-Title': 'Liga Costa de Oro',
     },
     body: JSON.stringify({
       model,
@@ -232,7 +232,7 @@ function generateGracefulFallback(request: AiCompletionRequest): { content: stri
 
   return {
     model: 'curiol-human-values-v1',
-    content: 'Jornada deportiva formativa celebrada en torno a los valores de compañerismo, esfuerzo y respeto mutuo en la Liga Deportiva Costa de Oro 2026.',
+    content: 'Jornada deportiva formativa celebrada en torno a los valores de compañerismo, esfuerzo y respeto mutuo en la Liga Costa de Oro 2026.',
   };
 }
 

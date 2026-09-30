@@ -253,11 +253,11 @@ async function handleAudit(request: NextRequest) {
       'info@curiol.studio',
       'alberto.bustos.ortega@mep.go.cr',
     ],
-    subject: `🤖 [Auditoría IA 5:00 AM] Liga Deportiva Costa de Oro 2026 — Estado: ${allOperational ? '100% OPERACIONAL ✅' : 'ATENCIÓN REQUERIDA ⚠️'}`,
+    subject: `🤖 [Auditoría IA 5:00 AM] Liga Costa de Oro 2026 — Estado: ${allOperational ? '100% OPERACIONAL ✅' : 'ATENCIÓN REQUERIDA ⚠️'}`,
     bodyHtml: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
         <h2 style="color: #0f172a; margin-top: 0;">Reporte Diario de Salud de Modelos IA (5:00 AM)</h2>
-        <p style="color: #64748b; font-size: 13px;">Liga Deportiva Costa de Oro 2026 · La Paz Community School · Guanacaste</p>
+        <p style="color: #64748b; font-size: 13px;">Liga Costa de Oro 2026 · La Paz Community School · Guanacaste</p>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 15px 0;" />
         <p><strong>Fecha y Hora de Auditoría:</strong> ${nowCostaRica} (Hora de Costa Rica)</p>
         <p><strong>Estado General:</strong> <span style="color: ${allOperational ? '#16a34a' : '#d97706'}; font-weight: bold;">${allOperational ? 'Todos los proveedores en línea' : 'Algunos proveedores requieren verificación'}</span></p>
@@ -294,7 +294,7 @@ async function handleAudit(request: NextRequest) {
   const whatsappPayload = {
     targetPhone: '+506 6060-2617',
     message: `🤖 *AUDITORÍA DIARIA DE MODELOS IA (5:00 AM)*
-🏆 *Liga Deportiva Costa de Oro 2026*
+🏆 *Liga Costa de Oro 2026*
 📅 ${nowCostaRica}
 
 ${testResults.map((r) => `${r.status === 'ONLINE' ? '✅' : '⚠️'} *${r.provider}* (${r.model}): ${r.status} [${r.latencyMs}ms]`).join('\n')}

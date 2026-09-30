@@ -72,7 +72,7 @@ export function Header() {
           <Link 
             href="/" 
             className="flex items-center gap-2 sm:gap-3.5 group transition-opacity hover:opacity-90 min-w-0 flex-1 overflow-hidden"
-            title="Liga Deportiva Costa de Oro 2026"
+            title="Liga Costa de Oro 2026"
           >
             {/* Emblema Original Dorado Sol y Olas */}
             <div className="w-[36px] h-[32px] sm:w-[50px] sm:h-[42px] shrink-0 flex items-center justify-center overflow-hidden">

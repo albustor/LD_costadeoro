@@ -5,6 +5,7 @@ import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { EventIntroVideo } from '@/components/home/EventIntroVideo';
 import { EventGeneralInfoCards } from '@/components/home/EventGeneralInfoCards';
+import { DevelopmentFeedbackModal } from '@/components/common/DevelopmentFeedbackModal';
 import { 
   Trophy, 
   MapPin, 
@@ -19,6 +20,9 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
+      {/* 🛠️ Modal emergente de retroalimentación y desarrollo */}
+      <DevelopmentFeedbackModal />
+
       {/* 🌊 1. ENCABEZADO DE BIENVENIDA */}
       <section className="rounded-3xl overflow-hidden bg-gradient-to-br from-white via-slate-50 to-amber-50/40 border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-3">
         <div className="space-y-2.5 max-w-3xl">

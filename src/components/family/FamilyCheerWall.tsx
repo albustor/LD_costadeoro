@@ -994,7 +994,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             </div>
 
             <p className="text-xs text-slate-600 leading-relaxed">
-              La <strong>Liga Deportiva Costa de Oro 2026</strong> es un espacio formativo, escolar y familiar. Al publicar mensajes, fotos o videos, cada padre, madre o familiar acepta las siguientes directrices:
+              La <strong>Liga Costa de Oro 2026</strong> es un espacio formativo, escolar y familiar. Al publicar mensajes, fotos o videos, cada padre, madre o familiar acepta las siguientes directrices:
             </p>
 
             <div className="space-y-2.5 text-xs text-slate-700">

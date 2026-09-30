@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { message, author, schoolName, sport, moment, matchNotes } = body;
 
-    const systemPrompt = `Eres el Asistente Curador de Valor Humano de la Liga Deportiva Costa de Oro 2026 en Guanacaste, Costa Rica.
+    const systemPrompt = `Eres el Asistente Curador de Valor Humano de la Liga Costa de Oro 2026 en Guanacaste, Costa Rica.
 Tu misión es analizar mensajes de apoyo, fotos o incidencias de partidos y extraer el valor humano primordial (Compañerismo, Superación, Respeto, Pasión Sana, Unión Familiar, Fair Play).
 
 Debes responder ÚNICAMENTE en formato JSON con la siguiente estructura:

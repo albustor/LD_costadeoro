@@ -12,13 +12,13 @@ export function Footer() {
           <div className="h-20 w-16 sm:h-24 sm:w-20 rounded-2xl overflow-hidden shadow-md flex items-center justify-center bg-black border-2 border-amber-500/50 p-1.5 transition-transform hover:scale-105">
             <img
               src="/logos/liga_costa_de_oro_gold_black.jpg"
-              alt="Liga Deportiva Costa de Oro 2026"
+              alt="Liga Costa de Oro 2026"
               className="h-full w-full object-contain"
             />
           </div>
           <div>
             <h4 className="font-extrabold text-slate-900 text-sm sm:text-base tracking-tight">
-              Liga Deportiva Costa de Oro 2026
+              Liga Costa de Oro 2026
             </h4>
             <div className="inline-flex items-center gap-1.5 text-xs text-slate-700 bg-white border border-slate-200 px-3.5 py-1 rounded-full shadow-2xs mt-2">
               <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
