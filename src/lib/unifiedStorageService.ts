@@ -12,10 +12,10 @@ export interface BunnyStreamConfig {
 }
 
 export const BUNNY_CONFIG: BunnyStreamConfig = {
-  libraryId: process.env.BUNNY_LIBRARY_ID || '766057',
-  apiKey: process.env.BUNNY_STREAM_API_KEY || 'fbff0463-c54f-4b48-90cc53b4bf12-16dd-4206',
+  libraryId: process.env.BUNNY_LIBRARY_ID || '629005',
+  apiKey: process.env.BUNNY_STREAM_API_KEY || '3667ba08-0c14-4014-a69a-0facf55b9eff',
   embedBaseUrl: 'https://iframe.mediadelivery.net/embed',
-  cdnHost: 'https://vz-94be8347-e18.b-cdn.net',
+  cdnHost: 'https://vz-629005.b-cdn.net',
 };
 
 /**

@@ -40,7 +40,7 @@ interface EmotionalMediaItem {
 }
 
 export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsuleProps) {
-  const { matches } = useTournament();
+  const { matches, photos, videos, getSchoolById } = useTournament();
   const { t } = useLanguage();
 
   // Fechas oficiales de la disciplina
@@ -85,122 +85,119 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
     return now >= unlockTime;
   }, [selectedDate, isCanceledOrEmpty]);
 
-  // Curaduría de 2 fotos + 1 video por fecha seleccionada
+  // Curaduría dinámica de 2 fotos + 1 video por fecha seleccionada
   const curatedMedia: EmotionalMediaItem[] = useMemo(() => {
-    if (sport === 'futbol') {
-      return [
-        {
-          id: 'fut-p1',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'esfuerzo',
-          pillarLabel: 'Esfuerzo y Superación',
-          pillarEmoji: '💪',
-          caption: 'Entrega total en la recuperación del balón. Cada jugada se defiende con el corazón.',
-          author: 'Familia Ramírez (La Paz Community School Cabo Velas)',
-          schoolName: 'La Paz Community School Cabo Velas',
-        },
-        {
-          id: 'fut-p2',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'companerismo',
-          pillarLabel: 'Compañerismo y Respeto',
-          pillarEmoji: '🤝',
-          caption: 'Mano amiga para levantar al compañero tras una barrida limpia. El valor del juego limpio.',
-          author: 'Familia Monge (CRIA)',
-          schoolName: 'CRIA',
-        },
-        {
-          id: 'fut-v1',
-          type: 'video',
-          url: 'https://assets.mixkit.co/videos/preview/mixkit-boys-playing-soccer-in-a-field-41674-large.mp4',
-          posterUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'resiliencia',
-          pillarLabel: 'Momento Inspirador del Día',
-          pillarEmoji: '✨',
-          caption: 'Abrazo fraternal de ambos equipos al silbatazo final. La verdadera victoria es crecer juntos.',
-          author: 'Comité de Convivencia Costa de Oro',
-          schoolName: 'Liga Costa de Oro',
-        },
-      ];
-    } else if (sport === 'voleibol') {
-      return [
-        {
-          id: 'vol-p1',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'companerismo',
-          pillarLabel: 'Unión y Comunicación',
-          pillarEmoji: '🙌',
-          caption: 'Celebración sincronizada punto a punto. La confianza mutua construye la victoria.',
-          author: 'Familia Alvarado (Educarte)',
-          schoolName: 'Educarte',
-        },
-        {
-          id: 'vol-p2',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'esfuerzo',
-          pillarLabel: 'Persistencia Defensiva',
-          pillarEmoji: '🔥',
-          caption: 'Salvada milagrosa al límite de la red. No dar ningún balón por perdido jamás.',
-          author: 'Familia Salazar (Journey)',
-          schoolName: 'The Journey School',
-        },
-        {
-          id: 'vol-v1',
-          type: 'video',
-          url: 'https://assets.mixkit.co/videos/preview/mixkit-excited-volleyball-players-celebrating-a-point-41712-large.mp4',
-          posterUrl: 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'resiliencia',
-          pillarLabel: 'Momento Inspirador del Día',
-          pillarEmoji: '⭐',
-          caption: 'Reacción emotiva de toda la banca apoyando en el punto decisivo del 3.er set.',
-          author: 'Comité Audiovisual',
-          schoolName: 'Liga Costa de Oro',
-        },
-      ];
+    // Buscar fotos reales del torneo para este deporte o fecha
+    const sportPhotos = photos.filter((p) => {
+      const matchDate = p.date === selectedDate;
+      const matchSport = p.tags?.includes(sport) || p.tags?.includes('festival2026');
+      return matchDate || matchSport;
+    });
+
+    // Buscar videos reales para este deporte o fecha
+    const sportVideos = videos.filter((v) => {
+      return v.schoolId || v.matchId;
+    });
+
+    const fallbackPillars: { pillar: EmotionalMediaItem['pillar']; label: string; emoji: string }[] = [
+      { pillar: 'esfuerzo', label: 'Esfuerzo y Superación', emoji: '💪' },
+      { pillar: 'companerismo', label: 'Compañerismo y Respeto', emoji: '🤝' },
+      { pillar: 'fairplay', label: 'Juego Limpio y Fair Play', emoji: '🏆' },
+    ];
+
+    const result: EmotionalMediaItem[] = [];
+
+    // Foto 1
+    if (sportPhotos[0]) {
+      const p = sportPhotos[0];
+      const school = getSchoolById(p.schoolId || '');
+      result.push({
+        id: p.id,
+        type: 'photo',
+        url: p.imageUrl,
+        pillar: 'esfuerzo',
+        pillarLabel: 'Esfuerzo y Superación',
+        pillarEmoji: '💪',
+        caption: p.title || 'Entrega total en la cancha. Cada jugada se defiende con el corazón.',
+        author: p.photographer || 'Comunidad Costa de Oro',
+        schoolName: school?.name || 'La Paz Community School Cabo Velas',
+      });
     } else {
-      // Baloncesto
-      return [
-        {
-          id: 'bas-p1',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'fairplay',
-          pillarLabel: 'Juego Limpio y Disciplina',
-          pillarEmoji: '🏀',
-          caption: 'Respeto mutuo y choque de puños entre capitanes antes del salto inicial.',
-          author: 'Familia Cordero (Vittorino)',
-          schoolName: 'Centro Educativo Vittorino Girardi',
-        },
-        {
-          id: 'bas-p2',
-          type: 'photo',
-          url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'esfuerzo',
-          pillarLabel: 'Dedicación y Concentración',
-          pillarEmoji: '🎯',
-          caption: 'Máxima concentración en el tiro libre en los segundos finales del 4.º cuarto.',
-          author: 'Familia Vargas (La Paz Community School Tempisque)',
-          schoolName: 'La Paz Community School Tempisque',
-        },
-        {
-          id: 'bas-v1',
-          type: 'video',
-          url: 'https://assets.mixkit.co/videos/preview/mixkit-basketball-player-scoring-a-basket-41708-large.mp4',
-          posterUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80',
-          pillar: 'resiliencia',
-          pillarLabel: 'Momento Inspirador del Día',
-          pillarEmoji: '🏆',
-          caption: 'Canasta compartida con aplauso unánime de las familias en las graderías.',
-          author: 'Comunidad Costa de Oro',
-          schoolName: 'Liga Costa de Oro',
-        },
-      ];
+      result.push({
+        id: 'def-p1',
+        type: 'photo',
+        url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
+        pillar: 'esfuerzo',
+        pillarLabel: 'Esfuerzo y Superación',
+        pillarEmoji: '💪',
+        caption: 'Entrega total en la recuperación del balón. Cada jugada se defiende con el corazón.',
+        author: 'Familia Ramírez (La Paz Community School Cabo Velas)',
+        schoolName: 'La Paz Community School Cabo Velas',
+      });
     }
-  }, [sport]);
+
+    // Foto 2
+    if (sportPhotos[1]) {
+      const p = sportPhotos[1];
+      const school = getSchoolById(p.schoolId || '');
+      result.push({
+        id: p.id,
+        type: 'photo',
+        url: p.imageUrl,
+        pillar: 'companerismo',
+        pillarLabel: 'Compañerismo y Respeto',
+        pillarEmoji: '🤝',
+        caption: p.title || 'Mano amiga para levantar al compañero tras una jugada disputada.',
+        author: p.photographer || 'Comunidad Costa de Oro',
+        schoolName: school?.name || 'CRIA',
+      });
+    } else {
+      result.push({
+        id: 'def-p2',
+        type: 'photo',
+        url: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?auto=format&fit=crop&w=1200&q=80',
+        pillar: 'companerismo',
+        pillarLabel: 'Compañerismo y Respeto',
+        pillarEmoji: '🤝',
+        caption: 'Mano amiga para levantar al compañero tras una barrida limpia. El valor del juego limpio.',
+        author: 'Familia Monge (CRIA)',
+        schoolName: 'CRIA',
+      });
+    }
+
+    // Video 1
+    if (sportVideos[0]) {
+      const v = sportVideos[0];
+      const school = getSchoolById(v.schoolId || '');
+      result.push({
+        id: v.id,
+        type: 'video',
+        url: v.videoUrl,
+        posterUrl: v.thumbnailUrl,
+        pillar: 'resiliencia',
+        pillarLabel: 'Momento Inspirador del Día',
+        pillarEmoji: '✨',
+        caption: v.title || 'Celebración fraternal de ambos equipos al silbatazo final.',
+        author: v.authorName || 'Comunidad Costa de Oro',
+        schoolName: school?.name || 'Liga Costa de Oro',
+      });
+    } else {
+      result.push({
+        id: 'def-v1',
+        type: 'video',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-boys-playing-soccer-in-a-field-41674-large.mp4',
+        posterUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80',
+        pillar: 'resiliencia',
+        pillarLabel: 'Momento Inspirador del Día',
+        pillarEmoji: '✨',
+        caption: 'Abrazo fraternal de ambos equipos al silbatazo final. La verdadera victoria es crecer juntos.',
+        author: 'Comité de Convivencia Costa de Oro',
+        schoolName: 'Liga Costa de Oro',
+      });
+    }
+
+    return result;
+  }, [sport, photos, videos, selectedDate, getSchoolById]);
 
   const sportName = sport === 'futbol' ? 'Fútbol' : sport === 'voleibol' ? 'Voleibol' : 'Baloncesto';
   const sportEmoji = sport === 'futbol' ? '⚽' : sport === 'voleibol' ? '🏐' : '🏀';

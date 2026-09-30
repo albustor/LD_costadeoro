@@ -121,6 +121,21 @@ export const tournamentStorage = {
     return safeGet<PhotoItem[]>(KEYS.PHOTOS, INITIAL_PHOTOS);
   },
 
+  addPhoto(newPhoto: Omit<PhotoItem, 'id' | 'createdAt'>): PhotoItem {
+    const photos = this.getPhotos();
+    const created: PhotoItem = {
+      ...newPhoto,
+      id: `p-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    const updated = [created, ...photos];
+    safeSet(KEYS.PHOTOS, updated);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('photos_updated', { detail: updated }));
+    }
+    return created;
+  },
+
   resetToInitial(): void {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(KEYS.TIER);

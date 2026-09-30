@@ -31,7 +31,12 @@ export function VideoShortsWall() {
   const [authorRole, setAuthorRole] = useState<ShortVideo['authorRole']>('Familia');
   const [schoolId, setSchoolId] = useState(schools[0]?.id || '');
   const [categoryId, setCategoryId] = useState(categories[0]?.id || '');
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   if (!isFeatureEnabled('fanShortsVideo')) {
     return (
@@ -55,28 +60,80 @@ export function VideoShortsWall() {
     }
   };
 
-  const handleUploadSubmit = (e: React.FormEvent) => {
+  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('video/')) {
+      setUploadError('Por favor selecciona un formato de video compatible (.mp4, .mov, .webm).');
+      return;
+    }
+
+    if (file.size > 150 * 1024 * 1024) {
+      setUploadError('El video supera el límite de 150 MB.');
+      return;
+    }
+
+    setUploadError(null);
+    setVideoFile(file);
+    setVideoPreview(URL.createObjectURL(file));
+  };
+
+  const handleUploadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !authorName.trim()) return;
+    if (!title.trim() || !authorName.trim()) {
+      setUploadError('Por favor ingresa un título y tu nombre.');
+      return;
+    }
 
-    addVideo({
-      title,
-      authorName,
-      authorRole,
-      schoolId,
-      categoryId,
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500&q=80',
-      durationSeconds: 15,
-    });
+    if (!videoFile) {
+      setUploadError('Por favor selecciona un archivo de video.');
+      return;
+    }
 
-    setUploadSuccess(true);
-    setTimeout(() => {
-      setUploadSuccess(false);
-      setIsUploadModalOpen(false);
-      setTitle('');
-      setAuthorName('');
-    }, 1500);
+    setUploading(true);
+    setUploadProgress(15);
+    setUploadError(null);
+
+    try {
+      const { uploadVideoToBunny } = await import('@/lib/bunnyMediaService');
+      const result = await uploadVideoToBunny(
+        videoFile,
+        title.trim(),
+        (pct) => setUploadProgress(pct)
+      );
+
+      if (result.success && (result.url || result.secureUrl)) {
+        const finalUrl = result.url || result.secureUrl;
+        addVideo({
+          title: title.trim(),
+          authorName: authorName.trim(),
+          authorRole,
+          schoolId,
+          categoryId,
+          videoUrl: finalUrl,
+          thumbnailUrl: result.thumbnailUrl || finalUrl,
+          durationSeconds: 15,
+        });
+
+        setUploadSuccess(true);
+        setTimeout(() => {
+          setUploadSuccess(false);
+          setIsUploadModalOpen(false);
+          setTitle('');
+          setAuthorName('');
+          setVideoFile(null);
+          setVideoPreview(null);
+          setUploadProgress(0);
+        }, 1500);
+      } else {
+        setUploadError(result.error || 'Error al procesar la subida del video.');
+      }
+    } catch (err: any) {
+      setUploadError(err.message || 'Error inesperado durante la carga del video.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -95,7 +152,7 @@ export function VideoShortsWall() {
 
         <button
           onClick={() => setIsUploadModalOpen(true)}
-          className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10 transition-all shrink-0"
+          className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10 transition-all shrink-0 cursor-pointer"
         >
           <Upload className="w-4 h-4" />
           <span>Subir Corto Familiar (9:16)</span>
@@ -112,12 +169,21 @@ export function VideoShortsWall() {
               onClick={() => setActiveVideo(vid)}
               className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 hover:border-amber-500/60 cursor-pointer transition-all duration-300 shadow-md flex flex-col justify-between"
             >
-              {/* Thumbnail Background */}
-              <img
-                src={vid.thumbnailUrl}
-                alt={vid.title}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+              {/* Thumbnail / Video Preview Background */}
+              {vid.thumbnailUrl && !vid.thumbnailUrl.endsWith('.mp4') ? (
+                <img
+                  src={vid.thumbnailUrl}
+                  alt={vid.title}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : (
+                <video
+                  src={vid.videoUrl}
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
 
               {/* Top Meta */}
@@ -178,13 +244,23 @@ export function VideoShortsWall() {
             </button>
 
             <div className="relative aspect-[9/16] bg-black">
-              <video
-                src={activeVideo.videoUrl}
-                controls
-                autoPlay
-                playsInline
-                className="w-full h-full object-contain"
-              />
+              {activeVideo.videoUrl.includes('mediadelivery.net') ? (
+                <iframe
+                  src={activeVideo.videoUrl}
+                  loading="lazy"
+                  className="w-full h-full border-0"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={activeVideo.videoUrl}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-contain"
+                />
+              )}
             </div>
 
             <div className="p-4 bg-slate-950 border-t border-slate-800">
@@ -209,7 +285,7 @@ export function VideoShortsWall() {
       {/* Upload Video Modal */}
       {isUploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setIsUploadModalOpen(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white p-1"
@@ -232,6 +308,50 @@ export function VideoShortsWall() {
               </div>
             ) : (
               <form onSubmit={handleUploadSubmit} className="space-y-4">
+                {uploadError && (
+                  <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs text-red-400 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{uploadError}</span>
+                  </div>
+                )}
+
+                {/* File picker & preview */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    Seleccionar Video Vertical (MP4, MOV, WebM):
+                  </label>
+                  <div className="border-2 border-dashed border-slate-700 hover:border-amber-400 rounded-2xl p-4 bg-slate-950 text-center flex flex-col items-center justify-center min-h-[140px] relative">
+                    {videoPreview ? (
+                      <div className="relative w-full aspect-[9/16] max-h-[180px] rounded-xl overflow-hidden bg-black flex items-center justify-center">
+                        <video src={videoPreview} controls className="max-h-[180px] w-full" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVideoFile(null);
+                            setVideoPreview(null);
+                          }}
+                          className="absolute top-2 right-2 p-1 bg-black/80 text-white rounded-full hover:bg-black"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <Film className="w-8 h-8 text-slate-500 mb-1" />
+                        <span className="text-xs font-bold text-slate-200">Elegir archivo de video del celular</span>
+                        <span className="text-[11px] text-slate-500 mt-0.5">Optimizado para Bunny Stream HLS</span>
+                        <input
+                          type="file"
+                          accept="video/mp4,video/quicktime,video/webm"
+                          onChange={handleVideoFileChange}
+                          className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                          required
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
                     Título o Descripción del Momento
@@ -314,16 +434,25 @@ export function VideoShortsWall() {
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span>
-                    El video se procesa en formato vertical 9:16 optimizado en CDN Bunny Stream con visualización instantánea.
-                  </span>
-                </div>
+                {uploading && (
+                  <div className="space-y-1">
+                    <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-amber-500 h-2 transition-all duration-200"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                      <span>Transfiriendo video a CDN...</span>
+                      <span>{uploadProgress}%</span>
+                    </div>
+                  </div>
+                )}
 
-                <div className="flex justify-end gap-2 pt-2">
+                <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
                   <button
                     type="button"
+                    disabled={uploading}
                     onClick={() => setIsUploadModalOpen(false)}
                     className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
                   >
@@ -331,9 +460,10 @@ export function VideoShortsWall() {
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md"
+                    disabled={uploading || !videoFile}
+                    className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 text-xs font-bold shadow-md cursor-pointer"
                   >
-                    Publicar Video
+                    {uploading ? 'Cargando Video...' : 'Publicar Video'}
                   </button>
                 </div>
               </form>

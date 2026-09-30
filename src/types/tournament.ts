@@ -154,17 +154,20 @@ export interface ShortVideo {
 export interface PhotoItem {
   id: string;
   title: string;
-  categoryId: string;
+  categoryId?: string;
   schoolId?: string;
-  jornada: number;
-  date: string;
+  jornada?: number;
+  date?: string;
   moment: 'previo' | 'durante' | 'final_premiacion';
   momentLabel: string;
   imageUrl: string;
+  thumbnailUrl?: string;
   watermarkUrl?: string;
-  photographer: 'Curiol Studio';
-  viewsCount: number;
+  photographer: string;
+  viewsCount?: number;
   downloadUrl?: string;
+  tags?: string[];
+  createdAt?: string;
 }
 
 export interface Sponsor {

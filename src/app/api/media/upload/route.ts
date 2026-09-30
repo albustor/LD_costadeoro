@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BUNNY_MEDIA_CONFIG } from '@/lib/bunnyMediaService';
+import { writeFile, mkdir } from 'fs/promises';
+import path from 'path';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,26 +17,41 @@ export async function POST(req: NextRequest) {
 
     const isVideo = file.type.startsWith('video/');
     const timestamp = Date.now();
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const publicId = `bny_${timestamp}_${safeName}`;
-    
-    // BunnyCDN Storage / Edge URL
-    const cdnUrl = `${BUNNY_MEDIA_CONFIG.storageCdnHost}/${folder}/${publicId}`;
+    const ext = file.name.split('.').pop()?.toLowerCase() || (isVideo ? 'mp4' : 'jpg');
+    const safeBaseName = file.name
+      .replace(/\.[^/.]+$/, '')
+      .replace(/[^a-zA-Z0-9_-]/g, '_')
+      .slice(0, 30);
+    const fileName = `${isVideo ? 'vid' : 'foto'}_${timestamp}_${safeBaseName}.${ext}`;
+    const targetSubdir = isVideo ? 'videos' : 'photos';
+
+    // Directorio físico en /public/uploads/
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', targetSubdir);
+    await mkdir(uploadDir, { recursive: true });
+
+    const filePath = path.join(uploadDir, fileName);
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    await writeFile(filePath, buffer);
+
+    // URL servida directamente por Next.js
+    const accessibleUrl = `/uploads/${targetSubdir}/${fileName}`;
 
     return NextResponse.json({
       success: true,
-      url: cdnUrl,
-      secureUrl: cdnUrl,
-      publicId,
-      format: file.type.split('/')[1] || (isVideo ? 'mp4' : 'jpg'),
+      url: accessibleUrl,
+      secureUrl: accessibleUrl,
+      publicId: fileName,
+      fileName,
+      format: ext,
       bytes: file.size,
       resourceType: isVideo ? 'video' : 'image',
-      provider: isVideo ? 'bunny_stream' : 'bunny_storage',
+      provider: 'local_storage',
     });
   } catch (error: any) {
     console.error('Error en /api/media/upload:', error);
     return NextResponse.json(
-      { error: 'Error interno del servidor', message: error.message },
+      { error: 'Error interno al guardar archivo multimedia', message: error.message },
       { status: 500 }
     );
   }

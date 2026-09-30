@@ -20,6 +20,7 @@ interface TournamentContextType {
   updateMatch: (match: Match) => void;
   recordSponsorClick: (sponsorId: string) => void;
   addVideo: (video: Omit<ShortVideo, 'id' | 'createdAt' | 'likesCount' | 'viewsCount' | 'approved'>) => ShortVideo;
+  addPhoto: (photo: Omit<PhotoItem, 'id' | 'createdAt'>) => PhotoItem;
   likeVideo: (videoId: string) => void;
   getSchoolById: (id: string) => School | undefined;
   getCategoryById: (id: string) => Category | undefined;
@@ -50,12 +51,19 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
       if (custom.detail) setVideos(custom.detail);
     };
 
+    const handlePhotosUpdate = (e: Event) => {
+      const custom = e as CustomEvent<PhotoItem[]>;
+      if (custom.detail) setPhotos(custom.detail);
+    };
+
     window.addEventListener('matches_updated', handleMatchesUpdate);
     window.addEventListener('videos_updated', handleVideosUpdate);
+    window.addEventListener('photos_updated', handlePhotosUpdate);
 
     return () => {
       window.removeEventListener('matches_updated', handleMatchesUpdate);
       window.removeEventListener('videos_updated', handleVideosUpdate);
+      window.removeEventListener('photos_updated', handlePhotosUpdate);
     };
   }, []);
 
@@ -72,6 +80,12 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
   const addVideo = (video: Omit<ShortVideo, 'id' | 'createdAt' | 'likesCount' | 'viewsCount' | 'approved'>) => {
     const created = tournamentStorage.addVideo(video);
     setVideos(tournamentStorage.getVideos());
+    return created;
+  };
+
+  const addPhoto = (photo: Omit<PhotoItem, 'id' | 'createdAt'>) => {
+    const created = tournamentStorage.addPhoto(photo);
+    setPhotos(tournamentStorage.getPhotos());
     return created;
   };
 
@@ -110,6 +124,7 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
         updateMatch,
         recordSponsorClick,
         addVideo,
+        addPhoto,
         likeVideo,
         getSchoolById,
         getCategoryById,

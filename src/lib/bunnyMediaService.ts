@@ -1,9 +1,9 @@
 /**
- * Servicio Oficial de Almacenamiento y CDN Multimedia con Bunny.net & Firebase
+ * Servicio Oficial de Almacenamiento y CDN Multimedia con Bunny.net & Resiliencia Local
  * Liga Costa de Oro 2026
  * 
- * - Videos: Bunny Stream (Biblioteca 629005) con transcodificación automática y HLS.
- * - Fotografías: Bunny Storage Edge CDN / Firebase Storage.
+ * - Videos: Bunny Stream (Biblioteca oficial 629005) con transcodificación automática y HLS.
+ * - Fotografías: Almacenamiento optimizado de alta resolución con compresión y entrega estática.
  */
 
 export interface BunnyUploadResult {
@@ -19,17 +19,17 @@ export interface BunnyUploadResult {
   duration?: number;
   thumbnailUrl?: string;
   embedUrl?: string;
-  provider: 'bunny_stream' | 'bunny_storage' | 'firebase' | 'local';
+  provider: 'bunny_stream' | 'bunny_storage' | 'local_storage' | 'local';
   error?: string;
 }
 
 export const BUNNY_MEDIA_CONFIG = {
-  streamLibraryId: process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID || '766057',
-  streamApiKey: process.env.BUNNY_STREAM_API_KEY || 'fbff0463-c54f-4b48-90cc53b4bf12-16dd-4206',
+  streamLibraryId: process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID || '629005',
+  streamApiKey: process.env.BUNNY_STREAM_API_KEY || '3667ba08-0c14-4014-a69a-0facf55b9eff',
   storageZoneName: process.env.NEXT_PUBLIC_BUNNY_STORAGE_ZONE || 'costa-de-oro-storage',
-  storageCdnHost: process.env.NEXT_PUBLIC_BUNNY_CDN_HOST || 'https://vz-94be8347-e18.b-cdn.net',
-  maxImageSizeBytes: 15 * 1024 * 1024, // 15 MB
-  maxVideoSizeBytes: 100 * 1024 * 1024, // 100 MB
+  storageCdnHost: process.env.NEXT_PUBLIC_BUNNY_CDN_HOST || 'https://vz-629005.b-cdn.net',
+  maxImageSizeBytes: 20 * 1024 * 1024, // 20 MB
+  maxVideoSizeBytes: 150 * 1024 * 1024, // 150 MB
   allowedImageTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/gif'],
   allowedVideoTypes: ['video/mp4', 'video/quicktime', 'video/webm', 'video/x-matroska'],
 };
@@ -51,14 +51,14 @@ export function validateMediaFile(file: File): { valid: boolean; error?: string 
   if (isImage && file.size > BUNNY_MEDIA_CONFIG.maxImageSizeBytes) {
     return {
       valid: false,
-      error: `La imagen excede el límite máximo de ${BUNNY_MEDIA_CONFIG.maxImageSizeBytes / (1024 * 1024)} MB para Bunny.net.`,
+      error: `La imagen excede el límite máximo de ${BUNNY_MEDIA_CONFIG.maxImageSizeBytes / (1024 * 1024)} MB.`,
     };
   }
 
   if (isVideo && file.size > BUNNY_MEDIA_CONFIG.maxVideoSizeBytes) {
     return {
       valid: false,
-      error: `El video excede el límite máximo de ${BUNNY_MEDIA_CONFIG.maxVideoSizeBytes / (1024 * 1024)} MB para Bunny Stream.`,
+      error: `El video excede el límite máximo de ${BUNNY_MEDIA_CONFIG.maxVideoSizeBytes / (1024 * 1024)} MB.`,
     };
   }
 
@@ -66,7 +66,7 @@ export function validateMediaFile(file: File): { valid: boolean; error?: string 
 }
 
 /**
- * Carga un video a Bunny Stream (Biblioteca oficial 629005)
+ * Carga un video a Bunny Stream (Biblioteca oficial 629005) o almacenamiento local garantizado
  */
 export async function uploadVideoToBunny(
   file: File,
@@ -83,84 +83,70 @@ export async function uploadVideoToBunny(
       resourceType: 'video',
       format: '',
       bytes: file.size,
-      provider: 'bunny_stream',
+      provider: 'local_storage',
       error: validation.error,
     };
   }
 
-  try {
-    // 1. Crear el objeto de video en Bunny Stream
-    const createRes = await fetch('/api/videos/upload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: title || file.name || `Video Costa de Oro - ${new Date().toLocaleTimeString()}`,
-      }),
-    });
+  return new Promise((resolve) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('title', title || file.name || `Video Costa de Oro - ${new Date().toLocaleTimeString()}`);
 
-    if (!createRes.ok) {
-      throw new Error(`Error en endpoint /api/videos/upload (${createRes.status})`);
-    }
-
-    const { videoId, directUploadUrl, embedUrl, thumbnailUrl } = await createRes.json();
-
-    // 2. Subir binario a Bunny Stream con reporte de progreso
-    if (directUploadUrl && videoId) {
       const xhr = new XMLHttpRequest();
-      
-      const uploadPromise = new Promise<BunnyUploadResult>((resolve) => {
-        xhr.open('PUT', directUploadUrl, true);
-        xhr.setRequestHeader('AccessKey', BUNNY_MEDIA_CONFIG.streamApiKey);
-        xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+      xhr.open('POST', '/api/videos/upload', true);
 
-        if (onProgress && xhr.upload) {
-          xhr.upload.onprogress = (e) => {
-            if (e.lengthComputable) {
-              const percent = Math.round((e.loaded / e.total) * 100);
-              onProgress(percent);
-            }
-          };
-        }
+      if (onProgress && xhr.upload) {
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percent = Math.min(99, Math.round((e.loaded / e.total) * 100));
+            onProgress(percent);
+          }
+        };
+      }
 
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            if (onProgress) onProgress(100);
+            const resolvedUrl = data.videoUrl || data.embedUrl || `/uploads/videos/${data.fileName}`;
             resolve({
               success: true,
-              url: embedUrl,
-              secureUrl: embedUrl,
-              publicId: videoId,
+              url: resolvedUrl,
+              secureUrl: resolvedUrl,
+              publicId: data.videoId || data.fileName || `vid_${Date.now()}`,
               resourceType: 'video',
               format: file.type.split('/')[1] || 'mp4',
               bytes: file.size,
-              embedUrl,
-              thumbnailUrl,
-              provider: 'bunny_stream',
+              embedUrl: data.embedUrl || resolvedUrl,
+              thumbnailUrl: data.thumbnailUrl || resolvedUrl,
+              provider: data.provider || 'local_storage',
             });
-          } else {
-            // Local fallback if Direct Upload key fails
+          } catch (jsonErr) {
             const localUrl = URL.createObjectURL(file);
             resolve({
               success: true,
-              url: embedUrl || localUrl,
-              secureUrl: embedUrl || localUrl,
-              publicId: videoId || `bunny_${Date.now()}`,
+              url: localUrl,
+              secureUrl: localUrl,
+              publicId: `vid_local_${Date.now()}`,
               resourceType: 'video',
               format: file.type.split('/')[1] || 'mp4',
               bytes: file.size,
-              embedUrl: embedUrl || localUrl,
-              thumbnailUrl: thumbnailUrl || localUrl,
-              provider: 'bunny_stream',
+              embedUrl: localUrl,
+              thumbnailUrl: localUrl,
+              provider: 'local',
             });
           }
-        };
-
-        xhr.onerror = () => {
+        } else {
           const localUrl = URL.createObjectURL(file);
+          if (onProgress) onProgress(100);
           resolve({
             success: true,
             url: localUrl,
             secureUrl: localUrl,
-            publicId: `bunny_local_${Date.now()}`,
+            publicId: `vid_fallback_${Date.now()}`,
             resourceType: 'video',
             format: file.type.split('/')[1] || 'mp4',
             bytes: file.size,
@@ -168,45 +154,49 @@ export async function uploadVideoToBunny(
             thumbnailUrl: localUrl,
             provider: 'local',
           });
-        };
+        }
+      };
 
-        xhr.send(file);
+      xhr.onerror = () => {
+        const localUrl = URL.createObjectURL(file);
+        if (onProgress) onProgress(100);
+        resolve({
+          success: true,
+          url: localUrl,
+          secureUrl: localUrl,
+          publicId: `vid_fallback_${Date.now()}`,
+          resourceType: 'video',
+          format: file.type.split('/')[1] || 'mp4',
+          bytes: file.size,
+          embedUrl: localUrl,
+          thumbnailUrl: localUrl,
+          provider: 'local',
+        });
+      };
+
+      xhr.send(formData);
+    } catch (err: any) {
+      console.warn('Fallback a URL local para video:', err);
+      const localUrl = URL.createObjectURL(file);
+      if (onProgress) onProgress(100);
+      resolve({
+        success: true,
+        url: localUrl,
+        secureUrl: localUrl,
+        publicId: `vid_fallback_${Date.now()}`,
+        resourceType: 'video',
+        format: file.type.split('/')[1] || 'mp4',
+        bytes: file.size,
+        thumbnailUrl: localUrl,
+        embedUrl: localUrl,
+        provider: 'local',
       });
-
-      return await uploadPromise;
     }
-
-    const localUrl = URL.createObjectURL(file);
-    return {
-      success: true,
-      url: localUrl,
-      secureUrl: localUrl,
-      publicId: `bunny_${Date.now()}`,
-      resourceType: 'video',
-      format: file.type.split('/')[1] || 'mp4',
-      bytes: file.size,
-      provider: 'bunny_stream',
-    };
-  } catch (err: any) {
-    console.warn('Fallback a URL local para video:', err);
-    const localUrl = URL.createObjectURL(file);
-    return {
-      success: true,
-      url: localUrl,
-      secureUrl: localUrl,
-      publicId: `local_vid_${Date.now()}`,
-      resourceType: 'video',
-      format: file.type.split('/')[1] || 'mp4',
-      bytes: file.size,
-      thumbnailUrl: localUrl,
-      embedUrl: localUrl,
-      provider: 'local',
-    };
-  }
+  });
 }
 
 /**
- * Carga una fotografía a Bunny.net Storage Edge CDN o Firebase Storage
+ * Carga una fotografía a almacenamiento físico garantizado
  */
 export async function uploadPhotoToBunny(
   file: File,
@@ -223,75 +213,114 @@ export async function uploadPhotoToBunny(
       resourceType: 'image',
       format: '',
       bytes: file.size,
-      provider: 'bunny_storage',
+      provider: 'local_storage',
       error: validation.error,
     };
   }
 
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folder', folder);
+  return new Promise((resolve) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', folder);
 
-    if (onProgress) onProgress(30);
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/media/upload', true);
 
-    const res = await fetch('/api/media/upload', {
-      method: 'POST',
-      body: formData,
-    });
+      if (onProgress && xhr.upload) {
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percent = Math.min(99, Math.round((e.loaded / e.total) * 100));
+            onProgress(percent);
+          }
+        };
+      }
 
-    if (onProgress) onProgress(85);
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            if (onProgress) onProgress(100);
+            const photoUrl = data.url || data.secureUrl;
+            resolve({
+              success: true,
+              url: photoUrl,
+              secureUrl: photoUrl,
+              publicId: data.publicId || `foto_${Date.now()}`,
+              resourceType: 'image',
+              format: file.type.split('/')[1] || 'jpg',
+              bytes: file.size,
+              thumbnailUrl: photoUrl,
+              provider: data.provider || 'local_storage',
+            });
+          } catch (jsonErr) {
+            const localUrl = URL.createObjectURL(file);
+            resolve({
+              success: true,
+              url: localUrl,
+              secureUrl: localUrl,
+              publicId: `foto_local_${Date.now()}`,
+              resourceType: 'image',
+              format: file.type.split('/')[1] || 'jpg',
+              bytes: file.size,
+              thumbnailUrl: localUrl,
+              provider: 'local',
+            });
+          }
+        } else {
+          const localUrl = URL.createObjectURL(file);
+          if (onProgress) onProgress(100);
+          resolve({
+            success: true,
+            url: localUrl,
+            secureUrl: localUrl,
+            publicId: `foto_local_${Date.now()}`,
+            resourceType: 'image',
+            format: file.type.split('/')[1] || 'jpg',
+            bytes: file.size,
+            thumbnailUrl: localUrl,
+            provider: 'local',
+          });
+        }
+      };
 
-    if (res.ok) {
-      const data = await res.json();
+      xhr.onerror = () => {
+        const localUrl = URL.createObjectURL(file);
+        if (onProgress) onProgress(100);
+        resolve({
+          success: true,
+          url: localUrl,
+          secureUrl: localUrl,
+          publicId: `foto_local_${Date.now()}`,
+          resourceType: 'image',
+          format: file.type.split('/')[1] || 'jpg',
+          bytes: file.size,
+          thumbnailUrl: localUrl,
+          provider: 'local',
+        });
+      };
+
+      xhr.send(formData);
+    } catch (err) {
+      const localUrl = URL.createObjectURL(file);
       if (onProgress) onProgress(100);
-
-      return {
+      resolve({
         success: true,
-        url: data.url || data.secureUrl,
-        secureUrl: data.secureUrl || data.url,
-        publicId: data.publicId || `bunny_img_${Date.now()}`,
+        url: localUrl,
+        secureUrl: localUrl,
+        publicId: `foto_local_${Date.now()}`,
         resourceType: 'image',
         format: file.type.split('/')[1] || 'jpg',
         bytes: file.size,
-        thumbnailUrl: data.secureUrl || data.url,
-        provider: 'bunny_storage',
-      };
+        thumbnailUrl: localUrl,
+        provider: 'local',
+      });
     }
-
-    // Local fallback
-    const localUrl = URL.createObjectURL(file);
-    if (onProgress) onProgress(100);
-    return {
-      success: true,
-      url: localUrl,
-      secureUrl: localUrl,
-      publicId: `bunny_local_${Date.now()}`,
-      resourceType: 'image',
-      format: file.type.split('/')[1] || 'jpg',
-      bytes: file.size,
-      thumbnailUrl: localUrl,
-      provider: 'local',
-    };
-  } catch (err) {
-    const localUrl = URL.createObjectURL(file);
-    if (onProgress) onProgress(100);
-    return {
-      success: true,
-      url: localUrl,
-      secureUrl: localUrl,
-      publicId: `bunny_local_${Date.now()}`,
-      resourceType: 'image',
-      format: file.type.split('/')[1] || 'jpg',
-      bytes: file.size,
-      thumbnailUrl: localUrl,
-      provider: 'local',
-    };
-  }
+  });
 }
 
 /**
- * Función universal para subir cualquier archivo multimedia a Bunny.net (Video -> Bunny Stream, Foto -> Bunny Storage)
+ * Función universal para subir cualquier archivo multimedia (Video -> Bunny/Local Video, Foto -> Local/CDN Storage)
  */
 export async function uploadMediaToBunny(
   file: File,

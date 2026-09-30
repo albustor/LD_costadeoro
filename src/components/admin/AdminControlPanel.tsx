@@ -29,7 +29,9 @@ import {
   Scan,
   ExternalLink,
   Users,
-  X
+  X,
+  Award,
+  FileSpreadsheet
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -38,17 +40,17 @@ import { LiveDeskScorer } from './LiveDeskScorer';
 import { RosterUploaderModal } from './RosterUploaderModal';
 import { CertificateGeneratorModal } from './CertificateGeneratorModal';
 import { AdminRosterManager } from './AdminRosterManager';
-import { Award, FileSpreadsheet } from 'lucide-react';
+import { SystemAuditPlanView } from './SystemAuditPlanView';
 
 export function AdminControlPanel() {
-  const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById } = useTournament();
+  const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById, addPhoto, addVideo } = useTournament();
 
   // Authentication Pin (Simple PIN for quick field access)
   const [pin, setPin] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Open access by default for convenience
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'audit'>('results');
 
   // Event-wide Family PIN Configuration State
   const [eventPinInput, setEventPinInput] = useState<string>(() => {
@@ -335,6 +337,17 @@ export function AdminControlPanel() {
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
             <span>6. Nóminas Excel y Listas</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('audit')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'audit'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+            <span>7. Plan de Auditoría y Pruebas</span>
           </button>
         </div>
       </div>
@@ -676,6 +689,32 @@ export function AdminControlPanel() {
                       setBunnyResult(res);
                       if (res.success) {
                         setUploadedList((prev) => [res, ...prev]);
+                        
+                        // Sincronizar automáticamente con la Galería o Mural
+                        if (res.resourceType === 'image') {
+                          addPhoto({
+                            title: `Foto Oficial - ${bunnyFile.name.replace(/\.[^/.]+$/, '')}`,
+                            photographer: 'Mesa Técnica / Oficial',
+                            imageUrl: res.secureUrl || res.url,
+                            thumbnailUrl: res.thumbnailUrl || res.secureUrl || res.url,
+                            moment: 'durante',
+                            momentLabel: '🔵 En Cancha / Jugadas',
+                            schoolId: 'la-paz-cabo-velas',
+                            tags: ['oficial', 'festival2026'],
+                          });
+                        } else if (res.resourceType === 'video') {
+                          addVideo({
+                            title: `Video Oficial - ${bunnyFile.name.replace(/\.[^/.]+$/, '')}`,
+                            authorName: 'Mesa Técnica',
+                            authorRole: 'Curiol Studio',
+                            schoolId: 'la-paz-cabo-velas',
+                            categoryId: categories[0]?.id || 'futbol-u15',
+                            videoUrl: res.secureUrl || res.url,
+                            thumbnailUrl: res.thumbnailUrl || res.secureUrl || res.url,
+                            durationSeconds: 20,
+                          });
+                        }
+
                         setBunnyFile(null);
                         setBunnyPreview(null);
                       }
@@ -838,6 +877,11 @@ export function AdminControlPanel() {
       {/* 📊 PESTAÑA 6: GESTOR DE NÓMINAS EXCEL Y FORMULARIOS */}
       {activeTab === 'rosters' && (
         <AdminRosterManager />
+      )}
+
+      {/* 🛡️ PESTAÑA 7: PLAN MAESTRO DE AUDITORÍA Y ANÁLISIS PRÁCTICO */}
+      {activeTab === 'audit' && (
+        <SystemAuditPlanView />
       )}
 
       {/* 📱 MODAL DEL ESCÁNER DE DATOS Y CÓDIGOS QR */}
