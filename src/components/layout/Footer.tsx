@@ -12,7 +12,7 @@ export function Footer() {
           <img
             src="/logos/nextplay_logo.png"
             alt="NextPlay"
-            className="h-10 sm:h-12 w-auto object-contain transition-transform hover:scale-105"
+            className="h-14 sm:h-20 w-auto object-contain transition-transform hover:scale-105"
           />
         </div>
 
