@@ -7,6 +7,15 @@ export function Footer() {
     <footer className="bg-slate-100/95 border-t border-slate-200/90 pt-8 pb-10 text-slate-600 text-xs">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center space-y-6">
         
+        {/* 0. LOGO NEXTPLAY: SOBRE EL LOGO NEGRO OFICIAL Y ABAJO DE PRESENTACIÓN OFICIAL */}
+        <div className="flex flex-col items-center gap-1">
+          <img
+            src="/logos/nextplay_logo.png"
+            alt="NextPlay"
+            className="h-10 sm:h-12 w-auto object-contain transition-transform hover:scale-105"
+          />
+        </div>
+
         {/* 1. CENTRO PRINCIPAL: LOGO OFICIAL DEL TORNEO DESTACADO Y GRANDE */}
         <div className="flex flex-col items-center gap-3">
           <div className="h-20 w-16 sm:h-24 sm:w-20 rounded-2xl overflow-hidden shadow-md flex items-center justify-center bg-black border-2 border-amber-500/50 p-1.5 transition-transform hover:scale-105">
