@@ -6,98 +6,27 @@ import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { EventIntroVideo } from '@/components/home/EventIntroVideo';
 import { EventGeneralInfoCards } from '@/components/home/EventGeneralInfoCards';
-import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { 
   Trophy, 
-  MapPin, 
   Calendar, 
   Heart, 
-  SlidersHorizontal, 
-  ChevronRight, 
-  Shield
+  SlidersHorizontal 
 } from 'lucide-react';
 
 export default function HomePage() {
-  const { tournament, schools } = useTournament();
+  const { schools } = useTournament();
   const { t } = useLanguage();
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
-      {/* 🌊 1. BIENVENIDA A LA LIGA DEPORTIVA COSTA DE ORO */}
-      <section className="rounded-3xl overflow-hidden bg-gradient-to-br from-white via-slate-50 to-amber-50/30 border border-slate-200/90 p-5 sm:p-7 shadow-xs space-y-3">
-        <div className="space-y-2.5 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-slate-950 text-amber-300 font-bold text-xs border border-amber-500/40 flex items-center gap-1.5 shadow-2xs">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" />
-              <span>{t('hero.welcomeBadge')}</span>
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white text-slate-700 font-medium text-xs border border-slate-200 flex items-center gap-1.5 shadow-2xs">
-              <MapPin className="w-3.5 h-3.5 text-amber-600" />
-              <span>Sede: {tournament.host.name}</span>
-            </span>
-            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 font-semibold text-xs border border-emerald-200">
-              Octubre - noviembre 2026
-            </span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            {t('hero.title')}
-          </h1>
-
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            {t('hero.tagline')}
-          </p>
-        </div>
-      </section>
-
-      {/* 🎬 2. VIDEO OFICIAL EN EL ENCABEZADO (AL PURO INICIO ANTES DE LAS TARJETAS) */}
+      {/* 🎬 1. VIDEO OFICIAL EN EL ENCABEZADO PRINCIPAL (AL PURO INICIO) */}
       <section className="space-y-2">
         <EventIntroVideo />
       </section>
 
-      {/* 🗂️ 3. TARJETAS INFORMATIVAS Y MODALIDADES DEL EVENTO */}
+      {/* 🗂️ 2. TARJETAS INFORMATIVAS INTERACTIVAS (DESPLEGABLES CON UN CLIC DEBAJO DEL VIDEO) */}
       <section className="space-y-3 pt-1">
         <EventGeneralInfoCards schools={schools} />
-      </section>
-
-      {/* 🏫 4. INSTITUCIONES EDUCATIVAS PARTICIPANTES */}
-      <section className="space-y-3 pt-1">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
-            <Shield className="w-4 h-4 text-amber-600" />
-            <span>{t('hero.schools.title')}</span>
-          </h2>
-          <Link
-            href="/colegios"
-            className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1 group"
-          >
-            <span>{t('hero.schools.viewDetails')}</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-        </div>
-
-        {/* Cuadrícula interactiva con los 6 colegios: Escudo + Nombre */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
-          {schools.map((school) => (
-            <Link
-              key={school.id}
-              href="/colegios"
-              className="bg-white hover:bg-amber-50/60 p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 hover:border-amber-400 shadow-2xs hover:shadow-md transition-all flex flex-col items-center text-center gap-2.5 group cursor-pointer"
-            >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border border-slate-200/90 group-hover:border-amber-400 flex items-center justify-center p-2 shadow-2xs group-hover:scale-105 transition-all">
-                <SchoolEmblem schoolId={school.id} size="md" showBorder={false} />
-              </div>
-              <div className="min-w-0 w-full space-y-0.5">
-                <span className="font-extrabold text-slate-900 text-xs sm:text-[13px] leading-tight block truncate group-hover:text-amber-900 transition-colors">
-                  {school.shortName || school.name}
-                </span>
-                <span className="text-[10.5px] text-slate-500 block truncate">
-                  {school.location || school.city}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
       </section>
 
       {/* 🚀 5. ACCESOS DIRECTOS COMPACTOS (TIPO ICONOS / ACCIONES RÁPIDAS) */}
