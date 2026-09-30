@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Category, Match, PhotoItem, School, ShortVideo, Sponsor, Standing } from '@/types/tournament';
+import { Category, FamilyPost, Match, PhotoItem, PostComment, School, ShortVideo, Sponsor, Standing } from '@/types/tournament';
 import { CATEGORIES_DATA, SCHOOLS_DATA, TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { calculateStandings } from '@/lib/sportsEngine';
@@ -14,6 +14,7 @@ interface TournamentContextType {
   sponsors: Sponsor[];
   videos: ShortVideo[];
   photos: PhotoItem[];
+  familyPosts: FamilyPost[];
   selectedCategoryId: string;
   setSelectedCategoryId: (id: string) => void;
   getStandingsForCategory: (categoryId: string) => Standing[];
@@ -21,6 +22,9 @@ interface TournamentContextType {
   recordSponsorClick: (sponsorId: string) => void;
   addVideo: (video: Omit<ShortVideo, 'id' | 'createdAt' | 'likesCount' | 'viewsCount' | 'approved'>) => ShortVideo;
   addPhoto: (photo: Omit<PhotoItem, 'id' | 'createdAt'>) => PhotoItem;
+  addFamilyPost: (post: Omit<FamilyPost, 'id' | 'createdAt' | 'likesCount' | 'applauseCount' | 'featuredVotes' | 'comments'> & { comments?: PostComment[] }) => FamilyPost;
+  reactToFamilyPost: (postId: string, type: 'like' | 'applause' | 'feature') => void;
+  addCommentToFamilyPost: (postId: string, comment: Omit<PostComment, 'id' | 'createdAt'>) => void;
   likeVideo: (videoId: string) => void;
   getSchoolById: (id: string) => School | undefined;
   getCategoryById: (id: string) => Category | undefined;
@@ -33,6 +37,7 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [videos, setVideos] = useState<ShortVideo[]>([]);
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
+  const [familyPosts, setFamilyPosts] = useState<FamilyPost[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(CATEGORIES_DATA[0].id);
 
   useEffect(() => {
@@ -40,6 +45,14 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
     setSponsors(tournamentStorage.getSponsors());
     setVideos(tournamentStorage.getVideos());
     setPhotos(tournamentStorage.getPhotos());
+    setFamilyPosts(tournamentStorage.getFamilyPosts());
+
+    // Sincronizar con la base de datos centralizada del servidor
+    tournamentStorage.fetchRemoteFamilyPosts().then((posts) => {
+      if (posts && posts.length > 0) {
+        setFamilyPosts(posts);
+      }
+    });
 
     const handleMatchesUpdate = (e: Event) => {
       const custom = e as CustomEvent<Match[]>;
@@ -56,14 +69,21 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
       if (custom.detail) setPhotos(custom.detail);
     };
 
+    const handleFamilyPostsUpdate = (e: Event) => {
+      const custom = e as CustomEvent<FamilyPost[]>;
+      if (custom.detail) setFamilyPosts(custom.detail);
+    };
+
     window.addEventListener('matches_updated', handleMatchesUpdate);
     window.addEventListener('videos_updated', handleVideosUpdate);
     window.addEventListener('photos_updated', handlePhotosUpdate);
+    window.addEventListener('family_posts_updated', handleFamilyPostsUpdate);
 
     return () => {
       window.removeEventListener('matches_updated', handleMatchesUpdate);
       window.removeEventListener('videos_updated', handleVideosUpdate);
       window.removeEventListener('photos_updated', handlePhotosUpdate);
+      window.removeEventListener('family_posts_updated', handleFamilyPostsUpdate);
     };
   }, []);
 
@@ -87,6 +107,22 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
     const created = tournamentStorage.addPhoto(photo);
     setPhotos(tournamentStorage.getPhotos());
     return created;
+  };
+
+  const addFamilyPost = (post: Omit<FamilyPost, 'id' | 'createdAt' | 'likesCount' | 'applauseCount' | 'featuredVotes' | 'comments'> & { comments?: PostComment[] }) => {
+    const created = tournamentStorage.addFamilyPost(post);
+    setFamilyPosts(tournamentStorage.getFamilyPosts());
+    return created;
+  };
+
+  const reactToFamilyPost = (postId: string, type: 'like' | 'applause' | 'feature') => {
+    const updated = tournamentStorage.reactToFamilyPost(postId, type);
+    setFamilyPosts(updated);
+  };
+
+  const addCommentToFamilyPost = (postId: string, comment: Omit<PostComment, 'id' | 'createdAt'>) => {
+    const updated = tournamentStorage.addCommentToFamilyPost(postId, comment);
+    setFamilyPosts(updated);
   };
 
   const likeVideo = (videoId: string) => {
@@ -118,6 +154,7 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
         sponsors,
         videos,
         photos,
+        familyPosts,
         selectedCategoryId,
         setSelectedCategoryId,
         getStandingsForCategory,
@@ -125,6 +162,9 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
         recordSponsorClick,
         addVideo,
         addPhoto,
+        addFamilyPost,
+        reactToFamilyPost,
+        addCommentToFamilyPost,
         likeVideo,
         getSchoolById,
         getCategoryById,

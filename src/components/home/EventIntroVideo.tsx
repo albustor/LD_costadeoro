@@ -10,7 +10,7 @@ export function EventIntroVideo() {
       <div className="relative rounded-3xl overflow-hidden bg-slate-950 border border-slate-300/80 shadow-xl">
         <div style={{ position: 'relative', paddingTop: '56.25%' }}>
           <iframe
-            src="https://player.mediadelivery.net/embed/766057/642b0c4a-96fa-431a-9915-32dee5a0633b?autoplay=true&loop=false&muted=true&preload=true&responsive=true&captions=false&showAudioTracks=false"
+            src="https://player.mediadelivery.net/embed/766057/4ecd7194-734a-4483-88d7-4d6643eeb816?autoplay=true&loop=false&muted=true&preload=true&responsive=true"
             loading="lazy"
             style={{ border: 0, position: 'absolute', top: 0, height: '100%', width: '100%' }}
             allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"

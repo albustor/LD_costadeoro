@@ -1,7 +1,7 @@
 'use client';
 
-import { Match, PhotoItem, ShortVideo, Sponsor, TierOption } from '@/types/tournament';
-import { INITIAL_MATCHES, INITIAL_PHOTOS, INITIAL_SHORT_VIDEOS, INITIAL_SPONSORS } from './initialData';
+import { FamilyPost, Match, PhotoItem, PostComment, ShortVideo, Sponsor, TierOption } from '@/types/tournament';
+import { INITIAL_FAMILY_POSTS, INITIAL_MATCHES, INITIAL_PHOTOS, INITIAL_SHORT_VIDEOS, INITIAL_SPONSORS } from './initialData';
 import { DEFAULT_ACTIVE_TIER } from '@/config/tierConfig';
 
 const KEYS = {
@@ -11,6 +11,7 @@ const KEYS = {
   VIDEOS: 'costa_de_oro_videos',
   PHOTOS: 'costa_de_oro_photos',
   VOTES: 'costa_de_oro_mvp_votes',
+  FAMILY_POSTS: 'costa_de_oro_family_posts',
 };
 
 function safeGet<T>(key: string, fallback: T): T {
@@ -136,6 +137,127 @@ export const tournamentStorage = {
     return created;
   },
 
+  getFamilyPosts(): FamilyPost[] {
+    return safeGet<FamilyPost[]>(KEYS.FAMILY_POSTS, INITIAL_FAMILY_POSTS);
+  },
+
+  async fetchRemoteFamilyPosts(): Promise<FamilyPost[]> {
+    if (typeof window === 'undefined') return this.getFamilyPosts();
+    try {
+      const res = await fetch('/api/posts', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          safeSet(KEYS.FAMILY_POSTS, json.data);
+          window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: json.data }));
+          return json.data;
+        }
+      }
+    } catch (err) {
+      console.warn('[StorageAdapter] Offline fallback para posts:', err);
+    }
+    return this.getFamilyPosts();
+  },
+
+  addFamilyPost(newPost: Omit<FamilyPost, 'id' | 'createdAt' | 'likesCount' | 'applauseCount' | 'featuredVotes' | 'comments'> & { comments?: PostComment[] }): FamilyPost {
+    const posts = this.getFamilyPosts();
+    const created: FamilyPost = {
+      ...newPost,
+      id: `fp-${Date.now()}`,
+      createdAt: 'Justo ahora',
+      likesCount: 0,
+      applauseCount: 0,
+      featuredVotes: 0,
+      isFeatured: false,
+      comments: newPost.comments || [],
+    };
+    const updated = [created, ...posts];
+    safeSet(KEYS.FAMILY_POSTS, updated);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: updated }));
+
+      // Sincronizar en segundo plano con la base de datos central del servidor
+      fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPost),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data) {
+            // Actualizar ID oficial del servidor si difiere
+            const serverUpdated = this.getFamilyPosts().map((p) => (p.id === created.id ? data.data : p));
+            safeSet(KEYS.FAMILY_POSTS, serverUpdated);
+            window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: serverUpdated }));
+          }
+        })
+        .catch((err) => console.warn('[StorageAdapter Sync Post Error]:', err));
+    }
+    return created;
+  },
+
+  reactToFamilyPost(postId: string, type: 'like' | 'applause' | 'feature'): FamilyPost[] {
+    const posts = this.getFamilyPosts();
+    const updated = posts.map((p) => {
+      if (p.id === postId) {
+        const updatedLikes = type === 'like' ? (p.likesCount || 0) + 1 : (p.likesCount || 0);
+        const updatedApplause = type === 'applause' ? (p.applauseCount || 0) + 1 : (p.applauseCount || 0);
+        const updatedVotes = type === 'feature' ? (p.featuredVotes || 0) + 1 : (p.featuredVotes || 0);
+        const isFeatured = updatedLikes + updatedApplause >= 35 || updatedVotes >= 8 || p.isFeatured;
+        return {
+          ...p,
+          likesCount: updatedLikes,
+          applauseCount: updatedApplause,
+          featuredVotes: updatedVotes,
+          isFeatured,
+        };
+      }
+      return p;
+    });
+    safeSet(KEYS.FAMILY_POSTS, updated);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: updated }));
+
+      // Sincronizar reacción en el servidor
+      fetch(`/api/posts/${encodeURIComponent(postId)}/react`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type }),
+      }).catch((err) => console.warn('[StorageAdapter Sync React Error]:', err));
+    }
+    return updated;
+  },
+
+  addCommentToFamilyPost(postId: string, comment: Omit<PostComment, 'id' | 'createdAt'>): FamilyPost[] {
+    const posts = this.getFamilyPosts();
+    const newComment: PostComment = {
+      ...comment,
+      id: `comm-${Date.now()}`,
+      createdAt: 'Justo ahora',
+    };
+    const updated = posts.map((p) => {
+      if (p.id === postId) {
+        return {
+          ...p,
+          comments: [...(p.comments || []), newComment],
+        };
+      }
+      return p;
+    });
+    safeSet(KEYS.FAMILY_POSTS, updated);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: updated }));
+
+      // Sincronizar comentario en el servidor
+      fetch(`/api/posts/${encodeURIComponent(postId)}/comment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(comment),
+      }).catch((err) => console.warn('[StorageAdapter Sync Comment Error]:', err));
+    }
+    return updated;
+  },
+
   resetToInitial(): void {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(KEYS.TIER);
@@ -143,6 +265,7 @@ export const tournamentStorage = {
     localStorage.removeItem(KEYS.SPONSORS);
     localStorage.removeItem(KEYS.VIDEOS);
     localStorage.removeItem(KEYS.PHOTOS);
+    localStorage.removeItem(KEYS.FAMILY_POSTS);
     window.location.reload();
   },
 };

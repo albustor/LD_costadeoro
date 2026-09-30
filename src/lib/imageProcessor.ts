@@ -85,3 +85,33 @@ export function downloadImageAsJpg(imageUrl: string, fileName: string): void {
   link.click();
   document.body.removeChild(link);
 }
+
+/**
+ * Compresses an image file in the browser and returns an optimized File object ready for upload
+ */
+export async function processImageForUpload(
+  file: File,
+  options?: { maxWidth?: number; quality?: number }
+): Promise<{ file: File; previewUrl: string; fileSizeKB: number }> {
+  const maxDim = options?.maxWidth || 1920;
+  const qual = options?.quality || 0.85;
+  const processed = await processAndCompressPhoto(file, maxDim, qual);
+
+  // Convert dataURL to real File object
+  const arr = processed.previewUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  const cleanName = file.name.replace(/\.[^/.]+$/, '') + '.jpg';
+  const compressedFile = new File([u8arr], cleanName, { type: mime });
+
+  return {
+    file: compressedFile,
+    previewUrl: processed.previewUrl,
+    fileSizeKB: processed.fileSizeKB,
+  };
+}

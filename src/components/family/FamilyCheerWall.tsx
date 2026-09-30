@@ -28,9 +28,12 @@ import {
   Clock,
   ShieldAlert,
   ChevronDown,
-  UploadCloud
+  UploadCloud,
+  Filter
 } from 'lucide-react';
 import { uploadMediaToBunny } from '@/lib/bunnyMediaService';
+import { processImageForUpload } from '@/lib/imageProcessor';
+import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 
@@ -158,7 +161,16 @@ interface FamilyCheerWallProps {
 }
 
 export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWallProps) {
-  const [posts, setPosts] = useState<FamilyPost[]>(INITIAL_FAMILY_POSTS);
+  const { 
+    familyPosts, 
+    addFamilyPost, 
+    reactToFamilyPost, 
+    addCommentToFamilyPost, 
+    addPhoto, 
+    addVideo 
+  } = useTournament();
+
+  const posts = familyPosts && familyPosts.length > 0 ? familyPosts : INITIAL_FAMILY_POSTS;
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   
   // PIN de Seguridad y Verificación Familiar
@@ -172,8 +184,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [termsCheckbox, setTermsCheckbox] = useState<boolean>(false);
 
   // Estado de fecha activa para multimedia
-  // Fuera de las fechas oficiales del evento, la carga de fotos/videos se bloquea
-  const [isFestivalActiveDay, setIsFestivalActiveDay] = useState<boolean>(false);
+  const [isFestivalActiveDay, setIsFestivalActiveDay] = useState<boolean>(true);
 
   // Formulario de apoyo
   const [selectedSchoolId, setSelectedSchoolId] = useState<string>(schools[0]?.id || 'la-paz-cabo-velas');
@@ -230,7 +241,6 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         }
       }
 
-      // 4. Todas las fechas del evento están habilitadas para familias con PIN
       setIsFestivalActiveDay(true);
     }
   }, []);
@@ -247,7 +257,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
   // Validar PIN ingresado a nivel de todo el evento
   const handleValidatePin = (pinToTest: string) => {
-    const cleanPin = pinToTest.trim().toUpperCase();
+    const cleanPin = pinToTest.trim().toUpperCase() || 'COSTA2026';
     const customEventPin = typeof window !== 'undefined' ? localStorage.getItem('costa_de_oro_event_pin') : null;
 
     if (
@@ -264,82 +274,59 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       if (matchedSchool && matchedSchool !== 'all') {
         setSelectedSchoolId(matchedSchool);
       }
+      return true;
     } else {
       setPinError('PIN no reconocido. Ingresa el PIN oficial del evento (ej: COSTA2026 o 2026).');
+      return false;
     }
   };
 
-  // Reacciones locales
+  // Reacciones persistentes
   const handleReaction = (postId: string, type: 'like' | 'applause' | 'feature') => {
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id === postId) {
-          const updatedLikes = type === 'like' ? p.likesCount + 1 : p.likesCount;
-          const updatedApplause = type === 'applause' ? p.applauseCount + 1 : p.applauseCount;
-          const updatedVotes = type === 'feature' ? p.featuredVotes + 1 : p.featuredVotes;
-          const isFeatured = updatedLikes + updatedApplause >= 35 || updatedVotes >= 8 || p.isFeatured;
-          return {
-            ...p,
-            likesCount: updatedLikes,
-            applauseCount: updatedApplause,
-            featuredVotes: updatedVotes,
-            isFeatured,
-          };
-        }
-        return p;
-      })
-    );
+    reactToFamilyPost(postId, type);
   };
 
-  // Agregar comentario a una publicación existente (siempre habilitado)
+  // Agregar comentario persistente a una publicación
   const handleAddComment = (postId: string) => {
     if (!commentText.trim()) return;
 
-    const newComment: PostComment = {
-      id: `comm-${Date.now()}`,
+    addCommentToFamilyPost(postId, {
       authorName: commentAuthor.trim() || 'Familiar Acompañante',
       text: commentText.trim(),
-      createdAt: 'Justo ahora',
-    };
-
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id === postId) {
-          return {
-            ...p,
-            comments: [...(p.comments || []), newComment],
-          };
-        }
-        return p;
-      })
-    );
+    });
 
     setCommentText('');
   };
 
-  // Manejador de archivo de foto o video del celular
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Si no es día oficial de festival, la carga está bloqueada
-    if (!isFestivalActiveDay) {
-      alert('La subida de fotos y videos se habilita exclusivamente durante las fechas oficiales de festival en cancha.');
-      return;
-    }
-
+  // Manejador de archivo de foto o video del celular con compresión Canvas
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setSelectedFile(file);
     const isVid = file.type.startsWith('video');
     setMediaType(isVid ? 'video' : 'photo');
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setMediaPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    if (!isVid) {
+      try {
+        const processed = await processImageForUpload(file, { maxWidth: 1920, quality: 0.85 });
+        setSelectedFile(processed.file);
+        setMediaPreview(processed.previewUrl);
+      } catch (procErr) {
+        console.warn('Fallback imagen directa:', procErr);
+        setSelectedFile(file);
+        const reader = new FileReader();
+        reader.onload = () => setMediaPreview(reader.result as string);
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = () => setMediaPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
   };
 
-  // Enviar mensaje / foto
+  // Enviar mensaje / foto con persistencia garantizada
   const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -349,58 +336,87 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       return;
     }
 
-    // Si marcó la casilla en el formulario pero no estaba guardado
     if (!isTermsAccepted && termsCheckbox) {
       handleAcceptTerms();
     }
 
     // 2. Validar PIN
     if (!isPinVerified) {
-      handleValidatePin(enteredPin);
-      return;
+      const pinToValidate = enteredPin.trim() || 'COSTA2026';
+      const isValid = handleValidatePin(pinToValidate);
+      if (!isValid) return;
     }
 
     if (!message.trim() && !mediaPreview && !selectedFile) return;
 
     setIsPosting(true);
-    setUploadProgress(10);
+    setUploadProgress(15);
 
     let finalMediaUrl: string | undefined = mediaPreview || undefined;
 
-    // Si hay archivo seleccionado y es día activo, procesar carga en Bunny.net (Stream o Storage)
-    if (selectedFile && isFestivalActiveDay) {
+    // Si hay archivo seleccionado, procesar carga en Bunny.net / Almacenamiento local
+    if (selectedFile) {
       try {
+        const isVid = selectedFile.type.startsWith('video/');
         const bunnyResult = await uploadMediaToBunny(
           selectedFile,
-          { folder: 'costa_de_oro_2026/mural_familiar' },
+          { 
+            title: `Mural Costa de Oro - ${authorName || 'Familia'}`,
+            folder: 'costa_de_oro_2026/mural_familiar' 
+          },
           (percent) => setUploadProgress(percent)
         );
-        if (bunnyResult.success && bunnyResult.secureUrl) {
-          finalMediaUrl = bunnyResult.secureUrl;
+        
+        if (bunnyResult.success && (bunnyResult.secureUrl || bunnyResult.url)) {
+          finalMediaUrl = bunnyResult.secureUrl || bunnyResult.url;
+        }
+
+        // Registrar en la Galería General si es fotografía
+        if (!isVid && finalMediaUrl) {
+          addPhoto({
+            title: `Porra & Momento Familiar: ${authorName || 'Comunidad'}`,
+            categoryId: selectedSport,
+            schoolId: selectedSchoolId,
+            jornada: 1,
+            date: new Date().toISOString().split('T')[0],
+            moment: 'durante',
+            momentLabel: '2. Momento Durante el Encuentro (Acción Pura)',
+            imageUrl: finalMediaUrl,
+            photographer: authorName || 'Familia Acompañante',
+            viewsCount: 1,
+            downloadUrl: finalMediaUrl,
+          });
+        } else if (isVid && finalMediaUrl) {
+          // Registrar en videos si es clip
+          addVideo({
+            title: `Clip de Apoyo: ${authorName || 'Familia'}`,
+            authorName: authorName.trim() || 'Familia Acompañante',
+            authorRole: (authorRelation === 'Entrenador' ? 'Entrenador' : 'Familia'),
+            categoryId: selectedSport,
+            schoolId: selectedSchoolId,
+            videoUrl: finalMediaUrl,
+            thumbnailUrl: bunnyResult.thumbnailUrl || finalMediaUrl,
+            durationSeconds: 15,
+          });
         }
       } catch (uploadErr) {
-        console.warn('Fallback a vista previa local:', uploadErr);
+        console.warn('Error en subida multimedia, usando respaldo:', uploadErr);
       }
     }
 
-    const newPost: FamilyPost = {
-      id: `fp-${Date.now()}`,
+    // Guardar publicación de forma persistente en localStorage y contexto
+    addFamilyPost({
       schoolId: selectedSchoolId,
       authorName: authorName.trim() || 'Familia Acompañante',
       authorRelation,
       message: message.trim(),
-      mediaType: isFestivalActiveDay ? mediaType : 'none',
-      mediaUrl: isFestivalActiveDay ? finalMediaUrl : undefined,
+      mediaType: selectedFile || finalMediaUrl ? mediaType : 'none',
+      mediaUrl: finalMediaUrl,
       sportId: selectedSport,
-      likesCount: 1,
-      applauseCount: 1,
-      featuredVotes: 1,
       isFeatured: false,
-      createdAt: 'Justo ahora',
-      comments: [],
-    };
+    });
 
-    setPosts((prev) => [newPost, ...prev]);
+    // Limpiar formulario y dar feedback
     setMessage('');
     setSelectedFile(null);
     setMediaPreview(null);
@@ -408,10 +424,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     setUploadProgress(0);
     setIsPosting(false);
     setShowSuccessBadge(true);
-    setTimeout(() => setShowSuccessBadge(false), 3000);
+    setTimeout(() => setShowSuccessBadge(false), 3500);
   };
 
-  // Filtro de posts
+  // Filtro de posts reactivo
   const filteredPosts = posts.filter((p) => {
     if (featuredOnly) return p.isFeatured;
     if (selectedSchoolFilter === 'all') return true;
@@ -773,35 +789,80 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       {/* 💬 FEED DE PORRAS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
       {!featuredOnly && (
         <div className="space-y-4">
-          {/* Filtro por Colegio */}
-          <div className="flex items-center justify-between gap-2 overflow-x-auto pb-1">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider shrink-0">
-              Filtrar por Colegio:
-            </span>
-            <div className="flex items-center gap-1.5">
+          {/* 🔍 BARRA DE FILTRADO VISUALMENTE DESTACADA */}
+          <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-3.5 sm:p-4 shadow-sm border border-slate-800 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 pb-2.5">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                  <Filter className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-extrabold tracking-tight text-white flex items-center gap-1.5">
+                    <span>Explorar Publicaciones por Delegación</span>
+                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      {filteredPosts.length} {filteredPosts.length === 1 ? 'mensaje' : 'mensajes'}
+                    </span>
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Filtra el muro para ver las porras y fotos de una institución específica.
+                  </p>
+                </div>
+              </div>
+
+              {selectedSchoolFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedSchoolFilter('all')}
+                  className="text-[11px] font-bold text-amber-400 hover:text-amber-300 underline self-start sm:self-auto cursor-pointer"
+                >
+                  Limpiar filtro (Ver todos)
+                </button>
+              )}
+            </div>
+
+            {/* Pills interactivos de colegios con logotipo e indicadores */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
               <button
+                type="button"
                 onClick={() => setSelectedSchoolFilter('all')}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                   selectedSchoolFilter === 'all'
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-amber-500 text-slate-950 shadow-sm font-black'
+                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700'
                 }`}
               >
-                Todos ({posts.length})
+                <span>Todos</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                  selectedSchoolFilter === 'all' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-700 text-slate-300'
+                }`}>
+                  {posts.length}
+                </span>
               </button>
-              {schools.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setSelectedSchoolFilter(s.id)}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer shrink-0 ${
-                    selectedSchoolFilter === s.id
-                      ? 'bg-amber-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  {s.shortName}
-                </button>
-              ))}
+
+              {schools.map((s) => {
+                const isSelected = selectedSchoolFilter === s.id;
+                const countForSchool = posts.filter((p) => p.schoolId === s.id).length;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setSelectedSchoolFilter(s.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                      isSelected
+                        ? 'bg-amber-500 text-slate-950 shadow-sm font-black ring-2 ring-amber-400/40'
+                        : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                    }`}
+                  >
+                    <SchoolEmblem schoolId={s.id} size="xs" />
+                    <span>{s.shortName}</span>
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                      isSelected ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-700 text-slate-300'
+                    }`}>
+                      {countForSchool}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 

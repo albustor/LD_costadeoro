@@ -75,27 +75,36 @@ El asistente opera bajo el rol de **Jim (Ingeniero Full-Stack y Auditor Técnico
 
 ---
 
-## 5. Foco Activo de Intervención: Visualización y Accesibilidad en Celular
+## 5. Arquitectura de Base de Datos Centralizada (Multi-Dispositivo)
 
-### Diagnóstico de la Situación Actual:
-- **Problema Detectado**: En pantallas móviles de smartphones, la interfaz y tipografías se perciben excesivamente reducidas.
-- **Causa Raíz Identificada**:
-  1. En `Header.tsx`, la barra superior móvil renderiza `<DuaAccessibilityBar compact={true} />`, la cual **únicamente expone el botón de reproducción de audio** (`Volume2`).
-  2. Los controles de cambio de tamaño de texto (`A-`, `100%`, `A+`) quedaron confinados dentro del menú hamburguesa (`mobileMenuOpen`), haciéndolos poco visibles o inaccesibles para el usuario promedio sin desplegar dicho menú.
-  3. En `src/app/layout.tsx`, la configuración de `viewport` bloquea el zoom táctil mediante `maximumScale: 1, userScalable: false`, impidiendo que los usuarios con dificultades visuales amplíen la pantalla con gesto de pinza (*pinch-to-zoom*).
-  4. La escala base tipográfica en móviles se beneficia de un umbral visual más amplio y legible sin romper la cuadrícula ni generar desbordamiento horizontal.
-
-### Plan de Ajuste Quirúrgico Previsto (Pendiente de Autorización):
-1. **Reubicación o Rediseño de Acciones Rápidas en Móvil**:
-   - Exponer un pill táctil directo o selector de zoom `A- / A+` accesible en la barra superior móvil sin obligar a abrir el menú hamburguesa.
-2. **Ajuste en `Viewport`**:
-   - Evaluar permitir zoom táctil accesible (`userScalable: true`, `maximumScale: 3`) cumpliendo normativas WCAG 2.2 de accesibilidad.
-3. **Optimización de Jerarquía Tipográfica**:
-   - Asegurar que el cambio en `textScale` escale de forma armónica los componentes de partidos, tarjetas de horarios y tablas de posiciones.
+### Estado Actual de Persistencia en Servidor:
+1. **Archivos Físicos (Fotos y Videos)**:
+   - Se guardan físicamente en el servidor local (`/public/uploads/photos/` y `/public/uploads/videos/`) y se transmiten a **Bunny.net (Bunny Stream Library 629005 y CDN)**.
+2. **Publicaciones del Muro Comunitario ([`/api/posts`](file:///d:/AntigravityFinal/EventoCostadeOro/src/app/api/posts/route.ts))**:
+   - `GET /api/posts` & `POST /api/posts`: Persistencia atómica de mensajes, autor, colegio, fotos/videos vinculados y contador de likes/aplausos en `src/data/tournament_db.json`.
+   - `POST /api/posts/[id]/react` & `POST /api/posts/[id]/comment`: Interacciones en tiempo real entre múltiples celulares.
+3. **Nóminas Oficiales de Atletas ([`/api/rosters`](file:///d:/AntigravityFinal/EventoCostadeOro/src/app/api/rosters/route.ts))**:
+   - `GET /api/rosters` & `POST /api/rosters`: Persistencia centralizada de jugadores, entrenadores, dorsales y categorías, con sincronización híbrida offline-first en `rosterService.ts`.
 
 ---
 
-## 6. Comandos de Operación Frecuentes
+## 6. Protocolo Obligatorio de Validación Inicial al Arrancar Procesos
+
+Al iniciar cualquier sesión o tarea en este repositorio, el asistente debe ejecutar de forma obligatoria las siguientes validaciones previas a realizar modificaciones:
+
+1. **Salud del Servidor Local (Puerto 3014)**:
+   - Verificar que el servidor esté activo en `http://localhost:3014`.
+2. **Integridad de la Base de Datos Centralizada (`tournament_db.json`)**:
+   - Validar que `src/data/tournament_db.json` exista y sea legible con estructura válida (`posts`, `rosters`, `photos`, `videos`, `matches`).
+3. **Verificación de Endpoints API Críticos**:
+   - Test de lectura en `GET /api/posts` (debe responder `200 OK` con array de publicaciones).
+   - Test de lectura en `GET /api/rosters` (debe responder `200 OK` con nóminas oficiales).
+4. **Verificación de Compilación y Tipado Estricto**:
+   - Ejecutar `npm run build` para garantizar cero errores de TypeScript y empaquetado antes de cualquier despliegue.
+
+---
+
+## 7. Comandos de Operación Frecuentes
 
 ```bash
 # Desarrollo local en el puerto asignado (3014)

@@ -73,12 +73,26 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 - **Plan Quirúrgico**: Exponer un selector de escala tipográfica directo en la cabecera móvil o barra de acceso rápido, y flexibilizar el viewport según las recomendaciones de accesibilidad.
 - **Estado**: Diagnosticado y documentado. Listo para validación de propuesta y aplicación de parche por etapas.
 
+### ADR-008: Persistencia del Muro y Estrategia de Base de Datos Centralizada (Multi-Dispositivo)
+- **Contexto**: Las fotos y videos se guardan físicamente en el servidor local (`/public/uploads/`) y en Bunny CDN (Library 629005). Los metadatos de las publicaciones (mensajes, autores, comentarios, likes) requerían persistencia centralizada para sincronizarse entre múltiples dispositivos en tiempo real.
+- **Decisión**: Implementación de base de datos atómica en `/src/data/tournament_db.json` administrada por `serverDb.ts` y expuesta mediante los endpoints `/api/posts`, `/api/posts/[id]/react` y `/api/posts/[id]/comment`. Sincronización híbrida offline-first en `storageAdapter.ts`.
+- **Estado**: ✅ Implementado, auditado y en producción.
+
+### ADR-009: Persistencia y Sincronización Centralizada de Nóminas Oficiales (`/api/rosters`)
+- **Contexto**: La carga e inscripción de nóminas de jugadores, entrenadores y dorsales se encontraba aislada en `localStorage` del navegador. Se requería que las nóminas guardadas o importadas vía Excel/CSV estuviesen disponibles centralizadamente para todos los colegios y la mesa de control.
+- **Decisión**: Extensión de `tournament_db.json` con la entidad `rosters: TeamRoster[]`, creación del endpoint `/api/rosters` (GET/POST) con soporte individual y por lotes, y actualización de `rosterService.ts` y `SchoolRosterManager.tsx` con sincronización bidireccional inmediata.
+- **Estado**: ✅ Implementado, auditado y verificado con `npm run build`.
+
 ---
 
 ## 4. Estructura de Persistencia y Modelos de Datos
 
-- **`src/lib/initialData.ts`**: Repositorio base con las 6 instituciones, sus insignias vectoriales, sedes, los 4 festivales del cronograma y partidos pre-configurados.
-- **`src/context/TournamentContext.tsx`**: Estado global de la aplicación (partidos en vivo, resultados, actas y cálculo reactivo de tablas de posiciones).
+- **`src/data/tournament_db.json`**: Base de datos centralizada de servidor (Posts, Nóminas, Fotos, Videos, Partidos).
+- **`src/lib/serverDb.ts`**: Motor de base de datos atómico en Node.js con cola de escritura serializada (`writeQueue`).
+- **`src/lib/rosterService.ts`**: Capa de servicio para nóminas oficiales con sincronización remota (`fetchRemoteRosters`) y persistencia local/remota.
+- **`src/lib/storageAdapter.ts`**: Adaptador de persistencia para partidos, fotos, videos y posts familiares sincronizado con `/api/posts`.
+- **`src/lib/initialData.ts`**: Repositorio base con las 6 instituciones, insignias vectoriales, sedes y los 4 festivales del cronograma.
+- **`src/context/TournamentContext.tsx`**: Estado global de la aplicación con sincronización reactiva por eventos (`matches_updated`, `family_posts_updated`, etc.).
 - **`src/context/LanguageContext.tsx`**: Gestor de internacionalización con persistencia de idioma (ES / EN).
 - **`src/context/TierContext.tsx`**: Gestor de modos comerciales y configuraciones institucionales (*Feature Flags*).
 
@@ -93,13 +107,22 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-09-28 | Rediseño de Header sólido negro, filete dorado y audio DUA | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-29 | Configuración CuriolHub en puerto 3014 y DevViewportBar | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Creación de `AGENTS.md` y `Memoria.md` vinculados | ✅ Completado | Jim (Curiol Studio) |
-| 2026-09-30 | **Ajuste de visibilidad de controles de escala en móviles** | ⏳ **En Propuesta** | Jim (Curiol Studio) |
+| 2026-09-30 | Reparación de subida de fotos, videos y curador emocional IA | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Reparación y persistencia reactiva del Muro Familiar (`/mural`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Base de datos centralizada multi-dispositivo para el Muro (`/api/posts`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Persistencia en base de datos centralizada de Nóminas Oficiales (`/api/rosters`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Auditoría técnica integral y validación de resiliencia de Bunny.net | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 
-## 6. Protocolo para Retomar el Proyecto
+## 6. Protocolo Obligatorio para Iniciar o Retomar Procesos
 
-1. Abrir terminal en la raíz: `d:\AntigravityFinal\EventoCostadeOro`.
-2. Ejecutar `npm run dev` para levantar el entorno en el puerto asignado `3014`.
-3. Abrir en navegador: `http://localhost:3014` y escanear el QR de `DevViewportBar` desde el smartphone de prueba.
-4. Para realizar modificaciones en el código, respetar estrictamente el **Safety Lock** estipulado en [AGENTS.md](file:///d:/AntigravityFinal/EventoCostadeOro/AGENTS.md) presentando archivo, líneas y justificación previa a cualquier escritura.
+Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el motor debe validar obligatoriamente:
+
+1. **Salud del Servidor**: Verificar `npm run dev` en el puerto `3014`.
+2. **Integridad de Base de Datos**: Comprobar que `src/data/tournament_db.json` exista y sea válido.
+3. **Pings a Endpoints API**:
+   - `GET /api/posts` ➔ `200 OK`
+   - `GET /api/rosters` ➔ `200 OK`
+4. **Verificación Estática**: Comprobar tipado estricto con `npm run build`.
+5. **Safety Lock**: No modificar ningún archivo sin presentar previamente ruta, líneas y justificación técnica para aprobación del usuario.

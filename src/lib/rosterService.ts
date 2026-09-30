@@ -104,6 +104,31 @@ export const INITIAL_DEFAULT_ROSTERS: TeamRoster[] = [
 ];
 
 export const rosterService = {
+  // 0. Sincronizar con la Base de Datos Central del Servidor (/api/rosters)
+  async fetchRemoteRosters(): Promise<TeamRoster[]> {
+    if (typeof window === 'undefined') return INITIAL_DEFAULT_ROSTERS;
+
+    try {
+      const res = await fetch('/api/rosters', {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.success && Array.isArray(data.rosters) && data.rosters.length > 0) {
+          localStorage.setItem(ROSTERS_STORAGE_KEY, JSON.stringify(data.rosters));
+          window.dispatchEvent(new CustomEvent('rosters_sync_updated', { detail: data.rosters }));
+          return data.rosters;
+        }
+      }
+    } catch (err) {
+      console.warn('[rosterService] Fallback a caché local:', err);
+    }
+
+    return this.getAllRosters();
+  },
+
   // 1. Obtener todas las nóminas sincronizadas
   getAllRosters(): TeamRoster[] {
     if (typeof window === 'undefined') return INITIAL_DEFAULT_ROSTERS;
@@ -139,21 +164,33 @@ export const rosterService = {
         r.categoryId === newRoster.categoryId
     );
 
+    const updatedRoster: TeamRoster = {
+      ...newRoster,
+      updatedAt: new Date().toISOString(),
+    };
+
     if (index >= 0) {
-      all[index] = { ...newRoster, updatedAt: new Date().toISOString() };
+      all[index] = updatedRoster;
     } else {
-      all.push({ ...newRoster, updatedAt: new Date().toISOString() });
+      all.push(updatedRoster);
     }
 
     localStorage.setItem(ROSTERS_STORAGE_KEY, JSON.stringify(all));
 
     // También guardar clave individual para retrocompatibilidad
     const singleKey = `roster_${newRoster.schoolId}_${newRoster.sport}_${newRoster.categoryId}`;
-    localStorage.setItem(singleKey, JSON.stringify(newRoster));
+    localStorage.setItem(singleKey, JSON.stringify(updatedRoster));
 
     // Despachar evento global reactivo para sincronización en tiempo real con el Admin
     window.dispatchEvent(new CustomEvent('rosters_sync_updated', { detail: all }));
-    window.dispatchEvent(new CustomEvent('roster_updated', { detail: newRoster }));
+    window.dispatchEvent(new CustomEvent('roster_updated', { detail: updatedRoster }));
+
+    // Persistir de forma asíncrona en la Base de Datos Central del Servidor
+    fetch('/api/rosters', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedRoster),
+    }).catch((err) => console.error('[rosterService] Error guardando nómina en servidor:', err));
   },
 
   // 4. Guardar conjunto completo de nóminas importadas
@@ -161,7 +198,12 @@ export const rosterService = {
     if (typeof window === 'undefined') return;
 
     const current = this.getAllRosters();
-    rostersToSave.forEach((newR) => {
+    const preparedRosters = rostersToSave.map((r) => ({
+      ...r,
+      updatedAt: new Date().toISOString(),
+    }));
+
+    preparedRosters.forEach((newR) => {
       const idx = current.findIndex(
         (r) =>
           r.schoolId === newR.schoolId &&
@@ -169,9 +211,9 @@ export const rosterService = {
           r.categoryId === newR.categoryId
       );
       if (idx >= 0) {
-        current[idx] = { ...newR, updatedAt: new Date().toISOString() };
+        current[idx] = newR;
       } else {
-        current.push({ ...newR, updatedAt: new Date().toISOString() });
+        current.push(newR);
       }
 
       // Clave individual
@@ -182,6 +224,13 @@ export const rosterService = {
     localStorage.setItem(ROSTERS_STORAGE_KEY, JSON.stringify(current));
     window.dispatchEvent(new CustomEvent('rosters_sync_updated', { detail: current }));
     window.dispatchEvent(new CustomEvent('roster_updated'));
+
+    // Persistir lote en la Base de Datos Central del Servidor
+    fetch('/api/rosters', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(preparedRosters),
+    }).catch((err) => console.error('[rosterService] Error guardando lote de nóminas en servidor:', err));
   },
 
   // 5. Generar archivo Excel (.xls XML Spreadsheet 2003 nativo) que abre en Microsoft Excel con formato y estilos

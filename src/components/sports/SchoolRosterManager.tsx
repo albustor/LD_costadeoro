@@ -69,6 +69,13 @@ export function SchoolRosterManager({ activeSchool }: SchoolRosterManagerProps) 
   useEffect(() => {
     loadSchoolRosters();
 
+    // Sincronizar con la base de datos central en background
+    rosterService.fetchRemoteRosters().then(() => {
+      loadSchoolRosters();
+    }).catch((err) => {
+      console.warn('[SchoolRosterManager] Error al sincronizar con /api/rosters:', err);
+    });
+
     const handleRosterUpdate = () => loadSchoolRosters();
     window.addEventListener('roster_updated', handleRosterUpdate);
     window.addEventListener('rosters_sync_updated', handleRosterUpdate);

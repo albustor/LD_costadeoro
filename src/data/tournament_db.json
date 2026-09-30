@@ -1,0 +1,757 @@
+{
+  "posts": [
+    {
+      "schoolId": "cria",
+      "authorName": "Familia Acompañante",
+      "authorRelation": "Compañero/a",
+      "message": "¡A darlo todo en la cancha! 🏆",
+      "mediaType": "video",
+      "mediaUrl": "/uploads/videos/vid_1790808243026_futbol3.mp4",
+      "sportId": "futbol",
+      "isFeatured": false,
+      "id": "fp-1790808243459-aafj",
+      "createdAt": "Justo ahora",
+      "likesCount": 1,
+      "applauseCount": 1,
+      "featuredVotes": 1,
+      "comments": []
+    },
+    {
+      "schoolId": "cria",
+      "authorName": "Familia Rodriguez",
+      "authorRelation": "Pap�",
+      "message": "Gran triunfo en el voleibol femenino! Excelente juego de todas.",
+      "mediaType": "none",
+      "sportId": "voleibol",
+      "isFeatured": false,
+      "id": "fp-1790808135504-9sfl",
+      "createdAt": "Justo ahora",
+      "likesCount": 1,
+      "applauseCount": 2,
+      "featuredVotes": 1,
+      "comments": [
+        {
+          "authorName": "Coach Ana",
+          "authorRelation": "Entrenador",
+          "text": "Felicidades a las atletas por su gran entrega en la cancha!",
+          "id": "comm-1790808136879-7bu6",
+          "createdAt": "Justo ahora"
+        }
+      ]
+    },
+    {
+      "schoolId": "la-paz-cabo-velas",
+      "authorName": "Prueba Auditoria Jim",
+      "authorRelation": "Familia",
+      "message": "Prueba de publicacion directa en Base de Datos Centralizada del Servidor.",
+      "mediaType": "none",
+      "sportId": "futbol",
+      "isFeatured": false,
+      "id": "fp-1790808116315-nv9x",
+      "createdAt": "Justo ahora",
+      "likesCount": 1,
+      "applauseCount": 1,
+      "featuredVotes": 1,
+      "comments": [
+        {
+          "authorName": "Coach Carlos",
+          "authorRelation": "Entrenador",
+          "text": "Comentario persistido exitosamente en base de datos.",
+          "id": "comm-1790808119602-f1jf",
+          "createdAt": "Justo ahora"
+        }
+      ]
+    },
+    {
+      "id": "fp-1",
+      "schoolId": "la-paz-cabo-velas",
+      "authorName": "Familia Soto Brenes",
+      "authorRelation": "Mamá",
+      "message": "¡Increíble partido de las chicas de Cabo Velas! Qué garra y qué compañerismo demostraron hoy en la cancha. ¡Con todo en la siguiente fecha! 🌊⚽",
+      "mediaType": "photo",
+      "mediaUrl": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop&q=80",
+      "sportId": "futbol",
+      "likesCount": 24,
+      "applauseCount": 18,
+      "featuredVotes": 9,
+      "isFeatured": true,
+      "createdAt": "Hace 20 min",
+      "comments": [
+        {
+          "id": "c-1",
+          "authorName": "Coach Diego",
+          "authorRelation": "Entrenador",
+          "text": "¡Gran trabajo de las atletas! El respeto y la disciplina ante todo.",
+          "createdAt": "Hace 10 min"
+        }
+      ]
+    },
+    {
+      "id": "fp-2",
+      "schoolId": "cria",
+      "authorName": "Carlos Mendoza",
+      "authorRelation": "Papá",
+      "message": "¡Excelente remontada en el 2.° set del voleibol! Orgullosos de cada punto disputado por los Sharks de CRIA. 🦈🏐",
+      "mediaType": "photo",
+      "mediaUrl": "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=800&auto=format&fit=crop&q=80",
+      "sportId": "voleibol",
+      "likesCount": 19,
+      "applauseCount": 15,
+      "featuredVotes": 7,
+      "isFeatured": true,
+      "createdAt": "Hace 45 min",
+      "comments": []
+    },
+    {
+      "id": "fp-3",
+      "schoolId": "journey-school",
+      "authorName": "Mariana & David",
+      "authorRelation": "Familia",
+      "message": "¡Qué gran ambiente deportivo en Guanacaste! Ver a los chicos disfrutar y hacer amigos de otros colegios es lo más valioso. ¡Arriba The Journey! 🏀✨",
+      "mediaType": "none",
+      "sportId": "baloncesto",
+      "likesCount": 16,
+      "applauseCount": 12,
+      "featuredVotes": 4,
+      "isFeatured": false,
+      "createdAt": "Hace 1 hora",
+      "comments": [
+        {
+          "id": "c-2",
+          "authorName": "Laura V.",
+          "authorRelation": "Mamá",
+          "text": "¡Totalmente de acuerdo! Qué hermosa fiesta deportiva familiar.",
+          "createdAt": "Hace 30 min"
+        }
+      ]
+    },
+    {
+      "id": "fp-4",
+      "schoolId": "educarte",
+      "authorName": "Abuela Rosaura",
+      "authorRelation": "Abuelo/a",
+      "message": "¡Felicidades a nuestro nieto Mateo y a todo el equipo de Educarte por ese partidazo! Los amamos.",
+      "mediaType": "none",
+      "sportId": "futbol",
+      "likesCount": 22,
+      "applauseCount": 20,
+      "featuredVotes": 6,
+      "isFeatured": true,
+      "createdAt": "Hace 2 horas",
+      "comments": []
+    },
+    {
+      "id": "fp-5",
+      "schoolId": "vittorino",
+      "authorName": "Profe Esteban",
+      "authorRelation": "Entrenador",
+      "message": "¡Gran esfuerzo muchachos de Vittorino! La disciplina y el trabajo en equipo dan frutos día con día.",
+      "mediaType": "photo",
+      "mediaUrl": "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&auto=format&fit=crop&q=80",
+      "sportId": "baloncesto",
+      "likesCount": 14,
+      "applauseCount": 11,
+      "featuredVotes": 3,
+      "isFeatured": false,
+      "createdAt": "Hace 3 horas",
+      "comments": []
+    }
+  ],
+  "photos": [
+    {
+      "id": "ph-01",
+      "title": "Calentamiento y concentración previa al partido",
+      "categoryId": "cat-fem-futbol",
+      "schoolId": "la-paz-cabo-velas",
+      "jornada": 1,
+      "date": "2026-10-05",
+      "moment": "previo",
+      "momentLabel": "1. Momento Previo (Enfoque & Calentamiento)",
+      "imageUrl": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=1000&q=80",
+      "photographer": "Curiol Studio",
+      "viewsCount": 340,
+      "downloadUrl": "#"
+    },
+    {
+      "id": "ph-02",
+      "title": "Disputa de balón en el medio campo",
+      "categoryId": "cat-fem-futbol",
+      "schoolId": "cria",
+      "jornada": 1,
+      "date": "2026-10-05",
+      "moment": "durante",
+      "momentLabel": "2. Momento Durante el Encuentro (Acción Pura)",
+      "imageUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1000&q=80",
+      "photographer": "Curiol Studio",
+      "viewsCount": 420,
+      "downloadUrl": "#"
+    },
+    {
+      "id": "ph-03",
+      "title": "Abrazo de equipo tras la victoria en voleibol",
+      "categoryId": "cat-c-voleibol",
+      "schoolId": "la-paz-cabo-velas",
+      "jornada": 1,
+      "date": "2026-10-08",
+      "moment": "final_premiacion",
+      "momentLabel": "3. Momento Posterior & Celebración",
+      "imageUrl": "https://images.unsplash.com/photo-1526676037777-05a232554f77?w=1000&q=80",
+      "photographer": "Curiol Studio",
+      "viewsCount": 290,
+      "downloadUrl": "#"
+    },
+    {
+      "id": "ph-04",
+      "title": "Salto al aro en la categoría C de baloncesto",
+      "categoryId": "cat-c-baloncesto",
+      "schoolId": "vittorino",
+      "jornada": 1,
+      "date": "2026-10-09",
+      "moment": "durante",
+      "momentLabel": "2. Momento Durante el Encuentro (Acción Pura)",
+      "imageUrl": "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1000&q=80",
+      "photographer": "Curiol Studio",
+      "viewsCount": 310,
+      "downloadUrl": "#"
+    }
+  ],
+  "videos": [
+    {
+      "id": "v-01",
+      "title": "¡Golazo al ángulo en el clásico de fútbol femenino!",
+      "authorName": "Familia Méndez",
+      "authorRole": "Familia",
+      "schoolId": "la-paz-cabo-velas",
+      "categoryId": "cat-fem-futbol",
+      "matchId": "m-fem-01",
+      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500&q=80",
+      "durationSeconds": 18,
+      "likesCount": 64,
+      "viewsCount": 512,
+      "createdAt": "2026-10-05T16:00:00Z",
+      "approved": true
+    },
+    {
+      "id": "v-02",
+      "title": "Tapón espectacular en el último cuarto de baloncesto",
+      "authorName": "Coach Esteban",
+      "authorRole": "Entrenador",
+      "schoolId": "cria",
+      "categoryId": "cat-c-baloncesto",
+      "matchId": "m-bal-c-01",
+      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500&q=80",
+      "durationSeconds": 14,
+      "likesCount": 47,
+      "viewsCount": 389,
+      "createdAt": "2026-10-09T16:30:00Z",
+      "approved": true
+    },
+    {
+      "id": "v-03",
+      "title": "Celebración del equipo tras el pase a la final de voleibol",
+      "authorName": "Curiol Studio",
+      "authorRole": "Curiol Studio",
+      "schoolId": "la-paz-tempisque",
+      "categoryId": "cat-c-voleibol",
+      "matchId": "m-vol-c-01",
+      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=500&q=80",
+      "durationSeconds": 22,
+      "likesCount": 89,
+      "viewsCount": 730,
+      "createdAt": "2026-10-08T15:15:00Z",
+      "approved": true
+    }
+  ],
+  "matches": [
+    {
+      "id": "m-fem-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-fem-futbol",
+      "sport": "futbol",
+      "date": "2026-10-05",
+      "time": "13:30",
+      "venue": "Cancha Principal, Campus Cabo Velas",
+      "homeTeamId": "la-paz-cabo-velas",
+      "awayTeamId": "cria",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-05T10:00:00Z"
+    },
+    {
+      "id": "m-fem-02",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-fem-futbol",
+      "sport": "futbol",
+      "date": "2026-10-05",
+      "time": "15:00",
+      "venue": "Cancha Principal, Campus Cabo Velas",
+      "homeTeamId": "journey-school",
+      "awayTeamId": "educarte",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-05T10:00:00Z"
+    },
+    {
+      "id": "m-fem-03",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-fem-futbol",
+      "sport": "futbol",
+      "date": "2026-10-05",
+      "time": "16:15",
+      "venue": "Cancha 2, Campus Cabo Velas",
+      "homeTeamId": "la-paz-tempisque",
+      "awayTeamId": "vittorino",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-05T10:00:00Z"
+    },
+    {
+      "id": "m-fut-c-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-c-futbol",
+      "sport": "futbol",
+      "date": "2026-10-06",
+      "time": "13:30",
+      "venue": "Cancha Principal, Campus Tempisque",
+      "homeTeamId": "cria",
+      "awayTeamId": "la-paz-tempisque",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-06T10:00:00Z"
+    },
+    {
+      "id": "m-fut-c-02",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-c-futbol",
+      "sport": "futbol",
+      "date": "2026-10-06",
+      "time": "15:00",
+      "venue": "Cancha Principal, Campus Tempisque",
+      "homeTeamId": "educarte",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-06T10:00:00Z"
+    },
+    {
+      "id": "m-fut-d-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-d-futbol",
+      "sport": "futbol",
+      "date": "2026-10-07",
+      "time": "14:00",
+      "venue": "Cancha Sintética, Campus Cabo Velas",
+      "homeTeamId": "vittorino",
+      "awayTeamId": "journey-school",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-07T10:00:00Z"
+    },
+    {
+      "id": "m-vol-c-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-c-voleibol",
+      "sport": "voleibol",
+      "date": "2026-10-08",
+      "time": "13:30",
+      "venue": "Gimnasio Techado, Campus Tempisque",
+      "homeTeamId": "la-paz-cabo-velas",
+      "awayTeamId": "journey-school",
+      "homeScore": 0,
+      "awayScore": 0,
+      "homeSetsWon": 0,
+      "awaySetsWon": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-08T10:00:00Z"
+    },
+    {
+      "id": "m-bal-c-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "1.ª Jornada - Festival Octubre",
+      "categoryId": "cat-c-baloncesto",
+      "sport": "baloncesto",
+      "date": "2026-10-09",
+      "time": "14:30",
+      "venue": "Cancha Múltiple, Campus Cabo Velas",
+      "homeTeamId": "cria",
+      "awayTeamId": "vittorino",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-09T10:00:00Z"
+    },
+    {
+      "id": "m-fem-j2-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 2,
+      "jornadaName": "2.ª Jornada - Festival Noviembre",
+      "categoryId": "cat-fem-futbol",
+      "sport": "futbol",
+      "date": "2026-11-02",
+      "time": "14:00",
+      "venue": "Cancha Principal, Campus Tempisque",
+      "homeTeamId": "la-paz-tempisque",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Clásico institucional programado para la 2.ª Jornada Oficial.",
+      "updatedAt": "2026-10-15T10:00:00Z"
+    },
+    {
+      "id": "m-fut-c-next1",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 2,
+      "jornadaName": "2.ª Jornada - Festival Noviembre",
+      "categoryId": "cat-c-futbol",
+      "sport": "futbol",
+      "date": "2026-11-03",
+      "time": "13:30",
+      "venue": "Cancha Principal, Campus Tempisque",
+      "homeTeamId": "journey-school",
+      "awayTeamId": "cria",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-20T10:00:00Z"
+    },
+    {
+      "id": "m-vol-c-next1",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 2,
+      "jornadaName": "2.ª Jornada - Festival Noviembre",
+      "categoryId": "cat-c-voleibol",
+      "sport": "voleibol",
+      "date": "2026-11-05",
+      "time": "14:00",
+      "venue": "Gimnasio Techado, Campus Cabo Velas",
+      "homeTeamId": "educarte",
+      "awayTeamId": "la-paz-tempisque",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-20T10:00:00Z"
+    },
+    {
+      "id": "m-bal-c-next1",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 2,
+      "jornadaName": "2.ª Jornada - Festival Noviembre",
+      "categoryId": "cat-c-baloncesto",
+      "sport": "baloncesto",
+      "date": "2026-11-06",
+      "time": "15:00",
+      "venue": "Cancha Múltiple, Campus Cabo Velas",
+      "homeTeamId": "la-paz-cabo-velas",
+      "awayTeamId": "educarte",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Encuentro de prueba programado para calibración previa al torneo.",
+      "updatedAt": "2026-10-20T10:00:00Z"
+    }
+  ],
+  "updatedAt": "2026-09-30T23:06:27.944Z",
+  "rosters": [
+    {
+      "schoolId": "la-paz-cabo-velas",
+      "sport": "futbol",
+      "categoryId": "cat-fem-futbol",
+      "coachName": "Carlos Santana (DB Validado)",
+      "assistantCoachName": "Valeria Montero",
+      "players": [
+        {
+          "id": "p-test-1",
+          "jerseyNumber": 10,
+          "fullName": "Valentina Soto (Capitana)",
+          "isCaptain": true,
+          "position": "Delantera",
+          "birthYear": 2009
+        }
+      ],
+      "updatedAt": "2026-09-30T23:06:27.944Z"
+    },
+    {
+      "schoolId": "la-paz-cabo-velas",
+      "sport": "futbol",
+      "categoryId": "cat-c-futbol",
+      "coachName": "Carlos Santana",
+      "assistantCoachName": "Valeria Montero",
+      "players": [
+        {
+          "id": "p-lpcv-c-10",
+          "jerseyNumber": 10,
+          "fullName": "Nicolás Brenes",
+          "position": "Delantero",
+          "isCaptain": true,
+          "birthYear": 2011
+        },
+        {
+          "id": "p-lpcv-c-1",
+          "jerseyNumber": 1,
+          "fullName": "Felipe Carvajal",
+          "position": "Portero",
+          "isCaptain": false,
+          "birthYear": 2010
+        },
+        {
+          "id": "p-lpcv-c-5",
+          "jerseyNumber": 5,
+          "fullName": "Esteban Solís",
+          "position": "Defensa",
+          "isCaptain": false,
+          "birthYear": 2011
+        }
+      ],
+      "updatedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "schoolId": "la-paz-tempisque",
+      "sport": "futbol",
+      "categoryId": "cat-fem-futbol",
+      "coachName": "Andrés Castro",
+      "assistantCoachName": "Fabián Umaña",
+      "players": [
+        {
+          "id": "p-lptp-1",
+          "jerseyNumber": 1,
+          "fullName": "Lucía Méndez",
+          "position": "Portera",
+          "isCaptain": false,
+          "birthYear": 2010
+        },
+        {
+          "id": "p-lptp-9",
+          "jerseyNumber": 9,
+          "fullName": "Elena Solano",
+          "position": "Delantera",
+          "isCaptain": true,
+          "birthYear": 2009
+        },
+        {
+          "id": "p-lptp-5",
+          "jerseyNumber": 5,
+          "fullName": "Daniela Arias",
+          "position": "Defensa",
+          "isCaptain": false,
+          "birthYear": 2010
+        },
+        {
+          "id": "p-lptp-11",
+          "jerseyNumber": 11,
+          "fullName": "Sofía Cordero",
+          "position": "Mediocampista",
+          "isCaptain": false,
+          "birthYear": 2011
+        }
+      ],
+      "updatedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "schoolId": "cria",
+      "sport": "futbol",
+      "categoryId": "cat-c-futbol",
+      "coachName": "Roberto Gómez",
+      "assistantCoachName": "Mauricio Alpízar",
+      "players": [
+        {
+          "id": "p-cria-10",
+          "jerseyNumber": 10,
+          "fullName": "Mateo Jiménez",
+          "position": "Delantero",
+          "isCaptain": true,
+          "birthYear": 2012
+        },
+        {
+          "id": "p-cria-4",
+          "jerseyNumber": 4,
+          "fullName": "Daniel Obregón",
+          "position": "Defensa Central",
+          "isCaptain": false,
+          "birthYear": 2013
+        },
+        {
+          "id": "p-cria-1",
+          "jerseyNumber": 1,
+          "fullName": "Ignacio Vega",
+          "position": "Portero",
+          "isCaptain": false,
+          "birthYear": 2012
+        },
+        {
+          "id": "p-cria-7",
+          "jerseyNumber": 7,
+          "fullName": "Santiago Fonseca",
+          "position": "Mediocampista",
+          "isCaptain": false,
+          "birthYear": 2012
+        }
+      ],
+      "updatedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "schoolId": "journey-school",
+      "sport": "futbol",
+      "categoryId": "cat-fem-futbol",
+      "coachName": "Esteban Arias",
+      "assistantCoachName": "Marcela Núñez",
+      "players": [
+        {
+          "id": "p-jour-8",
+          "jerseyNumber": 8,
+          "fullName": "Camila Rojas",
+          "position": "Mediocampista",
+          "isCaptain": true,
+          "birthYear": 2009
+        },
+        {
+          "id": "p-jour-1",
+          "jerseyNumber": 1,
+          "fullName": "Adriana Pizarro",
+          "position": "Portera",
+          "isCaptain": false,
+          "birthYear": 2010
+        },
+        {
+          "id": "p-jour-10",
+          "jerseyNumber": 10,
+          "fullName": "Paula Calderón",
+          "position": "Delantera",
+          "isCaptain": false,
+          "birthYear": 2009
+        }
+      ],
+      "updatedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "schoolId": "vittorino",
+      "sport": "baloncesto",
+      "categoryId": "cat-c-basket",
+      "coachName": "Felipe Navarro",
+      "assistantCoachName": "Jorge Quesada",
+      "players": [
+        {
+          "id": "p-vitt-5",
+          "jerseyNumber": 5,
+          "fullName": "Sebastián Cordero",
+          "position": "Base",
+          "isCaptain": true,
+          "birthYear": 2012
+        },
+        {
+          "id": "p-vitt-9",
+          "jerseyNumber": 9,
+          "fullName": "Matías Esquivel",
+          "position": "Alero",
+          "isCaptain": false,
+          "birthYear": 2012
+        },
+        {
+          "id": "p-vitt-15",
+          "jerseyNumber": 15,
+          "fullName": "Gabriel Zúñiga",
+          "position": "Pívot",
+          "isCaptain": false,
+          "birthYear": 2013
+        },
+        {
+          "id": "p-vitt-7",
+          "jerseyNumber": 7,
+          "fullName": "Alejandro Marín",
+          "position": "Escolta",
+          "isCaptain": false,
+          "birthYear": 2012
+        }
+      ],
+      "updatedAt": "2026-09-30T12:00:00.000Z"
+    },
+    {
+      "schoolId": "educarte",
+      "sport": "voleibol",
+      "categoryId": "cat-fem-c-voley",
+      "coachName": "Karla Mora",
+      "assistantCoachName": "Rodrigo Salas",
+      "players": [
+        {
+          "id": "p-educ-11",
+          "jerseyNumber": 11,
+          "fullName": "Valeria Alvarado",
+          "position": "Armadora",
+          "isCaptain": true,
+          "birthYear": 2012
+        },
+        {
+          "id": "p-educ-4",
+          "jerseyNumber": 4,
+          "fullName": "Natalia Benavides",
+          "position": "Rematadora",
+          "isCaptain": false,
+          "birthYear": 2012
+        },
+        {
+          "id": "p-educ-7",
+          "jerseyNumber": 7,
+          "fullName": "Valerie Chavarría",
+          "position": "Líbero",
+          "isCaptain": false,
+          "birthYear": 2013
+        },
+        {
+          "id": "p-educ-2",
+          "jerseyNumber": 2,
+          "fullName": "Amanda Blanco",
+          "position": "Central",
+          "isCaptain": false,
+          "birthYear": 2012
+        }
+      ],
+      "updatedAt": "2026-09-30T12:00:00.000Z"
+    }
+  ]
+}
