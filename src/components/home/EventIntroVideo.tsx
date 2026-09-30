@@ -230,8 +230,8 @@ export function EventIntroVideo() {
         )}
 
         {/* 🎛️ BARRA INFERIOR DE CONTROLES MULTIMEDIA */}
-        <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-5 right-3 sm:right-5 flex items-center justify-between text-white z-20 pointer-events-auto">
-          <div className="flex items-center gap-2 sm:gap-3">
+        <div className="absolute bottom-2.5 sm:bottom-4 left-2.5 sm:left-5 right-2.5 sm:right-5 flex flex-wrap items-center justify-between text-white z-20 pointer-events-auto gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
             
             {/* Play/Pause */}
             <button
@@ -254,7 +254,7 @@ export function EventIntroVideo() {
             {/* Botón de Cápsula de Voz de Organización */}
             <button
               onClick={toggleVoiceover}
-              className={`px-3 py-1.5 rounded-xl backdrop-blur-md font-bold text-[11px] sm:text-xs transition-all flex items-center gap-1.5 border cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl backdrop-blur-md font-bold text-[10.5px] sm:text-xs transition-all flex items-center gap-1 border cursor-pointer ${
                 voiceoverPlaying
                   ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md ring-2 ring-amber-400/40'
                   : 'bg-black/70 hover:bg-black/90 text-amber-300 border-amber-500/30'
@@ -262,7 +262,7 @@ export function EventIntroVideo() {
               title="Escuchar audio de la organización"
             >
               <Zap className="w-3.5 h-3.5 fill-current" />
-              <span>{voiceoverPlaying ? 'Pausar Cápsula de Voz' : '🎙️ Cápsula de Organización'}</span>
+              <span>{voiceoverPlaying ? 'Pausar Audio' : '🎙️ Audio Oficial'}</span>
             </button>
           </div>
 

@@ -41,17 +41,17 @@ export function Header() {
           {/* Logo e Identidad Minimalista */}
           <Link 
             href="/" 
-            className="flex items-center gap-2 sm:gap-3 group shrink-0 transition-opacity hover:opacity-90"
+            className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0 transition-opacity hover:opacity-90"
             title="Liga Deportiva Costa de Oro 2026"
           >
             {/* Emblema Original Dorado Sol y Olas */}
-            <div className="w-[36px] h-[30px] shrink-0 flex items-center justify-center overflow-hidden">
+            <div className="w-[40px] h-[34px] sm:w-[46px] sm:h-[38px] shrink-0 flex items-center justify-center overflow-hidden">
               <svg
                 viewBox="0 0 76 64"
-                width="36"
-                height="30"
-                style={{ width: '36px', height: '30px', minWidth: '36px', maxWidth: '36px' }}
-                className="w-[36px] h-[30px] drop-shadow-[0_1px_8px_rgba(245,158,11,0.4)] block shrink-0"
+                width="40"
+                height="34"
+                style={{ width: '40px', height: '34px', minWidth: '40px', maxWidth: '46px' }}
+                className="w-full h-full drop-shadow-[0_1px_8px_rgba(245,158,11,0.4)] block shrink-0"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -79,11 +79,11 @@ export function Header() {
 
             {/* Tipografía Minimalista */}
             <div className="flex flex-col justify-center leading-none select-none">
-              <div className="flex items-center gap-1.5 font-serif font-black tracking-wide text-xs sm:text-base">
+              <div className="flex items-center gap-1.5 font-serif font-black tracking-wide text-sm sm:text-lg">
                 <span className="text-white">LIGA</span>
                 <span className="text-amber-400">COSTA DE ORO</span>
               </div>
-              <span className="text-[7.5px] sm:text-[9px] font-sans font-bold uppercase tracking-widest text-slate-400 mt-0.5">
+              <span className="text-[8.5px] sm:text-[10px] font-sans font-bold uppercase tracking-widest text-slate-400 mt-0.5">
                 Guanacaste · 2026
               </span>
             </div>
@@ -124,11 +124,11 @@ export function Header() {
           </nav>
 
           {/* Acciones Móviles Minimalistas */}
-          <div className="flex items-center lg:hidden gap-1.5">
+          <div className="flex items-center lg:hidden gap-2">
             <button
               onClick={toggleLanguage}
               title="Cambiar idioma"
-              className="px-2 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1"
+              className="h-9 px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 text-xs font-mono font-bold flex items-center gap-1 shadow-2xs"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>{language.toUpperCase()}</span>
@@ -136,7 +136,7 @@ export function Header() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer"
+              className="h-9 w-9 flex items-center justify-center rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer shadow-2xs"
               aria-label="Menú de navegación"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

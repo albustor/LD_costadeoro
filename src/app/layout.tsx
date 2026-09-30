@@ -30,10 +30,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#090d16',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -42,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="light">
+    <html lang="es" className="light overflow-x-hidden">
       <head>
         {/* Cache-Buster & Legacy PWA Service Worker Purge */}
         <script
@@ -66,7 +67,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-20 md:pb-0">
+      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-20 md:pb-0 w-full overflow-x-hidden relative">
         <TierProvider>
           <LanguageProvider>
             <TournamentProvider>
@@ -77,7 +78,7 @@ export default function RootLayout({
               <LiveMatchBanner />
 
               {/* Main Content Area */}
-              <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+              <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 overflow-x-hidden">
                 {children}
               </main>
 
