@@ -192,22 +192,17 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
             ? language === 'en' ? 'Stop audio narration' : 'Detener audio resumen'
             : language === 'en' ? 'Listen to audio summary (DUA)' : 'Escuchar audio resumen emotivo (DUA)'
         }
-        className={`h-9 px-2.5 rounded-xl border font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs ${
+        className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all cursor-pointer shadow-2xs ${
           isPlaying
             ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md animate-pulse'
             : 'bg-slate-900 border-slate-800 text-amber-300 hover:text-white hover:bg-slate-800'
         }`}
+        aria-label={isPlaying ? 'Pausar audio' : 'Reproducir audio'}
       >
         {isPlaying ? (
-          <>
-            <VolumeX className="w-4 h-4 text-slate-950" />
-            <span className="text-[11px] font-black">{language === 'en' ? 'Pause' : 'Pausar'}</span>
-          </>
+          <VolumeX className="w-4 h-4 text-slate-950" />
         ) : (
-          <>
-            <Volume2 className="w-4 h-4 text-amber-400" />
-            <span className="text-[11px] font-bold">Audio</span>
-          </>
+          <Volume2 className="w-4 h-4 text-amber-400" />
         )}
       </button>
     );
