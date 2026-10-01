@@ -32,7 +32,7 @@ const MEDIA_SLIDES: MediaSlide[] = [
     ),
     badge: 'Spot Oficial',
     bunnyIframeUrl:
-      'https://player.mediadelivery.net/embed/766057/796e64d3-a2f6-46fa-b540-9e4310cb217b?autoplay=true&loop=false&muted=true&preload=true&responsive=true',
+      'https://player.mediadelivery.net/embed/766057/796e64d3-a2f6-46fa-b540-9e4310cb217b?autoplay=true&loop=false&muted=false&preload=true&responsive=true',
   },
   {
     id: 'nextplay-falling',
@@ -131,9 +131,9 @@ export function EventIntroVideo() {
           {activeSlide.type === 'video' ? (
             <iframe
               src={activeSlide.bunnyIframeUrl}
-              loading="lazy"
+              loading="eager"
               className="absolute inset-0 w-full h-full border-0"
-              allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen;"
               allowFullScreen={true}
               title={activeSlide.title}
             />
