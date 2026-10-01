@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Sparkles, ChevronLeft, ChevronRight, Play, Zap, Shield, HeartHandshake } from 'lucide-react';
+import { Sparkles, ChevronLeft, ChevronRight, Play, Zap, Shield, HeartHandshake, Volume2, Timer } from 'lucide-react';
 
 interface MediaSlide {
   id: string;
@@ -86,9 +86,28 @@ const MEDIA_SLIDES: MediaSlide[] = [
 
 export function EventIntroVideo() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVideoActive, setIsVideoActive] = useState(false);
+  const [countdown, setCountdown] = useState(3);
   const touchStartX = useRef<number | null>(null);
 
   const activeSlide = MEDIA_SLIDES[currentIndex];
+
+  // Cuenta regresiva automática de 3 segundos al ingresar a la página
+  useEffect(() => {
+    if (countdown > 0 && !isVideoActive) {
+      const timer = setTimeout(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0 && !isVideoActive) {
+      setIsVideoActive(true);
+    }
+  }, [countdown, isVideoActive]);
+
+  const handleStartImmediately = () => {
+    setCountdown(0);
+    setIsVideoActive(true);
+  };
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? MEDIA_SLIDES.length - 1 : prev - 1));
@@ -129,14 +148,47 @@ export function EventIntroVideo() {
         {/* Aspect Ratio 16:9 */}
         <div className="relative w-full pb-[56.25%] bg-slate-950">
           {activeSlide.type === 'video' ? (
-            <iframe
-              src={activeSlide.bunnyIframeUrl}
-              loading="eager"
-              className="absolute inset-0 w-full h-full border-0"
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen;"
-              allowFullScreen={true}
-              title={activeSlide.title}
-            />
+            isVideoActive ? (
+              <iframe
+                src={activeSlide.bunnyIframeUrl}
+                loading="eager"
+                className="absolute inset-0 w-full h-full border-0 animate-fade-in"
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen;"
+                allowFullScreen={true}
+                title={activeSlide.title}
+              />
+            ) : (
+              /* ⏳ Portada con cuenta regresiva de 3 segundos */
+              <div 
+                onClick={handleStartImmediately}
+                className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950/70 p-6 text-center cursor-pointer group"
+              >
+                {/* Botón de Play Central con Anillo de Pulso */}
+                <div className="relative mb-3.5">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/50 shadow-2xl group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg">
+                      <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-slate-950 translate-x-0.5" />
+                    </div>
+                  </div>
+                  <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-slate-900 border border-amber-400 text-amber-300 text-xs font-black flex items-center justify-center animate-pulse">
+                    {countdown}
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 max-w-md">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 text-amber-300 text-[11px] sm:text-xs font-bold border border-amber-400/40">
+                    <Volume2 className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+                    <span>Iniciando video con sonido en {countdown}s...</span>
+                  </span>
+                  <h3 className="text-sm sm:text-lg font-black text-white leading-tight">
+                    {activeSlide.title}
+                  </h3>
+                  <p className="text-[11px] sm:text-xs text-slate-300">
+                    Toca aquí para reproducir de inmediato
+                  </p>
+                </div>
+              </div>
+            )
           ) : (
             <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-slate-950">
               <Image
