@@ -1,109 +1,8 @@
 {
-  "posts": [
-    {
-      "schoolId": "vittorino",
-      "authorName": "Alberto",
-      "authorRelation": "Familia",
-      "message": "¡Vamos con garra! 🔥",
-      "mediaType": "none",
-      "sportId": "futbol",
-      "isFeatured": false,
-      "id": "fp-1790852305265-60b8",
-      "createdAt": "Justo ahora",
-      "likesCount": 0,
-      "applauseCount": 0,
-      "featuredVotes": 0,
-      "comments": []
-    },
-    {
-      "schoolId": "vittorino",
-      "authorName": "Familia Acompañante",
-      "authorRelation": "Familia",
-      "message": "¡Vamos con garra! 🔥",
-      "mediaType": "none",
-      "sportId": "futbol",
-      "isFeatured": false,
-      "id": "fp-1790852281441-19jd",
-      "createdAt": "Justo ahora",
-      "likesCount": 0,
-      "applauseCount": 0,
-      "featuredVotes": 0,
-      "comments": []
-    },
-    {
-      "id": "fp-demo-01",
-      "schoolId": "la-paz-cabo-velas",
-      "authorName": "Familia Fernández",
-      "authorRelation": "Mamá de Valeria (#10)",
-      "message": "¡Excelente partido inaugural de las chicas de Fútbol Femenino! Gran entrega y juego limpio de ambos equipos. ¡Orgullo de La Paz Cabo Velas! ⚽🎉",
-      "mediaType": "photo",
-      "mediaUrl": "/uploads/photos/foto_1790817323329_1001887756.jpg",
-      "sportId": "futbol",
-      "isFeatured": true,
-      "createdAt": "Hace 2 horas",
-      "likesCount": 24,
-      "applauseCount": 42,
-      "featuredVotes": 12,
-      "comments": [
-        {
-          "id": "comm-01",
-          "authorName": "Prof. Carlos Solís",
-          "authorRelation": "Entrenador",
-          "message": "¡Felicidades a todas las atletas por el compromiso y la disciplina en cancha!",
-          "createdAt": "Hace 1 hora"
-        },
-        {
-          "id": "comm-02",
-          "authorName": "Familia Morales",
-          "authorRelation": "Papá de Mateo",
-          "message": "¡Mucho éxito en la jornada de mañana!",
-          "createdAt": "Hace 30 min"
-        }
-      ]
-    },
-    {
-      "id": "fp-demo-02",
-      "schoolId": "la-paz-tempisque",
-      "authorName": "Comunidad Tempisque",
-      "authorRelation": "Afición Oficial",
-      "message": "¡Qué partidazo de voleibol contra CRIA! Un tie-break de infarto 15-12. El verdadero espíritu del Festival Deportivo: amistad, respeto y pasión. 🏐✨",
-      "mediaType": "photo",
-      "mediaUrl": "/uploads/photos/foto_1790817323329_1001887756.jpg",
-      "sportId": "voleibol",
-      "isFeatured": true,
-      "createdAt": "Hace 3 horas",
-      "likesCount": 31,
-      "applauseCount": 58,
-      "featuredVotes": 15,
-      "comments": [
-        {
-          "id": "comm-03",
-          "authorName": "Coach Sarah Adams (CRIA)",
-          "authorRelation": "Entrenadora Rival",
-          "message": "¡Gran nivel de juego de las chicas de Tempisque! Un honor compartir cancha.",
-          "createdAt": "Hace 2 horas"
-        }
-      ]
-    },
-    {
-      "id": "fp-demo-03",
-      "schoolId": "cria",
-      "authorName": "CRIA Athletics",
-      "authorRelation": "Coordinación Deportiva",
-      "message": "Gran victoria de nuestro equipo de Baloncesto Masculino (68-60). Agradecemos la hospitalidad de la sede y el apoyo incondicional de los padres de familia. 🏀👏",
-      "mediaType": "photo",
-      "mediaUrl": "/uploads/photos/foto_1790817323329_1001887756.jpg",
-      "sportId": "baloncesto",
-      "isFeatured": false,
-      "createdAt": "Hace 4 horas",
-      "likesCount": 18,
-      "applauseCount": 35,
-      "featuredVotes": 6,
-      "comments": []
-    }
-  ],
+  "posts": [],
   "photos": [],
   "videos": [],
+  "rosters": [],
   "matches": [
     {
       "id": "j1-fut-fem-01",
@@ -117,12 +16,12 @@
       "venue": "Cancha de La Garita Nueva",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-cabo-velas",
-      "homeScore": 1,
-      "awayScore": 2,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Victoria de La Paz Cabo Velas en tiempo reglamentario.",
-      "updatedAt": "2026-10-05T17:00:00Z"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Fútbol Femenino (3:30 pm)",
+      "updatedAt": "2026-10-05T15:30:00Z"
     },
     {
       "id": "j1-fut-fem-02",
@@ -136,12 +35,12 @@
       "venue": "Cancha de La Garita Nueva",
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "vittorino",
-      "homeScore": 3,
-      "awayScore": 1,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Gran actuación ofensiva de Tempisque.",
-      "updatedAt": "2026-10-05T17:00:00Z"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Fútbol Femenino (3:30 pm)",
+      "updatedAt": "2026-10-05T15:30:00Z"
     },
     {
       "id": "j1-fut-c-01",
@@ -155,12 +54,12 @@
       "venue": "Cancha de La Garita Nueva",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-cabo-velas",
-      "homeScore": 2,
-      "awayScore": 3,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Encuentro vibrante con 5 goles.",
-      "updatedAt": "2026-10-06T17:00:00Z"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Fútbol Categoría C (3:15 pm)",
+      "updatedAt": "2026-10-06T15:15:00Z"
     },
     {
       "id": "j1-fut-c-02",
@@ -174,12 +73,12 @@
       "venue": "Cancha de La Garita Nueva",
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "journey-school",
-      "homeScore": 2,
-      "awayScore": 2,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Empate 2-2 en cierre de infarto.",
-      "updatedAt": "2026-10-06T17:00:00Z"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Fútbol Categoría C (3:15 pm)",
+      "updatedAt": "2026-10-06T15:15:00Z"
     },
     {
       "id": "j1-fut-c-03",
@@ -189,1356 +88,214 @@
       "categoryId": "cat-c-futbol",
       "sport": "futbol",
       "date": "2026-10-06",
-      "time": "15:15",
+      "time": "16:00",
       "venue": "Cancha de La Garita Nueva",
       "homeTeamId": "vittorino",
-      "awayTeamId": "educarte",
-      "homeScore": 1,
-      "awayScore": 0,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Victoria por la mínima de Vittorino.",
-      "updatedAt": "2026-10-06T17:00:00Z"
-    },
-    {
-      "id": "j1-vol-fem-01",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 1,
-      "jornadaName": "Jornada 1 · Festival Deportivo",
-      "categoryId": "cat-fem-c-voley",
-      "sport": "voleibol",
-      "date": "2026-10-07",
-      "time": "15:30",
-      "venue": "Gimnasio La Paz Cabo Velas",
-      "homeTeamId": "la-paz-cabo-velas",
-      "awayTeamId": "journey-school",
-      "homeScore": 97,
-      "awayScore": 82,
-      "homeSetsWon": 3,
-      "awaySetsWon": 1,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Sets: 25-18, 22-25, 25-20, 25-19",
-      "updatedAt": "2026-10-07T17:30:00Z"
-    },
-    {
-      "id": "j1-vol-fem-02",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 1,
-      "jornadaName": "Jornada 1 · Festival Deportivo",
-      "categoryId": "cat-fem-c-voley",
-      "sport": "voleibol",
-      "date": "2026-10-07",
-      "time": "15:30",
-      "venue": "Gimnasio La Paz Tempisque",
-      "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "cria",
-      "homeScore": 103,
-      "awayScore": 105,
-      "homeSetsWon": 3,
-      "awaySetsWon": 2,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Sets: 25-21, 23-25, 25-22, 20-25, 15-12 (Tie-break)",
-      "updatedAt": "2026-10-07T18:00:00Z"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Fútbol Categoría C (4:00 pm)",
+      "updatedAt": "2026-10-06T16:00:00Z"
     },
     {
-      "id": "j1-vol-fem-03",
+      "id": "j1-fut-c-04",
       "tournamentId": "costa-de-oro-2026",
       "jornada": 1,
       "jornadaName": "Jornada 1 · Festival Deportivo",
-      "categoryId": "cat-fem-c-voley",
-      "sport": "voleibol",
-      "date": "2026-10-07",
-      "time": "15:30",
-      "venue": "Gimnasio La Paz Cabo Velas",
-      "homeTeamId": "educarte",
-      "awayTeamId": "vittorino",
-      "homeScore": 75,
-      "awayScore": 48,
-      "homeSetsWon": 3,
-      "awaySetsWon": 0,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Sets: 25-14, 25-16, 25-18",
-      "updatedAt": "2026-10-07T17:00:00Z"
-    },
-    {
-      "id": "j1-bas-mas-01",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 1,
-      "jornadaName": "Jornada 1 · Festival Deportivo",
-      "categoryId": "cat-c-basket",
-      "sport": "baloncesto",
-      "date": "2026-10-08",
+      "categoryId": "cat-c-futbol",
+      "sport": "futbol",
+      "date": "2026-10-06",
       "time": "16:00",
-      "venue": "Gimnasio La Paz Tempisque",
-      "homeTeamId": "cria",
+      "venue": "Cancha de La Garita Nueva",
+      "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "la-paz-tempisque",
-      "homeScore": 68,
-      "awayScore": 60,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Partido intenso con alta efectividad de tiro.",
-      "updatedAt": "2026-10-08T17:45:00Z"
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Fútbol Categoría C (4:00 pm)",
+      "updatedAt": "2026-10-06T16:00:00Z"
     },
     {
-      "id": "j1-bas-mas-02",
+      "id": "j1-fut-d-01",
       "tournamentId": "costa-de-oro-2026",
       "jornada": 1,
       "jornadaName": "Jornada 1 · Festival Deportivo",
-      "categoryId": "cat-c-basket",
-      "sport": "baloncesto",
-      "date": "2026-10-08",
-      "time": "16:00",
-      "venue": "Gimnasio La Paz Cabo Velas",
-      "homeTeamId": "vittorino",
-      "awayTeamId": "educarte",
-      "homeScore": 52,
-      "awayScore": 58,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Educarte se impone en el último cuarto.",
-      "updatedAt": "2026-10-08T17:45:00Z"
-    },
-    {
-      "id": "j1-bas-mas-03",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 1,
-      "jornadaName": "Jornada 1 · Festival Deportivo",
-      "categoryId": "cat-c-basket",
-      "sport": "baloncesto",
-      "date": "2026-10-08",
-      "time": "16:00",
-      "venue": "Gimnasio La Paz Cabo Velas",
-      "homeTeamId": "la-paz-cabo-velas",
-      "awayTeamId": "journey-school",
-      "homeScore": 64,
-      "awayScore": 55,
-      "status": "completed",
-      "currentPeriod": "Finalizado",
-      "notes": "Solidez defensiva de Cabo Velas.",
-      "updatedAt": "2026-10-08T17:45:00Z"
-    },
-    {
-      "id": "j2-fut-fem-01",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 2,
-      "jornadaName": "Jornada 2 · Festival Deportivo",
-      "categoryId": "cat-fem-futbol",
+      "categoryId": "cat-d-futbol",
       "sport": "futbol",
-      "date": "2026-10-12",
-      "time": "15:30",
-      "venue": "Cancha de La Garita Nueva",
-      "homeTeamId": "la-paz-cabo-velas",
-      "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 2 - Fútbol Femenino (3:30 pm)",
-      "updatedAt": "2026-10-12T15:30:00Z"
-    },
-    {
-      "id": "j2-fut-fem-02",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 2,
-      "jornadaName": "Jornada 2 · Festival Deportivo",
-      "categoryId": "cat-fem-futbol",
-      "sport": "futbol",
-      "date": "2026-10-12",
-      "time": "15:30",
-      "venue": "Cancha de La Garita Nueva",
-      "homeTeamId": "journey-school",
-      "awayTeamId": "cria",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 2 - Fútbol Femenino (3:30 pm)",
-      "updatedAt": "2026-10-12T15:30:00Z"
-    },
-    {
-      "id": "j2-vol-fem-01",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 2,
-      "jornadaName": "Jornada 2 · Festival Deportivo",
-      "categoryId": "cat-fem-c-voley",
-      "sport": "voleibol",
-      "date": "2026-10-14",
-      "time": "15:30",
-      "venue": "Gimnasio La Paz Tempisque",
-      "homeTeamId": "the-journey-school",
-      "awayTeamId": "cria",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 2 - Voleibol Femenino (3:30 pm)",
-      "updatedAt": "2026-10-14T15:30:00Z"
-    },
-    {
-      "id": "j2-bas-mas-01",
-      "tournamentId": "costa-de-oro-2026",
-      "jornada": 2,
-      "jornadaName": "Jornada 2 · Festival Deportivo",
-      "categoryId": "cat-c-basket",
-      "sport": "baloncesto",
-      "date": "2026-10-15",
-      "time": "16:00",
-      "venue": "Gimnasio La Paz Cabo Velas",
-      "homeTeamId": "educarte",
+      "date": "2026-10-07",
+      "time": "15:15",
+      "venue": "CRIA",
+      "homeTeamId": "cria",
       "awayTeamId": "la-paz-cabo-velas",
       "homeScore": 0,
       "awayScore": 0,
       "status": "scheduled",
       "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 2 - Baloncesto Masculino (4:00 pm)",
-      "updatedAt": "2026-10-15T16:00:00Z"
-    }
-  ],
-  "rosters": [
-    {
-      "schoolId": "la-paz-cabo-velas",
-      "sport": "futbol",
-      "categoryId": "cat-fem-futbol",
-      "coachName": "Prof. Carlos Solís",
-      "assistantCoachName": "Lic. Roberto Alvarado",
-      "players": [
-        {
-          "id": "p-lp-cv-f1",
-          "jerseyNumber": 1,
-          "fullName": "Lucía Morales Vega",
-          "position": "Portera",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-f2",
-          "jerseyNumber": 3,
-          "fullName": "Jimena Castro Ortiz",
-          "position": "Defensa Central",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-f3",
-          "jerseyNumber": 4,
-          "fullName": "Camila Rodríguez Solano",
-          "position": "Lateral Derecha",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-lp-cv-f4",
-          "jerseyNumber": 6,
-          "fullName": "Daniela Ruiz Gómez",
-          "position": "Mediocampista",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-f5",
-          "jerseyNumber": 8,
-          "fullName": "Sofía Cordero Rojas",
-          "position": "Volante Ofensiva",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-f6",
-          "jerseyNumber": 10,
-          "fullName": "Valeria Fernández Mora",
-          "position": "Delantera Centro",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-f7",
-          "jerseyNumber": 11,
-          "fullName": "Mariana Chaves Araya",
-          "position": "Extremo Izquierda",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-lp-cv-f8",
-          "jerseyNumber": 14,
-          "fullName": "Emma Delgado Navarro",
-          "position": "Defensa Lateral",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T10:57:02.765Z"
+      "notes": "Jornada 1 - Fútbol Categoría D (3:15 pm)",
+      "updatedAt": "2026-10-07T15:15:00Z"
     },
     {
-      "schoolId": "la-paz-cabo-velas",
-      "sport": "futbol",
-      "categoryId": "cat-c-futbol",
-      "coachName": "Prof. Andrés Vargas",
-      "assistantCoachName": "Lic. Roberto Alvarado",
-      "players": [
-        {
-          "id": "p-lp-cv-c1",
-          "jerseyNumber": 1,
-          "fullName": "Santiago Zúñiga Arias",
-          "position": "Portero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-c2",
-          "jerseyNumber": 2,
-          "fullName": "Felipe Montero Gómez",
-          "position": "Defensa Central",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-c3",
-          "jerseyNumber": 5,
-          "fullName": "Emilio Jiménez Solís",
-          "position": "Mediocampista",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-c4",
-          "jerseyNumber": 7,
-          "fullName": "Sebastián Brenes Fallas",
-          "position": "Extremo",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-c5",
-          "jerseyNumber": 9,
-          "fullName": "Mateo Chinchilla Soto",
-          "position": "Delantero Centro",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-c6",
-          "jerseyNumber": 10,
-          "fullName": "Gabriel Carvajal Mora",
-          "position": "Volante Creativo",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-lp-cv-c7",
-          "jerseyNumber": 17,
-          "fullName": "Alejandro Quesada Vega",
-          "position": "Lateral",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "la-paz-cabo-velas",
-      "sport": "futbol",
+      "id": "j1-fut-d-02",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
       "categoryId": "cat-d-futbol",
-      "coachName": "Prof. Andrés Vargas",
-      "assistantCoachName": "Lic. Roberto Alvarado",
-      "players": [
-        {
-          "id": "p-lp-cv-d1",
-          "jerseyNumber": 1,
-          "fullName": "Nicolás Vargas Castro",
-          "position": "Portero",
-          "isCaptain": false,
-          "birthYear": 2013
-        },
-        {
-          "id": "p-lp-cv-d2",
-          "jerseyNumber": 3,
-          "fullName": "Ian Martínez Solano",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2013
-        },
-        {
-          "id": "p-lp-cv-d3",
-          "jerseyNumber": 7,
-          "fullName": "Thiago Cordero Araya",
-          "position": "Volante",
-          "isCaptain": false,
-          "birthYear": 2014
-        },
-        {
-          "id": "p-lp-cv-d4",
-          "jerseyNumber": 10,
-          "fullName": "Maximiliano Fallas Ruiz",
-          "position": "Delantero",
-          "isCaptain": true,
-          "birthYear": 2013
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
+      "sport": "futbol",
+      "date": "2026-10-07",
+      "time": "15:15",
+      "venue": "CRIA",
+      "homeTeamId": "la-paz-tempisque",
+      "awayTeamId": "vittorino",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "postponed",
+      "currentPeriod": "Reprogramado",
+      "notes": "SE REPROGRAMA",
+      "updatedAt": "2026-10-07T15:15:00Z"
     },
     {
-      "schoolId": "la-paz-cabo-velas",
-      "sport": "voleibol",
+      "id": "j1-vol-c-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
       "categoryId": "cat-c-voleibol",
-      "coachName": "Prof. Esteban Morales",
-      "players": [
-        {
-          "id": "p-lp-cv-v1",
-          "jerseyNumber": 2,
-          "fullName": "Elena Solano Quirós",
-          "position": "Líbero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-v2",
-          "jerseyNumber": 4,
-          "fullName": "Catalina Méndez Fallas",
-          "position": "Armadora",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-v3",
-          "jerseyNumber": 7,
-          "fullName": "Mariana Campos Delgado",
-          "position": "Rematadora Principal",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-v4",
-          "jerseyNumber": 9,
-          "fullName": "Valentina Mora Chaves",
-          "position": "Bloqueadora Central",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-lp-cv-v5",
-          "jerseyNumber": 12,
-          "fullName": "Abril Salazar Blanco",
-          "position": "Opuesta",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-v6",
-          "jerseyNumber": 15,
-          "fullName": "Paula Navarro Castro",
-          "position": "Receptora",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
+      "sport": "voleibol",
+      "date": "2026-10-08",
+      "time": "15:15",
+      "venue": "Arena La Paz",
+      "homeTeamId": "journey-school",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 0,
+      "awayScore": 0,
+      "homeSetsWon": 0,
+      "awaySetsWon": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Voleibol Femenino Categoría C (3:15 pm)",
+      "updatedAt": "2026-10-08T15:15:00Z"
     },
     {
-      "schoolId": "la-paz-cabo-velas",
+      "id": "j1-vol-c-02",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
+      "categoryId": "cat-c-voleibol",
       "sport": "voleibol",
+      "date": "2026-10-08",
+      "time": "15:15",
+      "venue": "Arena La Paz",
+      "homeTeamId": "educarte",
+      "awayTeamId": "vittorino",
+      "homeScore": 0,
+      "awayScore": 0,
+      "homeSetsWon": 0,
+      "awaySetsWon": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Voleibol Femenino Categoría C (3:15 pm)",
+      "updatedAt": "2026-10-08T15:15:00Z"
+    },
+    {
+      "id": "j1-vol-d-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
       "categoryId": "cat-d-voleibol",
-      "coachName": "Prof. Esteban Morales",
-      "players": [
-        {
-          "id": "p-lp-cv-vd1",
-          "jerseyNumber": 1,
-          "fullName": "Camila Brenes Soto",
-          "position": "Armadora",
-          "isCaptain": true,
-          "birthYear": 2013
-        },
-        {
-          "id": "p-lp-cv-vd2",
-          "jerseyNumber": 5,
-          "fullName": "Sofía Montero Solís",
-          "position": "Atacante",
-          "isCaptain": false,
-          "birthYear": 2013
-        },
-        {
-          "id": "p-lp-cv-vd3",
-          "jerseyNumber": 8,
-          "fullName": "Luciana Jiménez Mora",
-          "position": "Líbero",
-          "isCaptain": false,
-          "birthYear": 2014
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
+      "sport": "voleibol",
+      "date": "2026-10-08",
+      "time": "16:15",
+      "venue": "Arena La Paz",
+      "homeTeamId": "journey-school",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 0,
+      "awayScore": 0,
+      "homeSetsWon": 0,
+      "awaySetsWon": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Voleibol Femenino Categoría D (4:15 pm)",
+      "updatedAt": "2026-10-08T16:15:00Z"
     },
     {
-      "schoolId": "la-paz-cabo-velas",
-      "sport": "baloncesto",
+      "id": "j1-vol-d-02",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
+      "categoryId": "cat-d-voleibol",
+      "sport": "voleibol",
+      "date": "2026-10-08",
+      "time": "16:15",
+      "venue": "Arena La Paz",
+      "homeTeamId": "educarte",
+      "awayTeamId": "vittorino",
+      "homeScore": 0,
+      "awayScore": 0,
+      "homeSetsWon": 0,
+      "awaySetsWon": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Voleibol Femenino Categoría D (4:15 pm)",
+      "updatedAt": "2026-10-08T16:15:00Z"
+    },
+    {
+      "id": "j1-bal-c-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
       "categoryId": "cat-c-baloncesto",
-      "coachName": "Prof. Diego Ruiz",
-      "players": [
-        {
-          "id": "p-lp-cv-b1",
-          "jerseyNumber": 4,
-          "fullName": "Felipe Mora Alvarado",
-          "position": "Base / Armador",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-b2",
-          "jerseyNumber": 7,
-          "fullName": "Ignacio Castro Vega",
-          "position": "Escolta",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-b3",
-          "jerseyNumber": 11,
-          "fullName": "Rodrigo Gómez Solís",
-          "position": "Alero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-cv-b4",
-          "jerseyNumber": 14,
-          "fullName": "Nicolás Chaves Rojas",
-          "position": "Ala-Pivot",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-lp-cv-b5",
-          "jerseyNumber": 21,
-          "fullName": "Samuel Ortiz Monge",
-          "position": "Pivot",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
+      "sport": "baloncesto",
+      "date": "2026-10-09",
+      "time": "15:15",
+      "venue": "CRIA",
+      "homeTeamId": "la-paz-cabo-velas",
+      "awayTeamId": "la-paz-tempisque",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Baloncesto Categoría C (3:15 pm) · Descansa: Educarte",
+      "updatedAt": "2026-10-09T15:15:00Z"
     },
     {
-      "schoolId": "la-paz-cabo-velas",
-      "sport": "baloncesto",
+      "id": "j1-bal-d-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
       "categoryId": "cat-d-baloncesto",
-      "coachName": "Prof. Diego Ruiz",
-      "players": [
-        {
-          "id": "p-lp-cv-bd1",
-          "jerseyNumber": 3,
-          "fullName": "Lucas Alvarado Brenes",
-          "position": "Base",
-          "isCaptain": true,
-          "birthYear": 2013
-        },
-        {
-          "id": "p-lp-cv-bd2",
-          "jerseyNumber": 8,
-          "fullName": "Emiliano Soto Araya",
-          "position": "Alero",
-          "isCaptain": false,
-          "birthYear": 2013
-        },
-        {
-          "id": "p-lp-cv-bd3",
-          "jerseyNumber": 15,
-          "fullName": "Damián Cordero Castro",
-          "position": "Pivot",
-          "isCaptain": false,
-          "birthYear": 2014
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "la-paz-tempisque",
-      "sport": "futbol",
-      "categoryId": "cat-fem-futbol",
-      "coachName": "Prof. Elena Castro",
-      "players": [
-        {
-          "id": "p-lp-t-f1",
-          "jerseyNumber": 1,
-          "fullName": "Luciana Valverde Araya",
-          "position": "Portera",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-f2",
-          "jerseyNumber": 3,
-          "fullName": "Miranda Solís Cordero",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-f3",
-          "jerseyNumber": 5,
-          "fullName": "Julieta Vargas Fallas",
-          "position": "Mediocampista",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-f4",
-          "jerseyNumber": 8,
-          "fullName": "Jimena Alvarado Brenes",
-          "position": "Delantera",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-f5",
-          "jerseyNumber": 11,
-          "fullName": "Fiorella Zúñiga Mora",
-          "position": "Extremo",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "la-paz-tempisque",
-      "sport": "futbol",
-      "categoryId": "cat-c-futbol",
-      "coachName": "Prof. Elena Castro",
-      "players": [
-        {
-          "id": "p-lp-t-c1",
-          "jerseyNumber": 1,
-          "fullName": "Andrés Montero Salazar",
-          "position": "Portero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-c2",
-          "jerseyNumber": 4,
-          "fullName": "Sebastián Cordero Solís",
-          "position": "Defensa Central",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-c3",
-          "jerseyNumber": 7,
-          "fullName": "Esteban Jiménez Vega",
-          "position": "Volante",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-c4",
-          "jerseyNumber": 9,
-          "fullName": "Diego Fallas Chaves",
-          "position": "Delantero",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-c5",
-          "jerseyNumber": 10,
-          "fullName": "Mauricio Brenes Araya",
-          "position": "Armador",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "la-paz-tempisque",
-      "sport": "voleibol",
-      "categoryId": "cat-c-voleibol",
-      "coachName": "Prof. Roberto Mora",
-      "players": [
-        {
-          "id": "p-lp-t-v1",
-          "jerseyNumber": 1,
-          "fullName": "Isabella Rojas Solano",
-          "position": "Armadora",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-v2",
-          "jerseyNumber": 5,
-          "fullName": "Sofía Guillén Navarro",
-          "position": "Capitana / Atacante",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-v3",
-          "jerseyNumber": 8,
-          "fullName": "Camila Araya Gómez",
-          "position": "Central",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-v4",
-          "jerseyNumber": 10,
-          "fullName": "Ana Paula Jiménez",
-          "position": "Líbero",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-lp-t-v5",
-          "jerseyNumber": 14,
-          "fullName": "Victoria Fallas Chaves",
-          "position": "Opuesta",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "la-paz-tempisque",
       "sport": "baloncesto",
-      "categoryId": "cat-c-baloncesto",
-      "coachName": "Prof. Roberto Mora",
-      "players": [
-        {
-          "id": "p-lp-t-b1",
-          "jerseyNumber": 2,
-          "fullName": "Fabián Vargas Ortiz",
-          "position": "Base",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-b2",
-          "jerseyNumber": 6,
-          "fullName": "Leonardo Solano Fallas",
-          "position": "Escolta",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-b3",
-          "jerseyNumber": 10,
-          "fullName": "Alejandro Monge Castro",
-          "position": "Alero",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-lp-t-b4",
-          "jerseyNumber": 15,
-          "fullName": "Gabriel Araya Brenes",
-          "position": "Pivot",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
+      "date": "2026-10-09",
+      "time": "16:15",
+      "venue": "CRIA",
+      "homeTeamId": "journey-school",
+      "awayTeamId": "la-paz-tempisque",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Baloncesto Categoría D (4:15 pm)",
+      "updatedAt": "2026-10-09T16:15:00Z"
     },
     {
-      "schoolId": "cria",
-      "sport": "futbol",
-      "categoryId": "cat-fem-futbol",
-      "coachName": "Coach Michael Taylor",
-      "players": [
-        {
-          "id": "p-cr-f1",
-          "jerseyNumber": 1,
-          "fullName": "Hannah Davis",
-          "position": "Goalkeeper",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-f2",
-          "jerseyNumber": 4,
-          "fullName": "Olivia Smith",
-          "position": "Defender",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-f3",
-          "jerseyNumber": 7,
-          "fullName": "Mia Johnson",
-          "position": "Midfielder",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-f4",
-          "jerseyNumber": 10,
-          "fullName": "Emma Jenkins",
-          "position": "Forward",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-f5",
-          "jerseyNumber": 13,
-          "fullName": "Sophia Brown",
-          "position": "Winger",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "cria",
-      "sport": "futbol",
-      "categoryId": "cat-c-futbol",
-      "coachName": "Coach Michael Taylor",
-      "players": [
-        {
-          "id": "p-cr-c1",
-          "jerseyNumber": 1,
-          "fullName": "Lucas Miller",
-          "position": "Goalkeeper",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-c2",
-          "jerseyNumber": 3,
-          "fullName": "Benjamin Moore",
-          "position": "Defender",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-c3",
-          "jerseyNumber": 8,
-          "fullName": "Oliver Taylor",
-          "position": "Midfielder",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-c4",
-          "jerseyNumber": 9,
-          "fullName": "William Anderson",
-          "position": "Striker",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-c5",
-          "jerseyNumber": 11,
-          "fullName": "Jack Thomas",
-          "position": "Winger",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "cria",
-      "sport": "voleibol",
-      "categoryId": "cat-c-voleibol",
-      "coachName": "Coach Sarah Adams",
-      "players": [
-        {
-          "id": "p-cr-v1",
-          "jerseyNumber": 2,
-          "fullName": "Chloe Wilson",
-          "position": "Setter",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-v2",
-          "jerseyNumber": 5,
-          "fullName": "Grace Martinez",
-          "position": "Outside Hitter",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-v3",
-          "jerseyNumber": 8,
-          "fullName": "Ava Robinson",
-          "position": "Middle Blocker",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-v4",
-          "jerseyNumber": 12,
-          "fullName": "Zoe Clark",
-          "position": "Libero",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "cria",
+      "id": "j1-bal-d-02",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
+      "categoryId": "cat-d-baloncesto",
       "sport": "baloncesto",
-      "categoryId": "cat-c-baloncesto",
-      "coachName": "Coach Sarah Adams",
-      "players": [
-        {
-          "id": "p-cr-b1",
-          "jerseyNumber": 3,
-          "fullName": "Liam Wilson",
-          "position": "Point Guard",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-b2",
-          "jerseyNumber": 9,
-          "fullName": "Noah Martinez",
-          "position": "Shooting Guard",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-b3",
-          "jerseyNumber": 15,
-          "fullName": "Ethan Clark",
-          "position": "Small Forward",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-b4",
-          "jerseyNumber": 23,
-          "fullName": "Tyler Ross",
-          "position": "Power Forward",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-cr-b5",
-          "jerseyNumber": 34,
-          "fullName": "Alexander White",
-          "position": "Center",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "journey-school",
-      "sport": "futbol",
-      "categoryId": "cat-fem-futbol",
-      "coachName": "Prof. Marco Araya",
-      "players": [
-        {
-          "id": "p-js-f1",
-          "jerseyNumber": 1,
-          "fullName": "Camila Solano Vega",
-          "position": "Portera",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-f2",
-          "jerseyNumber": 4,
-          "fullName": "Lucía Morales Castro",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-f3",
-          "jerseyNumber": 7,
-          "fullName": "Elena Brenes Ortiz",
-          "position": "Mediocampista",
-          "isCaptain": false,
-          "birthYear": 2012
-        },
-        {
-          "id": "p-js-f4",
-          "jerseyNumber": 10,
-          "fullName": "Valeria Cordero Salazar",
-          "position": "Delantera",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-f5",
-          "jerseyNumber": 11,
-          "fullName": "Daniela Chaves Mora",
-          "position": "Extremo",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "journey-school",
-      "sport": "futbol",
-      "categoryId": "cat-c-futbol",
-      "coachName": "Prof. Marco Araya",
-      "players": [
-        {
-          "id": "p-js-c1",
-          "jerseyNumber": 1,
-          "fullName": "Felipe Montero Gómez",
-          "position": "Portero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-c2",
-          "jerseyNumber": 5,
-          "fullName": "Santiago Zúñiga Arias",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-c3",
-          "jerseyNumber": 9,
-          "fullName": "Mateo Chinchilla Soto",
-          "position": "Delantero",
-          "isCaptain": true,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "journey-school",
-      "sport": "voleibol",
-      "categoryId": "cat-c-voleibol",
-      "coachName": "Prof. Marco Araya",
-      "players": [
-        {
-          "id": "p-js-v1",
-          "jerseyNumber": 2,
-          "fullName": "Victoria Brenes Soto",
-          "position": "Líbero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-v2",
-          "jerseyNumber": 6,
-          "fullName": "Lucía Cordero Salazar",
-          "position": "Atacante Principal",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-v3",
-          "jerseyNumber": 8,
-          "fullName": "Abril Montero Fallas",
-          "position": "Armadora",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-v4",
-          "jerseyNumber": 11,
-          "fullName": "Rebeca Solano Méndez",
-          "position": "Central",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "journey-school",
-      "sport": "baloncesto",
-      "categoryId": "cat-c-baloncesto",
-      "coachName": "Prof. Marco Araya",
-      "players": [
-        {
-          "id": "p-js-b1",
-          "jerseyNumber": 4,
-          "fullName": "Emilio Mora Alvarado",
-          "position": "Base",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-b2",
-          "jerseyNumber": 7,
-          "fullName": "Ignacio Castro Vega",
-          "position": "Escolta",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-b3",
-          "jerseyNumber": 12,
-          "fullName": "Rodrigo Gómez Solís",
-          "position": "Alero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-js-b4",
-          "jerseyNumber": 21,
-          "fullName": "Samuel Ortiz Monge",
-          "position": "Pivot",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "vittorino",
-      "sport": "futbol",
-      "categoryId": "cat-fem-futbol",
-      "coachName": "Prof. Giancarlo Vitti",
-      "players": [
-        {
-          "id": "p-vi-f1",
-          "jerseyNumber": 1,
-          "fullName": "Chiara Rossi",
-          "position": "Portera",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-f2",
-          "jerseyNumber": 4,
-          "fullName": "Giulia Ferrari",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-f3",
-          "jerseyNumber": 9,
-          "fullName": "Francesca Romano",
-          "position": "Delantera",
-          "isCaptain": true,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "vittorino",
-      "sport": "futbol",
-      "categoryId": "cat-c-futbol",
-      "coachName": "Prof. Giancarlo Vitti",
-      "players": [
-        {
-          "id": "p-vi-c1",
-          "jerseyNumber": 1,
-          "fullName": "Giovanni Bianchi",
-          "position": "Portero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-c2",
-          "jerseyNumber": 5,
-          "fullName": "Lorenzo Ricci",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-c3",
-          "jerseyNumber": 10,
-          "fullName": "Andrea Marino",
-          "position": "Delantero",
-          "isCaptain": true,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "vittorino",
-      "sport": "voleibol",
-      "categoryId": "cat-c-voleibol",
-      "coachName": "Prof. Giancarlo Vitti",
-      "players": [
-        {
-          "id": "p-vi-v1",
-          "jerseyNumber": 2,
-          "fullName": "Sofia Bruno",
-          "position": "Armadora",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-v2",
-          "jerseyNumber": 7,
-          "fullName": "Alessia Costa",
-          "position": "Atacante",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-v3",
-          "jerseyNumber": 12,
-          "fullName": "Elena Gallo",
-          "position": "Líbero",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "vittorino",
-      "sport": "baloncesto",
-      "categoryId": "cat-c-baloncesto",
-      "coachName": "Prof. Giancarlo Vitti",
-      "players": [
-        {
-          "id": "p-vi-b1",
-          "jerseyNumber": 5,
-          "fullName": "Matteo Fontana",
-          "position": "Base",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-b2",
-          "jerseyNumber": 8,
-          "fullName": "Leonardo Conti",
-          "position": "Alero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-b3",
-          "jerseyNumber": 15,
-          "fullName": "Marco Santoro",
-          "position": "Capitán / Escolta",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-vi-b4",
-          "jerseyNumber": 22,
-          "fullName": "Gabriele De Luca",
-          "position": "Pivot",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "educarte",
-      "sport": "futbol",
-      "categoryId": "cat-c-futbol",
-      "coachName": "Prof. Diana Montero",
-      "players": [
-        {
-          "id": "p-ed-c1",
-          "jerseyNumber": 1,
-          "fullName": "Kevin Solís Castro",
-          "position": "Portero",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-c2",
-          "jerseyNumber": 4,
-          "fullName": "David Mora Vega",
-          "position": "Defensa",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-c3",
-          "jerseyNumber": 9,
-          "fullName": "Justin Alvarado Araya",
-          "position": "Delantero",
-          "isCaptain": true,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "educarte",
-      "sport": "voleibol",
-      "categoryId": "cat-c-voleibol",
-      "coachName": "Prof. Diana Montero",
-      "players": [
-        {
-          "id": "p-ed-v1",
-          "jerseyNumber": 3,
-          "fullName": "Valeria Mora Solís",
-          "position": "Armadora",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-v2",
-          "jerseyNumber": 7,
-          "fullName": "Paula Zúñiga Arias",
-          "position": "Central",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-v3",
-          "jerseyNumber": 11,
-          "fullName": "Raquel Fallas Chaves",
-          "position": "Capitana / Opuesta",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-v4",
-          "jerseyNumber": 16,
-          "fullName": "Daniela Gómez Castro",
-          "position": "Líbero",
-          "isCaptain": false,
-          "birthYear": 2012
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
-    },
-    {
-      "schoolId": "educarte",
-      "sport": "baloncesto",
-      "categoryId": "cat-c-baloncesto",
-      "coachName": "Prof. Diana Montero",
-      "players": [
-        {
-          "id": "p-ed-b1",
-          "jerseyNumber": 2,
-          "fullName": "Brandon Castro Brenes",
-          "position": "Base",
-          "isCaptain": false,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-b2",
-          "jerseyNumber": 6,
-          "fullName": "Julián Rojas Fallas",
-          "position": "Alero",
-          "isCaptain": true,
-          "birthYear": 2011
-        },
-        {
-          "id": "p-ed-b3",
-          "jerseyNumber": 10,
-          "fullName": "Andrey Chaves Gómez",
-          "position": "Pivot",
-          "isCaptain": false,
-          "birthYear": 2011
-        }
-      ],
-      "updatedAt": "2026-10-01T08:00:00Z"
+      "date": "2026-10-09",
+      "time": "17:15",
+      "venue": "CRIA",
+      "homeTeamId": "cria",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Baloncesto Categoría D (5:15 pm)",
+      "updatedAt": "2026-10-09T17:15:00Z"
     }
-  ],
-  "updatedAt": "2026-10-01T10:58:25.265Z"
+  ]
 }

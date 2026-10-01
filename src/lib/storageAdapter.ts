@@ -147,7 +147,7 @@ export const tournamentStorage = {
       const res = await fetch('/api/posts', { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
-        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        if (json.success && Array.isArray(json.data)) {
           safeSet(KEYS.FAMILY_POSTS, json.data);
           window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: json.data }));
           return json.data;

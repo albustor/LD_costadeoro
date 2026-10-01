@@ -111,10 +111,11 @@ export const rosterService = {
       if (res.ok) {
         const json = await res.json();
         const data = Array.isArray(json) ? json : (json?.rosters || []);
-        if (Array.isArray(data) && data.length > 0) {
-          localStorage.setItem(ROSTERS_STORAGE_KEY, JSON.stringify(data));
-          window.dispatchEvent(new CustomEvent('rosters_sync_updated', { detail: data }));
-          return data;
+        if (Array.isArray(data)) {
+          const finalData = data.length > 0 ? data : INITIAL_DEFAULT_ROSTERS;
+          localStorage.setItem(ROSTERS_STORAGE_KEY, JSON.stringify(finalData));
+          window.dispatchEvent(new CustomEvent('rosters_sync_updated', { detail: finalData }));
+          return finalData;
         }
       }
     } catch (err) {

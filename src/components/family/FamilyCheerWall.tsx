@@ -58,102 +58,7 @@ const OFFICIAL_FESTIVAL_RANGES = [
   { name: 'Grandes Finales', start: '2026-11-23', end: '2026-11-27' },
 ];
 
-const INITIAL_FAMILY_POSTS: FamilyPost[] = [
-  {
-    id: 'fp-1',
-    schoolId: 'la-paz-cabo-velas',
-    authorName: 'Familia Soto Brenes',
-    authorRelation: 'Mamá',
-    message: '¡Increíble partido de las chicas de Cabo Velas! Qué garra y qué compañerismo demostraron hoy en la cancha. ¡Con todo en la siguiente fecha! 🌊⚽',
-    mediaType: 'photo',
-    mediaUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop&q=80',
-    sportId: 'futbol',
-    likesCount: 24,
-    applauseCount: 18,
-    featuredVotes: 9,
-    isFeatured: true,
-    createdAt: 'Hace 20 min',
-    comments: [
-      {
-        id: 'c-1',
-        authorName: 'Coach Diego',
-        authorRelation: 'Entrenador',
-        text: '¡Gran trabajo de las atletas! El respeto y la disciplina ante todo.',
-        createdAt: 'Hace 10 min',
-      },
-    ],
-  },
-  {
-    id: 'fp-2',
-    schoolId: 'cria',
-    authorName: 'Carlos Mendoza',
-    authorRelation: 'Papá',
-    message: '¡Excelente remontada en el 2.° set del voleibol! Orgullosos de cada punto disputado por los Sharks de CRIA. 🦈🏐',
-    mediaType: 'photo',
-    mediaUrl: 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=800&auto=format&fit=crop&q=80',
-    sportId: 'voleibol',
-    likesCount: 19,
-    applauseCount: 15,
-    featuredVotes: 7,
-    isFeatured: true,
-    createdAt: 'Hace 45 min',
-    comments: [],
-  },
-  {
-    id: 'fp-3',
-    schoolId: 'journey-school',
-    authorName: 'Mariana & David',
-    authorRelation: 'Familia',
-    message: '¡Qué gran ambiente deportivo en Guanacaste! Ver a los chicos disfrutar y hacer amigos de otros colegios es lo más valioso. ¡Arriba The Journey! 🏀✨',
-    mediaType: 'none',
-    sportId: 'baloncesto',
-    likesCount: 16,
-    applauseCount: 12,
-    featuredVotes: 4,
-    isFeatured: false,
-    createdAt: 'Hace 1 hora',
-    comments: [
-      {
-        id: 'c-2',
-        authorName: 'Laura V.',
-        authorRelation: 'Mamá',
-        text: '¡Totalmente de acuerdo! Qué hermosa fiesta deportiva familiar.',
-        createdAt: 'Hace 30 min',
-      },
-    ],
-  },
-  {
-    id: 'fp-4',
-    schoolId: 'educarte',
-    authorName: 'Abuela Rosaura',
-    authorRelation: 'Abuelo/a',
-    message: '¡Felicidades a nuestro nieto Mateo y a todo el equipo de Educarte por ese partidazo! Los amamos.',
-    mediaType: 'none',
-    sportId: 'futbol',
-    likesCount: 22,
-    applauseCount: 20,
-    featuredVotes: 6,
-    isFeatured: true,
-    createdAt: 'Hace 2 horas',
-    comments: [],
-  },
-  {
-    id: 'fp-5',
-    schoolId: 'vittorino',
-    authorName: 'Profe Esteban',
-    authorRelation: 'Entrenador',
-    message: '¡Gran esfuerzo muchachos de Vittorino! La disciplina y el trabajo en equipo dan frutos día con día.',
-    mediaType: 'photo',
-    mediaUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&auto=format&fit=crop&q=80',
-    sportId: 'baloncesto',
-    likesCount: 14,
-    applauseCount: 11,
-    featuredVotes: 3,
-    isFeatured: false,
-    createdAt: 'Hace 3 horas',
-    comments: [],
-  },
-];
+const INITIAL_FAMILY_POSTS: FamilyPost[] = [];
 
 interface FamilyCheerWallProps {
   schools: School[];
@@ -170,7 +75,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     addVideo 
   } = useTournament();
 
-  const posts = familyPosts && familyPosts.length > 0 ? familyPosts : INITIAL_FAMILY_POSTS;
+  const posts = Array.isArray(familyPosts) ? familyPosts : [];
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   
   // PIN de Seguridad y Verificación Familiar
