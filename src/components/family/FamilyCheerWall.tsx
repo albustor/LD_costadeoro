@@ -462,16 +462,6 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             </div>
           </div>
 
-          {/* Aviso sobre Carga Multimedia (Fotos/Videos) y PIN General */}
-          <div className="p-3 rounded-2xl border text-xs flex items-start sm:items-center gap-2.5 bg-amber-50/70 border-amber-200 text-amber-950">
-            <Info className="w-4 h-4 shrink-0 mt-0.5 sm:mt-0 text-amber-700" />
-            <div className="min-w-0">
-              <span>
-                <strong>PIN de Evento Habilitado para Todas las Fechas:</strong> Las familias y padres con el PIN oficial pueden compartir mensajes, fotografías y videos durante todas las fechas de la Liga Costa de Oro. <em>(PIN predeterminado: <strong>COSTA2026</strong> o <strong>2026</strong>)</em>.
-              </span>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmitPost} className="space-y-4">
             {/* Paso 1: Selecciona a tu Colegio */}
             <div>
