@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTournament } from '@/context/TournamentContext';
 import { Match, MatchStatus, SportType } from '@/types/tournament';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
+import { formatTime12h } from '@/lib/utils';
 import { 
   Lock, 
   Unlock, 
@@ -548,7 +549,7 @@ export function AdminControlPanel() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-mono font-bold text-sm bg-white px-2.5 py-1 rounded-xl border border-slate-200 text-slate-900 shrink-0">
-                      {m.time}
+                      {formatTime12h(m.time)}
                     </span>
                     <div>
                       <span className="font-bold text-xs sm:text-sm text-slate-900 block">

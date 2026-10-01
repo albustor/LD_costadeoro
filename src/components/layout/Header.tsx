@@ -129,6 +129,7 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  target="_self"
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     isActive
                       ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-xs'

@@ -28,6 +28,8 @@ export function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              target="_self"
+              prefetch={true}
               className={`flex flex-col items-center justify-center py-1 rounded-xl transition-all cursor-pointer active:scale-95 ${
                 isActive
                   ? 'text-amber-300'

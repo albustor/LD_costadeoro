@@ -27,3 +27,22 @@ export function formatUSD(amount: number): string {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+export function formatTime12h(timeString?: string): string {
+  if (!timeString) return '';
+  const trimmed = timeString.trim();
+  if (/am|pm/i.test(trimmed)) return trimmed;
+  try {
+    const parts = trimmed.split(':');
+    if (parts.length < 2) return trimmed;
+    const hours = parseInt(parts[0], 10);
+    const minutes = parts[1].slice(0, 2);
+    if (isNaN(hours)) return trimmed;
+    const period = hours >= 12 ? 'pm' : 'am';
+    const hours12 = hours % 12 || 12;
+    return `${hours12}:${minutes} ${period}`;
+  } catch {
+    return timeString;
+  }
+}
+

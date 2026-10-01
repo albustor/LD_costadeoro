@@ -5,6 +5,7 @@ import { Match, MatchStatus, MatchEvent, SetScore, QuarterScore } from '@/types/
 import { useTournament } from '@/context/TournamentContext';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { OfficialMatchSheet } from '@/components/sports/OfficialMatchSheet';
+import { formatTime12h } from '@/lib/utils';
 import { 
   Play, 
   Pause, 
@@ -175,7 +176,7 @@ export function LiveDeskScorer() {
                 <span className="text-xs text-slate-600 font-bold">{currentMatch.jornadaName}</span>
               </div>
               <p className="text-xs text-slate-500 font-medium">
-                {currentMatch.venue} | {currentMatch.date} a las {currentMatch.time}
+                {currentMatch.venue} | {currentMatch.date} a las {formatTime12h(currentMatch.time)}
               </p>
             </div>
 

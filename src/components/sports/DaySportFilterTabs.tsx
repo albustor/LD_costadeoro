@@ -81,7 +81,7 @@ export function DaySportFilterTabs({
           Programación Semanal por Disciplina
         </span>
         <span className="text-[10px] text-slate-400 font-medium">
-          13:00 - 16:30 hs
+          1:00 pm - 4:30 pm
         </span>
       </div>
 

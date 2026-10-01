@@ -131,59 +131,54 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
     }
   };
 
-  // Selector de voz femenina costarricense / latina suave para español y US femenina para inglés
+  // Selector de voz femenina neuronal de alta definición (Natural/Online/Enhanced)
   const selectOptimalVoice = useCallback(
-    (lang: 'es' | 'en') => {
+    (lang: 'es' | 'en'): SpeechSynthesisVoice | null => {
       const allVoices = voices.length > 0 ? voices : typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis.getVoices() : [];
+      if (!allVoices || allVoices.length === 0) return null;
 
-      if (lang === 'es') {
-        // 1. Voz específica de Costa Rica (es-CR)
-        const costaRicaVoice = allVoices.find(
-          (v) => (v.lang.includes('es-CR') || v.lang.includes('es_CR')) &&
-                 !/male|hombre|jorge|diego|carlos|enrique|raul|raúl|pablo/i.test(v.name)
-        );
-        if (costaRicaVoice) return costaRicaVoice;
+      // Sistema de puntuación ponderada para encontrar la voz más humana y natural
+      const rankVoice = (v: SpeechSynthesisVoice): number => {
+        let score = 0;
+        const name = v.name.toLowerCase();
+        const vLang = v.lang.toLowerCase();
 
-        // 2. Voz Femenina Latina preferente natural (México, Colombia, US, etc.)
-        const latamFemale = allVoices.find(
-          (v) =>
-            (v.lang.startsWith('es-') || v.lang.startsWith('es_')) &&
-            !v.lang.includes('es-ES') &&
-            (/female|mujer|paulina|sabina|monica|mónica|mia|sofia|sofía|dalia|paloma|camila|lupe|rosa|helena|zira|natural|google/i.test(v.name) ||
-             !/male|hombre|jorge|diego|carlos|enrique|raul|raúl|pablo/i.test(v.name))
-        );
-        if (latamFemale) return latamFemale;
+        // Descartar voces masculinas
+        if (/male|hombre|jorge|diego|carlos|enrique|raul|raúl|pablo|alvaro|álvaro|miguel|manuel|david|guy|george/i.test(name)) {
+          return -1000;
+        }
 
-        // 3. Cualquier voz en español latinoamericano
-        const latamAny = allVoices.find(
-          (v) =>
-            v.lang.includes('es-CR') ||
-            v.lang.includes('es-419') ||
-            v.lang.includes('es-MX') ||
-            v.lang.includes('es-US') ||
-            v.lang.includes('es-CO')
-        );
-        if (latamAny) return latamAny;
+        if (lang === 'es') {
+          if (!vLang.startsWith('es')) return -2000;
 
-        // 4. Fallback en español
-        return allVoices.find((v) => v.lang.startsWith('es')) || null;
-      } else {
-        // 1. Voz Femenina Norteamericana (en-US)
-        const usFemale = allVoices.find(
-          (v) =>
-            (v.lang === 'en-US' || v.lang === 'en_US') &&
-            (/female|zira|jenny|samantha|susan|victoria|karen|allison|ava|aria|natural/i.test(v.name) ||
-             !/male|guy|david|mark|alex|george/i.test(v.name))
-        );
-        if (usFemale) return usFemale;
+          // 1. Calidad Neuronal / Natural / Online / Enhanced (cero sonido a lata)
+          if (/natural|neural|online|enhanced|premium|highquality|hd/i.test(name)) score += 100;
+          if (/google/i.test(name)) score += 60;
+          if (/siri/i.test(name)) score += 50;
 
-        // 2. Cualquier voz en-US
-        const usAny = allVoices.find((v) => v.lang === 'en-US' || v.lang === 'en_US');
-        if (usAny) return usAny;
+          // 2. Acento Costarricense o Latinoamericano
+          if (vLang.includes('es-cr') || vLang.includes('es_cr')) score += 80;
+          else if (vLang.includes('es-419') || vLang.includes('es-mx') || vLang.includes('es-co') || vLang.includes('es-us')) score += 40;
+          else if (vLang.includes('es-es')) score += 5; // España con menor prioridad
 
-        // 3. Fallback inglés
-        return allVoices.find((v) => v.lang.startsWith('en')) || null;
-      }
+          // 3. Voces femeninas reconocidas por calidez y naturalidad
+          if (/salome|salomé|dalia|paulina|sabina|camila|mia|mía|sofia|sofía|monica|mónica|lupe|paloma|rosa|lucia|lucía|valeria/i.test(name)) {
+            score += 50;
+          }
+        } else {
+          if (!vLang.startsWith('en')) return -2000;
+          if (/natural|neural|online|enhanced|premium/i.test(name)) score += 100;
+          if (vLang === 'en-us' || vLang === 'en_us') score += 50;
+          if (/jenny|aria|samantha|ava|allison|michelle|siri/i.test(name)) score += 40;
+        }
+
+        return score;
+      };
+
+      const sorted = [...allVoices].sort((a, b) => rankVoice(b) - rankVoice(a));
+      const best = sorted[0];
+
+      return best && rankVoice(best) > -500 ? best : null;
     },
     [voices]
   );
@@ -220,9 +215,10 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
       utterance.lang = language === 'en' ? 'en-US' : 'es-CR';
     }
 
-    // Tono femenino costarricense cálido, suave, sutil y velocidad media pausada
-    utterance.pitch = 1.04; 
-    utterance.rate = 0.90; 
+    // Parámetros acústicos naturales (pitch neutro 1.0, cadencia ágil y conversacional 1.10)
+    utterance.pitch = 1.0; 
+    utterance.rate = 1.10; 
+    utterance.volume = 1.0;
 
     utterance.onend = () => setIsPlaying(false);
     utterance.onerror = () => setIsPlaying(false);

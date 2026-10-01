@@ -113,7 +113,7 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Femenino',
     division: 'Abierta',
     dayOfWeek: 'Lunes',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
   {
     id: 'cat-c-futbol',
@@ -122,7 +122,7 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Masculino',
     division: 'Categoría C (2010-2011)',
     dayOfWeek: 'Martes',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
   {
     id: 'cat-d-futbol',
@@ -131,7 +131,7 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Masculino',
     division: 'Categoría D (2012-2014)',
     dayOfWeek: 'Miércoles',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
   {
     id: 'cat-c-voleibol',
@@ -140,7 +140,7 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Femenino',
     division: 'Categoría C (2010-2011)',
     dayOfWeek: 'Jueves',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
   {
     id: 'cat-d-voleibol',
@@ -149,7 +149,7 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Femenino',
     division: 'Categoría D (2012-2014)',
     dayOfWeek: 'Jueves',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
   {
     id: 'cat-c-baloncesto',
@@ -158,7 +158,7 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Masculino',
     division: 'Categoría C (2010-2011)',
     dayOfWeek: 'Viernes',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
   {
     id: 'cat-d-baloncesto',
@@ -167,6 +167,6 @@ export const CATEGORIES_DATA: Category[] = [
     gender: 'Masculino',
     division: 'Categoría D (2012-2014)',
     dayOfWeek: 'Viernes',
-    scheduleTime: '13:00 - 16:30',
+    scheduleTime: '1:00 pm - 4:30 pm',
   },
 ];

@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { Match, PhotoItem, ShortVideo } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
 import { useTier } from '@/context/TierContext';
-import { formatDateCostaRica } from '@/lib/utils';
+import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
 import { 
   X, 
   MapPin, 
@@ -168,7 +168,7 @@ export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
             <div className="col-span-1 text-center">
               {match.status === 'scheduled' ? (
                 <div className="text-xs font-bold text-slate-600 bg-white py-1.5 px-2 rounded-lg border border-slate-200 shadow-sm">
-                  {match.time}
+                  {formatTime12h(match.time)}
                 </div>
               ) : (
                 <div className="space-y-1">
@@ -210,7 +210,7 @@ export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1">
             <span className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-slate-400" />
-              {formatDateCostaRica(match.date)} a las {match.time}
+              {formatDateCostaRica(match.date)} a las {formatTime12h(match.time)}
             </span>
             <span className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-amber-600" />

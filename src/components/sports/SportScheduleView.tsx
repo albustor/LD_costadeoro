@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Category, Match, School, Standing } from '@/types/tournament';
 import { SchoolEmblem } from './SchoolEmblem';
 import { SportIconRenderer } from './SportGraphicIcons';
+import { formatTime12h } from '@/lib/utils';
 import { 
   Calendar, 
   Clock, 
@@ -244,7 +245,7 @@ export function SportScheduleView({
                           <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-100">
                             <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
                               <Clock className={`w-4 h-4 ${sportThemeClasses.clockColor}`} />
-                              <span className="font-mono text-sm text-slate-900 font-bold">{match.time}</span>
+                              <span className="font-mono text-sm text-slate-900 font-bold">{formatTime12h(match.time)}</span>
                               <span className="text-slate-300">•</span>
                               <span className="text-slate-500 text-[11px] truncate max-w-[140px]">
                                 {match.venue}

@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { Match } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
-import { formatDateCostaRica } from '@/lib/utils';
+import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
 import { SchoolEmblem } from './SchoolEmblem';
 import { 
   Printer, 
@@ -147,7 +147,7 @@ export function OfficialMatchSheet({ match, onClose }: OfficialMatchSheetProps) 
             <div>
               <span className="text-[10px] font-bold text-slate-500 uppercase block">Fecha y hora</span>
               <span className="font-extrabold text-slate-900">
-                {formatDateCostaRica(match.date)} · {match.time}
+                {formatDateCostaRica(match.date)} · {formatTime12h(match.time)}
               </span>
             </div>
             <div>

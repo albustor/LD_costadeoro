@@ -6,7 +6,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { SchoolRosterManager } from '@/components/sports/SchoolRosterManager';
 import { MatchDetailModal } from '@/components/sports/MatchDetailModal';
-import { formatDateCostaRica } from '@/lib/utils';
+import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
 import { Match } from '@/types/tournament';
 import { 
   Shield, 
@@ -341,7 +341,7 @@ export default function ColegiosPage() {
                   <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 pt-1 border-t border-slate-100">
                     <div className="flex items-center gap-2 font-semibold text-slate-700">
                       <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>{formatDateCostaRica(match.date)} • {match.time}</span>
+                      <span>{formatDateCostaRica(match.date)} • {formatTime12h(match.time)}</span>
                     </div>
 
                     <div className="flex items-center gap-1 text-slate-600 font-medium">

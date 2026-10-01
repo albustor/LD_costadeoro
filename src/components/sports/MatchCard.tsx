@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Match } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
-import { formatDateCostaRica } from '@/lib/utils';
+import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
 import { MapPin, Clock, Award, CheckCircle2, ChevronRight } from 'lucide-react';
 import { MatchDetailModal } from './MatchDetailModal';
 import { SportWatermark, getSportTheme } from './SportGlyphs';
@@ -129,7 +129,7 @@ export function MatchCard({ match }: MatchCardProps) {
           <div className="flex flex-wrap items-center gap-3">
             <span className="flex items-center gap-1 font-semibold text-slate-700">
               <Clock className="w-3.5 h-3.5 text-slate-400" />
-              {formatDateCostaRica(match.date)} • {match.time}
+              {formatDateCostaRica(match.date)} • {formatTime12h(match.time)}
             </span>
             <span className="flex items-center gap-1 font-medium text-slate-600">
               <MapPin className="w-3.5 h-3.5 text-slate-400" />
