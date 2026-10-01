@@ -286,17 +286,17 @@ export default function ColegiosPage() {
                   </div>
 
                   {/* Fila Central: Enfrentamiento Cara a Cara 1:1 (Simétrico y Nítido) */}
-                  <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-                    <div className="grid grid-cols-7 items-center gap-2">
+                  <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 w-full min-w-0">
                       {/* Equipo Local (Lado Izquierdo) */}
-                      <div className={`col-span-3 flex flex-col sm:flex-row items-center sm:items-start gap-2 text-center sm:text-left p-2 rounded-xl transition-colors ${
+                      <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-2 text-center sm:text-left p-2 rounded-xl transition-colors min-w-0 w-full overflow-hidden ${
                         match.homeTeamId === activeSchool.id ? 'bg-amber-50/80 border border-amber-200' : ''
                       }`}>
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+                        <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1 shrink-0 shadow-2xs">
                           <SchoolEmblem schoolId={homeSchool.id} size="sm" showBorder={false} />
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1 justify-center sm:justify-start flex-wrap">
+                        <div className="min-w-0 flex-1 w-full">
+                          <div className="flex items-center gap-1 justify-center sm:justify-start flex-wrap mb-0.5">
                             <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
                               Local
                             </span>
@@ -306,7 +306,7 @@ export default function ColegiosPage() {
                               </span>
                             )}
                           </div>
-                          <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight mt-1">
+                          <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-snug line-clamp-2 break-words">
                             {homeSchool.shortName || homeSchool.name}
                           </h4>
                           <span className="text-[10px] text-slate-500 font-medium block truncate mt-0.5">
@@ -316,9 +316,9 @@ export default function ColegiosPage() {
                       </div>
 
                       {/* VS o Marcador Central */}
-                      <div className="col-span-1 text-center flex flex-col items-center justify-center">
+                      <div className="shrink-0 px-1 sm:px-2 text-center flex flex-col items-center justify-center">
                         {isCompleted || isLive ? (
-                          <span className="font-mono font-black text-xs sm:text-sm text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 block shadow-2xs">
+                          <span className="font-mono font-black text-xs sm:text-sm text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 block shadow-2xs whitespace-nowrap">
                             {match.homeScore} : {match.awayScore}
                           </span>
                         ) : (
@@ -331,14 +331,14 @@ export default function ColegiosPage() {
                       </div>
 
                       {/* Equipo Visita (Lado Derecho) */}
-                      <div className={`col-span-3 flex flex-col sm:flex-row-reverse items-center sm:items-start gap-2 text-center sm:text-right p-2 rounded-xl transition-colors ${
+                      <div className={`flex flex-col sm:flex-row-reverse items-center sm:items-start gap-2 text-center sm:text-right p-2 rounded-xl transition-colors min-w-0 w-full overflow-hidden ${
                         match.awayTeamId === activeSchool.id ? 'bg-amber-50/80 border border-amber-200' : ''
                       }`}>
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+                        <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1 shrink-0 shadow-2xs">
                           <SchoolEmblem schoolId={awaySchool.id} size="sm" showBorder={false} />
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1 justify-center sm:justify-end flex-wrap">
+                        <div className="min-w-0 flex-1 w-full">
+                          <div className="flex items-center gap-1 justify-center sm:justify-end flex-wrap mb-0.5">
                             {match.awayTeamId === activeSchool.id && (
                               <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
                                 Mi equipo
@@ -348,7 +348,7 @@ export default function ColegiosPage() {
                               Visita
                             </span>
                           </div>
-                          <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight mt-1">
+                          <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-snug line-clamp-2 break-words">
                             {awaySchool.shortName || awaySchool.name}
                           </h4>
                           <span className="text-[10px] text-slate-500 font-medium block truncate mt-0.5">

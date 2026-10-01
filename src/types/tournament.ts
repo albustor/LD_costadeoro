@@ -43,7 +43,7 @@ export interface Category {
   name: string;
   sport: SportType;
   gender: 'Femenino' | 'Masculino' | 'Mixto';
-  division: 'Categoría C (2010-2011)' | 'Categoría D (2012-2014)' | 'Abierta';
+  division: 'Categoría C (2012-2014)' | 'Categoría D (2009-2011)' | 'Abierta' | string;
   dayOfWeek: string;
   scheduleTime: string;
 }

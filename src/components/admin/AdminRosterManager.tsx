@@ -360,19 +360,9 @@ export function AdminRosterManager() {
               <span>Despacho de Enlaces Directos de Inscripción (WhatsApp & Correo)</span>
             </h3>
             <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
-              Comparte el portal webapp directo a cada coordinador deportivo con su PIN de seguridad. La institución podrá ingresar atletas en línea o subir su archivo Excel usando la plantilla base oficial.
+              Comparte el portal webapp directo a cada coordinador deportivo con su PIN de seguridad. La institución podrá ingresar atletas en línea o registrar la nómina oficial.
             </p>
           </div>
-
-          <button
-            type="button"
-            onClick={() => handleDownloadOfficialTemplate()}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-sm transition-all cursor-pointer shrink-0"
-            title="Descargar plantilla oficial Excel base vacía para compartir con las instituciones"
-          >
-            <Download className="w-4 h-4" />
-            <span>Descargar Plantilla Base Excel</span>
-          </button>
         </div>
 
         {/* Cuadrícula de Enlaces por Institución */}

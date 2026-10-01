@@ -162,7 +162,7 @@ export default function DeportesPage() {
                 <div className="space-y-1 text-xs text-slate-600">
                   <p className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                    <span>{t('sports.day')}: <strong>{cat.dayOfWeek}s</strong></span>
+                    <span>{t('sports.day')}: <strong>{cat.dayOfWeek}</strong></span>
                   </p>
                   <p className="flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />

@@ -60,7 +60,7 @@ export function Footer() {
 
         {/* 3. ABAJO DE TODO EN LETRAS MÁS PEQUEÑAS: DERECHOS RESERVADOS */}
         <p className="text-[11px] sm:text-xs text-slate-500 font-medium max-w-lg leading-relaxed pt-1">
-          © 2026 Liga Costa de Oro 2026. Festival deportivo intercolegial. Guanacaste, Costa Rica. Todos los derechos reservados.
+          © 2026 Liga Costa de Oro 2026 · Festival deportivo intercolegial · Guanacaste, Costa Rica. Todos los derechos reservados.
         </p>
 
       </div>

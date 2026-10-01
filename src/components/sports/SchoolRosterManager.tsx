@@ -74,24 +74,9 @@ export function SchoolRosterManager({ activeSchool }: SchoolRosterManagerProps) 
         const r = rosters.find((item) => isCategoryMatch(item.categoryId, cat.id) && item.schoolId === activeSchool.id);
         return r && r.players && r.players.length > 0;
       });
-      setExpandedCategoryId(firstWithPlayers ? firstWithPlayers.id : sportCategories[0].id);
-    } else {
       setExpandedCategoryId(null);
     }
   }, [activeSport, activeSchool.id, rosters.length]);
-
-  // Descargar archivo Excel oficial de la institución
-  const handleDownloadExcel = () => {
-    const blob = rosterService.generateExcelWorkbook(activeSchool);
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `nomina_oficial_${activeSchool.id}_2026.xls`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
 
   // Conteo de atletas por disciplina
   const countPlayersBySport = (sport: SportType) => {
@@ -124,17 +109,6 @@ export function SchoolRosterManager({ activeSchool }: SchoolRosterManagerProps) 
             Consulta los deportistas y cuerpos técnicos acreditados por disciplina para el Festival Deportivo.
           </p>
         </div>
-
-        {/* Botón de Descarga Excel */}
-        <button
-          type="button"
-          onClick={handleDownloadExcel}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-bold shadow-2xs transition-all cursor-pointer hover:border-amber-400 self-start sm:self-center shrink-0"
-          title="Descargar nómina oficial en formato Excel (.xls)"
-        >
-          <Download className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Descargar Nómina (.xls)</span>
-        </button>
       </div>
 
       <div className="px-4 sm:px-6 space-y-4 pb-6">

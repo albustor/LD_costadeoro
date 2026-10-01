@@ -2,7 +2,71 @@
   "posts": [],
   "photos": [],
   "videos": [],
-  "rosters": [],
+  "rosters": [
+    {
+      "schoolId": "la-paz-cabo-velas",
+      "sport": "futbol",
+      "categoryId": "cat-fem-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    },
+    {
+      "schoolId": "la-paz-cabo-velas",
+      "sport": "futbol",
+      "categoryId": "cat-c-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    },
+    {
+      "schoolId": "la-paz-tempisque",
+      "sport": "futbol",
+      "categoryId": "cat-fem-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    },
+    {
+      "schoolId": "cria",
+      "sport": "futbol",
+      "categoryId": "cat-c-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    },
+    {
+      "schoolId": "journey-school",
+      "sport": "futbol",
+      "categoryId": "cat-fem-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    },
+    {
+      "schoolId": "vittorino",
+      "sport": "baloncesto",
+      "categoryId": "cat-c-basket",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    },
+    {
+      "schoolId": "educarte",
+      "sport": "voleibol",
+      "categoryId": "cat-fem-c-voley",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-01T16:14:00.790Z"
+    }
+  ],
   "matches": [
     {
       "id": "j1-fut-fem-01",
@@ -297,5 +361,6 @@
       "notes": "Jornada 1 - Baloncesto Categoría D (5:15 pm)",
       "updatedAt": "2026-10-09T17:15:00Z"
     }
-  ]
+  ],
+  "updatedAt": "2026-10-01T16:14:00.800Z"
 }

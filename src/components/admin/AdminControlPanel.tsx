@@ -33,7 +33,9 @@ import {
   X,
   Award,
   FileSpreadsheet,
-  BarChart3
+  BarChart3,
+  ShieldAlert,
+  LogOut
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -48,9 +50,37 @@ import { SystemAuditPlanView } from './SystemAuditPlanView';
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById, addPhoto, addVideo } = useTournament();
 
-  // Authentication Pin (Simple PIN for quick field access)
-  const [pin, setPin] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Open access by default for convenience
+  // Authentication Pin / Master Password
+  const [adminPasswordInput, setAdminPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('costa_de_oro_admin_auth') === 'true';
+    }
+    return false;
+  });
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = adminPasswordInput.trim();
+    const valid = (TOURNAMENT_CONFIG.security as any)?.validAdminPins || ['2026ControlAdmin', 'ORO2026', 'COSTA2026'];
+    if (clean === '2026ControlAdmin' || valid.includes(clean)) {
+      setIsAuthenticated(true);
+      setAuthError('');
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('costa_de_oro_admin_auth', 'true');
+      }
+    } else {
+      setAuthError('Clave de administración incorrecta. Por favor verifica e intenta de nuevo.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('costa_de_oro_admin_auth');
+    }
+  };
 
   // Active Management Tab
   const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'daily_stats' | 'audit'>('results');
@@ -216,15 +246,82 @@ export function AdminControlPanel() {
   const homeSchool = getSchoolById(selectedMatch?.homeTeamId);
   const awaySchool = getSchoolById(selectedMatch?.awayTeamId);
 
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-md mx-auto my-12 p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 shadow-lg text-center space-y-6 animate-fade-in">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-slate-950 text-amber-300 flex items-center justify-center text-2xl border border-amber-500/40 shadow-md">
+          <ShieldAlert className="w-8 h-8 text-amber-400" />
+        </div>
+
+        <div className="space-y-1.5">
+          <span className="text-[11px] font-black uppercase tracking-wider text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+            Acceso restringido
+          </span>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900">
+            Panel de administración
+          </h2>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Ingresa la clave maestra autorizada para gestionar resultados, nóminas de atletas y configuración general.
+          </p>
+        </div>
+
+        <form onSubmit={handleAdminLogin} className="space-y-4 text-left">
+          <div>
+            <label className="text-xs font-bold text-slate-700 block mb-1.5">
+              Clave de administración
+            </label>
+            <input
+              type="password"
+              value={adminPasswordInput}
+              onChange={(e) => {
+                setAdminPasswordInput(e.target.value);
+                setAuthError('');
+              }}
+              placeholder="Ingresa la clave de control"
+              className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition"
+              autoFocus
+            />
+          </div>
+
+          {authError && (
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2">
+              <span>⚠️</span>
+              <span>{authError}</span>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className="w-full py-3 px-4 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-extrabold text-sm flex items-center justify-center gap-2 transition shadow-md cursor-pointer"
+          >
+            <Lock className="w-4 h-4 text-amber-400" />
+            <span>Ingresar al panel</span>
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* Cabecera del Panel de Control */}
       <div className="rounded-3xl bg-gradient-to-br from-white via-slate-50 to-amber-50/50 border border-slate-200 p-5 sm:p-7 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold mb-2">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400" />
-            <span>Mesa Técnica y Control de Datos</span>
-          </span>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-amber-400" />
+              <span>Mesa Técnica y Control de Datos</span>
+            </span>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-[11px] font-bold transition cursor-pointer"
+              title="Cerrar sesión de administrador"
+            >
+              <LogOut className="w-3 h-3" />
+              <span>Cerrar sesión</span>
+            </button>
+          </div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Panel Central de Resultados y Calendario
           </h1>

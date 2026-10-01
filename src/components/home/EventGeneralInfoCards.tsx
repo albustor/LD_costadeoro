@@ -470,8 +470,8 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                   </span>
                 </div>
                 <ul className="text-xs sm:text-sm text-slate-700 space-y-1.5 font-medium">
-                  <li><strong>Jueves:</strong> Voleibol femenino categoría C</li>
-                  <li><strong>Jueves:</strong> Voleibol femenino categoría D</li>
+                  <li><strong>Jueves:</strong> Voleibol femenino categoría C (2012-2014)</li>
+                  <li><strong>Jueves:</strong> Voleibol femenino categoría D (2009-2011)</li>
                   <li>Al mejor de 3 sets (25 pts cada uno)</li>
                 </ul>
               </div>
@@ -491,8 +491,8 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                   </span>
                 </div>
                 <ul className="text-xs sm:text-sm text-slate-700 space-y-1.5 font-medium">
-                  <li><strong>Viernes:</strong> Baloncesto categoría C</li>
-                  <li><strong>Viernes:</strong> Baloncesto categoría D</li>
+                  <li><strong>Viernes:</strong> Baloncesto categoría C (2012-2014)</li>
+                  <li><strong>Viernes:</strong> Baloncesto categoría D (2009-2011)</li>
                   <li>4 periodos con reloj oficial y mesa técnica</li>
                 </ul>
               </div>

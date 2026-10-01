@@ -294,30 +294,30 @@ export function SportScheduleView({
                         </div>
 
                         {/* ⚔️ ENFRENTAMIENTO CARA A CARA (SIMÉTRICO Y COMPLETO) */}
-                        <div className="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
-                          <div className="grid grid-cols-7 items-center gap-2">
+                        <div className="bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+                          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 w-full min-w-0">
                             {/* Equipo Local */}
-                            <div className="col-span-3 flex flex-col sm:flex-row items-center sm:items-start gap-2 text-center sm:text-left p-1.5 rounded-xl">
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 text-center sm:text-left p-1.5 rounded-xl min-w-0 w-full overflow-hidden">
                               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-1 shrink-0 shadow-2xs">
                                 <SchoolEmblem schoolId={homeSchool.id} size="sm" showBorder={false} />
                               </div>
-                              <div className="min-w-0 flex-1">
+                              <div className="min-w-0 flex-1 w-full">
                                 <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 inline-block mb-0.5">
                                   Local
                                 </span>
-                                <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight">
+                                <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-snug line-clamp-2 break-words">
                                   {homeSchool.shortName || homeSchool.name}
                                 </h4>
-                                <span className="text-[10px] text-slate-500 font-medium block truncate">
+                                <span className="text-[10px] text-slate-500 font-medium block truncate mt-0.5">
                                   {homeSchool.city}
                                 </span>
                               </div>
                             </div>
 
                             {/* VS o Marcador */}
-                            <div className="col-span-1 text-center flex flex-col items-center justify-center">
+                            <div className="shrink-0 px-1 sm:px-2 text-center flex flex-col items-center justify-center">
                               {isCompleted || isLive ? (
-                                <span className={`font-mono font-black text-xs sm:text-sm px-2.5 py-1 rounded-xl block shadow-2xs ${sportThemeClasses.scoreBox}`}>
+                                <span className={`font-mono font-black text-xs sm:text-sm px-2.5 py-1 rounded-xl block shadow-2xs whitespace-nowrap ${sportThemeClasses.scoreBox}`}>
                                   {match.homeScore} : {match.awayScore}
                                 </span>
                               ) : (
@@ -328,18 +328,18 @@ export function SportScheduleView({
                             </div>
 
                             {/* Equipo Visita */}
-                            <div className="col-span-3 flex flex-col sm:flex-row-reverse items-center sm:items-start gap-2 text-center sm:text-right p-1.5 rounded-xl">
+                            <div className="flex flex-col sm:flex-row-reverse items-center sm:items-start gap-2 text-center sm:text-right p-1.5 rounded-xl min-w-0 w-full overflow-hidden">
                               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-1 shrink-0 shadow-2xs">
                                 <SchoolEmblem schoolId={awaySchool.id} size="sm" showBorder={false} />
                               </div>
-                              <div className="min-w-0 flex-1">
+                              <div className="min-w-0 flex-1 w-full">
                                 <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 inline-block mb-0.5">
                                   Visita
                                 </span>
-                                <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight">
+                                <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-snug line-clamp-2 break-words">
                                   {awaySchool.shortName || awaySchool.name}
                                 </h4>
-                                <span className="text-[10px] text-slate-500 font-medium block truncate">
+                                <span className="text-[10px] text-slate-500 font-medium block truncate mt-0.5">
                                   {awaySchool.city}
                                 </span>
                               </div>
