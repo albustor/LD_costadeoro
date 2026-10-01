@@ -50,17 +50,18 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
   const applyScaleToHtml = (scale: number) => {
     if (typeof window === 'undefined') return;
     const html = document.documentElement;
-    html.classList.remove('text-scale-100', 'text-scale-115', 'text-scale-130', 'text-scale-145');
+    html.classList.remove('text-scale-100', 'text-scale-130', 'text-scale-160', 'text-scale-200');
     
-    if (scale <= 100) html.classList.add('text-scale-100');
-    else if (scale <= 115) html.classList.add('text-scale-115');
-    else if (scale <= 130) html.classList.add('text-scale-130');
-    else html.classList.add('text-scale-145');
+    if (scale <= 115) html.classList.add('text-scale-100');
+    else if (scale <= 145) html.classList.add('text-scale-130');
+    else if (scale <= 180) html.classList.add('text-scale-160');
+    else html.classList.add('text-scale-200');
 
-    html.style.fontSize = `${(scale / 100) * 16}px`;
+    const basePx = window.innerWidth <= 640 ? 17.5 : 16;
+    html.style.fontSize = `${(scale / 100) * basePx}px`;
   };
 
-  // Cargar escala de texto guardada o predeterminada
+  // Cargar escala de texto guardada o escuchar cambios de gesto táctil
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedScale = localStorage.getItem('costa_de_oro_text_scale');
@@ -70,10 +71,17 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
           setTextScale(scale);
           applyScaleToHtml(scale);
         }
-      } else {
-        // En pantallas móviles de alta resolución, aplicar base 115% o 130% cómoda
-        applyScaleToHtml(100);
       }
+
+      const handleScaleEvent = (e: Event) => {
+        const customEvt = e as CustomEvent<number>;
+        if (customEvt.detail && typeof customEvt.detail === 'number') {
+          setTextScale(customEvt.detail);
+        }
+      };
+
+      window.addEventListener('costa_text_scale_changed', handleScaleEvent);
+      return () => window.removeEventListener('costa_text_scale_changed', handleScaleEvent);
     }
   }, []);
 
@@ -87,10 +95,11 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
   const changeTextScale = (delta: number) => {
     setTextScale((prev) => {
-      const nextScale = Math.min(145, Math.max(100, prev + delta));
+      const nextScale = Math.min(200, Math.max(100, prev + delta));
       if (typeof window !== 'undefined') {
         localStorage.setItem('costa_de_oro_text_scale', nextScale.toString());
         applyScaleToHtml(nextScale);
+        window.dispatchEvent(new CustomEvent('costa_text_scale_changed', { detail: nextScale }));
       }
       return nextScale;
     });
@@ -98,15 +107,16 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
   const cycleTextScale = () => {
     setTextScale((prev) => {
-      let next = 115;
-      if (prev === 100) next = 115;
-      else if (prev === 115) next = 130; // Modo S23 Ultra
-      else if (prev === 130) next = 145;
-      else next = 100;
+      let next = 130;
+      if (prev <= 115) next = 130; // Modo Cómodo S23 Ultra
+      else if (prev <= 145) next = 160; // Modo Grande
+      else if (prev <= 180) next = 200; // Modo Ultra 200%
+      else next = 100; // Restablecer a estándar
 
       if (typeof window !== 'undefined') {
         localStorage.setItem('costa_de_oro_text_scale', next.toString());
         applyScaleToHtml(next);
+        window.dispatchEvent(new CustomEvent('costa_text_scale_changed', { detail: next }));
       }
       return next;
     });
@@ -117,38 +127,45 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
     if (typeof window !== 'undefined') {
       localStorage.setItem('costa_de_oro_text_scale', '100');
       applyScaleToHtml(100);
+      window.dispatchEvent(new CustomEvent('costa_text_scale_changed', { detail: 100 }));
     }
   };
 
-  // Selector de voz femenina latina para español / voz femenina norteamericana para inglés
+  // Selector de voz femenina costarricense / latina suave para español y US femenina para inglés
   const selectOptimalVoice = useCallback(
     (lang: 'es' | 'en') => {
       const allVoices = voices.length > 0 ? voices : typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis.getVoices() : [];
 
       if (lang === 'es') {
-        // 1. Voz Femenina Latina preferente (México, Costa Rica, US, Colombia, etc.)
+        // 1. Voz específica de Costa Rica (es-CR)
+        const costaRicaVoice = allVoices.find(
+          (v) => (v.lang.includes('es-CR') || v.lang.includes('es_CR')) &&
+                 !/male|hombre|jorge|diego|carlos|enrique|raul|raúl|pablo/i.test(v.name)
+        );
+        if (costaRicaVoice) return costaRicaVoice;
+
+        // 2. Voz Femenina Latina preferente natural (México, Colombia, US, etc.)
         const latamFemale = allVoices.find(
           (v) =>
             (v.lang.startsWith('es-') || v.lang.startsWith('es_')) &&
             !v.lang.includes('es-ES') &&
-            (/female|mujer|paulina|sabina|monica|mónica|mia|sofia|sofía|dalia|paloma|camila|lupe|rosa|helena|zira/i.test(v.name) ||
+            (/female|mujer|paulina|sabina|monica|mónica|mia|sofia|sofía|dalia|paloma|camila|lupe|rosa|helena|zira|natural|google/i.test(v.name) ||
              !/male|hombre|jorge|diego|carlos|enrique|raul|raúl|pablo/i.test(v.name))
         );
         if (latamFemale) return latamFemale;
 
-        // 2. Cualquier voz en español latino
+        // 3. Cualquier voz en español latinoamericano
         const latamAny = allVoices.find(
           (v) =>
-            v.lang.includes('es-MX') ||
             v.lang.includes('es-CR') ||
-            v.lang.includes('es-US') ||
             v.lang.includes('es-419') ||
-            v.lang.includes('es-CO') ||
-            v.lang.includes('es-CL')
+            v.lang.includes('es-MX') ||
+            v.lang.includes('es-US') ||
+            v.lang.includes('es-CO')
         );
         if (latamAny) return latamAny;
 
-        // 3. Fallback en español
+        // 4. Fallback en español
         return allVoices.find((v) => v.lang.startsWith('es')) || null;
       } else {
         // 1. Voz Femenina Norteamericana (en-US)
@@ -200,12 +217,12 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
       utterance.voice = optimalVoice;
       utterance.lang = optimalVoice.lang;
     } else {
-      utterance.lang = language === 'en' ? 'en-US' : 'es-MX';
+      utterance.lang = language === 'en' ? 'en-US' : 'es-CR';
     }
 
-    // Tono femenino cálido y ritmo pausado DUA
-    utterance.pitch = 1.12; 
-    utterance.rate = 0.95; 
+    // Tono femenino costarricense cálido, suave, sutil y velocidad media pausada
+    utterance.pitch = 1.04; 
+    utterance.rate = 0.90; 
 
     utterance.onend = () => setIsPlaying(false);
     utterance.onerror = () => setIsPlaying(false);
@@ -301,7 +318,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
       <button
         type="button"
         onClick={cycleTextScale}
-        title={`Tamaño actual: ${textScale}%. Clic para alternar a 115%, 130% o 145%`}
+        title={`Tamaño actual: ${textScale}%. Clic para alternar a 130% (S23 Ultra), 160% o 200% (Ultra)`}
         className={`px-2 py-1 rounded-md font-mono font-black text-xs transition-colors cursor-pointer ${
           textScale > 100
             ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
@@ -315,7 +332,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
         type="button"
         onClick={() => changeTextScale(15)}
         title="Aumentar tamaño de texto (A+)"
-        disabled={textScale >= 145}
+        disabled={textScale >= 200}
         className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed font-black text-xs transition-colors cursor-pointer"
       >
         A+

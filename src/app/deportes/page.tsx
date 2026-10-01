@@ -121,15 +121,9 @@ export default function DeportesPage() {
               {activeSport === 'futbol' ? '⚽' : activeSport === 'voleibol' ? '🏐' : '🏀'}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-extrabold text-[10.5px] uppercase tracking-wider">
-                  {t('sports.badge')}
-                </span>
-                <span className="text-slate-300">•</span>
-                <span className="text-xs text-slate-500 font-medium">
-                  {activeSport === 'futbol' ? 'Fútbol Formativo' : activeSport === 'voleibol' ? 'Voleibol Sala' : 'Baloncesto FIBA'}
-                </span>
-              </div>
+              <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">
+                {activeSport === 'futbol' ? 'Fútbol Formativo' : activeSport === 'voleibol' ? 'Voleibol Sala' : 'Baloncesto FIBA'}
+              </span>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight mt-0.5">
                 {activeSport === 'futbol' ? t('sports.soccer') : activeSport === 'voleibol' ? t('sports.volleyball') : t('sports.basketball')}
               </h2>

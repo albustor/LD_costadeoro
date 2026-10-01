@@ -42,17 +42,111 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* 🔍 Niveles de Escala Tipográfica DUA Accesibles */
+/* 🔍 Niveles de Escala Tipográfica DUA Accesibles con Reflow */
 html.text-scale-100 { font-size: 16px !important; }
-html.text-scale-115 { font-size: 18.4px !important; }
 html.text-scale-130 { font-size: 20.8px !important; } /* Nivel Cómodo S23 Ultra (130%) */
-html.text-scale-145 { font-size: 23.2px !important; }
+html.text-scale-160 { font-size: 25.6px !important; } /* Nivel Grande (160%) */
+html.text-scale-200 { font-size: 32.0px !important; } /* Nivel Ultra Macro (200%) */
 
 @media (max-width: 640px) {
-  html.text-scale-100 { font-size: 17.5px !important; }
-  html.text-scale-115 { font-size: 20.1px !important; }
-  html.text-scale-130 { font-size: 22.8px !important; } /* Nivel Cómodo S23 Ultra en móvil */
-  html.text-scale-145 { font-size: 25.4px !important; }
+  html.text-scale-100 { font-size: 17.5px; }
+  html.text-scale-130 { font-size: 22.8px; } /* Nivel Cómodo S23 Ultra en móvil */
+  html.text-scale-160 { font-size: 28.0px; } /* Nivel Grande en móvil */
+  html.text-scale-200 { font-size: 35.0px; } /* Nivel Ultra Macro en móvil (200%) */
+}
+
+/* 🛡️ Reglas de Reflow Universal (Cero Desbordamiento Horizontal) */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, main, section, header, footer, div, article, aside {
+  max-width: 100vw;
+}
+
+p, span, h1, h2, h3, h4, h5, h6, label, button, a {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Animación suave continua para transición de escala */
+html {
+  transition: font-size 0.45s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+html.scale-animating {
+  transition: font-size 0.45s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* ✨ Animación Tutorial de Dos Dedos (Pinch Expand / Contract) */
+@keyframes touchPinchExpandContract {
+  0%, 15% {
+    transform: scale(0.88);
+    opacity: 0.6;
+  }
+  45%, 65% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  85%, 100% {
+    transform: scale(0.88);
+    opacity: 0.6;
+  }
+}
+
+@keyframes fingerLeftMove {
+  0%, 15% {
+    transform: translate(8px, 6px) scale(0.9);
+  }
+  45%, 65% {
+    transform: translate(-18px, -14px) scale(1.1);
+  }
+  85%, 100% {
+    transform: translate(8px, 6px) scale(0.9);
+  }
+}
+
+@keyframes fingerRightMove {
+  0%, 15% {
+    transform: translate(-8px, -6px) scale(0.9);
+  }
+  45%, 65% {
+    transform: translate(18px, 14px) scale(1.1);
+  }
+  85%, 100% {
+    transform: translate(-8px, -6px) scale(0.9);
+  }
+}
+
+@keyframes touchRipplePulse {
+  0%, 15% {
+    transform: scale(0.6);
+    opacity: 0.2;
+  }
+  45%, 65% {
+    transform: scale(1.4);
+    opacity: 0.8;
+  }
+  85%, 100% {
+    transform: scale(0.6);
+    opacity: 0.2;
+  }
+}
+
+.animate-finger-left {
+  animation: fingerLeftMove 2.8s infinite ease-in-out;
+}
+
+.animate-finger-right {
+  animation: fingerRightMove 2.8s infinite ease-in-out;
+}
+
+.animate-pinch-card {
+  animation: touchPinchExpandContract 2.8s infinite ease-in-out;
+}
+
+.animate-touch-ripple {
+  animation: touchRipplePulse 2.8s infinite ease-in-out;
 }
 
 /* Minimalist Clean Scrollbars */

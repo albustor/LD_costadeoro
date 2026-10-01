@@ -113,14 +113,14 @@ export function PwaInstallButton({ variant = 'header', className = '' }: PwaInst
         </button>
       )}
 
-      {/* Modal Instructivo para iPhone (iOS) y Navegadores */}
+      {/* Modal Instructivo Diferenciado para iPhone (iOS) y Android */}
       {showIOSModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
           <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 max-w-sm w-full shadow-2xl relative space-y-4">
             {/* Botón Cerrar */}
             <button
               onClick={() => setShowIOSModal(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+              className="absolute top-4 right-4 p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
               aria-label="Cerrar"
             >
               <X className="w-4 h-4" />
@@ -140,51 +140,118 @@ export function PwaInstallButton({ variant = 'header', className = '' }: PwaInst
                   Instalar Liga Costa de Oro
                 </h3>
                 <p className="text-[11px] text-slate-500 font-medium">
-                  Acceso directo rápido y sin descargas pesadas
+                  Acceso directo oficial de alta velocidad
                 </p>
               </div>
             </div>
 
-            {/* Pasos para iPhone / iOS Safari */}
-            <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 space-y-2.5 text-xs text-slate-700">
-              <div className="flex items-start gap-2.5">
-                <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                  1
-                </div>
-                <div className="leading-snug">
-                  Toca el botón <strong className="text-slate-900">Compartir</strong>{' '}
-                  <span className="inline-flex items-center px-1.5 py-0.5 bg-white rounded border border-amber-300 text-[10px] font-bold text-amber-900 mx-1">
-                    <Share className="w-3 h-3 inline mr-1 text-blue-600" /> Compartir
-                  </span>{' '}
-                  o los tres puntitos en la barra inferior de Safari.
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                  2
-                </div>
-                <div className="leading-snug">
-                  Desplaza hacia abajo y selecciona la opción{' '}
-                  <strong className="text-slate-900">"Agregar a inicio"</strong>{' '}
-                  <span className="inline-flex items-center px-1.5 py-0.5 bg-white rounded border border-amber-300 text-[10px] font-bold text-slate-900 mx-1">
-                    <PlusSquare className="w-3 h-3 inline mr-1 text-slate-700" /> Agregar a inicio
-                  </span>.
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
-                  3
-                </div>
-                <div className="leading-snug">
-                  Toca <strong className="text-slate-900">"Agregar"</strong> en la esquina superior derecha y ¡listo! Tendrás el icono oficial en tu pantalla.
-                </div>
-              </div>
+            {/* Pestañas de Selección de Dispositivo */}
+            <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setIsIOS(false)}
+                className={`py-1.5 rounded-lg transition-all cursor-pointer ${
+                  !isIOS
+                    ? 'bg-white text-slate-950 shadow-xs font-black'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                🤖 Android
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsIOS(true)}
+                className={`py-1.5 rounded-lg transition-all cursor-pointer ${
+                  isIOS
+                    ? 'bg-white text-slate-950 shadow-xs font-black'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                🍎 iPhone (iOS)
+              </button>
             </div>
 
+            {/* Contenido para Android (Instalación Automática) */}
+            {!isIOS ? (
+              <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-4 space-y-3 text-xs text-slate-700">
+                <div className="flex items-center gap-2 text-emerald-900 font-black text-xs">
+                  <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Instalación Automática en Android</span>
+                </div>
+                <p className="text-slate-700 leading-relaxed font-medium">
+                  En dispositivos <strong>Android (Samsung, Xiaomi, Pixel)</strong> la app se instala con 1 solo toque.
+                </p>
+
+                {deferredPrompt ? (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (deferredPrompt) {
+                        await deferredPrompt.prompt();
+                        const res = await deferredPrompt.userChoice;
+                        if (res.outcome === 'accepted') setInstalled(true);
+                        setDeferredPrompt(null);
+                        setShowIOSModal(false);
+                      }
+                    }}
+                    className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Instalar Ahora (1 Toque)</span>
+                  </button>
+                ) : (
+                  <div className="bg-white/80 border border-emerald-200 rounded-xl p-2.5 text-[11px] text-slate-600 space-y-1">
+                    <p className="font-semibold text-slate-800">Si no aparece el diálogo automático:</p>
+                    <p>Toca los <strong>tres puntitos (⋮)</strong> en la esquina de Chrome y selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Contenido para iPhone / iOS Safari */
+              <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 space-y-2.5 text-xs text-slate-700">
+                <div className="flex items-center gap-1.5 text-amber-950 font-black text-xs pb-0.5">
+                  <span>🍎 Pasos para iPhone / iPad (Safari)</span>
+                </div>
+
+                <div className="flex items-start gap-2.5">
+                  <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                    1
+                  </div>
+                  <div className="leading-snug">
+                    Toca el botón <strong className="text-slate-900">Compartir</strong>{' '}
+                    <span className="inline-flex items-center px-1.5 py-0.5 bg-white rounded border border-amber-300 text-[10px] font-bold text-amber-900 mx-1">
+                      <Share className="w-3 h-3 inline mr-1 text-blue-600" /> Compartir
+                    </span>{' '}
+                    en la barra inferior de Safari.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5">
+                  <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                    2
+                  </div>
+                  <div className="leading-snug">
+                    Desplaza hacia abajo y selecciona{' '}
+                    <strong className="text-slate-900">"Agregar a inicio"</strong>{' '}
+                    <span className="inline-flex items-center px-1.5 py-0.5 bg-white rounded border border-amber-300 text-[10px] font-bold text-slate-900 mx-1">
+                      <PlusSquare className="w-3 h-3 inline mr-1 text-slate-700" /> Agregar a inicio
+                    </span>.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5">
+                  <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
+                    3
+                  </div>
+                  <div className="leading-snug">
+                    Toca <strong className="text-slate-900">"Agregar"</strong> en la esquina superior derecha y ¡listo!
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Ventajas */}
-            <div className="flex items-center gap-2 text-[11px] text-slate-600 font-medium pt-1">
+            <div className="flex items-center gap-2 text-[11px] text-slate-600 font-medium pt-0.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>Marcadores en vivo, sin anuncios y consumo ultra-bajo de datos.</span>
             </div>
@@ -193,7 +260,7 @@ export function PwaInstallButton({ variant = 'header', className = '' }: PwaInst
             <button
               onClick={() => setShowIOSModal(false)}
               type="button"
-              className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold rounded-xl transition-all shadow-xs"
+              className="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold rounded-xl transition-all shadow-xs cursor-pointer"
             >
               ¡Entendido!
             </button>

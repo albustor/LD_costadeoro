@@ -82,10 +82,7 @@ export function SportScheduleView({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-700">
-            Disciplinas y Modalidades Oficiales:
-          </span>
-          <span className="text-xs font-bold text-amber-800 bg-amber-100/80 px-2.5 py-0.5 rounded-full border border-amber-300">
-            3 Deportes Oficiales
+            Disciplinas:
           </span>
         </div>
 

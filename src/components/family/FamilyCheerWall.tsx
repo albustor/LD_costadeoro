@@ -789,51 +789,21 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       {/* 💬 FEED DE PORRAS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
       {!featuredOnly && (
         <div className="space-y-4">
-          {/* 🔍 BARRA DE FILTRADO VISUALMENTE DESTACADA */}
-          <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-3.5 sm:p-4 shadow-sm border border-slate-800 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 pb-2.5">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                  <Filter className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-extrabold tracking-tight text-white flex items-center gap-1.5">
-                    <span>Explorar Publicaciones por Delegación</span>
-                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                      {filteredPosts.length} {filteredPosts.length === 1 ? 'mensaje' : 'mensajes'}
-                    </span>
-                  </h4>
-                  <p className="text-[11px] text-slate-400">
-                    Filtra el muro para ver las porras y fotos de una institución específica.
-                  </p>
-                </div>
-              </div>
-
-              {selectedSchoolFilter !== 'all' && (
-                <button
-                  type="button"
-                  onClick={() => setSelectedSchoolFilter('all')}
-                  className="text-[11px] font-bold text-amber-400 hover:text-amber-300 underline self-start sm:self-auto cursor-pointer"
-                >
-                  Limpiar filtro (Ver todos)
-                </button>
-              )}
-            </div>
-
-            {/* Pills interactivos de colegios con logotipo e indicadores */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+          {/* 🔍 SELECTOR RÁPIDO DE DELEGACIÓN (MINIMALISTA Y ÁGIL) */}
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 flex-1">
               <button
                 type="button"
                 onClick={() => setSelectedSchoolFilter('all')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                   selectedSchoolFilter === 'all'
-                    ? 'bg-amber-500 text-slate-950 shadow-sm font-black'
-                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                    ? 'bg-amber-500 text-slate-950 shadow-xs font-black'
+                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
                 }`}
               >
                 <span>Todos</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-                  selectedSchoolFilter === 'all' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-700 text-slate-300'
+                  selectedSchoolFilter === 'all' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-600'
                 }`}>
                   {posts.length}
                 </span>
@@ -849,14 +819,14 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     onClick={() => setSelectedSchoolFilter(s.id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                       isSelected
-                        ? 'bg-amber-500 text-slate-950 shadow-sm font-black ring-2 ring-amber-400/40'
-                        : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                        ? 'bg-amber-500 text-slate-950 shadow-xs font-black ring-2 ring-amber-400/40'
+                        : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
                     }`}
                   >
                     <SchoolEmblem schoolId={s.id} size="xs" />
                     <span>{s.shortName}</span>
                     <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-                      isSelected ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-700 text-slate-300'
+                      isSelected ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-600'
                     }`}>
                       {countForSchool}
                     </span>
@@ -864,6 +834,16 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 );
               })}
             </div>
+
+            {selectedSchoolFilter !== 'all' && (
+              <button
+                type="button"
+                onClick={() => setSelectedSchoolFilter('all')}
+                className="text-[11px] font-bold text-amber-700 hover:text-amber-800 underline shrink-0 cursor-pointer"
+              >
+                Ver todos
+              </button>
+            )}
           </div>
 
           {/* Tarjetas de Porras */}
@@ -878,28 +858,34 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   key={post.id}
                   className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-2xs space-y-3 transition-all hover:border-slate-300"
                 >
-                  {/* Encabezado: Escudo del Colegio y Autor */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2.5">
+                  {/* Encabezado: Escudo + Autor en ancho completo para Reflow perfecto */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
                       <SchoolEmblem schoolId={school.id} size="sm" />
-                      <div>
-                        <span className="block font-bold text-xs sm:text-sm text-slate-900">
-                          {post.authorName}
-                        </span>
-                        <span className="block text-[10.5px] text-slate-500 font-medium">
-                          {post.authorRelation} de {school.shortName} • {post.createdAt}
-                        </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug">
+                            {post.authorName}
+                          </h4>
+                          <span className="text-[10px] text-slate-400 font-mono shrink-0">
+                            {post.createdAt}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-amber-800 font-bold leading-tight mt-0.5">
+                          {post.authorRelation} · {school.name}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    {/* Badges de Valor e IA en su propia fila */}
+                    <div className="flex items-center gap-1.5 flex-wrap">
                       {post.isFeatured && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-200 shadow-2xs">
                           <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                           <span>Destacado</span>
                         </span>
                       )}
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9.5px] font-bold border border-emerald-200">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9.5px] font-bold border border-emerald-200 shadow-2xs">
                         <Sparkles className="w-3 h-3 text-emerald-600" />
                         <span>Valor Humano IA</span>
                       </span>

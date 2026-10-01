@@ -83,6 +83,98 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 - **Decisión**: Extensión de `tournament_db.json` con la entidad `rosters: TeamRoster[]`, creación del endpoint `/api/rosters` (GET/POST) con soporte individual y por lotes, y actualización de `rosterService.ts` y `SchoolRosterManager.tsx` con sincronización bidireccional inmediata.
 - **Estado**: ✅ Implementado, auditado y verificado con `npm run build`.
 
+### ADR-010: Reflow Continuo al 200%, Micro-animación Tutorial de 2 Dedos e Interpolación LERP
+- **Contexto**: Se requería escalabilidad tipográfica avanzada para teléfonos de alta densidad (Samsung Galaxy S23 Ultra) que alcanzara hasta el 200% (Modo Macro) sin generar desplazamiento lateral (Reflow WCAG 2.2). El movimiento inicial presentaba saltos discretos bruscos y la indicación tutorial no era visualmente evidente.
+- **Decisión**:
+  1. Implementación de física de amortiguación continua (LERP `0.10` a 60 FPS con `requestAnimationFrame`) en `TouchReflowZoomProvider.tsx`.
+  2. Curva elástica de transición en CSS: `transition: font-size 0.45s cubic-bezier(0.25, 1, 0.5, 1) !important;`.
+  3. Micro-animación tutorial SVG en `GestureOnboardingHint.tsx` con dos dedos estilizados, ondas de pulso concéntricas y simulación de reflow al cargar la web.
+- **Estado**: ✅ Implementado, verificado y probado en dispositivos móviles reales.
+
+### ADR-011: Estandarización del Footer Institucional y Autoría Curiol Studio
+- **Contexto**: Organización visual y jerárquica del pie de página para albergar el escudo oficial de la liga, NextPlay, la autoría de desarrollo y los derechos reservados de forma armónica.
+- **Decisión**:
+  1. Jerarquía superior con escudo de la liga y NextPlay (`Sedes rotativas · Guanacaste, Costa Rica`).
+  2. Logo de Curiol Studio con enlace directo a `https://curiol.studio` y leyenda sutil `"Desarrollo WebApp"`.
+  3. Leyenda institucional inferior: `© 2026 Liga Costa de Oro 2026. Festival deportivo intercolegial. Guanacaste, Costa Rica. Todos los derechos reservados.`
+### ADR-012: Prevención de Colapso de Texto Vertical en Flexbox (Muro Familiar)
+- **Contexto**: El nombre del autor en las publicaciones del muro se colapsaba a 1 solo carácter por línea de forma vertical (`F-a-m-i-l-i-a...`) debido a la regla agresiva `word-break: break-word` combinada con contenedores `flex` sin `min-w-0 flex-1`.
+- **Decisión**:
+  1. En `src/app/globals.css`: Homologación de `overflow-wrap: break-word; word-break: normal;`.
+  2. En `src/components/family/FamilyCheerWall.tsx`: Adición de `min-w-0 flex-1` y `flex-wrap` al encabezado de las tarjetas para que el texto y los badges fluyan horizontalmente en cualquier resolución.
+- **Estado**: ✅ Implementado, verificado y corregido.
+
+### ADR-013: Detección y Flujos Diferenciados de Instalación PWA (Android vs. iOS)
+- **Contexto**: El modal instructivo de instalación mostraba únicamente los pasos manuales de Safari para iPhone, confundiendo a los usuarios de Android (Samsung Galaxy S23 Ultra) donde la instalación es nativa con un solo toque.
+- **Decisión**: En `src/components/pwa/PwaInstallButton.tsx`, se implementó detección de plataforma y selector de pestañas:
+  - **Android**: Botón directo de 1 toque (*"Instalar Ahora"*) que dispara el diálogo nativo del sistema operativo (`beforeinstallprompt`).
+  - **iPhone (iOS Safari)**: Guía detallada de 3 pasos (*Compartir ➔ Agregar a inicio*).
+- **Estado**: ✅ Implementado y activo.
+
+### ADR-014: Homologación de Síntesis de Voz Costarricense / Latina Cálida (DUA)
+- **Contexto**: Se requería una locución uniforme, suave y pausada en todas las secciones de la plataforma.
+- **Decisión**: En `src/components/accessibility/DuaAccessibilityBar.tsx`:
+  - Fijación obligatoria del código regional `es-CR` (Costa Rica).
+  - Prioridad de voces femeninas latinas naturales (`es-CR`, `Paulina`, `Sabina`, `Mónica`, `Dalia`, `Sofía`).
+  - Calibración de tono suave `pitch = 1.04` y velocidad media equilibrada `rate = 0.90` en todas las páginas.
+### ADR-015: Reestructuración de Tarjetas y Unificación de Filtros de Delegación en el Muro
+- **Contexto**:
+  1. El texto largo del autor en las tarjetas del muro se comprimía severamente porque compartía la misma fila horizontal con los badges de *Destacado* y *Valor Humano IA*.
+  2. La barra de filtrado por delegación utilizaba una caja azul oscura redundante y voluminosa que desplazaba las publicaciones fuera del viewport en smartphones.
+- **Decisión**:
+  1. En `src/components/family/FamilyCheerWall.tsx`: El encabezado de cada publicación se estructuró verticalmente: la fila superior aloja el escudo institucional y el nombre del autor en el 100% del ancho (~340px), y los badges se ubican en una segunda línea sutil, garantizando legibilidad perfecta hasta el 200% de zoom.
+  2. Se sustituyó el banner oscuro por una barra minimalista y ligera de pestañas (`Todos (8)`, `La Paz (3)`, etc.) directamente sobre el feed.
+### ADR-016: Rediseño Mobile-First y Prevención de Colapso Visual en Tarjetas de Partidos
+- **Contexto**: En la sección de Colegios y Deportes, las tarjetas de partidos en móviles (390px / S23 Ultra) sufrían de compresión severa: las categorías largas colisionaban con el estado del partido, el nombre del rival se truncaba a fragmentos ilegibles por falta de ancho horizontal y la sede se cortaba en el borde inferior.
+- **Decisión**:
+  1. En `src/app/colegios/page.tsx`: Se rediseñó la tarjeta de partido con estructura elástica:
+      - Fila superior: Deporte y categoría formateados de forma nítida junto a la insignia de estado (`Programado`, `En vivo`, `Finalizado`).
+      - Fila central: Enfrentamiento directo con ancho completo, micro-etiquetas compactas (`Local vs` / `Visita vs`), escudo en alta resolución y nombre del rival sin asfixia de espacio.
+      - Fila inferior: Fecha, hora y sede con salto responsivo multilínea (*`flex-wrap`*).
+   2. En `src/components/sports/MatchCard.tsx`: Se homologó la misma arquitectura flexbox resiliente para todas las vistas deportivas de la aplicación.
+- **Estado**: ✅ Implementado, auditado y activo en localhost.
+
+### ADR-017: Showcase Multimedia Interactivo en Portada (Video Oficial + Galería NextPlay)
+- **Fecha**: 2026-09-30
+- **Contexto**: Se requería una forma de navegación en el espacio del video oficial de la portada para alternar entre la presentación oficial y la serie de tres postales gráficas de mentalidad deportiva de NextPlay (*Falling is not the end*, *Próxima jugada*, *Cada día es una nueva jugada*).
+- **Decisión**:
+  1. En `src/components/home/EventIntroVideo.tsx`: Se transformó el contenedor estático en un visualizador multimedia responsivo (16:9) con 4 diapositivas indexadas.
+  2. Se incorporaron flechas de navegación táctil flotantes (`<` y `>`) con backdrop blur, detector de gestos swipe (`onTouchStart`/`onTouchEnd`) para smartphones y barra de píldoras de acceso directo con iconos y micro-etiquetas.
+  3. Se diseñó un pie descriptivo dinámico que actualiza en tiempo real el título, insignia y lema inspirador del recurso visible.
+- **Estado**: ✅ Implementado, auditado y activo en localhost.
+
+### ADR-018: Navegación Minimalista por Iconos y Flechas en Carrusel de Portada
+- **Fecha**: 2026-09-30
+- **Contexto**: La barra de 4 botones de 2x2 con texto y la tarjeta descriptiva inferior generaban sobrecarga visual y restaban espacio vertical en pantallas móviles.
+- **Decisión**:
+  1. En `src/components/home/EventIntroVideo.tsx`: Se eliminó el texto de los botones y se consolidó en una sola línea horizontal ultra-compacta.
+  2. Se colocaron botones de flechas dedicadas (`‹` y `›`) en los extremos para avanzar y retroceder con 1 toque.
+  3. En el centro se ubicaron 4 iconos interactivos (`▶`, `🛡️`, `⚡`, `🤝`) con realce dorado y escala suave para el elemento activo.
+  4. Se eliminó por completo la tarjeta inferior de texto redundante, permitiendo que las postales gráficas comuniquen directamente el mensaje visual de forma inmersiva.
+- **Estado**: ✅ Implementado, auditado y activo en localhost.
+
+### ADR-019: Integración de Nuevo Video Oficial Bunny Stream y Limpieza de Badges en Deportes/Calendario
+- **Fecha**: 2026-09-30
+- **Contexto**: Se solicitó integrar la nueva versión del video oficial en la portada e index, eliminar el badge ámbar redundante "Disciplinas Oficiales" en la vista de deportes y simplificar el selector de modalidades deportivas a "Disciplinas:".
+- **Decisión**:
+  1. En `src/components/home/EventIntroVideo.tsx`: Se actualizó el endpoint de Bunny Stream a la URL oficial `https://player.mediadelivery.net/embed/766057/796e64d3-a2f6-46fa-b540-9e4310cb217b?autoplay=true&loop=false&muted=true&preload=true&responsive=true`.
+  2. En `src/app/deportes/page.tsx`: Se retiró el badge ámbar `DISCIPLINAS OFICIALES` y su separador en la ficha técnica, dejando directamente la modalidad formativa con estética limpia.
+  3. En `src/components/sports/SportScheduleView.tsx`: Se simplificó el encabezado a `Disciplinas:`, eliminando la etiqueta `3 Deportes Oficiales`.
+- **Estado**: ✅ Implementado, auditado y activo en localhost.
+
+### ADR-020: Sincronización Fidedigna 1:1 del Fixture Oficial de Juegos (Jornada 1: 5 al 9 de Octubre 2026)
+- **Fecha**: 2026-09-30
+- **Contexto**: Se requería extraer y validar con precisión 1:1 los 15 partidos oficiales programados para la Jornada 1 a partir del afiche oficial del festival, reseteando marcadores y puntos a cero, e incorporar las insignias solicitadas en la portada.
+- **Decisión**:
+  1. En `src/lib/initialData.ts` y `src/data/tournament_db.json`: Se actualizaron los 15 partidos oficiales por día, hora, categoría y sede:
+     - Lunes 05 Oct (Fútbol Femenino, Cancha de La Garita Nueva, 3:30 pm): CRIA vs LP Cabo Velas / LP Tempisque vs Vittorino.
+     - Martes 06 Oct (Fútbol C, Cancha de La Garita Nueva): 3:15 pm (CRIA vs LP Cabo Velas / LP Tempisque vs Journey) y 4:00 pm (Vittorino vs CRIA / LP Cabo Velas vs LP Tempisque).
+     - Miércoles 07 Oct (Fútbol D, CRIA, 3:15 pm): CRIA vs LP Cabo Velas / LP Tempisque vs Vittorino (Estado: *SE REPROGRAMA*).
+     - Jueves 08 Oct (Voleibol Femenino, Arena La Paz): 3:15 pm Cat C (Journey vs LP Cabo Velas / Educarte vs Vittorino) y 4:15 pm Cat D (Journey vs LP Cabo Velas / Educarte vs Vittorino).
+     - Viernes 09 Oct (Baloncesto, CRIA): 3:15 pm Cat C (LP Cabo Velas vs LP Tempisque, descansa Educarte), 4:15 pm Cat D (Journey vs LP Tempisque) y 5:15 pm Cat D (CRIA vs LP Cabo Velas).
+  2. En `src/app/page.tsx` y `src/lib/translations.ts`: Se homologaron las insignias de bienvenida: «🏆 Festival Costa de Oro», «Festival Deportivo Intercolegial 2026» y «Octubre y Noviembre 2026».
+- **Estado**: ✅ Implementado, auditado y activo en localhost.
+
 ---
 
 ## 4. Estructura de Persistencia y Modelos de Datos
@@ -115,7 +207,19 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-09-30 | Configuración de Bunny Stream Oficial (Library 766057 & API Key) y Sincronización Dual Nube + Local | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Limpieza total de datos a Estado Cero (marcadores 0-0, muro limpio, nóminas listas) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Sistema de Escalado Tipográfico Adaptativo Móvil (Modo Cómodo S23 Ultra al 130%) | ✅ Completado | Jim (Curiol Studio) |
-| 2026-09-30 | Despliegue Oficial en Producción Vercel (`https://costadeoro.curiol.studio`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Motor de Escalado hasta 200% y Gesto Táctil de Pellizco (Pinch-to-Scale) con Cero Scroll Horizontal (Reflow WCAG 2.2) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Micro-animación tutorial SVG de dos dedos y suavizado LERP 60 FPS | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Rediseño y armonización del Footer con enlace oficial a Curiol Studio | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Corrección de rotura vertical de texto en Muro (`overflow-wrap` & `min-w-0 flex-1`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Eliminación total de la manito residual al cerrar modal de gestos | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Calibración de voz femenina costarricense `es-CR` uniforme en todo el sitio | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Instalador PWA diferenciado con 1 toque en Android y guía Safari para iPhone | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Reestructuración de tarjetas (Reflow ancho completo) y barra de filtros unificada en Muro | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Rediseño mobile-first y anti-recorte en tarjetas de partidos (`/colegios` y `/calendario`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Showcase Multimedia Interactivo en Portada (Video Oficial + Galería NextPlay) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Barra de Navegación Minimalista por Iconos y Flechas en Portada | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Integración de Nuevo Video Oficial y Limpieza de Badges en Deportes/Calendario | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Sincronización 1:1 Fixture Oficial Jornada 1 (15 Partidos, Cero Puntos y Badges) | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 

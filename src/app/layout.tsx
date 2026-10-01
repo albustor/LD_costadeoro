@@ -8,6 +8,8 @@ import { Footer } from '@/components/layout/Footer';
 import { LiveMatchBanner } from '@/components/sports/LiveMatchBanner';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { DevViewportBar } from '@/components/dev/DevViewportBar';
+import { TouchReflowZoomProvider } from '@/components/accessibility/TouchReflowZoomProvider';
+import { GestureOnboardingHint } from '@/components/accessibility/GestureOnboardingHint';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://costadeoro.curiol.studio'),
@@ -97,25 +99,30 @@ export default function RootLayout({
         <TierProvider>
           <LanguageProvider>
             <TournamentProvider>
-              {/* Minimalist Sticky Header */}
-              <Header />
+              <TouchReflowZoomProvider>
+                {/* Minimalist Sticky Header */}
+                <Header />
 
-              {/* Dynamic Live Match Indicator */}
-              <LiveMatchBanner />
+                {/* Dynamic Live Match Indicator */}
+                <LiveMatchBanner />
 
-              {/* Main Content Area */}
-              <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3 sm:pt-5 pb-2 sm:pb-4 overflow-x-hidden">
-                {children}
-              </main>
+                {/* Main Content Area */}
+                <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3 sm:pt-5 pb-2 sm:pb-4 overflow-x-hidden">
+                  {children}
+                </main>
 
-              {/* Minimalist Footer */}
-              <Footer />
+                {/* Minimalist Footer */}
+                <Footer />
 
-              {/* Mobile PWA Bottom Navigation */}
-              <MobileBottomNav />
+                {/* Mobile PWA Bottom Navigation */}
+                <MobileBottomNav />
 
-              {/* Floating Multi-Device Dev Viewport Toolbar */}
-              <DevViewportBar />
+                {/* Gesture Onboarding Hint (2 Fingers Animation) */}
+                <GestureOnboardingHint />
+
+                {/* Floating Multi-Device Dev Viewport Toolbar */}
+                <DevViewportBar />
+              </TouchReflowZoomProvider>
             </TournamentProvider>
           </LanguageProvider>
         </TierProvider>

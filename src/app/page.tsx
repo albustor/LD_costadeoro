@@ -31,8 +31,11 @@ export default function HomePage() {
               <MapPin className="w-4 h-4 text-amber-600" />
               <span>Sedes rotativas · Guanacaste</span>
             </span>
-            <span className="px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-900 font-bold text-xs sm:text-sm border border-emerald-200">
-              Octubre - noviembre 2026
+            <span className="px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-900 font-bold text-xs sm:text-sm border border-emerald-200 shadow-2xs">
+              Festival Deportivo Intercolegial 2026
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-amber-50/80 text-amber-950 font-bold text-xs sm:text-sm border border-amber-300/80 shadow-2xs">
+              Octubre y Noviembre 2026
             </span>
           </div>
 
