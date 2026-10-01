@@ -23,7 +23,7 @@ export const translations = {
     // Home / Hero
     'hero.welcomeBadge': 'Festival Costa de Oro',
     'hero.title': 'Bienvenidos a la Liga Costa de Oro',
-    'hero.tagline': 'Next Play es un torneo deportivo intercolegial que conecta a estudiantes de Guanacaste a través del fútbol, voleibol y baloncesto, creando espacios para competir, compartir y crecer juntos dentro y fuera de la cancha.',
+    'hero.tagline': 'Liga Costa de Oro es un torneo deportivo intercolegial que conecta a estudiantes de Guanacaste a través del fútbol, voleibol y baloncesto, creando espacios para competir, compartir y crecer juntos dentro y fuera de la cancha.',
     'hero.tab.video': 'Video introductorio del evento',
     'hero.tab.info': 'Información general del evento',
     'hero.videoTitle': 'Video oficial de la Liga Costa de Oro 2026',
@@ -158,7 +158,7 @@ export const translations = {
     // Home / Hero
     'hero.welcomeBadge': 'Costa de Oro Festival',
     'hero.title': 'Welcome to Liga Costa de Oro',
-    'hero.tagline': 'Next Play is an inter-school sports tournament connecting students across Guanacaste through soccer, volleyball, and basketball, creating spaces to compete, share, and grow together on and off the field.',
+    'hero.tagline': 'Liga Costa de Oro is an inter-school sports tournament connecting students across Guanacaste through soccer, volleyball, and basketball, creating spaces to compete, share, and grow together on and off the field.',
     'hero.tab.video': 'Official Intro Video',
     'hero.tab.info': 'General Event Information',
     'hero.videoTitle': 'Official Costa de Oro 2026 League Video',
