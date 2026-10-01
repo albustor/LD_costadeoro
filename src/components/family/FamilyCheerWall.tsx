@@ -416,6 +416,9 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       isFeatured: false,
     });
 
+    // Conmutar de inmediato el filtro visual hacia la delegación donde se publicó
+    setSelectedSchoolFilter(selectedSchoolId);
+
     // Limpiar formulario y dar feedback
     setMessage('');
     setSelectedFile(null);
@@ -424,7 +427,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     setUploadProgress(0);
     setIsPosting(false);
     setShowSuccessBadge(true);
-    setTimeout(() => setShowSuccessBadge(false), 3500);
+    setTimeout(() => setShowSuccessBadge(false), 5000);
   };
 
   // Filtro de posts reactivo
@@ -789,6 +792,30 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       {/* 💬 FEED DE PORRAS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
       {!featuredOnly && (
         <div className="space-y-4">
+          {/* 🌟 BANNER DE CONFIRMACIÓN DE PUBLICACIÓN EXITOSA */}
+          {showSuccessBadge && (
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm animate-fade-in">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div>
+                  <p className="text-xs sm:text-sm font-black text-emerald-900">
+                    ¡Tu mensaje de apoyo ha sido publicado con éxito en el muro!
+                  </p>
+                  <p className="text-[11px] text-emerald-800 font-medium">
+                    Visible inmediatamente para todas las familias y sincronizado en tiempo real.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedSchoolFilter('all')}
+                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0 transition-colors cursor-pointer"
+              >
+                Ver todos los mensajes
+              </button>
+            </div>
+          )}
+
           {/* 🔍 SELECTOR RÁPIDO DE DELEGACIÓN (MINIMALISTA Y ÁGIL) */}
           <div className="flex items-center justify-between gap-2 pt-1">
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 flex-1">
@@ -846,8 +873,48 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             )}
           </div>
 
-          {/* Tarjetas de Porras */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Tarjetas de Porras o Estado Vacío */}
+          {filteredPosts.length === 0 ? (
+            <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 text-center space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+                <Heart className="w-6 h-6 text-amber-500 fill-amber-500" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="font-extrabold text-sm sm:text-base text-slate-900">
+                  Aún no hay porras registradas para esta delegación
+                </h4>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                  {selectedSchoolFilter !== 'all'
+                    ? `¡Sé la primera familia en enviar un mensaje de aliento a los atletas de ${schools.find((s) => s.id === selectedSchoolFilter)?.shortName || 'este colegio'}!`
+                    : 'Sé el primero en enviar apoyo a los deportistas.'}
+                </p>
+              </div>
+              <div className="flex items-center justify-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedSchoolFilter !== 'all') {
+                      setSelectedSchoolId(selectedSchoolFilter);
+                    }
+                    window.scrollTo({ top: 400, behavior: 'smooth' });
+                  }}
+                  className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black shadow-xs transition-all cursor-pointer"
+                >
+                  Escribir mensaje de apoyo
+                </button>
+                {selectedSchoolFilter !== 'all' && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSchoolFilter('all')}
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                  >
+                    Ver otros colegios
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredPosts.map((post) => {
               const school = schools.find((s) => s.id === post.schoolId) || schools[0];
               const isCommentsOpen = openCommentsPostId === post.id;
@@ -1018,6 +1085,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               );
             })}
           </div>
+          )}
         </div>
       )}
 

@@ -108,7 +108,11 @@ export interface Match {
   events?: MatchEvent[];
   officialReport?: MatchOfficialReport;
   status: MatchStatus;
-  currentPeriod?: string; // '1.er Tiempo', '2.° Tiempo', 'Set 2', 'Q3', 'Final'
+  estimatedDurationMinutes?: number; // Duración base estimada en minutos (ej: 60 fútbol, 50 voleibol, 50 baloncesto)
+  customEndTime?: string; // Hora específica de cierre fijada por la mesa (HH:mm)
+  isManualOverride?: boolean; // Bloqueo manual fijado por árbitro / mesa de control
+  autoLifecycleEnabled?: boolean; // Control automático activado (default: true)
+  currentPeriod?: string; // '1.er Tiempo', '2.º Tiempo', 'Set 2', 'Q3', 'Final'
   minute?: number;
   mvpPlayerName?: string;
   mvpSchoolId?: string;

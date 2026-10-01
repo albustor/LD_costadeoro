@@ -292,8 +292,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
         ) : (
           <>
             <Volume2 className="w-4 h-4 text-amber-400" />
-            <span className="hidden sm:inline font-bold">Audio DUA</span>
-            <span className="sm:hidden font-bold">Audio</span>
+            <span className="font-bold">Audio</span>
           </>
         )}
       </button>

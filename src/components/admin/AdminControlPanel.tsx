@@ -32,7 +32,8 @@ import {
   Users,
   X,
   Award,
-  FileSpreadsheet
+  FileSpreadsheet,
+  BarChart3
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -41,6 +42,7 @@ import { LiveDeskScorer } from './LiveDeskScorer';
 import { RosterUploaderModal } from './RosterUploaderModal';
 import { CertificateGeneratorModal } from './CertificateGeneratorModal';
 import { AdminRosterManager } from './AdminRosterManager';
+import { AdminDailyStats } from './AdminDailyStats';
 import { SystemAuditPlanView } from './SystemAuditPlanView';
 
 export function AdminControlPanel() {
@@ -51,7 +53,7 @@ export function AdminControlPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(true); // Open access by default for convenience
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'audit'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'daily_stats' | 'audit'>('results');
 
   // Event-wide Family PIN Configuration State
   const [eventPinInput, setEventPinInput] = useState<string>(() => {
@@ -340,6 +342,17 @@ export function AdminControlPanel() {
             <span>6. Nóminas Excel y Listas</span>
           </button>
           <button
+            onClick={() => setActiveTab('daily_stats')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'daily_stats'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <BarChart3 className="w-3.5 h-3.5 text-amber-500" />
+            <span>7. Estadísticas y Reporte 7:00 AM</span>
+          </button>
+          <button
             onClick={() => setActiveTab('audit')}
             className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'audit'
@@ -348,7 +361,7 @@ export function AdminControlPanel() {
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>7. Plan de Auditoría y Pruebas</span>
+            <span>8. Plan de Auditoría y Pruebas</span>
           </button>
         </div>
       </div>
@@ -880,7 +893,12 @@ export function AdminControlPanel() {
         <AdminRosterManager />
       )}
 
-      {/* 🛡️ PESTAÑA 7: PLAN MAESTRO DE AUDITORÍA Y ANÁLISIS PRÁCTICO */}
+      {/* 📈 PESTAÑA 7: ESTADÍSTICAS DIARIAS Y REPORTE 7:00 AM (EVOLUTION API) */}
+      {activeTab === 'daily_stats' && (
+        <AdminDailyStats />
+      )}
+
+      {/* 🛡️ PESTAÑA 8: PLAN MAESTRO DE AUDITORÍA Y ANÁLISIS PRÁCTICO */}
       {activeTab === 'audit' && (
         <SystemAuditPlanView />
       )}

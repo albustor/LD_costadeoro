@@ -225,6 +225,101 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-09-30 | Calibración de Velocidad de Voz DUA a 1.10 (Cadencia Natural Dinámica) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Estandarización Universal de Horas a Formato 12 Horas (`1:00 pm - 4:30 pm`, `3:15 pm`, etc.) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Corrección de Distribución Responsiva Móvil (1 Columna y Reflow) en Ficha de Colegios (`/colegios`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Simplificación de Botón de Cabecera DUA a sólo «Audio» | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Estandarización Terminológica Universal a «Número de Jugador» en Toda la WebApp y Excel | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Creación del Portal Autónomo de Registro de Nóminas (`/registro-nomina`) con PIN y Carga Excel | ✅ Completado | Jim (Curiol Studio) |
+### ADR-019: Portal Universal de Registro por PIN, Excel Multi-Hoja y Acordeón Público de Nóminas
+- **Contexto**: Las instituciones requerían un único enlace general para el registro de atletas, donde el PIN institucional seccionara y desbloqueara automáticamente su colegio, con soporte para libros de Excel de 3 hojas (Fútbol, Voleibol, Baloncesto). Simultáneamente, se requería limpiar el perfil público de los colegios de formularios y modales de edición, reemplazándolos por un visualizador ligero tipo acordeón y pestañas por deporte.
+- **Decisión**:
+  1. **Enlace Universal Único (`/registro-nomina`)**: Entrada central con PIN Gate de 4 dígitos que detecta y desbloquea el colegio correspondiente (`getSchoolByPin`), permitiendo registro web o subida de archivo.
+  2. **Libro Excel Multi-Hoja XML 2003**: Generador y parser en `rosterService.ts` con 3 pestañas nativas (`<Worksheet ss:Name="Fútbol">`, `<Worksheet ss:Name="Voleibol">`, `<Worksheet ss:Name="Baloncesto">`) con estructura oficial estandarizada y término «Número de Jugador».
+  3. **Visualizador Público Acordeón (`SchoolRosterManager.tsx`)**: Eliminación total de modales y PIN en el perfil del colegio. Pestañas deportivas con conteo en vivo de atletas, acordeón colapsable por categoría oficial y fichas táctiles compactas con **# Jugador**, **Nombre** y distintivo **`© Capitán`**.
+- **Estado**: ✅ Implementado, auditado y verificado con `npm run build`.
+
+### ADR-020: PWA Onboarding con Memoria Local y Suite de Diagnóstico End-to-End
+- **Contexto**: Se requería que el modal tutorial/onboarding de reflow ofreciera el botón directo de «Instalar App» y un checkbox para silenciarlo permanentemente en el dispositivo. Adicionalmente, se solicitó la validación estricta de la persistencia atómica en base de datos y la congruencia matemática del motor de puntajes deportivos.
+- **Decisión**:
+  1. **Persistencia de Onboarding**: Inclusión de checkbox «No volver a mostrar en este dispositivo» guardado en `localStorage` (`costa_hide_onboarding_hint`) y botón de instalación PWA en `GestureOnboardingHint.tsx`.
+  2. **Suite de Diagnóstico en Vivo (`scripts/diagnostico_sistema.ts`)**: Validación automatizada con 10/10 pruebas superadas (salud de endpoints, round-trip de escritura en disco a `tournament_db.json` y verificación matemática de reglamentos Fútbol 3/1/0, Baloncesto FIBA 2/1 y Voleibol FIVB 3-0/3-2).
+- **Estado**: ✅ Implementado y 100% verificado.
+
+### ADR-021: Dashboard de Estadísticas en Tiempo Real y Despacho WhatsApp Matutino con Evolution API
+- **Contexto**: La organización requería simular un estado real de torneo (Jornada 1 jugada con marcadores, goles, sets, puntos y nóminas completas) y contar con un panel de control con métricas diarias en `/admin`, además de despachar a las 7:00 AM un reporte ejecutivo de WhatsApp al número de Don Alejandro.
+- **Decisión**:
+  1. **Poblado de Datos Realistas**: Nóminas con `# Jugador`, posiciones y capitanes para las 6 instituciones en fútbol, voleibol y baloncesto; 11 partidos de la Jornada 1 marcados como concluidos y 4 de la Jornada 2 programados; publicaciones del muro activas con aplausos y comentarios.
+  2. **Dashboard Diario en Admin (`AdminDailyStats.tsx`)**: Integración de la Pestaña 7 en el panel `/admin` con selector de jornada, contadores de goles/sets/puntos, líderes por disciplina, previsualizador de mensaje en vivo y disparador manual.
+  3. **Motor Evolution API & Cron (`evolutionApi.ts` y `/api/cron/reporte-diario-whatsapp`)**: Despacho automático estructurado vía `POST /message/sendText` y fallback directo a WhatsApp Web (`wa.me`) con texto formateado en caso de pruebas locales.
+- **Estado**: ✅ Implementado, auditado y verificado con `npm run build`.
+
+### ADR-022: Sincronización Automática de Filtro y Feedback de Confirmación al Publicar en el Muro Familiar (`/mural`)
+- **Fecha**: 2026-10-01
+- **Contexto**: Al publicar un mensaje de apoyo para una institución en `/mural`, si el filtro activo de la pestaña superior estaba seleccionado en otra delegación (ej. con 0 publicaciones), la lista inferior mantenía el filtro antiguo y no mostraba el nuevo mensaje recién guardado, creando la percepción errónea de que no se había publicado.
+- **Decisión**:
+  1. **Conmutación Inmediata de Filtro**: En `handleSubmitPost` de `FamilyCheerWall.tsx`, tras persistir el post mediante `addFamilyPost(...)`, se actualiza de inmediato el filtro activo `setSelectedSchoolFilter(selectedSchoolId)` para que el nuevo mensaje se sitúe visiblemente al tope del feed.
+  2. **Alerta de Confirmación Flotante**: Inclusión de un banner verde esmeralda `✓ ¡Tu mensaje para [Colegio] ha sido publicado en el muro!` con botón de acceso directo `Ver todos los mensajes`.
+  3. **Empty State Interactivo**: Cuando una delegación seleccionada tenga 0 mensajes, se muestra un contenedor amigable con ilustración y botón directo `¡Sé el primero en enviar apoyo a este colegio!`.
+- **Estado**: ✅ Implementado, verificado y activo.
+
+---
+
+## 4. Estándares y Convenciones del Código
+
+- **Rigor Tipográfico y Terminológico**: La denominación del evento es «Festival Deportivo», las sedes son «La Paz Community School Cabo Velas» y «La Paz Community School Tempisque», y los dorsales son oficialmente «Número de Jugador» o «# Jugador».
+- **Guía Estándar de Capitalización y Ortografía en Español (Normas RAE)**:
+  - *Tipo Oración (Sentence Case)*: Mayúscula inicial únicamente en la primera palabra de títulos, menús, encabezados y botones (evitar *Title Case* anglosajón).
+  - *Mayúsculas Sostenidas*: Restringidas a siglas (`URL`, `DNI`) y obligatoriedad estricta de tildes en mayúsculas (`ADMINISTRACIÓN`, `BÚSQUEDA`).
+  - *Excepciones*: Mayúscula en cada palabra solo para nombres propios de personas, instituciones o marcas oficiales.
+  - *Puntuación Funcional*: Títulos, botones y etiquetas aisladas **nunca llevan punto final**; párrafos y oraciones explicativas **cierran obligatoriamente con punto final**.
+- **Mobile-First Real**: Todas las vistas deben probarse en `localhost:3014` y en smartphones vía QR `DevViewportBar`.
+
+---
+
+## 5. Bitácora de Procesos y Estado de Tareas
+
+| Fecha | Tarea / Hito | Estado | Responsable |
+| :--- | :--- | :--- | :--- |
+| 2026-09-26 | Plan maestro de desarrollo y cotización de ingeniería | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-27 | Integración de Bunny Stream Video Player en portada | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-28 | Rediseño de Header sólido negro, filete dorado y audio DUA | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-29 | Configuración CuriolHub en puerto 3014 y DevViewportBar | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Creación de `AGENTS.md` y `Memoria.md` vinculados | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Reparación de subida de fotos, videos y curador emocional IA | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Reparación y persistencia reactiva del Muro Familiar (`/mural`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Base de datos centralizada multi-dispositivo para el Muro (`/api/posts`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Persistencia en base de datos centralizada de Nóminas Oficiales (`/api/rosters`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Auditoría técnica integral y validación de resiliencia de Bunny.net | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Configuración de Bunny Stream Oficial (Library 766057 & API Key) y Sincronización Dual Nube + Local | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Limpieza total de datos a Estado Cero (marcadores 0-0, muro limpio, nóminas listas) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Sistema de Escalado Tipográfico Adaptativo Móvil (Modo Cómodo S23 Ultra al 130%) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Motor de Escalado hasta 200% y Gesto Táctil de Pellizco (Pinch-to-Scale) con Cero Scroll Horizontal (Reflow WCAG 2.2) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Micro-animación tutorial SVG de dos dedos y suavizado LERP 60 FPS | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Rediseño y armonización del Footer con enlace oficial a Curiol Studio | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Corrección de rotura vertical de texto en Muro (`overflow-wrap` & `min-w-0 flex-1`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Eliminación total de la manito residual al cerrar modal de gestos | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Calibración de voz femenina costarricense `es-CR` uniforme en todo el sitio | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Instalador PWA diferenciado con 1 toque en Android y guía Safari para iPhone | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Reestructuración de tarjetas (Reflow ancho completo) y barra de filtros unificada en Muro | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Rediseño mobile-first y anti-recorte en tarjetas de partidos (`/colegios` y `/calendario`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Showcase Multimedia Interactivo en Portada (Video Oficial + Galería NextPlay) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Barra de Navegación Minimalista por Iconos y Flechas en Portada | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Integración de Nuevo Video Oficial y Limpieza de Badges en Deportes/Calendario | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Sincronización 1:1 Fixture Oficial Jornada 1 (15 Partidos, Cero Puntos y Badges) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Auditoría Integral de Producción y Publicación a GitHub / Vercel | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Navegación Interna Forzada en Misma Pestaña (`target="_self"` y `prefetch`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Calibración de Velocidad de Voz DUA a 1.10 (Cadencia Natural Dinámica) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Estandarización Universal de Horas a Formato 12 Horas (`1:00 pm - 4:30 pm`, `3:15 pm`, etc.) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Corrección de Distribución Responsiva Móvil (1 Columna y Reflow) en Ficha de Colegios (`/colegios`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Simplificación de Botón de Cabecera DUA a sólo «Audio» | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Estandarización Terminológica Universal a «Número de Jugador» en Toda la WebApp y Excel | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Creación del Portal Autónomo de Registro de Nóminas (`/registro-nomina`) con PIN y Carga Excel | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Soporte de Libro de Excel Multi-Hoja (Pestañas Fútbol, Voleibol, Baloncesto) en Generador y Parser | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Despachador de Enlace Universal `/registro-nomina` con PIN por WhatsApp y Correo en `/admin` | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Limpieza de Formularios/PIN en Colegios y Nuevo Visualizador Público Acordeón y Pestañas por Deporte | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Modal de Onboarding con Opción «Instalar App» y Checkbox «No volver a mostrar en este dispositivo» | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Creación y Ejecución Exitosa de la Suite de Diagnóstico End-to-End (10/10 Pruebas Aprobadas) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Poblado de Datos Realistas (Jornada 1 Concluida, Muro Activo y Nóminas por Colegio) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Dashboard de Estadísticas en Tiempo Real en `/admin` e Integración con Evolution API para Reporte Matutino 7:00 AM | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Sincronización Automática de Filtro y Feedback de Confirmación al Publicar en el Muro (`/mural`) | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 
@@ -239,3 +334,4 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
    - `GET /api/rosters` ➔ `200 OK`
 4. **Verificación Estática**: Comprobar tipado estricto con `npm run build`.
 5. **Safety Lock**: No modificar ningún archivo sin presentar previamente ruta, líneas y justificación técnica para aprobación del usuario.
+

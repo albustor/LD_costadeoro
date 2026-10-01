@@ -159,13 +159,13 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
     }
   };
 
-  // Generar nómina genérica de emergencia (Dorsales #1 a #15)
+  // Generar nómina genérica de emergencia (Jugadores #1 a #15)
   const handleGenerateEmergencyRoster = () => {
     const defaultPositions = ['Portero/a', 'Defensa', 'Defensa', 'Mediocampista', 'Mediocampista', 'Delantero/a'];
     const emergencyList: Player[] = Array.from({ length: 12 }, (_, i) => ({
       id: `p-emerg-${i + 1}`,
       jerseyNumber: i + 1,
-      fullName: `Dorsal #${i + 1}`,
+      fullName: `Jugador #${i + 1}`,
       position: defaultPositions[i % defaultPositions.length],
       isCaptain: i === 0,
     }));
@@ -174,7 +174,7 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
     setActiveTab('preview');
     setStatusMessage({
       type: 'info',
-      text: 'Se generó una nómina provisional de emergencia (Dorsales #1 al #12) para habilitar el marcador sin demoras.',
+      text: 'Se generó una nómina provisional de emergencia (Jugadores #1 al #12) para habilitar el marcador sin demoras.',
     });
   };
 
@@ -196,7 +196,7 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
                 </span>
               </h2>
               <p className="text-xs text-slate-400">
-                Estandarización de atletas, dorsales y cuerpos técnicos por colegio
+                Estandarización de atletas, números de jugador y cuerpos técnicos por colegio
               </p>
             </div>
           </div>

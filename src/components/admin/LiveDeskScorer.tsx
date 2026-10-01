@@ -1,11 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Match, MatchStatus, MatchEvent, SetScore, QuarterScore } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { OfficialMatchSheet } from '@/components/sports/OfficialMatchSheet';
 import { formatTime12h } from '@/lib/utils';
+import { 
+  DEFAULT_SPORT_DURATIONS, 
+  getMatchDefaultDuration, 
+  calculateEstimatedEndTime, 
+  evaluateMatchLifecycle,
+  extendMatchTime 
+} from '@/lib/matchLifecycleEngine';
 import { 
   Play, 
   Pause, 
@@ -21,7 +28,10 @@ import {
   Zap, 
   Flame, 
   Flag,
-  UserCheck
+  UserCheck,
+  Timer,
+  RefreshCw,
+  Sliders
 } from 'lucide-react';
 
 export function LiveDeskScorer() {
@@ -37,6 +47,12 @@ export function LiveDeskScorer() {
   const [homeScore, setHomeScore] = useState<number>(currentMatch?.homeScore ?? 0);
   const [awayScore, setAwayScore] = useState<number>(currentMatch?.awayScore ?? 0);
   const [status, setStatus] = useState<MatchStatus>(currentMatch?.status ?? 'scheduled');
+  const [isManualOverride, setIsManualOverride] = useState<boolean>(currentMatch?.isManualOverride ?? false);
+  const [customEndTime, setCustomEndTime] = useState<string>(currentMatch?.customEndTime ?? '');
+  const [durationMinutes, setDurationMinutes] = useState<number>(
+    getMatchDefaultDuration(currentMatch?.sport || 'futbol', currentMatch?.estimatedDurationMinutes)
+  );
+
   const [currentPeriod, setCurrentPeriod] = useState<string>(currentMatch?.currentPeriod ?? '1.er Tiempo');
   const [minute, setMinute] = useState<number>(currentMatch?.minute ?? 0);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
@@ -69,6 +85,9 @@ export function LiveDeskScorer() {
       setHomeScore(target.homeScore);
       setAwayScore(target.awayScore);
       setStatus(target.status);
+      setIsManualOverride(target.isManualOverride ?? false);
+      setCustomEndTime(target.customEndTime ?? '');
+      setDurationMinutes(getMatchDefaultDuration(target.sport, target.estimatedDurationMinutes));
       setCurrentPeriod(target.currentPeriod || '1.er Tiempo');
       setMinute(target.minute || 0);
       setMvpPlayerName(target.mvpPlayerName || '');
@@ -96,6 +115,41 @@ export function LiveDeskScorer() {
     }
   };
 
+  // Cambio manual de estado (Fija override de la mesa técnica)
+  const handleStatusChangeManual = (newStatus: MatchStatus) => {
+    setStatus(newStatus);
+    setIsManualOverride(true);
+  };
+
+  // Añadir minutos de prórroga al cierre
+  const handleExtendDuration = (extraMinutes: number) => {
+    const newDur = durationMinutes + extraMinutes;
+    setDurationMinutes(newDur);
+    const { endTime24h } = calculateEstimatedEndTime(currentMatch?.date || '', currentMatch?.time || '', newDur);
+    setCustomEndTime(endTime24h);
+    setIsManualOverride(false); // Sigue el reloj con la nueva hora extendida
+  };
+
+  // Alternar entre control manual y automático
+  const handleToggleMode = () => {
+    if (isManualOverride) {
+      // Reanudar modo automático
+      if (currentMatch) {
+        const evalResult = evaluateMatchLifecycle({
+          ...currentMatch,
+          estimatedDurationMinutes: durationMinutes,
+          customEndTime: customEndTime || undefined,
+          isManualOverride: false,
+        });
+        setStatus(evalResult.suggestedStatus);
+        if (evalResult.suggestedPeriod) setCurrentPeriod(evalResult.suggestedPeriod);
+      }
+      setIsManualOverride(false);
+    } else {
+      setIsManualOverride(true);
+    }
+  };
+
   // Quick Save
   const handleSaveMatchData = () => {
     if (!currentMatch) return;
@@ -105,6 +159,10 @@ export function LiveDeskScorer() {
       homeScore,
       awayScore,
       status,
+      estimatedDurationMinutes: durationMinutes,
+      customEndTime: customEndTime || undefined,
+      isManualOverride,
+      autoLifecycleEnabled: !isManualOverride,
       currentPeriod,
       minute,
       mvpPlayerName,
@@ -125,6 +183,13 @@ export function LiveDeskScorer() {
     setSavedFeedback(true);
     setTimeout(() => setSavedFeedback(false), 2500);
   };
+
+  const endTimeInfo = calculateEstimatedEndTime(
+    currentMatch?.date || '',
+    currentMatch?.time || '',
+    durationMinutes,
+    customEndTime
+  );
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -180,12 +245,12 @@ export function LiveDeskScorer() {
               </p>
             </div>
 
-            {/* Selector de Estado del Partido */}
+            {/* Selector de Estado del Partido (Con Bloqueo Manual) */}
             <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl border border-slate-200">
               {(['scheduled', 'live', 'completed'] as MatchStatus[]).map((st) => (
                 <button
                   key={st}
-                  onClick={() => setStatus(st)}
+                  onClick={() => handleStatusChangeManual(st)}
                   className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${
                     status === st
                       ? st === 'live'
@@ -195,10 +260,68 @@ export function LiveDeskScorer() {
                         : 'bg-slate-900 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
+                  title={isManualOverride ? 'Estado fijado manualmente por la mesa' : 'Haz clic para forzar estado manual'}
                 >
-                  {st === 'scheduled' ? 'Programado' : st === 'live' ? '🔴 En Vivo' : '✓ Finalizado'}
+                  {st === 'scheduled' ? 'Programado' : st === 'live' ? '🔴 En vivo' : '✓ Finalizado'}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* ⏱️ BARRA DE CONTROL HÍBRIDO: DURACIÓN Y CIERRE AUTOMÁTICO */}
+          <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-3">
+              <div className={`p-2.5 rounded-xl flex items-center justify-center shrink-0 ${
+                isManualOverride ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+              }`}>
+                <Timer className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-black text-slate-900 text-xs sm:text-sm">
+                    {isManualOverride ? 'Control manual de mesa' : 'Ciclo automático por horario'}
+                  </span>
+                  <span className={`px-2 py-0.5 rounded-md text-[10.5px] font-bold ${
+                    isManualOverride ? 'bg-amber-200 text-amber-900' : 'bg-emerald-200 text-emerald-900'
+                  }`}>
+                    {isManualOverride ? '✋ Manual' : '⚙️ Automático'}
+                  </span>
+                </div>
+                <p className="text-slate-600 text-[11.5px] mt-0.5 font-medium">
+                  Inicio: <strong className="text-slate-900 font-bold">{formatTime12h(currentMatch.time)}</strong> • Cierre previsto: <strong className="text-slate-950 font-black">{endTimeInfo.endTime12h}</strong> ({durationMinutes} min de juego).
+                </p>
+              </div>
+            </div>
+
+            {/* Acciones Rápidas de Prórroga y Modo */}
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleExtendDuration(5)}
+                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs transition cursor-pointer shadow-2xs"
+                title="Añadir 5 minutos de prórroga a la hora de cierre"
+              >
+                +5 min prórroga
+              </button>
+              <button
+                type="button"
+                onClick={() => handleExtendDuration(10)}
+                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold text-xs transition cursor-pointer shadow-2xs"
+                title="Añadir 10 minutos de prórroga a la hora de cierre"
+              >
+                +10 min prórroga
+              </button>
+              <button
+                type="button"
+                onClick={handleToggleMode}
+                className={`px-3 py-1.5 rounded-xl font-bold text-xs transition cursor-pointer flex items-center gap-1.5 ${
+                  isManualOverride 
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs' 
+                    : 'bg-slate-800 hover:bg-slate-700 text-amber-300 shadow-2xs'
+                }`}
+              >
+                {isManualOverride ? 'Reactivar automático' : 'Fijar modo manual'}
+              </button>
             </div>
           </div>
 

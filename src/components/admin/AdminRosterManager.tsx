@@ -20,8 +20,24 @@ import {
   Award, 
   UserCheck, 
   RefreshCw,
-  Edit3
+  Edit3,
+  Copy,
+  Send,
+  ExternalLink,
+  Mail,
+  FileCheck,
+  KeyRound
 } from 'lucide-react';
+import Link from 'next/link';
+
+const SCHOOL_PINS_MAP: Record<string, string> = {
+  'la-paz-cabo-velas': '1001',
+  'la-paz-tempisque': '1002',
+  'cria': '2001',
+  'journey-school': '3001',
+  'vittorino': '4001',
+  'educarte': '5001',
+};
 
 export function AdminRosterManager() {
   const { schools, categories } = useTournament();
@@ -30,6 +46,9 @@ export function AdminRosterManager() {
   const [selectedSport, setSelectedSport] = useState<SportType>('futbol');
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('cat-fem-futbol');
   
+  // Dispatcher State
+  const [copiedSchoolId, setCopiedSchoolId] = useState<string | null>(null);
+
   // Editor State
   const [coachName, setCoachName] = useState<string>('');
   const [assistantCoachName, setAssistantCoachName] = useState<string>('');
@@ -103,6 +122,61 @@ export function AdminRosterManager() {
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', `nomina_oficial_${currentSchool.id}_2026.xls`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // Obtener URL de registro universal (opcionalmente con parámetro de colegio)
+  const getSchoolRegistrationUrl = (schoolId?: string) => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://costadeoro.curiol.studio';
+    if (schoolId) {
+      return `${origin}/registro-nomina?school=${schoolId}`;
+    }
+    return `${origin}/registro-nomina`;
+  };
+
+  // Copiar Enlace Directo con PIN
+  const handleCopyLink = (schoolId: string) => {
+    const url = getSchoolRegistrationUrl();
+    const pin = SCHOOL_PINS_MAP[schoolId] || '1001';
+    const textToCopy = `Enlace de Registro Oficial: ${url}\nPIN de Acceso: ${pin}`;
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(textToCopy);
+      setCopiedSchoolId(schoolId);
+      setTimeout(() => setCopiedSchoolId(null), 3000);
+    }
+  };
+
+  // Compartir por WhatsApp
+  const handleShareWhatsApp = (school: School) => {
+    const url = getSchoolRegistrationUrl();
+    const pin = SCHOOL_PINS_MAP[school.id] || '1001';
+    const message = `🏆 *FESTIVAL DEPORTIVO COSTA DE ORO 2026*\n\nEstimado/a Coordinador/a Deportivo de *${school.name}*:\n\nLe compartimos el enlace oficial único para el registro y carga de nóminas de atletas de su institución:\n🔗 *Enlace Universal:* ${url}\n🔑 *PIN Institucional de Acceso:* ${pin}\n\n📋 *Instrucciones:*\n1. Ingrese al enlace único y digite su PIN institucional (*${pin}*) para activar su panel exclusivo.\n2. Puede completar el formulario en línea por disciplina o descargar la *Plantilla Base Oficial en Excel (con pestañas para Fútbol, Voleibol y Baloncesto)*, completarla y subirla en el mismo portal.\n3. Los datos alimentan automáticamente la plataforma web oficial y las actas de juego del torneo.\n\n¡Muchos éxitos en la competición!`;
+
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+  };
+
+  // Enviar por Correo Electrónico
+  const handleShareEmail = (school: School) => {
+    const url = getSchoolRegistrationUrl();
+    const pin = SCHOOL_PINS_MAP[school.id] || '1001';
+    const subject = `Enlace Oficial de Registro de Nóminas 2026 - ${school.shortName}`;
+    const body = `Estimado/a Coordinador/a Deportivo de ${school.name},\n\nLe compartimos el enlace oficial único para el registro y acreditación de nóminas de atletas del Festival Deportivo Costa de Oro 2026.\n\nEnlace Universal: ${url}\nPIN de Acceso Institucional: ${pin}\n\nInstrucciones:\n1. Ingrese al enlace y digite su PIN institucional (${pin}) para desbloquear el registro de su institución.\n2. Inscriba a sus atletas en línea o descargue la Plantilla Base Oficial de Excel (con pestañas separadas por deporte) y cárguela directamente en el portal.\n\nSaludos cordiales,\nComité Organizador · Liga Deportiva Costa de Oro 2026`;
+
+    const mailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailUrl;
+  };
+
+  // Descargar Plantilla Base Oficial
+  const handleDownloadOfficialTemplate = (school?: School) => {
+    const blob = rosterService.generateOfficialTemplateWorkbook(school);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `plantilla_base_oficial_nomina_${school?.id || '2026'}.xls`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -274,6 +348,122 @@ export function AdminRosterManager() {
         </div>
       </div>
 
+      {/* 📨 SECCIÓN DE DESPACHO RÁPIDO DE ENLACES PARA INSTITUCIONES (WHATSAPP / CORREO) */}
+      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 rounded-3xl p-5 sm:p-6 border border-amber-500/30 text-white shadow-md space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div className="space-y-1">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+              Autogestión para Instituciones
+            </span>
+            <h3 className="text-base sm:text-lg font-black text-amber-300 flex items-center gap-2">
+              <Send className="w-5 h-5 text-amber-400" />
+              <span>Despacho de Enlaces Directos de Inscripción (WhatsApp & Correo)</span>
+            </h3>
+            <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+              Comparte el portal webapp directo a cada coordinador deportivo con su PIN de seguridad. La institución podrá ingresar atletas en línea o subir su archivo Excel usando la plantilla base oficial.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleDownloadOfficialTemplate()}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-sm transition-all cursor-pointer shrink-0"
+            title="Descargar plantilla oficial Excel base vacía para compartir con las instituciones"
+          >
+            <Download className="w-4 h-4" />
+            <span>Descargar Plantilla Base Excel</span>
+          </button>
+        </div>
+
+        {/* Cuadrícula de Enlaces por Institución */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+          {schools.map((school) => {
+            const isCopied = copiedSchoolId === school.id;
+            const pin = SCHOOL_PINS_MAP[school.id] || '1001';
+            const registrationUrl = getSchoolRegistrationUrl(school.id);
+
+            return (
+              <div
+                key={school.id}
+                className="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 hover:border-amber-500/50 transition-all flex flex-col justify-between gap-3 shadow-2xs"
+              >
+                <div className="flex items-start justify-between gap-2.5">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center p-1 shrink-0">
+                      <SchoolEmblem schoolId={school.id} size="xs" showBorder={false} />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="font-extrabold text-xs sm:text-sm text-white block truncate">
+                        {school.shortName}
+                      </span>
+                      <span className="text-[10px] text-amber-400 font-mono font-bold flex items-center gap-1">
+                        <KeyRound className="w-3 h-3" />
+                        <span>PIN: {pin}</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/registro-nomina?school=${school.id}`}
+                    target="_blank"
+                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-300 transition-colors"
+                    title="Abrir vista de inscripción en nueva pestaña"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                {/* Acciones de Despacho */}
+                <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-800/80">
+                  <button
+                    type="button"
+                    onClick={() => handleCopyLink(school.id)}
+                    className={`py-2 px-2 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1 cursor-pointer border ${
+                      isCopied
+                        ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+                    }`}
+                    title="Copiar enlace directo al portapapeles"
+                  >
+                    {isCopied ? (
+                      <>
+                        <CheckCircle2 className="w-3 h-3 text-slate-950" />
+                        <span>¡Copiado!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3 text-amber-400" />
+                        <span>Copiar</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleShareWhatsApp(school)}
+                    className="py-2 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[11px] transition-all flex items-center justify-center gap-1 cursor-pointer shadow-2xs"
+                    title="Enviar enlace formal pre-redactado por WhatsApp"
+                  >
+                    <Send className="w-3 h-3" />
+                    <span>WhatsApp</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleShareEmail(school)}
+                    className="py-2 px-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-[11px] transition-all flex items-center justify-center gap-1 cursor-pointer shadow-2xs"
+                    title="Enviar enlace formal pre-redactado por Correo Electrónico"
+                  >
+                    <Mail className="w-3 h-3" />
+                    <span>Correo</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* 🏫 FILTROS Y SELECTORES DE EDICIÓN */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
         <div>
@@ -393,14 +583,15 @@ export function AdminRosterManager() {
               key={p.id || idx}
               className="flex items-center gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-300 transition-colors"
             >
-              <div className="w-14 shrink-0">
+              <div className="w-16 shrink-0">
                 <input
                   type="number"
                   min={1}
                   max={99}
                   value={p.jerseyNumber || ''}
                   onChange={(e) => handleUpdatePlayer(idx, 'jerseyNumber', parseInt(e.target.value, 10) || '')}
-                  placeholder="#"
+                  placeholder="N°"
+                  title="Número de Jugador"
                   className="w-full p-2 rounded-lg bg-white border border-slate-300 text-center font-mono font-black text-xs text-amber-950"
                 />
               </div>

@@ -116,3 +116,36 @@ npm run build
 # Arranque en modo producción local
 npm run start
 ```
+
+---
+
+## 8. Guía Estándar de Capitalización y Ortografía en Español (Normas RAE)
+
+### 1. Capitalización en Títulos, Menús y Elementos de Interfaz
+- **Tipo oración (*Sentence Case*):** En español, salvo nombres propios, **únicamente la primera palabra** de un título, encabezado, botón, etiqueta de menú o interfaz lleva mayúscula inicial. Se debe evitar la costumbre anglosajona (*Title Case*) de poner mayúscula a cada palabra.
+  - **Correcto:** `Configuración de usuario`, `Registro de datos`, `Crear nueva cuenta`
+  - **Incorrecto:** `Configuración de Usuario`, `Registro de Datos`, `Crear Nueva Cuenta`
+
+### 2. Uso de Mayúsculas Sostenidas (MAYÚSCULAS CONTINUAS)
+- **Restricción de uso:** Debe evitarse escribir oraciones complejas o párrafos enteros en mayúsculas sostenidas, ya que dificulta la legibilidad y contraviene las normas de accesibilidad. Su uso debe limitarse a siglas (*DNI*, *URL*), avisos de emergencia o elementos gráficos puntuales.
+- **Obligatoriedad de la tilde:** Escribir en mayúsculas **no exime** de colocar tilde. Las palabras en mayúsculas deben acentuarse siempre según las reglas generales de ortografía (ej. *ADMINISTRACIÓN*, *BÚSQUEDA*).
+
+### 3. Excepciones para el Uso de Mayúsculas en Cada Palabra
+Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que formen parte de:
+- Nombres propios de personas, lugares, instituciones o entidades legales (*Ministerio de Deportes*, *Registro Civil*).
+- Marcas registradas, leyes o documentos oficiales.
+
+### 4. Puntuación según la Función del Texto
+- **Títulos, botones y etiquetas aisladas:** Los encabezados, textos de botones o ítems de menús independientes **nunca llevan punto final**.
+- **Oraciones descriptivas y párrafos:** Los textos explicativos, tooltips, notificaciones o bajadas de título deben iniciar con mayúscula, aplicar minúsculas según la norma estándar y **cerrar obligatoriamente con punto final**.
+
+---
+
+## 9. Protocolo de Sincronización Reactiva de Filtros en Muro y Feeds Comunitarios
+
+1. **Sincronización Automática al Publicar**:
+   - Al enviar una nueva publicación en el Muro Familiar (`/mural`), el manejador de envío (`handleSubmitPost`) debe conmutar de inmediato el estado del filtro activo (`setSelectedSchoolFilter(selectedSchoolId)`) para enfocar el feed en la delegación seleccionada y presentar el nuevo mensaje en la primera posición.
+2. **Feedback Contextual y Alertas de Éxito**:
+   - Toda acción de publicación o interacción debe ofrecer confirmación visual inmediata (badge o toast flotante) con acceso directo para conmutar a `«Ver todos los mensajes»`.
+3. **Manejo de Estados Vacíos (*Empty States*)**:
+   - Cuando una pestaña de colegio o categoría tenga 0 publicaciones o registros, la interfaz debe mostrar un estado interactivo y amigable con llamado a la acción (`¡Sé el primero en enviar apoyo a este colegio!`), evitando espacios en blanco que desorienten al usuario.
