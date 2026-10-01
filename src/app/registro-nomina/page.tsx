@@ -288,7 +288,7 @@ function RegistroNominaContent() {
               Portal Oficial de Acreditación 2026
             </span>
             <span className="text-slate-300">•</span>
-            <span className="text-xs text-slate-500 font-semibold">Liga Deportiva Costa de Oro</span>
+            <span className="text-xs text-slate-500 font-semibold">Liga Costa de Oro</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight mt-1">
             Registro Oficial de Nóminas y Atletas

@@ -164,7 +164,7 @@ export function AdminRosterManager() {
     const url = getSchoolRegistrationUrl();
     const pin = SCHOOL_PINS_MAP[school.id] || '1001';
     const subject = `Enlace Oficial de Registro de Nóminas 2026 - ${school.shortName}`;
-    const body = `Estimado/a Coordinador/a Deportivo de ${school.name},\n\nLe compartimos el enlace oficial único para el registro y acreditación de nóminas de atletas del Festival Deportivo Costa de Oro 2026.\n\nEnlace Universal: ${url}\nPIN de Acceso Institucional: ${pin}\n\nInstrucciones:\n1. Ingrese al enlace y digite su PIN institucional (${pin}) para desbloquear el registro de su institución.\n2. Inscriba a sus atletas en línea o descargue la Plantilla Base Oficial de Excel (con pestañas separadas por deporte) y cárguela directamente en el portal.\n\nSaludos cordiales,\nComité Organizador · Liga Deportiva Costa de Oro 2026`;
+    const body = `Estimado/a Coordinador/a Deportivo de ${school.name},\n\nLe compartimos el enlace oficial único para el registro y acreditación de nóminas de atletas del Festival Deportivo Costa de Oro 2026.\n\nEnlace Universal: ${url}\nPIN de Acceso Institucional: ${pin}\n\nInstrucciones:\n1. Ingrese al enlace y digite su PIN institucional (${pin}) para desbloquear el registro de su institución.\n2. Inscriba a sus atletas en línea o descargue la Plantilla Base Oficial de Excel (con pestañas separadas por deporte) y cárguela directamente en el portal.\n\nSaludos cordiales,\nComité Organizador · Liga Costa de Oro 2026`;
 
     const mailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailUrl;

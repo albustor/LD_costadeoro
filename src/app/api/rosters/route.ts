@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllRostersFromDb, saveRosterToDb, saveMultipleRostersToDb } from '@/lib/serverDb';
 import { TeamRoster } from '@/types/tournament';
+import { sendRosterNotificationToAdmins } from '@/lib/evolutionApi';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -47,6 +48,15 @@ export async function POST(req: NextRequest) {
     // Caso 1: Arreglo de nóminas (importación masiva)
     if (Array.isArray(body)) {
       const saved = await saveMultipleRostersToDb(body as TeamRoster[]);
+      
+      // Notificar al comité organizador y Don Alejandro por cada nómina (o la primera si es masivo)
+      if (saved.length > 0) {
+        // Ejecución en segundo plano no bloqueante
+        Promise.allSettled(saved.map((r) => sendRosterNotificationToAdmins(r))).catch((err) =>
+          console.error('[Evolution API Roster Alert Error]:', err)
+        );
+      }
+
       return NextResponse.json({
         success: true,
         message: 'Nóminas múltiples guardadas exitosamente en la base de datos central.',
@@ -58,6 +68,13 @@ export async function POST(req: NextRequest) {
     // Caso 2: Objeto contenedor { rosters: [...] }
     if (body && Array.isArray(body.rosters)) {
       const saved = await saveMultipleRostersToDb(body.rosters as TeamRoster[]);
+      
+      if (saved.length > 0) {
+        Promise.allSettled(saved.map((r) => sendRosterNotificationToAdmins(r))).catch((err) =>
+          console.error('[Evolution API Roster Alert Error]:', err)
+        );
+      }
+
       return NextResponse.json({
         success: true,
         message: 'Nóminas múltiples guardadas exitosamente en la base de datos central.',
@@ -79,6 +96,11 @@ export async function POST(req: NextRequest) {
     }
 
     const saved = await saveRosterToDb(rosterData as TeamRoster);
+
+    // Despacho de WhatsApp en segundo plano a Don Alejandro y Soporte
+    sendRosterNotificationToAdmins(saved).catch((err) =>
+      console.error('[Evolution API Roster Alert Error]:', err)
+    );
 
     return NextResponse.json({
       success: true,

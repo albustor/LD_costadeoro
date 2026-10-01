@@ -132,6 +132,75 @@ _Curiol Studio · Ingeniería y Auditoría Deportiva_`;
   return message;
 }
 
+export const ADMIN_NOTIFICATION_RECIPIENTS = [
+  { name: 'Don Alejandro', phone: '50688445486' },
+  { name: 'Comité Organizador / Soporte', phone: '50660602617' },
+];
+
+/**
+ * Genera el texto del mensaje de alerta cuando una institución sube su nómina
+ */
+export function formatRosterNotificationMessage(roster: TeamRoster): string {
+  const school = SCHOOLS_DATA.find((s) => s.id === roster.schoolId);
+  const schoolName = school?.name || roster.schoolId;
+  const category = CATEGORIES_DATA.find((c) => c.id === roster.categoryId);
+  const categoryName = category?.name || roster.categoryId;
+  
+  const sportNames: Record<string, string> = {
+    futbol: '⚽ Fútbol',
+    voleibol: '🏐 Voleibol',
+    baloncesto: '🏀 Baloncesto',
+  };
+  const sportFormatted = sportNames[roster.sport] || roster.sport;
+  const playerCount = roster.players?.length || 0;
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('es-CR', {
+    timeZone: 'America/Costa_Rica',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  return `📋 *LIGA COSTA DE ORO 2026 · NUEVA NÓMINA REGISTRADA*
+━━━━━━━━━━━━━━━━━━━━
+🏫 *Institución:* ${schoolName}
+🏆 *Disciplina:* ${sportFormatted} (${categoryName})
+👤 *Entrenador:* ${roster.coachName || 'No indicado'}${roster.assistantCoachName ? ` · Asistente: ${roster.assistantCoachName}` : ''}
+👥 *Total de Atletas:* ${playerCount} estudiantes inscritos
+📅 *Fecha de Registro:* ${timeStr}
+
+🔍 *Ver nóminas completas y descargar listados:*
+https://costadeoro.curiol.studio/admin
+
+_Curiol Studio · Sistema Automático de Acreditación Deportiva_`;
+}
+
+/**
+ * Genera el texto del mensaje de prueba del sistema
+ */
+export function formatTestSystemMessage(): string {
+  return `👋 *MENSAJE DE PRUEBA · LIGA COSTA DE ORO 2026*
+━━━━━━━━━━━━━━━━━━━━
+Este es un mensaje de prueba de la plataforma digital oficial de la *Liga Costa de Oro 2026* (Festival Deportivo Intercolegial Guanacaste).
+
+📌 *Función de este canal de mensajería:*
+1️⃣ Notificar de manera inmediata a la mesa organizadora cada vez que un colegio registre o actualice su nómina oficial de atletas participantes.
+2️⃣ Detallar en tiempo real: institución, disciplina deportiva, categoría, entrenador responsable y cantidad de estudiantes inscritos.
+3️⃣ Enviar los reportes ejecutivos matutinos (7:00 am) y cierres de jornada con tablas de posiciones actualizadas.
+
+✅ *Destinatarios vinculados al sistema:*
+• Don Alejandro: +506 8844-5486
+• Comité Organizador / Soporte: +506 6060-2617
+
+🔗 *Panel de control administrativo:*
+https://costadeoro.curiol.studio/admin
+
+_Curiol Studio · Sistema Automático de Acreditación y Auditoría Deportiva_`;
+}
+
 /**
  * Despacha un mensaje a través de Evolution API (WhatsApp)
  */
@@ -139,9 +208,9 @@ export async function sendWhatsAppMessageViaEvolutionApi(
   phoneNumber: string,
   message: string
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
-  const apiUrl = process.env.EVOLUTION_API_URL || 'https://evolution.curiol.studio';
-  const apiKey = process.env.EVOLUTION_API_KEY;
-  const instanceName = process.env.EVOLUTION_INSTANCE_NAME || 'costadeoro';
+  const apiUrl = process.env.EVOLUTION_URL || process.env.EVOLUTION_API_URL || 'http://165.227.77.203:8080';
+  const apiKey = process.env.EVOLUTION_API_KEY || 'b00d9ce9195643d3';
+  const instanceName = process.env.EVOLUTION_INSTANCE_NAME || 'cs-cst-evolution-api-d149db45';
 
   // Sanitizar número (debe incluir código de país, ej: 50688888888)
   let cleanPhone = phoneNumber.replace(/\D/g, '');
@@ -165,6 +234,7 @@ export async function sendWhatsAppMessageViaEvolutionApi(
       },
       body: JSON.stringify({
         number: cleanPhone,
+        text: message,
         options: {
           delay: 1200,
           presence: 'composing',
@@ -195,6 +265,49 @@ export async function sendWhatsAppMessageViaEvolutionApi(
       error: err.message || 'Error de conexión con Evolution API',
     };
   }
+}
+
+/**
+ * Despacha notificación de registro de nómina a todos los administradores oficiales
+ */
+export async function sendRosterNotificationToAdmins(roster: TeamRoster) {
+  const message = formatRosterNotificationMessage(roster);
+  const results = [];
+
+  for (const admin of ADMIN_NOTIFICATION_RECIPIENTS) {
+    const res = await sendWhatsAppMessageViaEvolutionApi(admin.phone, message);
+    results.push({
+      recipient: admin.name,
+      phone: admin.phone,
+      ...res,
+      directUrl: getWhatsAppDirectUrl(admin.phone, message),
+    });
+  }
+
+  return results;
+}
+
+/**
+ * Despacha el mensaje de prueba oficial a todos los administradores
+ */
+export async function sendTestSystemNotification() {
+  const message = formatTestSystemMessage();
+  const results = [];
+
+  for (const admin of ADMIN_NOTIFICATION_RECIPIENTS) {
+    const res = await sendWhatsAppMessageViaEvolutionApi(admin.phone, message);
+    results.push({
+      recipient: admin.name,
+      phone: admin.phone,
+      ...res,
+      directUrl: getWhatsAppDirectUrl(admin.phone, message),
+    });
+  }
+
+  return {
+    message,
+    results,
+  };
 }
 
 /**

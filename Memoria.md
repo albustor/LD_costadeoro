@@ -1,13 +1,13 @@
 # Memoria Técnica y Registro Vivo de Decisiones de Arquitectura 🧠 Memoria.md
-# Proyecto: Liga Deportiva Costa de Oro 2026 (Guanacaste, Costa Rica)
-*Última Actualización: 30 de Septiembre de 2026 | Auditor Técnico: Jim (Curiol Studio)*
+# Proyecto: Liga Costa de Oro 2026 (Guanacaste, Costa Rica)
+*Última Actualización: 01 de Octubre de 2026 | Auditor Técnico: Jim (Curiol Studio)*
 *Vinculado formalmente con: [AGENTS.md](file:///d:/AntigravityFinal/EventoCostadeOro/AGENTS.md)*
 
 ---
 
 ## 1. Resumen Ejecutivo y Ficha Técnica del Proyecto
 
-La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto rendimiento desarrollada por **Curiol Studio** para el Festival Deportivo Intercolegial de Guanacaste 2026, anfitrionado por **La Paz Community School** (sedes Cabo Velas y Tempisque). Centraliza el calendario oficial, los marcadores en tiempo real, las actas digitales de partido, el mural comunitario multimedia y los servicios de streaming y accesibilidad universal.
+La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto rendimiento desarrollada por **Curiol Studio** para el Festival Deportivo Intercolegial de Guanacaste 2026, anfitrionado por **La Paz Community School** (sedes Cabo Velas y Tempisque). Centraliza el calendario oficial, los marcadores en tiempo real, las actas digitales de partido, el mural comunitario multimedia y los servicios de streaming y accesibilidad universal.
 
 - **Identificador CuriolHub**: `Liga Costa de Oro 2026 · Festival Deportivo`
 - **Categoría**: Proyectos / Deportes y Juventud Phygital
@@ -335,8 +335,8 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-10-01 | Inversión y Corrección de Categorías Oficiales: Cat C (2012-2014) y Cat D (2009-2011, excepción 2008) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Corrección de Ortografía y Pluralización de Días (`Lunes`, `Martes`, `Miércoles`, `Jueves`) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Nueva Clave Maestra de Administración `2026ControlAdmin` con Bloqueo de Sesión Nativo | ✅ Completado | Jim (Curiol Studio) |
-| 2026-10-01 | Retiro de Descargas Públicas de Nóminas en Colegios y Despacho de Enlaces | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Arquitectura Grid-Elastic `grid-cols-[1fr_auto_1fr]` con `min-w-0` Anti-Corte en Tarjetas de Partidos | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Estandarización de Nombre Oficial «Liga Costa de Oro», Alertas en Tiempo Real por WhatsApp (Evolution API) a Don Alejandro (88445486) y Soporte (60602617), y Modal de Bitácora en `/admin` | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 

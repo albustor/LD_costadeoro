@@ -35,7 +35,11 @@ import {
   FileSpreadsheet,
   BarChart3,
   ShieldAlert,
-  LogOut
+  LogOut,
+  Bell,
+  Send,
+  MessageSquare,
+  Phone
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -94,10 +98,53 @@ export function AdminControlPanel() {
   });
   const [pinSavedSuccess, setPinSavedSuccess] = useState<boolean>(false);
 
-  // Modal para Escáner de Datos, Carga de Rosters y Certificados
+  // Modal para Escáner de Datos, Carga de Rosters, Certificados y Alertas
   const [showScannerModal, setShowScannerModal] = useState<boolean>(false);
   const [showRosterModal, setShowRosterModal] = useState<boolean>(false);
   const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
+  const [showAlertsModal, setShowAlertsModal] = useState<boolean>(false);
+  const [testSending, setTestSending] = useState<boolean>(false);
+  const [testResponseStatus, setTestResponseStatus] = useState<string | null>(null);
+  const [registeredRostersList, setRegisteredRostersList] = useState<any[]>([]);
+  const [loadingRosters, setLoadingRosters] = useState<boolean>(false);
+
+  const fetchRecentRosters = async () => {
+    setLoadingRosters(true);
+    try {
+      const res = await fetch('/api/rosters', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        setRegisteredRostersList(data.rosters || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingRosters(false);
+    }
+  };
+
+  const handleOpenAlertsModal = () => {
+    setShowAlertsModal(true);
+    fetchRecentRosters();
+  };
+
+  const handleSendTestWhatsApp = async () => {
+    setTestSending(true);
+    setTestResponseStatus(null);
+    try {
+      const res = await fetch('/api/notifications/test', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        setTestResponseStatus('¡Mensaje de prueba enviado exitosamente por WhatsApp a Don Alejandro (+506 8844-5486) y Soporte (+506 6060-2617)!');
+      } else {
+        setTestResponseStatus(`Error: ${data.error || 'No se pudo despachar el mensaje.'}`);
+      }
+    } catch (err: any) {
+      setTestResponseStatus(`Error de conexión: ${err.message}`);
+    } finally {
+      setTestSending(false);
+    }
+  };
 
   // Función para Descargar Offline (JSON completo de la base de datos)
   const handleDownloadOffline = () => {
@@ -369,6 +416,16 @@ export function AdminControlPanel() {
             >
               <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
               <span>Escáner de Datos</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleOpenAlertsModal}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black shadow-2xs transition cursor-pointer"
+              title="Campana y bitácora de alertas de participantes en tiempo real por WhatsApp"
+            >
+              <Bell className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+              <span>Alertas WhatsApp</span>
             </button>
           </div>
         </div>
@@ -1082,6 +1139,174 @@ export function AdminControlPanel() {
           schools={schools}
           onClose={() => setShowCertificateModal(false)}
         />
+      )}
+
+      {/* 🔔 MODAL DE BITÁCORA Y ALERTAS DE PARTICIPANTES (WHATSAPP) */}
+      {showAlertsModal && (
+        <div 
+          className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowAlertsModal(false)}
+        >
+          <div 
+            className="bg-white rounded-3xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 space-y-5 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header del Modal */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700">
+                  <Bell className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base text-slate-900">
+                    Alertas y Bitácora de Participantes
+                  </h3>
+                  <span className="text-xs text-slate-500 font-medium">
+                    Notificaciones instantáneas por WhatsApp (Evolution API)
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowAlertsModal(false)}
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Tarjeta de Destinatarios Oficiales */}
+            <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-700">
+                  Destinatarios Vinculados al Sistema
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping" />
+                  <span>En Línea</span>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-black text-slate-900">Don Alejandro</div>
+                    <div className="text-[11px] font-bold text-emerald-700">+506 8844-5486</div>
+                  </div>
+                  <a
+                    href="https://wa.me/50688445486"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition"
+                    title="Abrir chat de WhatsApp Web"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                  </a>
+                </div>
+
+                <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <div className="text-xs font-black text-slate-900">Comité Organizador / Soporte</div>
+                    <div className="text-[11px] font-bold text-emerald-700">+506 6060-2617</div>
+                  </div>
+                  <a
+                    href="https://wa.me/50660602617"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition"
+                    title="Abrir chat de WhatsApp Web"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Botón de Disparo de Prueba */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={handleSendTestWhatsApp}
+                  disabled={testSending}
+                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition disabled:opacity-50 cursor-pointer"
+                >
+                  {testSending ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Enviando mensaje de prueba...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Enviar mensaje de prueba a ambos números ahora</span>
+                    </>
+                  )}
+                </button>
+
+                {testResponseStatus && (
+                  <div className="mt-2 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-semibold">
+                    {testResponseStatus}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Listado en Tiempo Real de Nóminas Recibidas */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-700">
+                  Ingresos Recientes de Nóminas ({registeredRostersList.length})
+                </h4>
+                <button
+                  type="button"
+                  onClick={fetchRecentRosters}
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 hover:text-slate-900 transition"
+                >
+                  <RefreshCw className={`w-3 h-3 ${loadingRosters ? 'animate-spin' : ''}`} />
+                  <span>Actualizar</span>
+                </button>
+              </div>
+
+              {loadingRosters ? (
+                <div className="p-6 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
+                  Consultando registros en el servidor central...
+                </div>
+              ) : registeredRostersList.length === 0 ? (
+                <div className="p-6 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                  No hay nóminas registradas aún. Tan pronto un delegado o colegio envíe su formulario en el portal, aparecerá aquí y se notificará a Don Alejandro y Soporte.
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-56 overflow-y-auto">
+                  {registeredRostersList.map((roster, idx) => {
+                    const school = schools.find((s) => s.id === roster.schoolId);
+                    return (
+                      <div
+                        key={idx}
+                        className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between text-xs"
+                      >
+                        <div className="space-y-0.5">
+                          <div className="font-bold text-slate-900">
+                            {school?.name || roster.schoolId}
+                          </div>
+                          <div className="text-[11px] text-slate-500">
+                            {roster.sport?.toUpperCase()} · {roster.categoryId} · {roster.players?.length || 0} atletas
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            Entrenador: {roster.coachName || 'No indicado'}
+                          </div>
+                        </div>
+
+                        <span className="px-2 py-1 rounded-md bg-amber-50 text-amber-900 font-extrabold text-[10px]">
+                          Registrado
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
