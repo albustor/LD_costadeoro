@@ -149,3 +149,38 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
    - Toda acción de publicación o interacción debe ofrecer confirmación visual inmediata (badge o toast flotante) con acceso directo para conmutar a `«Ver todos los mensajes»`.
 3. **Manejo de Estados Vacíos (*Empty States*)**:
    - Cuando una pestaña de colegio o categoría tenga 0 publicaciones o registros, la interfaz debe mostrar un estado interactivo y amigable con llamado a la acción (`¡Sé el primero en enviar apoyo a este colegio!`), evitando espacios en blanco que desorienten al usuario.
+
+---
+
+## 10. Rangos Oficiales de Categorías y Reglamento de Edades
+
+1. **Categoría C (Secundaria Inicial / Formativa):**
+   - Rango oficial: **2012 al 2014** *(01 de enero de 2012 al 31 de diciembre de 2014)*.
+2. **Categoría D (Secundaria Superior):**
+   - Rango oficial: **2009 al 2011** *(01 de enero de 2009 al 31 de diciembre de 2011)*.
+   - **Excepción reglamentaria permitida:** Hasta 2 estudiantes por institución nacidos en **2008**.
+3. **Categoría Femenina Abierta:**
+   - Libre de edad escolar en el nivel intercolegial.
+
+---
+
+## 11. Seguridad Administrativa y Privacidad de Nóminas
+
+1. **Clave Maestra de Administración:**
+   - Acceso al panel `/admin` protegido con la clave: **`2026ControlAdmin`**.
+   - La sesión se persiste localmente en `sessionStorage` para no interrumpir el trabajo de la mesa técnica y provee botón de *Cerrar sesión*.
+2. **Privacidad de Atletas (Privacy by Design):**
+   - Prohibido exponer enlaces públicos de descarga masiva de nóminas o documentos de identidad deportiva en vistas abiertas de la webapp.
+   - La descarga y consolidación de nóminas `.xls` queda restringida a la mesa de control en `/admin` y el portal de acreditación institucional protegido por PIN (`/registro-nomina`).
+
+---
+
+## 12. Arquitectura de Tarjetas de Encuentros Deportivos (Mobile-First Anti-Corte)
+
+1. **Contenedor Elástico Simétrico:**
+   - Utilizar `grid grid-cols-[1fr_auto_1fr]` con `min-w-0` y `w-full` para las tarjetas de partidos en `/colegios` y `/calendario`.
+   - PROHIBIDO usar cuadrículas rígidas `grid-cols-7` con `min-width: auto`, ya que los nombres largos de instituciones empujan al equipo visitante fuera del viewport móvil provocando su recorte por `overflow-hidden`.
+2. **Uso Obligatorio de Nombres Cortos:**
+   - Renderizar de forma preferente `homeSchool.shortName` y `awaySchool.shortName` con clases `line-clamp-2`, `leading-snug` y `break-words`.
+3. **Ortografía de Días de Competencia:**
+   - Los días de la semana en español (*Lunes, Martes, Miércoles, Jueves, Viernes*) son invariables en plural y ya concluyen en 's'. PROHIBIDO concatenar sufijos `'s'` al formatear etiquetas de días.

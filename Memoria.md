@@ -332,6 +332,11 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-10-01 | Dashboard de Estadísticas en Tiempo Real en `/admin` e Integración con Evolution API para Reporte Matutino 7:00 AM | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Sincronización Automática de Filtro y Feedback de Confirmación al Publicar en el Muro (`/mural`) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Rediseño Simétrico Cara a Cara de Instituciones y Jerarquía Visual de Día/Hora en Horarios | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Inversión y Corrección de Categorías Oficiales: Cat C (2012-2014) y Cat D (2009-2011, excepción 2008) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Corrección de Ortografía y Pluralización de Días (`Lunes`, `Martes`, `Miércoles`, `Jueves`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Nueva Clave Maestra de Administración `2026ControlAdmin` con Bloqueo de Sesión Nativo | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Retiro de Descargas Públicas de Nóminas en Colegios y Despacho de Enlaces | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Arquitectura Grid-Elastic `grid-cols-[1fr_auto_1fr]` con `min-w-0` Anti-Corte en Tarjetas de Partidos | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 
