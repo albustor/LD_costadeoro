@@ -20,6 +20,23 @@ export function formatDateCostaRica(dateString: string): string {
   }
 }
 
+export function formatFullDateCostaRica(dateString: string): string {
+  try {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    const formatted = date.toLocaleDateString('es-CR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    // Capitalización tipo oración según normas RAE
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  } catch {
+    return dateString;
+  }
+}
+
 export function formatUSD(amount: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

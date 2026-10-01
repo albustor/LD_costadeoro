@@ -3,12 +3,11 @@
 import React, { useState } from 'react';
 import { Match } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
-import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
-import { MapPin, Clock, Award, CheckCircle2, ChevronRight } from 'lucide-react';
+import { formatDateCostaRica, formatFullDateCostaRica, formatTime12h } from '@/lib/utils';
+import { MapPin, Clock, Award, CheckCircle2, ChevronRight, Calendar } from 'lucide-react';
 import { MatchDetailModal } from './MatchDetailModal';
 import { SportWatermark, getSportTheme } from './SportGlyphs';
 import { SchoolEmblem } from './SchoolEmblem';
-
 
 interface MatchCardProps {
   match: Match;
@@ -31,26 +30,29 @@ export function MatchCard({ match }: MatchCardProps) {
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className={`${theme.bgPastelClass} rounded-2xl border ${theme.borderClass} ${theme.borderHoverClass} transition-all p-4 relative overflow-hidden cursor-pointer group hover:shadow-md ${
+        className={`${theme.bgPastelClass} rounded-3xl border ${theme.borderClass} ${theme.borderHoverClass} transition-all p-4 sm:p-5 relative overflow-hidden cursor-pointer group hover:shadow-md ${
           isLive ? 'ring-2 ring-red-400 border-red-300' : ''
         }`}
       >
-        {/* Header with category badge and status */}
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-200/70 text-xs relative z-10">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <span className={`px-2.5 py-1 rounded-xl text-[11px] font-bold uppercase tracking-wide flex items-center gap-1.5 shadow-2xs ${theme.badgeBgClass} ${theme.badgeTextClass}`}>
+        {/* Header with category badge, date/time and status */}
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-slate-200/70 text-xs relative z-10">
+          <div className="flex items-center gap-2 min-w-0 flex-wrap">
+            <span className={`px-2.5 py-1 rounded-xl text-[11px] font-black uppercase tracking-wide flex items-center gap-1.5 shadow-2xs ${theme.badgeBgClass} ${theme.badgeTextClass}`}>
               <span>{match.sport === 'futbol' ? '⚽' : match.sport === 'voleibol' ? '🏐' : '🏀'}</span>
               <span>{category?.name || theme.name}</span>
             </span>
-            <span className="text-slate-300">•</span>
-            <span className="text-slate-500 font-medium text-[11px] truncate">{match.jornadaName}</span>
+
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-950 text-white font-mono font-bold text-[11px] shadow-2xs">
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <span>{formatTime12h(match.time)}</span>
+            </span>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             {isLive && (
               <span className="px-2.5 py-1 rounded-xl bg-red-100 text-red-700 font-black text-[10.5px] flex items-center gap-1 border border-red-200 animate-pulse shadow-2xs">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-ping"></span>
-                En Vivo ({match.currentPeriod})
+                En vivo ({match.currentPeriod})
               </span>
             )}
             {isCompleted && (
@@ -60,7 +62,7 @@ export function MatchCard({ match }: MatchCardProps) {
               </span>
             )}
             {isScheduled && (
-              <span className="px-2.5 py-1 rounded-xl bg-white/90 text-slate-600 font-bold text-[10.5px] flex items-center gap-1 border border-slate-200 shadow-2xs">
+              <span className="px-2.5 py-1 rounded-xl bg-white/90 text-slate-700 font-bold text-[10.5px] flex items-center gap-1 border border-slate-200 shadow-2xs">
                 <Clock className="w-3.5 h-3.5 text-slate-500" />
                 Programado
               </span>
@@ -70,21 +72,21 @@ export function MatchCard({ match }: MatchCardProps) {
         </div>
 
         {/* Teams and Score Box (Mobile Resilient) */}
-        <div className="flex items-center justify-between gap-2.5 my-3 relative z-10 bg-white/80 p-3 rounded-2xl border border-slate-200/80 shadow-2xs">
+        <div className="flex items-center justify-between gap-2.5 my-3 relative z-10 bg-white/90 p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs">
           {/* Home Team */}
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <SchoolEmblem schoolId={home?.id || ''} size="md" />
+            <SchoolEmblem schoolId={home?.id || ''} size="sm" />
             <div className="min-w-0 flex-1">
-              <span className="block font-extrabold text-slate-900 text-xs sm:text-sm leading-tight truncate">{home?.shortName || home?.name}</span>
-              <span className="block text-[10.5px] text-slate-500 truncate mt-0.5">{home?.city}</span>
+              <span className="block font-black text-slate-900 text-xs sm:text-sm leading-tight">{home?.shortName || home?.name}</span>
+              <span className="block text-[10px] text-slate-500 truncate mt-0.5">{home?.city}</span>
             </div>
           </div>
 
           {/* Score or VS */}
           <div className="shrink-0 text-center px-1">
             {isScheduled ? (
-              <div className="inline-block py-1.5 px-3 rounded-xl bg-amber-100 border border-amber-300 shadow-2xs">
-                <span className="text-xs font-black text-amber-900">VS</span>
+              <div className="inline-block py-1 px-2.5 rounded-xl bg-amber-400 border border-amber-500 shadow-2xs">
+                <span className="text-xs font-black text-slate-950">VS</span>
               </div>
             ) : (
               <div
@@ -102,13 +104,12 @@ export function MatchCard({ match }: MatchCardProps) {
           {/* Away Team */}
           <div className="flex items-center justify-end gap-2.5 text-right min-w-0 flex-1">
             <div className="min-w-0 flex-1">
-              <span className="block font-extrabold text-slate-900 text-xs sm:text-sm leading-tight truncate">{away?.shortName || away?.name}</span>
-              <span className="block text-[10.5px] text-slate-500 truncate mt-0.5">{away?.city}</span>
+              <span className="block font-black text-slate-900 text-xs sm:text-sm leading-tight">{away?.shortName || away?.name}</span>
+              <span className="block text-[10px] text-slate-500 truncate mt-0.5">{away?.city}</span>
             </div>
-            <SchoolEmblem schoolId={away?.id || ''} size="md" />
+            <SchoolEmblem schoolId={away?.id || ''} size="sm" />
           </div>
         </div>
-
 
         {/* Volleyball Sets Breakdown */}
         {match.sport === 'voleibol' && match.setScores && match.setScores.length > 0 && (
@@ -125,11 +126,11 @@ export function MatchCard({ match }: MatchCardProps) {
         )}
 
         {/* Footer Info: Venue & Date & MVP */}
-        <div className="mt-3 pt-2.5 border-t border-slate-200/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 relative z-10">
+        <div className="mt-3 pt-2.5 border-t border-slate-200/70 flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-slate-600 relative z-10">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="flex items-center gap-1 font-semibold text-slate-700">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
-              {formatDateCostaRica(match.date)} • {formatTime12h(match.time)}
+            <span className="flex items-center gap-1.5 font-bold text-slate-800">
+              <Calendar className="w-3.5 h-3.5 text-amber-600" />
+              {formatFullDateCostaRica(match.date)}
             </span>
             <span className="flex items-center gap-1 font-medium text-slate-600">
               <MapPin className="w-3.5 h-3.5 text-slate-400" />

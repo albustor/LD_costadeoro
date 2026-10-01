@@ -6,7 +6,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { SchoolRosterManager } from '@/components/sports/SchoolRosterManager';
 import { MatchDetailModal } from '@/components/sports/MatchDetailModal';
-import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
+import { formatDateCostaRica, formatFullDateCostaRica, formatTime12h } from '@/lib/utils';
 import { Match } from '@/types/tournament';
 import { 
   Shield, 
@@ -74,16 +74,6 @@ export default function ColegiosPage() {
         <p className="text-xs text-slate-500 mt-1">
           {t('schools.headerSubtitle')}
         </p>
-
-        {/* ℹ️ Banner de Modo de Pruebas */}
-        <div className="mt-3 flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/90 border border-amber-200 text-amber-950 text-xs">
-          <span className="font-black px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] uppercase shrink-0">
-            Modo Pruebas
-          </span>
-          <span className="font-medium text-[11.5px]">
-            Información de prueba de marcadores · Entorno de simulación previa al evento oficial (Marcadores y Estadísticas en 0).
-          </span>
-        </div>
       </div>
 
       {/* 🏫 SELECTOR DE COLEGIOS (2 EN 2 / GRID SIMÉTRICO) */}
@@ -227,9 +217,9 @@ export default function ColegiosPage() {
           {/* 📋 LISTA RESUMIDA Y MINIMALISTA DE ENCUENTROS (1 COLUMNA EN MÓVIL) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pb-6">
             {filteredMatches.map((match) => {
+              const homeSchool = getSchoolById(match.homeTeamId) || schools[0];
+              const awaySchool = getSchoolById(match.awayTeamId) || schools[1];
               const isHome = match.homeTeamId === activeSchool.id;
-              const opponentId = isHome ? match.awayTeamId : match.homeTeamId;
-              const opponent = getSchoolById(opponentId);
               const category = getCategoryById(match.categoryId);
               
               const isCompleted = match.status === 'completed';
@@ -240,28 +230,32 @@ export default function ColegiosPage() {
               const oppScore = isHome ? match.awayScore : match.homeScore;
               const isWin = isCompleted && myScore > oppScore;
               const isDraw = isCompleted && myScore === oppScore;
-              const isLoss = isCompleted && myScore < oppScore;
 
               // Color Theme per Sport
               const sportStyle = 
                 match.sport === 'futbol'
-                  ? { border: 'border-emerald-200', bg: 'bg-emerald-50/40', badge: 'bg-emerald-100 text-emerald-900', icon: '⚽' }
+                  ? { border: 'border-emerald-200', bg: 'bg-emerald-50/30', badge: 'bg-emerald-100 text-emerald-950', icon: '⚽' }
                   : match.sport === 'voleibol'
-                  ? { border: 'border-sky-200', bg: 'bg-sky-50/40', badge: 'bg-sky-100 text-sky-900', icon: '🏐' }
-                  : { border: 'border-orange-200', bg: 'bg-orange-50/40', badge: 'bg-orange-100 text-orange-900', icon: '🏀' };
+                  ? { border: 'border-sky-200', bg: 'bg-sky-50/30', badge: 'bg-sky-100 text-sky-950', icon: '🏐' }
+                  : { border: 'border-orange-200', bg: 'bg-orange-50/30', badge: 'bg-orange-100 text-orange-950', icon: '🏀' };
 
               return (
                 <div
                   key={match.id}
                   onClick={() => setSelectedMatch(match)}
-                  className={`p-4 rounded-3xl border ${sportStyle.border} ${sportStyle.bg} hover:shadow-md transition-all flex flex-col justify-between gap-3 cursor-pointer group bg-white`}
+                  className={`p-4 sm:p-5 rounded-3xl border ${sportStyle.border} ${sportStyle.bg} hover:shadow-md transition-all flex flex-col justify-between gap-3.5 cursor-pointer group bg-white shadow-2xs`}
                 >
-                  {/* Fila Superior: Deporte + Jornada + Estado */}
-                  <div className="flex items-center justify-between gap-2 text-xs flex-wrap">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <span className={`px-2.5 py-1 rounded-xl font-bold text-[11px] uppercase tracking-wide flex items-center gap-1.5 shadow-2xs ${sportStyle.badge}`}>
+                  {/* Fila Superior: Deporte + Fecha / Hora + Estado */}
+                  <div className="flex items-center justify-between gap-2 text-xs flex-wrap border-b border-slate-100 pb-2.5">
+                    <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                      <span className={`px-2.5 py-1 rounded-xl font-black text-[11px] uppercase tracking-wide flex items-center gap-1.5 shadow-2xs ${sportStyle.badge}`}>
                         <span>{sportStyle.icon}</span>
                         <span>{category?.name || match.sport}</span>
+                      </span>
+
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900 text-white font-bold text-[11px] shadow-2xs">
+                        <Clock className="w-3.5 h-3.5 text-amber-400" />
+                        <span>{formatTime12h(match.time)}</span>
                       </span>
                     </div>
 
@@ -279,59 +273,95 @@ export default function ColegiosPage() {
                       )}
                       {isScheduled && (
                         <span className="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 font-bold text-[10.5px] flex items-center gap-1 border border-amber-200 shadow-2xs">
-                          <Clock className="w-3.5 h-3.5 text-amber-700" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-700" />
                           <span>{t('schools.scheduled')}</span>
                         </span>
                       )}
                       {isLive && (
-                        <span className="px-2.5 py-1 rounded-xl bg-red-100 text-red-700 font-bold text-[10.5px] flex items-center gap-1 animate-pulse border border-red-200 shadow-2xs">
+                        <span className="px-2.5 py-1 rounded-xl bg-red-100 text-red-700 font-black text-[10.5px] flex items-center gap-1 animate-pulse border border-red-200 shadow-2xs">
                           <span>{t('schools.live')} ({myScore} - {oppScore})</span>
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Fila Central: Enfrentamiento Directo vs Rival (Ancho Completo y Cero Recorte) */}
-                  <div className="flex items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center p-1 shrink-0 shadow-2xs">
-                        <SchoolEmblem schoolId={opponent?.id || ''} size="xs" showBorder={false} />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
-                            {isHome ? 'Local vs' : 'Visita vs'}
-                          </span>
-                          <span className="text-[11px] text-slate-500 font-medium truncate">
-                            {match.jornadaName}
+                  {/* Fila Central: Enfrentamiento Cara a Cara 1:1 (Simétrico y Nítido) */}
+                  <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+                    <div className="grid grid-cols-7 items-center gap-2">
+                      {/* Equipo Local (Lado Izquierdo) */}
+                      <div className={`col-span-3 flex flex-col sm:flex-row items-center sm:items-start gap-2 text-center sm:text-left p-2 rounded-xl transition-colors ${
+                        match.homeTeamId === activeSchool.id ? 'bg-amber-50/80 border border-amber-200' : ''
+                      }`}>
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+                          <SchoolEmblem schoolId={homeSchool.id} size="sm" showBorder={false} />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1 justify-center sm:justify-start flex-wrap">
+                            <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                              Local
+                            </span>
+                            {match.homeTeamId === activeSchool.id && (
+                              <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
+                                Mi equipo
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight mt-1">
+                            {homeSchool.shortName || homeSchool.name}
+                          </h4>
+                          <span className="text-[10px] text-slate-500 font-medium block truncate mt-0.5">
+                            {homeSchool.city}
                           </span>
                         </div>
-                        <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug mt-1 break-words">
-                          {opponent?.name || opponent?.shortName}
-                        </h4>
-                        <span className="text-[10.5px] text-slate-500 font-medium block truncate mt-0.5">
-                          {opponent?.location || opponent?.city}
-                        </span>
                       </div>
-                    </div>
 
-                    {/* Marcador Oficial o VS */}
-                    <div className="shrink-0 text-center pl-2">
-                      {isCompleted ? (
-                        <span className="font-mono font-black text-sm sm:text-base text-slate-900 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 block">
-                          {match.homeScore} : {match.awayScore}
-                        </span>
-                      ) : (
-                        <span className="font-black text-xs text-amber-900 bg-amber-100 px-3.5 py-1.5 rounded-xl border border-amber-300 block shadow-2xs">
-                          VS
-                        </span>
-                      )}
+                      {/* VS o Marcador Central */}
+                      <div className="col-span-1 text-center flex flex-col items-center justify-center">
+                        {isCompleted || isLive ? (
+                          <span className="font-mono font-black text-xs sm:text-sm text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 block shadow-2xs">
+                            {match.homeScore} : {match.awayScore}
+                          </span>
+                        ) : (
+                          <div className="flex flex-col items-center gap-0.5">
+                            <span className="font-black text-[11px] text-amber-950 bg-amber-400 px-2.5 py-1 rounded-xl shadow-xs border border-amber-500">
+                              VS
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Equipo Visita (Lado Derecho) */}
+                      <div className={`col-span-3 flex flex-col sm:flex-row-reverse items-center sm:items-start gap-2 text-center sm:text-right p-2 rounded-xl transition-colors ${
+                        match.awayTeamId === activeSchool.id ? 'bg-amber-50/80 border border-amber-200' : ''
+                      }`}>
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+                          <SchoolEmblem schoolId={awaySchool.id} size="sm" showBorder={false} />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1 justify-center sm:justify-end flex-wrap">
+                            {match.awayTeamId === activeSchool.id && (
+                              <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
+                                Mi equipo
+                              </span>
+                            )}
+                            <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                              Visita
+                            </span>
+                          </div>
+                          <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight mt-1">
+                            {awaySchool.shortName || awaySchool.name}
+                          </h4>
+                          <span className="text-[10px] text-slate-500 font-medium block truncate mt-0.5">
+                            {awaySchool.city}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Voleibol: Resumen de Sets si aplica */}
                   {match.sport === 'voleibol' && match.setScores && match.setScores.length > 0 && (
-                    <div className="flex items-center gap-2 text-[10.5px] text-sky-900 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200 font-medium">
+                    <div className="flex items-center justify-center gap-2 text-[10.5px] text-sky-900 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200 font-medium">
                       <span>Sets ({match.homeSetsWon ?? 0} - {match.awaySetsWon ?? 0}):</span>
                       <span className="font-mono font-bold">
                         {match.setScores.map((s, idx) => `S${idx + 1}: ${s.home}-${s.away}`).join(' | ')}
@@ -339,11 +369,11 @@ export default function ColegiosPage() {
                     </div>
                   )}
 
-                  {/* Fila Inferior: Fecha, Sede y MVP con Salto Responsivo */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-                    <div className="flex items-center gap-2 font-semibold text-slate-700">
-                      <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>{formatDateCostaRica(match.date)} • {formatTime12h(match.time)}</span>
+                  {/* Fila Inferior: Fecha Completa RAE + Sede con Salto Responsivo */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11.5px] text-slate-600 pt-1 border-t border-slate-100">
+                    <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                      <Calendar className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      <span>{formatFullDateCostaRica(match.date)}</span>
                     </div>
 
                     <div className="flex items-center gap-1 text-slate-600 font-medium">
@@ -354,7 +384,7 @@ export default function ColegiosPage() {
                     {match.mvpPlayerName && (
                       <span className="text-[10.5px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1 shrink-0">
                         <Award className="w-3 h-3 text-amber-600" />
-                        <span>MVP</span>
+                        <span>MVP: {match.mvpPlayerName}</span>
                       </span>
                     )}
                   </div>

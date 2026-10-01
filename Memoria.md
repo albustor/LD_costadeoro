@@ -260,6 +260,17 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
   3. **Empty State Interactivo**: Cuando una delegación seleccionada tenga 0 mensajes, se muestra un contenedor amigable con ilustración y botón directo `¡Sé el primero en enviar apoyo a este colegio!`.
 - **Estado**: ✅ Implementado, verificado y activo.
 
+### ADR-023: Rediseño Simétrico Cara a Cara de Instituciones y Jerarquía Visual de Día/Hora en Horarios
+- **Fecha**: 2026-10-01
+- **Contexto**: Las tarjetas de encuentros en `/colegios` presentaban una asimetría confusa (únicamente el escudo rival y un `VS` aislado a la derecha), mientras que en `/calendario` el día y hora de juego carecían de suficiente jerarquía y los nombres de las instituciones se truncaban.
+- **Decisión**:
+  1. **Enfrentamiento Simétrico 1:1 en `/colegios`**: Rediseño con ambos colegios enfrentados (Local a la izquierda y Visita a la derecha) con sus respectivos escudos, nombres, píldora central `VS` y distinción `★ Mi equipo` para la delegación activa.
+  2. **Día y Hora Súper Evidentes en `/calendario` (`SportScheduleView.tsx` y `MatchCard.tsx`)**:
+     - Encabezado superior de alto contraste con badge de fecha completa en español RAE (`formatFullDateCostaRica`), reloj monoespaciado en blanco/negro (`3:15 pm`, `3:30 pm`) y sede oficial destacada.
+     - Contenedores de nombres elásticos sin truncado (`break-words`) para lectura clara en teléfonos móviles.
+     - Retiro de banners redundantes de pruebas.
+- **Estado**: ✅ Implementado, verificado y publicado.
+
 ---
 
 ## 4. Estándares y Convenciones del Código
@@ -320,6 +331,7 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-10-01 | Poblado de Datos Realistas (Jornada 1 Concluida, Muro Activo y Nóminas por Colegio) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Dashboard de Estadísticas en Tiempo Real en `/admin` e Integración con Evolution API para Reporte Matutino 7:00 AM | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Sincronización Automática de Filtro y Feedback de Confirmación al Publicar en el Muro (`/mural`) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-01 | Rediseño Simétrico Cara a Cara de Instituciones y Jerarquía Visual de Día/Hora en Horarios | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 

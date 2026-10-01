@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Category, Match, School, Standing } from '@/types/tournament';
 import { SchoolEmblem } from './SchoolEmblem';
 import { SportIconRenderer } from './SportGraphicIcons';
-import { formatTime12h } from '@/lib/utils';
+import { formatFullDateCostaRica, formatTime12h } from '@/lib/utils';
 import { 
   Calendar, 
   Clock, 
@@ -120,223 +120,267 @@ export function SportScheduleView({
       <div className="space-y-6 animate-fade-in">
         {(() => {
           const isFutbol = selectedSport === 'futbol';
-            const isVoleibol = selectedSport === 'voleibol';
-            const isBaloncesto = selectedSport === 'baloncesto';
+          const isVoleibol = selectedSport === 'voleibol';
+          const isBaloncesto = selectedSport === 'baloncesto';
 
-            const sportThemeClasses = isFutbol
-              ? {
-                  cardHeaderBg: 'bg-emerald-50/70 border-emerald-200 text-emerald-900',
-                  iconText: 'text-emerald-700',
-                  clockColor: 'text-emerald-600',
-                  accentBorder: 'border-emerald-200 hover:border-emerald-400',
-                  accentTopBorder: 'border-t-4 border-t-emerald-600',
-                  badgeCategory: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-                  venueNoticeBg: 'bg-emerald-50/80 border-emerald-200 text-emerald-950',
-                  vsPill: 'bg-emerald-100/70 text-emerald-800 border border-emerald-200',
-                  scoreBox: 'bg-emerald-900 text-white',
-                }
-              : isVoleibol
-              ? {
-                  cardHeaderBg: 'bg-sky-50/70 border-sky-200 text-sky-900',
-                  iconText: 'text-sky-700',
-                  clockColor: 'text-sky-600',
-                  accentBorder: 'border-sky-200 hover:border-sky-400',
-                  accentTopBorder: 'border-t-4 border-t-sky-600',
-                  badgeCategory: 'bg-sky-50 text-sky-800 border-sky-200',
-                  venueNoticeBg: 'bg-sky-50/80 border-sky-200 text-sky-950',
-                  vsPill: 'bg-sky-100/70 text-sky-800 border border-sky-200',
-                  scoreBox: 'bg-sky-900 text-white',
-                }
-              : isBaloncesto
-              ? {
-                  cardHeaderBg: 'bg-orange-50/70 border-orange-200 text-orange-900',
-                  iconText: 'text-orange-700',
-                  clockColor: 'text-orange-600',
-                  accentBorder: 'border-orange-200 hover:border-orange-400',
-                  accentTopBorder: 'border-t-4 border-t-orange-600',
-                  badgeCategory: 'bg-orange-50 text-orange-800 border-orange-200',
-                  venueNoticeBg: 'bg-orange-50/80 border-orange-200 text-orange-950',
-                  vsPill: 'bg-orange-100/70 text-orange-800 border border-orange-200',
-                  scoreBox: 'bg-orange-900 text-white',
-                }
-              : {
-                  cardHeaderBg: 'bg-indigo-50/70 border-indigo-200 text-indigo-900',
-                  iconText: 'text-indigo-700',
-                  clockColor: 'text-indigo-600',
-                  accentBorder: 'border-indigo-200 hover:border-indigo-400',
-                  accentTopBorder: 'border-t-4 border-t-indigo-600',
-                  badgeCategory: 'bg-indigo-50 text-indigo-800 border-indigo-200',
-                  venueNoticeBg: 'bg-indigo-50/80 border-indigo-200 text-indigo-950',
-                  vsPill: 'bg-indigo-100/70 text-indigo-800 border border-indigo-200',
-                  scoreBox: 'bg-slate-900 text-white',
-                };
+          const sportThemeClasses = isFutbol
+            ? {
+                cardHeaderBg: 'bg-emerald-50/70 border-emerald-200 text-emerald-900',
+                iconText: 'text-emerald-700',
+                clockColor: 'text-emerald-600',
+                accentBorder: 'border-emerald-200 hover:border-emerald-400',
+                accentTopBorder: 'border-t-4 border-t-emerald-600',
+                badgeCategory: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                venueNoticeBg: 'bg-emerald-50/80 border-emerald-200 text-emerald-950',
+                vsPill: 'bg-amber-400 text-slate-950 border border-amber-500 font-black',
+                scoreBox: 'bg-emerald-900 text-white',
+              }
+            : isVoleibol
+            ? {
+                cardHeaderBg: 'bg-sky-50/70 border-sky-200 text-sky-900',
+                iconText: 'text-sky-700',
+                clockColor: 'text-sky-600',
+                accentBorder: 'border-sky-200 hover:border-sky-400',
+                accentTopBorder: 'border-t-4 border-t-sky-600',
+                badgeCategory: 'bg-sky-50 text-sky-800 border-sky-200',
+                venueNoticeBg: 'bg-sky-50/80 border-sky-200 text-sky-950',
+                vsPill: 'bg-amber-400 text-slate-950 border border-amber-500 font-black',
+                scoreBox: 'bg-sky-900 text-white',
+              }
+            : isBaloncesto
+            ? {
+                cardHeaderBg: 'bg-orange-50/70 border-orange-200 text-orange-900',
+                iconText: 'text-orange-700',
+                clockColor: 'text-orange-600',
+                accentBorder: 'border-orange-200 hover:border-orange-400',
+                accentTopBorder: 'border-t-4 border-t-orange-600',
+                badgeCategory: 'bg-orange-50 text-orange-800 border-orange-200',
+                venueNoticeBg: 'bg-orange-50/80 border-orange-200 text-orange-950',
+                vsPill: 'bg-amber-400 text-slate-950 border border-amber-500 font-black',
+                scoreBox: 'bg-orange-900 text-white',
+              }
+            : {
+                cardHeaderBg: 'bg-indigo-50/70 border-indigo-200 text-indigo-900',
+                iconText: 'text-indigo-700',
+                clockColor: 'text-indigo-600',
+                accentBorder: 'border-indigo-200 hover:border-indigo-400',
+                accentTopBorder: 'border-t-4 border-t-indigo-600',
+                badgeCategory: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+                venueNoticeBg: 'bg-indigo-50/80 border-indigo-200 text-indigo-950',
+                vsPill: 'bg-amber-400 text-slate-950 border border-amber-500 font-black',
+                scoreBox: 'bg-slate-900 text-white',
+              };
 
-            return (
-              <div className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
-                {/* Encabezado Principal del Calendario */}
-                <div className={`p-4 rounded-2xl border ${sportThemeClasses.cardHeaderBg} flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-                      <SportIconRenderer sportId={currentSportConfig.id} size={32} />
-                    </div>
-                    <div>
-                      <h3 className="text-base sm:text-lg font-black tracking-tight">
-                        Horarios y calendario de {currentSportConfig.name}
-                      </h3>
-                      <p className="text-xs opacity-80 font-medium">
-                        Horas de inicio, canchas asignadas y estado en tiempo real
-                      </p>
-                    </div>
+          return (
+            <div className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
+              {/* Encabezado Principal del Calendario */}
+              <div className={`p-4 rounded-2xl border ${sportThemeClasses.cardHeaderBg} flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                    <SportIconRenderer sportId={currentSportConfig.id} size={32} />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-bold border border-slate-200/90 shadow-2xs">
-                      {sportMatches.length} partidos
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-bold border border-slate-200/90 shadow-2xs">
-                      {currentSportConfig.badgeText}
-                    </span>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black tracking-tight">
+                      Horarios y calendario de {currentSportConfig.name}
+                    </h3>
+                    <p className="text-xs opacity-80 font-medium">
+                      Horas de inicio, canchas asignadas y estado en tiempo real
+                    </p>
                   </div>
                 </div>
-
-                {/* Aviso de asignación de sedes por sorteo con tono del deporte */}
-                <div className={`flex items-center gap-2.5 p-3.5 rounded-2xl border text-xs ${sportThemeClasses.venueNoticeBg}`}>
-                  <MapPin className={`w-4 h-4 shrink-0 ${sportThemeClasses.iconText}`} />
-                  <div className="min-w-0">
-                    <span className="font-bold">Asignación de sedes: </span>
-                    <span className="opacity-90">
-                      Las sedes se definen por rifa rotativa entre las instituciones con cancha disponible (CRIA, La Paz Community School Cabo Velas, La Paz Community School Tempisque, The Journey School, Instituto Vittorino y Educarte). Cada festival diario se disputa en una sola sede anfitriona.
-                    </span>
-                  </div>
-                </div>
-
-                {/* ℹ️ Nota Oficial de Prueba y Calibración */}
-                <div className="flex items-center gap-2 p-3 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-950 text-xs">
-                  <span className="font-black px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] uppercase shrink-0">
-                    Modo de pruebas
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-bold border border-slate-200/90 shadow-2xs">
+                    {sportMatches.length} partidos
                   </span>
-                  <span className="font-medium text-[11.5px]">
-                    Información de prueba de marcadores · Entorno de simulación previa al evento oficial. Todos los marcadores y puntos inician en 0.
+                  <span className="px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-bold border border-slate-200/90 shadow-2xs">
+                    {currentSportConfig.badgeText}
                   </span>
                 </div>
+              </div>
 
-                {/* Lista de Partidos Limpia y Tematizada */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                  {sportMatches.length === 0 ? (
-                    <div className="col-span-2 p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 text-slate-400 text-xs">
-                      No hay partidos programados en este momento para {currentSportConfig.name}.
-                    </div>
-                  ) : (
-                    sportMatches.map((match) => {
-                      const homeSchool = schools.find((s) => s.id === match.homeTeamId) || schools[0];
-                      const awaySchool = schools.find((s) => s.id === match.awayTeamId) || schools[1];
-                      const category = categories.find((c) => c.id === match.categoryId);
+              {/* Aviso de asignación de sedes por sorteo con tono del deporte */}
+              <div className={`flex items-center gap-2.5 p-3.5 rounded-2xl border text-xs ${sportThemeClasses.venueNoticeBg}`}>
+                <MapPin className={`w-4 h-4 shrink-0 ${sportThemeClasses.iconText}`} />
+                <div className="min-w-0">
+                  <span className="font-bold">Asignación de sedes: </span>
+                  <span className="opacity-90">
+                    Las sedes se definen por rifa rotativa entre las instituciones con cancha disponible (CRIA, La Paz Community School Cabo Velas, La Paz Community School Tempisque, The Journey School, Instituto Vittorino y Educarte). Cada festival diario se disputa en una sola sede anfitriona.
+                  </span>
+                </div>
+              </div>
 
-                      const isLive = match.status === 'live';
-                      const isCompleted = match.status === 'completed';
+              {/* Lista de Partidos Limpia con DÍA Y HORA SÚPER EVIDENTES */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {sportMatches.length === 0 ? (
+                  <div className="col-span-2 p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 text-slate-400 text-xs">
+                    No hay partidos programados en este momento para {currentSportConfig.name}.
+                  </div>
+                ) : (
+                  sportMatches.map((match) => {
+                    const homeSchool = schools.find((s) => s.id === match.homeTeamId) || schools[0];
+                    const awaySchool = schools.find((s) => s.id === match.awayTeamId) || schools[1];
+                    const category = categories.find((c) => c.id === match.categoryId);
 
-                      return (
-                        <div
-                          key={match.id}
-                          className={`rounded-2xl p-4 border bg-white shadow-2xs transition-all ${sportThemeClasses.accentBorder} ${sportThemeClasses.accentTopBorder} ${
-                            isLive ? 'ring-2 ring-amber-400/40' : ''
-                          }`}
-                        >
-                          {/* Encabezado del Partido */}
-                          <div className="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-100">
-                            <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
-                              <Clock className={`w-4 h-4 ${sportThemeClasses.clockColor}`} />
-                              <span className="font-mono text-sm text-slate-900 font-bold">{formatTime12h(match.time)}</span>
-                              <span className="text-slate-300">•</span>
-                              <span className="text-slate-500 text-[11px] truncate max-w-[140px]">
-                                {match.venue}
+                    const isLive = match.status === 'live';
+                    const isCompleted = match.status === 'completed';
+                    const isPostponed = match.status === 'postponed';
+
+                    return (
+                      <div
+                        key={match.id}
+                        className={`rounded-3xl p-4 sm:p-5 border bg-white shadow-2xs transition-all ${sportThemeClasses.accentBorder} ${sportThemeClasses.accentTopBorder} ${
+                          isLive ? 'ring-2 ring-red-400/50' : ''
+                        }`}
+                      >
+                        {/* 🌟 ENCABEZADO DESTACADO: DÍA DE JUEGO Y HORA SÚPER EVIDENTES */}
+                        <div className="bg-slate-50/90 rounded-2xl p-3 border border-slate-200/80 mb-3.5 space-y-2">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            {/* DÍA Y FECHA DESTACADOS EN GRANDE */}
+                            <div className="flex items-center gap-2">
+                              <span className="p-1.5 rounded-lg bg-amber-500 text-slate-950 shadow-2xs shrink-0">
+                                <Calendar className="w-4 h-4" />
                               </span>
+                              <div>
+                                <span className="block font-black text-xs sm:text-sm text-slate-900 leading-tight">
+                                  {formatFullDateCostaRica(match.date)}
+                                </span>
+                              </div>
                             </div>
 
-                            {isLive && (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-black text-[10px] animate-pulse border border-red-200">
-                                <span className="w-2 h-2 rounded-full bg-red-600" />
-                                En vivo
+                            {/* HORA EN ALTO CONTRASTE */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-950 text-white font-mono font-black text-xs sm:text-sm shadow-2xs">
+                                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                <span>{formatTime12h(match.time)}</span>
                               </span>
-                            )}
 
-                            {isCompleted && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] border border-emerald-200">
-                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                                Finalizado
-                              </span>
-                            )}
+                              {/* Estado */}
+                              {isLive && (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-red-100 text-red-700 font-black text-[10.5px] animate-pulse border border-red-200">
+                                  <span className="w-2 h-2 rounded-full bg-red-600" />
+                                  En vivo
+                                </span>
+                              )}
 
-                            {!isLive && !isCompleted && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold text-[10px] border border-slate-200">
-                                <Hourglass className="w-3 h-3" />
-                                Programado
-                              </span>
-                            )}
+                              {isCompleted && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 font-bold text-[10.5px] border border-emerald-200">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                  Finalizado
+                                </span>
+                              )}
+
+                              {isPostponed && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-purple-100 text-purple-800 font-bold text-[10.5px] border border-purple-200">
+                                  Reprogramado
+                                </span>
+                              )}
+
+                              {!isLive && !isCompleted && !isPostponed && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 font-bold text-[10.5px] border border-amber-200">
+                                  <Hourglass className="w-3 h-3 text-amber-700" />
+                                  Programado
+                                </span>
+                              )}
+                            </div>
                           </div>
 
-                          {/* Enfrentamiento */}
-                          <div className="flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                              <SchoolEmblem schoolId={homeSchool.id} size="sm" />
-                              <span className="font-bold text-slate-900 text-xs sm:text-sm truncate">
-                                {homeSchool.shortName}
-                              </span>
+                          {/* Sede Oficial del Partido */}
+                          <div className="flex items-center gap-1.5 text-xs text-slate-600 pt-1 border-t border-slate-200/60">
+                            <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span className="font-semibold text-slate-800">{match.venue}</span>
+                            <span className="text-slate-300">•</span>
+                            <span className="text-slate-500 font-medium truncate">{match.notes || match.jornadaName}</span>
+                          </div>
+                        </div>
+
+                        {/* ⚔️ ENFRENTAMIENTO CARA A CARA (SIMÉTRICO Y COMPLETO) */}
+                        <div className="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
+                          <div className="grid grid-cols-7 items-center gap-2">
+                            {/* Equipo Local */}
+                            <div className="col-span-3 flex flex-col sm:flex-row items-center sm:items-start gap-2 text-center sm:text-left p-1.5 rounded-xl">
+                              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-1 shrink-0 shadow-2xs">
+                                <SchoolEmblem schoolId={homeSchool.id} size="sm" showBorder={false} />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 inline-block mb-0.5">
+                                  Local
+                                </span>
+                                <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight">
+                                  {homeSchool.shortName || homeSchool.name}
+                                </h4>
+                                <span className="text-[10px] text-slate-500 font-medium block truncate">
+                                  {homeSchool.city}
+                                </span>
+                              </div>
                             </div>
 
-                            <div className="px-3 py-1 rounded-xl text-center shrink-0 min-w-[58px]">
+                            {/* VS o Marcador */}
+                            <div className="col-span-1 text-center flex flex-col items-center justify-center">
                               {isCompleted || isLive ? (
-                                <span className={`font-mono font-black text-sm px-2.5 py-1 rounded-lg block ${sportThemeClasses.scoreBox}`}>
-                                  {match.homeScore} - {match.awayScore}
+                                <span className={`font-mono font-black text-xs sm:text-sm px-2.5 py-1 rounded-xl block shadow-2xs ${sportThemeClasses.scoreBox}`}>
+                                  {match.homeScore} : {match.awayScore}
                                 </span>
                               ) : (
-                                <span className={`text-[11px] font-bold px-2.5 py-1 rounded-lg block ${sportThemeClasses.vsPill}`}>
+                                <span className="font-black text-[11px] text-slate-950 bg-amber-400 px-2.5 py-1 rounded-xl shadow-xs border border-amber-500 block">
                                   VS
                                 </span>
                               )}
                             </div>
 
-                            <div className="flex items-center justify-end gap-2.5 flex-1 min-w-0 text-right">
-                              <span className="font-bold text-slate-900 text-xs sm:text-sm truncate">
-                                {awaySchool.shortName}
-                              </span>
-                              <SchoolEmblem schoolId={awaySchool.id} size="sm" />
+                            {/* Equipo Visita */}
+                            <div className="col-span-3 flex flex-col sm:flex-row-reverse items-center sm:items-start gap-2 text-center sm:text-right p-1.5 rounded-xl">
+                              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-1 shrink-0 shadow-2xs">
+                                <SchoolEmblem schoolId={awaySchool.id} size="sm" showBorder={false} />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[9.5px] font-black uppercase px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 inline-block mb-0.5">
+                                  Visita
+                                </span>
+                                <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-tight">
+                                  {awaySchool.shortName || awaySchool.name}
+                                </h4>
+                                <span className="text-[10px] text-slate-500 font-medium block truncate">
+                                  {awaySchool.city}
+                                </span>
+                              </div>
                             </div>
                           </div>
-
-                          {/* Desglose de Sets para Voleibol */}
-                          {isVoleibol && isCompleted && match.setScores && match.setScores.length > 0 && (
-                            <div className="mt-2.5 p-1.5 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center gap-2 text-[10.5px] font-mono font-semibold text-sky-800">
-                              {match.setScores.map((s, sIdx) => (
-                                <span key={sIdx} className="bg-white px-2 py-0.5 rounded border border-sky-200">
-                                  S{sIdx + 1}: {s.home}-{s.away}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Pie del partido con categoría tematizada */}
-                          {category && (
-                            <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10.5px]">
-                              <span className={`px-2 py-0.5 rounded-md font-semibold border ${sportThemeClasses.badgeCategory}`}>
-                                {category.name} ({category.dayOfWeek})
-                              </span>
-                              {match.mvpPlayerName && (
-                                <span className="font-medium text-amber-700 flex items-center gap-1">
-                                  <Sparkles className="w-3 h-3 text-amber-600" />
-                                  <span>MVP: <strong>{match.mvpPlayerName}</strong></span>
-                                </span>
-                              )}
-                            </div>
-                          )}
                         </div>
-                      );
-                    })
-                  )}
-                </div>
+
+                        {/* Desglose de Sets para Voleibol */}
+                        {isVoleibol && isCompleted && match.setScores && match.setScores.length > 0 && (
+                          <div className="mt-2.5 p-1.5 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center gap-2 text-[10.5px] font-mono font-semibold text-sky-800">
+                            {match.setScores.map((s, sIdx) => (
+                              <span key={sIdx} className="bg-white px-2 py-0.5 rounded border border-sky-200">
+                                S{sIdx + 1}: {s.home}-{s.away}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Pie del partido con categoría tematizada */}
+                        {category && (
+                          <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                            <span className={`px-2.5 py-0.5 rounded-lg font-bold border ${sportThemeClasses.badgeCategory}`}>
+                              {category.name} ({category.dayOfWeek})
+                            </span>
+                            {match.mvpPlayerName && (
+                              <span className="font-medium text-amber-700 flex items-center gap-1">
+                                <Sparkles className="w-3 h-3 text-amber-600" />
+                                <span>MVP: <strong>{match.mvpPlayerName}</strong></span>
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })
+                )}
               </div>
-            );
-          })()}
-        </div>
+            </div>
+          );
+        })()}
+      </div>
     </div>
   );
 }
