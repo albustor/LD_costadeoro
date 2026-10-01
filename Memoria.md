@@ -113,6 +113,9 @@ La **Liga Deportiva Costa de Oro 2026** es una plataforma web progresiva (PWA) d
 | 2026-09-30 | Persistencia en base de datos centralizada de Nóminas Oficiales (`/api/rosters`) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Auditoría técnica integral y validación de resiliencia de Bunny.net | ✅ Completado | Jim (Curiol Studio) |
 | 2026-09-30 | Configuración de Bunny Stream Oficial (Library 766057 & API Key) y Sincronización Dual Nube + Local | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Limpieza total de datos a Estado Cero (marcadores 0-0, muro limpio, nóminas listas) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Sistema de Escalado Tipográfico Adaptativo Móvil (Modo Cómodo S23 Ultra al 130%) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-09-30 | Despliegue Oficial en Producción Vercel (`https://costadeoro.curiol.studio`) | ✅ Completado | Jim (Curiol Studio) |
 
 ---
 

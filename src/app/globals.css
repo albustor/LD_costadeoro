@@ -9,26 +9,50 @@
   --border: #e2e8f0;
 }
 
-html,
-body {
+html {
   overflow-x: hidden !important;
   max-width: 100vw !important;
   width: 100% !important;
   position: relative;
   touch-action: pan-y;
   -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
+
+/* Base fluida optimizada para smartphones de alta resolución (Galaxy S23 Ultra / Pro Max) */
+@media (max-width: 640px) {
+  html {
+    font-size: 17.5px;
+  }
 }
 
 body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  position: relative;
   color: var(--foreground);
   background: var(--background);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 1rem;
+  line-height: 1.6;
   letter-spacing: -0.01em;
+}
+
+/* 🔍 Niveles de Escala Tipográfica DUA Accesibles */
+html.text-scale-100 { font-size: 16px !important; }
+html.text-scale-115 { font-size: 18.4px !important; }
+html.text-scale-130 { font-size: 20.8px !important; } /* Nivel Cómodo S23 Ultra (130%) */
+html.text-scale-145 { font-size: 23.2px !important; }
+
+@media (max-width: 640px) {
+  html.text-scale-100 { font-size: 17.5px !important; }
+  html.text-scale-115 { font-size: 20.1px !important; }
+  html.text-scale-130 { font-size: 22.8px !important; } /* Nivel Cómodo S23 Ultra en móvil */
+  html.text-scale-145 { font-size: 25.4px !important; }
 }
 
 /* Minimalist Clean Scrollbars */

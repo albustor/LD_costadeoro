@@ -47,7 +47,20 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
     }
   }, []);
 
-  // Cargar escala de texto guardada
+  const applyScaleToHtml = (scale: number) => {
+    if (typeof window === 'undefined') return;
+    const html = document.documentElement;
+    html.classList.remove('text-scale-100', 'text-scale-115', 'text-scale-130', 'text-scale-145');
+    
+    if (scale <= 100) html.classList.add('text-scale-100');
+    else if (scale <= 115) html.classList.add('text-scale-115');
+    else if (scale <= 130) html.classList.add('text-scale-130');
+    else html.classList.add('text-scale-145');
+
+    html.style.fontSize = `${(scale / 100) * 16}px`;
+  };
+
+  // Cargar escala de texto guardada o predeterminada
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedScale = localStorage.getItem('costa_de_oro_text_scale');
@@ -55,8 +68,11 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
         const scale = parseInt(savedScale, 10);
         if (!isNaN(scale)) {
           setTextScale(scale);
-          document.documentElement.style.fontSize = `${(scale / 100) * 16}px`;
+          applyScaleToHtml(scale);
         }
+      } else {
+        // En pantallas móviles de alta resolución, aplicar base 115% o 130% cómoda
+        applyScaleToHtml(100);
       }
     }
   }, []);
@@ -71,12 +87,28 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
   const changeTextScale = (delta: number) => {
     setTextScale((prev) => {
-      const newScale = Math.min(130, Math.max(90, prev + delta));
+      const nextScale = Math.min(145, Math.max(100, prev + delta));
       if (typeof window !== 'undefined') {
-        localStorage.setItem('costa_de_oro_text_scale', newScale.toString());
-        document.documentElement.style.fontSize = `${(newScale / 100) * 16}px`;
+        localStorage.setItem('costa_de_oro_text_scale', nextScale.toString());
+        applyScaleToHtml(nextScale);
       }
-      return newScale;
+      return nextScale;
+    });
+  };
+
+  const cycleTextScale = () => {
+    setTextScale((prev) => {
+      let next = 115;
+      if (prev === 100) next = 115;
+      else if (prev === 115) next = 130; // Modo S23 Ultra
+      else if (prev === 130) next = 145;
+      else next = 100;
+
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('costa_de_oro_text_scale', next.toString());
+        applyScaleToHtml(next);
+      }
+      return next;
     });
   };
 
@@ -84,7 +116,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
     setTextScale(100);
     if (typeof window !== 'undefined') {
       localStorage.setItem('costa_de_oro_text_scale', '100');
-      document.documentElement.style.fontSize = '16px';
+      applyScaleToHtml(100);
     }
   };
 
@@ -184,27 +216,41 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
   if (compact) {
     return (
-      <button
-        type="button"
-        onClick={toggleAudioSummary}
-        title={
-          isPlaying
-            ? language === 'en' ? 'Stop audio narration' : 'Detener audio resumen'
-            : language === 'en' ? 'Listen to audio summary (DUA)' : 'Escuchar audio resumen emotivo (DUA)'
-        }
-        className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all cursor-pointer shadow-2xs ${
-          isPlaying
-            ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md animate-pulse'
-            : 'bg-slate-900 border-slate-800 text-amber-300 hover:text-white hover:bg-slate-800'
-        }`}
-        aria-label={isPlaying ? 'Pausar audio' : 'Reproducir audio'}
-      >
-        {isPlaying ? (
-          <VolumeX className="w-4 h-4 text-slate-950" />
-        ) : (
-          <Volume2 className="w-4 h-4 text-amber-400" />
-        )}
-      </button>
+      <div className="flex items-center gap-1">
+        {/* 🔊 Botón Audio Resumen Compacto */}
+        <button
+          type="button"
+          onClick={toggleAudioSummary}
+          title={
+            isPlaying
+              ? language === 'en' ? 'Stop audio narration' : 'Detener audio resumen'
+              : language === 'en' ? 'Listen to audio summary (DUA)' : 'Escuchar audio resumen emotivo (DUA)'
+          }
+          className={`h-9 px-2 sm:px-2.5 rounded-xl border flex items-center justify-center transition-all cursor-pointer shadow-2xs ${
+            isPlaying
+              ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-md animate-pulse'
+              : 'bg-slate-900 border-slate-800 text-amber-300 hover:text-white hover:bg-slate-800'
+          }`}
+          aria-label={isPlaying ? 'Pausar audio' : 'Reproducir audio'}
+        >
+          {isPlaying ? (
+            <VolumeX className="w-4 h-4 text-slate-950" />
+          ) : (
+            <Volume2 className="w-4 h-4 text-amber-400" />
+          )}
+        </button>
+
+        {/* 🔍 Botón Rápido de Zoom Adaptativo (100% -> 115% -> 130% S23 Ultra -> 145%) */}
+        <button
+          type="button"
+          onClick={cycleTextScale}
+          title={`Tamaño actual: ${textScale}%. Toca para cambiar (100%, 115%, 130% S23 Ultra, 145%)`}
+          className="h-9 px-2 sm:px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 hover:text-amber-200 hover:bg-slate-800 font-mono font-black text-xs flex items-center gap-0.5 shadow-2xs cursor-pointer transition-all active:scale-95"
+        >
+          <span className="text-[10px] text-amber-400/80">A</span>
+          <span className="text-xs">{textScale}%</span>
+        </button>
+      </div>
     );
   }
 
@@ -244,9 +290,9 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
       {/* 🔍 Controles de Zoom Tipográfico DUA */}
       <button
         type="button"
-        onClick={() => changeTextScale(-10)}
+        onClick={() => changeTextScale(-15)}
         title="Disminuir tamaño de texto (A-)"
-        disabled={textScale <= 90}
+        disabled={textScale <= 100}
         className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed font-black text-xs transition-colors cursor-pointer"
       >
         A-
@@ -254,18 +300,22 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
       <button
         type="button"
-        onClick={resetTextScale}
-        title={`Tamaño actual: ${textScale}%. Clic para restablecer a 100%`}
-        className="px-2 py-1 rounded-md font-mono font-black text-xs text-amber-400 hover:bg-slate-800 transition-colors"
+        onClick={cycleTextScale}
+        title={`Tamaño actual: ${textScale}%. Clic para alternar a 115%, 130% o 145%`}
+        className={`px-2 py-1 rounded-md font-mono font-black text-xs transition-colors cursor-pointer ${
+          textScale > 100
+            ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
+            : 'text-amber-400 hover:bg-slate-800'
+        }`}
       >
         {textScale}%
       </button>
 
       <button
         type="button"
-        onClick={() => changeTextScale(10)}
+        onClick={() => changeTextScale(15)}
         title="Aumentar tamaño de texto (A+)"
-        disabled={textScale >= 130}
+        disabled={textScale >= 145}
         className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed font-black text-xs transition-colors cursor-pointer"
       >
         A+
