@@ -224,8 +224,8 @@ export default function ColegiosPage() {
             </div>
           </div>
 
-          {/* 📋 LISTA RESUMIDA Y MINIMALISTA DE ENCUENTROS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pb-6">
+          {/* 📋 LISTA RESUMIDA Y MINIMALISTA DE ENCUENTROS (1 COLUMNA EN MÓVIL) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pb-6">
             {filteredMatches.map((match) => {
               const isHome = match.homeTeamId === activeSchool.id;
               const opponentId = isHome ? match.awayTeamId : match.homeTeamId;
@@ -292,19 +292,21 @@ export default function ColegiosPage() {
                   </div>
 
                   {/* Fila Central: Enfrentamiento Directo vs Rival (Ancho Completo y Cero Recorte) */}
-                  <div className="flex items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs">
+                  <div className="flex items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <SchoolEmblem schoolId={opponent?.id || ''} size="md" />
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center p-1 shrink-0 shadow-2xs">
+                        <SchoolEmblem schoolId={opponent?.id || ''} size="xs" showBorder={false} />
+                      </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200 shrink-0">
                             {isHome ? 'Local vs' : 'Visita vs'}
                           </span>
-                          <span className="text-[11px] text-slate-500 font-medium">
+                          <span className="text-[11px] text-slate-500 font-medium truncate">
                             {match.jornadaName}
                           </span>
                         </div>
-                        <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-tight mt-1">
+                        <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug mt-1 break-words">
                           {opponent?.name || opponent?.shortName}
                         </h4>
                         <span className="text-[10.5px] text-slate-500 font-medium block truncate mt-0.5">
@@ -314,13 +316,13 @@ export default function ColegiosPage() {
                     </div>
 
                     {/* Marcador Oficial o VS */}
-                    <div className="shrink-0 text-center">
+                    <div className="shrink-0 text-center pl-2">
                       {isCompleted ? (
                         <span className="font-mono font-black text-sm sm:text-base text-slate-900 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 block">
                           {match.homeScore} : {match.awayScore}
                         </span>
                       ) : (
-                        <span className="font-black text-xs text-amber-900 bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 block shadow-2xs">
+                        <span className="font-black text-xs text-amber-900 bg-amber-100 px-3.5 py-1.5 rounded-xl border border-amber-300 block shadow-2xs">
                           VS
                         </span>
                       )}
