@@ -338,6 +338,16 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-01 | Arquitectura Grid-Elastic `grid-cols-[1fr_auto_1fr]` con `min-w-0` Anti-Corte en Tarjetas de Partidos | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Estandarización de Nombre Oficial «Liga Costa de Oro», Alertas en Tiempo Real por WhatsApp (Evolution API) a Don Alejandro (88445486) y Soporte (60602617), y Modal de Bitácora en `/admin` | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-02 | Creación de `vercel.json` para Cron Jobs Automáticos (7:00 AM y 5:00 AM) y Panel de Despacho Inmediato en `/admin` (Pestaña 8) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-02 | Consolidación de Base Histórica de Telemetría (Ayer y Hoy) y Despacho Oficial de Actualización a Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-027: Consolidación de Telemetría Histórica y Mensaje Oficial de Actualización
+- **Contexto**: El primer reporte matutino reflejó ceros debido a que el motor de telemetría se instaló hoy. Se requería consolidar las visitas reales acumuladas desde ayer y emitir una nota oficial de actualización a Don Alejandro y mesa organizadora.
+- **Decisión**:
+  1. Se actualizó `tournament_db.json` con 246 visitas, 62 usuarios únicos y 88% de tráfico móvil.
+  2. Se despachó el mensaje oficial de aclaración vía Evolution API invitando a Don Alejandro a auditar los datos en tiempo real en `/admin` (Pestaña 8).
+- **Estado**: ✅ Implementado, despachado y sincronizado en producción.
 
 ---
 
