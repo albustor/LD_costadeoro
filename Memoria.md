@@ -339,6 +339,17 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-01 | Estandarización de Nombre Oficial «Liga Costa de Oro», Alertas en Tiempo Real por WhatsApp (Evolution API) a Don Alejandro (88445486) y Soporte (60602617), y Modal de Bitácora en `/admin` | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-02 | Creación de `vercel.json` para Cron Jobs Automáticos (7:00 AM y 5:00 AM) y Panel de Despacho Inmediato en `/admin` (Pestaña 8) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-02 | Consolidación de Base Histórica de Telemetría (Ayer y Hoy) y Despacho Oficial de Actualización a Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-02 | Actualización de Roles (Don Alejandro Coordinador de Eventos, Comité de Soporte Curiol Studio Admin), Firma «Fotografía, Tecnología, Legado» y Enriquecimiento de Lectura de Telemetría | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-028: Estandarización de Roles Institucionales, Lectura de Telemetría y Firma de Curiol Studio
+- **Contexto**: Se requería homologar los roles oficiales de mensajería: **Don Alejandro (Coordinador de Eventos)**, **Comité de Soporte · Curiol Studio Admin**, incorporar una lectura pedagógica de la telemetría para la toma de decisiones del evento y fijar la firma oficial: `_Curiol Studio · Fotografía, Tecnología, Legado_`.
+- **Decisión**:
+  1. Se actualizaron `ADMIN_NOTIFICATION_RECIPIENTS` y los generadores de mensajes en `evolutionApi.ts` y `AdminTrafficAnalytics.tsx`.
+  2. Se enriqueció la sección de telemetría con explicaciones claras sobre volumen de interacción, horas pico y consulta por disciplina.
+  3. Se despachó la notificación de actualización oficial a ambos destinatarios con éxito.
+- **Estado**: ✅ Implementado, despachado y en producción.
 
 ---
 
