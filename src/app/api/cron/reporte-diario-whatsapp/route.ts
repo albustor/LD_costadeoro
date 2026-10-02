@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTournamentDb } from '@/lib/serverDb';
+import { getTournamentDb, getAnalyticsSummaryFromDb } from '@/lib/serverDb';
 import { calculateStandings } from '@/lib/sportsEngine';
 import { SCHOOLS_DATA } from '@/config/tournamentConfig';
 import { 
   DailyReportData, 
   generateDailyReportMessage, 
   sendWhatsAppMessageViaEvolutionApi,
-  getWhatsAppDirectUrl
+  getWhatsAppDirectUrl,
+  ADMIN_NOTIFICATION_RECIPIENTS
 } from '@/lib/evolutionApi';
 
 export const runtime = 'nodejs';
@@ -23,6 +24,7 @@ export async function POST(request: NextRequest) {
 async function handleDailyReport(request: NextRequest) {
   const startTime = Date.now();
   const db = await getTournamentDb();
+  const analytics = await getAnalyticsSummaryFromDb();
 
   // Fecha y hora en Costa Rica
   const nowCR = new Date().toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' });
@@ -39,6 +41,9 @@ async function handleDailyReport(request: NextRequest) {
   const posts = db.posts || [];
   const totalApplause = posts.reduce((sum, p) => sum + (p.likesCount || 0) + (p.applauseCount || 0), 0);
 
+  const totalDeviceHits = (analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android + analytics.deviceDistribution.tablet + analytics.deviceDistribution.desktop) || 1;
+  const mobilePercent = Math.round(((analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android) / totalDeviceHits) * 100);
+
   const reportData: DailyReportData = {
     jornada: 1,
     completedMatches,
@@ -50,36 +55,46 @@ async function handleDailyReport(request: NextRequest) {
     },
     totalPosts: posts.length,
     totalApplause,
+    trafficStats: {
+      totalViews: analytics.totalViews,
+      todayViews: analytics.todayViews,
+      uniqueVisitors: analytics.uniqueVisitorsCount,
+      mobilePercent,
+    },
     dateStr: nowCR,
   };
 
   const messageText = generateDailyReportMessage(reportData);
-  const targetPhone = process.env.DON_ALEJANDRO_PHONE || '50660602617';
+  const deliveryResults = [];
 
-  // Intentar envío por Evolution API
-  const sendResult = await sendWhatsAppMessageViaEvolutionApi(targetPhone, messageText);
-  const directWaUrl = getWhatsAppDirectUrl(targetPhone, messageText);
+  // Enviar a Don Alejandro y al Comité Organizador / Soporte
+  for (const admin of ADMIN_NOTIFICATION_RECIPIENTS) {
+    const sendRes = await sendWhatsAppMessageViaEvolutionApi(admin.phone, messageText);
+    const directUrl = getWhatsAppDirectUrl(admin.phone, messageText);
+    deliveryResults.push({
+      recipient: admin.name,
+      phone: admin.phone,
+      success: sendRes.success,
+      messageId: sendRes.messageId,
+      error: sendRes.error,
+      directWhatsAppWebUrl: directUrl,
+    });
+  }
 
   return NextResponse.json({
     success: true,
     timestamp: nowCR,
     executionTimeMs: Date.now() - startTime,
-    recipient: {
-      name: 'Don Alejandro',
-      phone: targetPhone,
-    },
-    delivery: {
-      evolutionApiSuccess: sendResult.success,
-      messageId: sendResult.messageId,
-      error: sendResult.error,
-      directWhatsAppWebUrl: directWaUrl,
-    },
+    recipients: ADMIN_NOTIFICATION_RECIPIENTS,
+    deliveries: deliveryResults,
     reportMessage: messageText,
     summaryStats: {
       completedMatches: completedMatches.length,
       upcomingMatches: upcomingMatches.length,
       totalCommunityPosts: posts.length,
       totalApplause,
+      totalTrafficViews: analytics.totalViews,
+      uniqueVisitors: analytics.uniqueVisitorsCount,
     },
   });
 }

@@ -39,7 +39,8 @@ import {
   Bell,
   Send,
   MessageSquare,
-  Phone
+  Phone,
+  Activity
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -50,6 +51,7 @@ import { CertificateGeneratorModal } from './CertificateGeneratorModal';
 import { AdminRosterManager } from './AdminRosterManager';
 import { AdminDailyStats } from './AdminDailyStats';
 import { SystemAuditPlanView } from './SystemAuditPlanView';
+import { AdminTrafficAnalytics } from './AdminTrafficAnalytics';
 
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById, addPhoto, addVideo } = useTournament();
@@ -87,7 +89,7 @@ export function AdminControlPanel() {
   };
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'daily_stats' | 'audit'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'daily_stats' | 'traffic' | 'audit'>('results');
 
   // Event-wide Family PIN Configuration State
   const [eventPinInput, setEventPinInput] = useState<string>(() => {
@@ -507,15 +509,26 @@ export function AdminControlPanel() {
             <span>7. Estadísticas y Reporte 7:00 AM</span>
           </button>
           <button
-            onClick={() => setActiveTab('audit')}
+            onClick={() => setActiveTab('traffic')}
             className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              activeTab === 'audit'
+              activeTab === 'traffic'
                 ? 'bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>8. Plan de Auditoría y Pruebas</span>
+            <Activity className="w-3.5 h-3.5 text-emerald-400" />
+            <span>8. Flujo y Tráfico Web</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('audit')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'audit'
+                ? 'bg-slate-900 text-amber-300 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <span>9. Plan de Auditoría y Pruebas</span>
           </button>
         </div>
       </div>
@@ -1052,7 +1065,12 @@ export function AdminControlPanel() {
         <AdminDailyStats />
       )}
 
-      {/* 🛡️ PESTAÑA 8: PLAN MAESTRO DE AUDITORÍA Y ANÁLISIS PRÁCTICO */}
+      {/* 🚀 PESTAÑA 8: FLUJO DE USUARIOS Y TELEMETRÍA DE IMPACTO */}
+      {activeTab === 'traffic' && (
+        <AdminTrafficAnalytics />
+      )}
+
+      {/* 🛡️ PESTAÑA 9: PLAN MAESTRO DE AUDITORÍA Y ANÁLISIS PRÁCTICO */}
       {activeTab === 'audit' && (
         <SystemAuditPlanView />
       )}

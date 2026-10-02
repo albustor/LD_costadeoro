@@ -13,6 +13,12 @@ export interface DailyReportData {
   };
   totalPosts: number;
   totalApplause: number;
+  trafficStats?: {
+    totalViews?: number;
+    todayViews?: number;
+    uniqueVisitors?: number;
+    mobilePercent?: number;
+  };
   dateStr: string;
 }
 
@@ -27,6 +33,7 @@ export function generateDailyReportMessage(data: DailyReportData): string {
     standingsBySport,
     totalPosts,
     totalApplause,
+    trafficStats,
     dateStr,
   } = data;
 
@@ -57,12 +64,12 @@ export function generateDailyReportMessage(data: DailyReportData): string {
     return `${h12}:${m < 10 ? '0' + m : m} ${period}`;
   };
 
-  let message = `🏆 *FESTIVAL DEPORTIVO COSTA DE ORO 2026*
+  let message = `🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
 📋 *REPORTE EJECUTIVO MATUTINO (7:00 AM)*
 📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
 📅 *Fecha:* ${dateStr}
 
-Estimado Don Alejandro, le compartimos el resumen de la jornada anterior y los encuentros programados para hoy:
+Estimado Don Alejandro y Comité Organizador, les compartimos el resumen del torneo, telemetría de impacto y encuentros programados para hoy:
 
 ━━━━━━━━━━━━━━━━━━━━
 📊 *RESUMEN DE RESULTADOS (Jornada ${jornada}):*
@@ -122,12 +129,21 @@ Estimado Don Alejandro, le compartimos el resumen de la jornada anterior y los e
     message += `\n• Jornada de descanso técnico / Sin partidos oficiales programados hoy.`;
   }
 
+  // Métricas de Impacto y Tráfico Web
+  if (trafficStats) {
+    message += `\n\n━━━━━━━━━━━━━━━━━━━━
+📈 *TELEMETRÍA Y FLUJO DE USUARIOS:*
+• 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} vistas
+• 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas
+• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)`;
+  }
+
   message += `\n\n━━━━━━━━━━━━━━━━━━━━
 📸 *Muro Familiar Comunitario:*
 • ${totalPosts} publicaciones y ${totalApplause} aplausos y reacciones registradas.
 
 🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio
-_Curiol Studio · Ingeniería y Auditoría Deportiva_`;
+_Curiol Studio · Ingeniería, Telemetría y Auditoría Deportiva_`;
 
   return message;
 }

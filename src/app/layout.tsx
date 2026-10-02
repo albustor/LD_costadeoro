@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import { TierProvider } from '@/context/TierContext';
 import { TournamentProvider } from '@/context/TournamentContext';
@@ -10,6 +11,7 @@ import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { DevViewportBar } from '@/components/dev/DevViewportBar';
 import { TouchReflowZoomProvider } from '@/components/accessibility/TouchReflowZoomProvider';
 import { GestureOnboardingHint } from '@/components/accessibility/GestureOnboardingHint';
+import { AnalyticsTracker } from '@/components/analytics/AnalyticsTracker';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://costadeoro.curiol.studio'),
@@ -122,6 +124,11 @@ export default function RootLayout({
 
                 {/* Floating Multi-Device Dev Viewport Toolbar */}
                 <DevViewportBar />
+
+                {/* Real-time Web Traffic & User Flow Tracker */}
+                <Suspense fallback={null}>
+                  <AnalyticsTracker />
+                </Suspense>
               </TouchReflowZoomProvider>
             </TournamentProvider>
           </LanguageProvider>

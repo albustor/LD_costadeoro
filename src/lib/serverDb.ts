@@ -9,12 +9,37 @@ import {
 } from './initialData';
 import { INITIAL_DEFAULT_ROSTERS } from './rosterService';
 
+export interface PageViewEvent {
+  path: string;
+  device: 'mobile_ios' | 'mobile_android' | 'tablet' | 'desktop' | 'unknown';
+  timestamp: string;
+  sessionId?: string;
+  referrer?: string;
+}
+
+export interface AnalyticsDbData {
+  totalViews: number;
+  uniqueSessions: string[];
+  viewsByRoute: Record<string, number>;
+  deviceDistribution: {
+    mobile_ios: number;
+    mobile_android: number;
+    tablet: number;
+    desktop: number;
+  };
+  dailyHistory: Record<string, { views: number; uniqueSessions: string[] }>;
+  hourlyToday: Record<string, number>;
+  todayDateStr: string;
+  recentEvents: PageViewEvent[];
+}
+
 export interface TournamentDbData {
   posts: FamilyPost[];
   photos: PhotoItem[];
   videos: ShortVideo[];
   matches: Match[];
   rosters: TeamRoster[];
+  analytics?: AnalyticsDbData;
   updatedAt: string;
 }
 
@@ -260,4 +285,133 @@ export async function saveMultipleRostersToDb(rostersToSave: TeamRoster[]): Prom
   await saveTournamentDb(db);
 
   return current;
+}
+
+/**
+ * Inicializa el objeto de analítica por defecto
+ */
+function getDefaultAnalyticsData(todayDateStr: string): AnalyticsDbData {
+  return {
+    totalViews: 0,
+    uniqueSessions: [],
+    viewsByRoute: {
+      '/': 0,
+      '/calendario': 0,
+      '/colegios': 0,
+      '/deportes': 0,
+      '/mural': 0,
+      '/galeria': 0,
+      '/registro-nomina': 0,
+      '/admin': 0,
+    },
+    deviceDistribution: {
+      mobile_ios: 0,
+      mobile_android: 0,
+      tablet: 0,
+      desktop: 0,
+    },
+    dailyHistory: {
+      [todayDateStr]: { views: 0, uniqueSessions: [] },
+    },
+    hourlyToday: {},
+    todayDateStr,
+    recentEvents: [],
+  };
+}
+
+/**
+ * Registra un evento de visualización de página o flujo de usuario
+ */
+export async function recordAnalyticsEventInDb(event: PageViewEvent): Promise<void> {
+  const db = await getTournamentDb();
+  const now = new Date();
+  const todayDateStr = now.toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' }); // YYYY-MM-DD
+  const hourKey = `${String(now.getHours()).padStart(2, '0')}:00`;
+
+  if (!db.analytics) {
+    db.analytics = getDefaultAnalyticsData(todayDateStr);
+  }
+
+  const a = db.analytics;
+
+  // Si cambió el día en Costa Rica, reiniciar el acumulador por hora
+  if (a.todayDateStr !== todayDateStr) {
+    a.todayDateStr = todayDateStr;
+    a.hourlyToday = {};
+  }
+
+  // Incrementar visitas totales
+  a.totalViews = (a.totalViews || 0) + 1;
+
+  // Registrar sesión única global
+  if (event.sessionId && !a.uniqueSessions.includes(event.sessionId)) {
+    a.uniqueSessions.push(event.sessionId);
+  }
+
+  // Incrementar ruta
+  const cleanPath = event.path || '/';
+  a.viewsByRoute[cleanPath] = (a.viewsByRoute[cleanPath] || 0) + 1;
+
+  // Incrementar dispositivo
+  const devKey = (event.device || 'desktop') as keyof typeof a.deviceDistribution;
+  if (a.deviceDistribution[devKey] !== undefined) {
+    a.deviceDistribution[devKey] = (a.deviceDistribution[devKey] || 0) + 1;
+  } else {
+    a.deviceDistribution.desktop = (a.deviceDistribution.desktop || 0) + 1;
+  }
+
+  // Historial diario
+  if (!a.dailyHistory[todayDateStr]) {
+    a.dailyHistory[todayDateStr] = { views: 0, uniqueSessions: [] };
+  }
+  a.dailyHistory[todayDateStr].views = (a.dailyHistory[todayDateStr].views || 0) + 1;
+  if (event.sessionId && !a.dailyHistory[todayDateStr].uniqueSessions.includes(event.sessionId)) {
+    a.dailyHistory[todayDateStr].uniqueSessions.push(event.sessionId);
+  }
+
+  // Distribución por hora de hoy
+  a.hourlyToday[hourKey] = (a.hourlyToday[hourKey] || 0) + 1;
+
+  // Eventos recientes (máximo 40 registros)
+  if (!a.recentEvents) a.recentEvents = [];
+  a.recentEvents.unshift({
+    path: cleanPath,
+    device: event.device,
+    timestamp: new Date().toISOString(),
+    referrer: event.referrer || 'Directo / PWA',
+  });
+  if (a.recentEvents.length > 40) {
+    a.recentEvents = a.recentEvents.slice(0, 40);
+  }
+
+  await saveTournamentDb(db);
+}
+
+/**
+ * Obtiene el resumen de analítica procesado para el panel de administración
+ */
+export async function getAnalyticsSummaryFromDb() {
+  const db = await getTournamentDb();
+  const now = new Date();
+  const todayDateStr = now.toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
+
+  const a = db.analytics || getDefaultAnalyticsData(todayDateStr);
+  const todayStats = a.dailyHistory?.[todayDateStr] || { views: 0, uniqueSessions: [] };
+
+  return {
+    totalViews: a.totalViews || 0,
+    uniqueVisitorsCount: a.uniqueSessions?.length || 0,
+    todayViews: todayStats.views || 0,
+    todayVisitors: todayStats.uniqueSessions?.length || 0,
+    deviceDistribution: a.deviceDistribution || { mobile_ios: 0, mobile_android: 0, tablet: 0, desktop: 0 },
+    viewsByRoute: a.viewsByRoute || {},
+    dailyHistory: Object.entries(a.dailyHistory || {}).map(([date, data]) => ({
+      date,
+      views: data.views,
+      visitors: data.uniqueSessions?.length || 0,
+    })),
+    hourlyToday: a.hourlyToday || {},
+    recentEvents: a.recentEvents || [],
+    updatedAt: db.updatedAt,
+  };
 }
