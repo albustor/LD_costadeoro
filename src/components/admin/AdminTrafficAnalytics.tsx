@@ -15,7 +15,12 @@ import {
   ShieldCheck, 
   Sparkles,
   Calendar,
-  Layers
+  Layers,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  ExternalLink,
+  MessageSquare
 } from 'lucide-react';
 
 interface AnalyticsData {
@@ -57,6 +62,41 @@ export function AdminTrafficAnalytics() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [dispatchingReport, setDispatchingReport] = useState<boolean>(false);
+  const [dispatchResult, setDispatchResult] = useState<{
+    success?: boolean;
+    message?: string;
+    deliveries?: Array<{ recipient: string; phone: string; success: boolean; directWhatsAppWebUrl?: string }>;
+  } | null>(null);
+
+  const handleSendDailyReportNow = async () => {
+    setDispatchingReport(true);
+    setDispatchResult(null);
+    try {
+      const res = await fetch('/api/cron/reporte-diario-whatsapp', { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        setDispatchResult({
+          success: true,
+          message: 'Reporte matutino despachado con éxito a Don Alejandro y soporte.',
+          deliveries: json.deliveries,
+        });
+      } else {
+        setDispatchResult({
+          success: false,
+          message: json.error || 'No se pudo completar el envío.',
+          deliveries: json.deliveries,
+        });
+      }
+    } catch (err: any) {
+      setDispatchResult({
+        success: false,
+        message: err.message || 'Error de conexión con el servidor.',
+      });
+    } finally {
+      setDispatchingReport(false);
+    }
+  };
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -160,6 +200,57 @@ export function AdminTrafficAnalytics() {
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Actualizar datos</span>
             </button>
+          </div>
+        </div>
+
+        {/* 📲 CONTROL DE DESPACHO MATUTINO WHATSAPP */}
+        <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-amber-400/30 text-white flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400">
+                <MessageSquare className="w-4 h-4" />
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-amber-300">
+                Canal Oficial de WhatsApp (Evolution API & Cron)
+              </span>
+            </div>
+            <p className="text-xs text-slate-300">
+              Despacho diario automático a las <strong>7:00 a.m.</strong> para <strong>Don Alejandro (+506 8844-5486)</strong> y Mesa Técnica (+506 6060-2617).
+            </p>
+            {dispatchResult && (
+              <div className={`mt-2 p-2.5 rounded-xl text-xs flex items-center gap-2 ${
+                dispatchResult.success ? 'bg-emerald-950/80 border border-emerald-500/40 text-emerald-200' : 'bg-rose-950/80 border border-rose-500/40 text-rose-200'
+              }`}>
+                {dispatchResult.success ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                )}
+                <span>{dispatchResult.message}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleSendDailyReportNow}
+              disabled={dispatchingReport}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition shadow-md cursor-pointer disabled:opacity-50"
+            >
+              <Send className={`w-3.5 h-3.5 ${dispatchingReport ? 'animate-bounce' : ''}`} />
+              <span>{dispatchingReport ? 'Despachando a Don Alejandro...' : 'Enviar Reporte Diario por WhatsApp Ahora'}</span>
+            </button>
+            <a
+              href="https://wa.me/50688445486"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold border border-slate-700 transition"
+              title="Abrir chat directo con Don Alejandro"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden sm:inline">WhatsApp Don Alejandro</span>
+            </a>
           </div>
         </div>
 

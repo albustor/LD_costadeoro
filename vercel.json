@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/reporte-diario-whatsapp",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cron/verificador-modelos-ia",
+      "schedule": "0 11 * * *"
+    }
+  ]
+}
