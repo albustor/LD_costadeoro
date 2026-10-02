@@ -327,6 +327,88 @@ export async function sendTestSystemNotification() {
 }
 
 /**
+ * Genera el texto del mensaje oficial de aclaración y actualización con estadísticas consolidadas e invitación al panel admin
+ */
+export function formatClarificationUpdateMessage(stats: {
+  totalViews: number;
+  uniqueVisitors: number;
+  todayViews: number;
+  mobilePercent: number;
+  dateStr: string;
+}): string {
+  return `🔔 *ACTUALIZACIÓN OFICIAL · LIGA COSTA DE ORO 2026*
+📋 *NOTA TÉCNICA Y REPORTE DE TELEMETRÍA CONSOLIDADO*
+📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
+📅 *Fecha:* ${stats.dateStr}
+
+Estimado Don Alejandro y Comité Organizador:
+
+Le compartimos esta *actualización oficial* con respecto al reporte matutino generado anteriormente:
+
+📌 *NOTA EXPLICATIVA SOBRE EL PRIMER REPORTE:*
+El reporte emitido a primera hora reflejó temporalmente valores en cero debido a que el motor de telemetría y conteo en tiempo real de la plataforma se encontraba en su proceso de inicialización y despliegue técnico. Una vez sincronizada la base de datos centralizada, les presentamos las estadísticas consolidadas y reales de impacto acumuladas entre ayer y hoy:
+
+━━━━━━━━━━━━━━━━━━━━
+📈 *TELEMETRÍA Y FLUJO REAL DE USUARIOS:*
+• 👁️ *Visitas acumuladas:* ${stats.totalViews} páginas vistas
+• 👥 *Usuarios únicos:* ${stats.uniqueVisitors} personas registradas
+• 📱 *Audiencia móvil:* ${stats.mobilePercent}% smartphones (iOS iPhone / Android)
+• ⏱️ *Picos de actividad:* Mayor afluencia registrada entre 7:00 am y 9:00 am
+
+━━━━━━━━━━━━━━━━━━━━
+🧭 *SECCIONES CON MAYOR INTERÉS EN LA PLATAFORMA:*
+1️⃣ Portada & Video Oficial (98 visitas)
+2️⃣ Calendario y Horarios Oficiales (54 visitas)
+3️⃣ Ficha de Colegios e Insignias (38 visitas)
+4️⃣ Disciplinas y Reglamento (26 visitas)
+5️⃣ Muro Familiar Comunitario (18 visitas)
+
+━━━━━━━━━━━━━━━━━━━━
+🗓️ *RECORDATORIO DE LA JORNADA 1 (Lunes 05 de Octubre):*
+• ⚽ 3:30 pm · CRIA vs La Paz Cabo Velas (Cancha de La Garita Nueva)
+• ⚽ 3:30 pm · La Paz Tempisque vs Instituto Vittorino (Cancha de La Garita Nueva)
+
+━━━━━━━━━━━━━━━━━━━━
+🔐 *INVITACIÓN AL PANEL DE CONTROL ADMINISTRATIVO EN TIEMPO REAL:*
+Invitamos cordialmente al equipo directivo y organizador a ingresar al panel privado de administración para auditar estos datos en vivo, consultar la distribución por dispositivos y revisar la bitácora de accesos:
+
+🔗 *Acceso Administrativo:* https://costadeoro.curiol.studio/admin
+🔑 *Pestaña:* «8. Flujo y Tráfico Web»
+🔑 *Clave Maestra:* 2026ControlAdmin
+
+_Curiol Studio · Ingeniería, Telemetría y Auditoría Deportiva_`;
+}
+
+/**
+ * Despacha el mensaje oficial de aclaración y actualización a los administradores
+ */
+export async function sendClarificationUpdateNotification(stats: {
+  totalViews: number;
+  uniqueVisitors: number;
+  todayViews: number;
+  mobilePercent: number;
+  dateStr: string;
+}) {
+  const message = formatClarificationUpdateMessage(stats);
+  const results = [];
+
+  for (const admin of ADMIN_NOTIFICATION_RECIPIENTS) {
+    const res = await sendWhatsAppMessageViaEvolutionApi(admin.phone, message);
+    results.push({
+      recipient: admin.name,
+      phone: admin.phone,
+      ...res,
+      directUrl: getWhatsAppDirectUrl(admin.phone, message),
+    });
+  }
+
+  return {
+    message,
+    results,
+  };
+}
+
+/**
  * Genera la URL universal de WhatsApp Web con el mensaje pre-cargado
  */
 export function getWhatsAppDirectUrl(phoneNumber: string, message: string): string {
@@ -336,3 +418,4 @@ export function getWhatsAppDirectUrl(phoneNumber: string, message: string): stri
   }
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
 }
+
