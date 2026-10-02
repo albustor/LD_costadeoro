@@ -215,7 +215,7 @@ export function AdminTrafficAnalytics() {
               </span>
             </div>
             <p className="text-xs text-slate-300">
-              Despacho diario automático a las <strong>7:00 a.m.</strong> para <strong>Don Alejandro (+506 8844-5486)</strong> y Mesa Técnica (+506 6060-2617).
+              Despacho diario automático a las <strong>7:00 a.m.</strong> para <strong>Don Alejandro (Coordinador de Eventos · +506 8844-5486)</strong> y <strong>Comité de Soporte · Curiol Studio Admin (+506 6060-2617)</strong>.
             </p>
             {dispatchResult && (
               <div className={`mt-2 p-2.5 rounded-xl text-xs flex items-center gap-2 ${
@@ -239,14 +239,14 @@ export function AdminTrafficAnalytics() {
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition shadow-md cursor-pointer disabled:opacity-50"
             >
               <Send className={`w-3.5 h-3.5 ${dispatchingReport ? 'animate-bounce' : ''}`} />
-              <span>{dispatchingReport ? 'Despachando a Don Alejandro...' : 'Enviar Reporte Diario por WhatsApp Ahora'}</span>
+              <span>{dispatchingReport ? 'Despachando reporte...' : 'Enviar Reporte por WhatsApp Ahora'}</span>
             </button>
             <a
               href="https://wa.me/50688445486"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold border border-slate-700 transition"
-              title="Abrir chat directo con Don Alejandro"
+              title="Abrir chat directo con Don Alejandro (Coordinador de Eventos)"
             >
               <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
               <span className="hidden sm:inline">WhatsApp Don Alejandro</span>

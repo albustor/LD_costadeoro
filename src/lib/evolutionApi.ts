@@ -132,10 +132,11 @@ Estimado Don Alejandro y Comité Organizador, les compartimos el resumen del tor
   // Métricas de Impacto y Tráfico Web
   if (trafficStats) {
     message += `\n\n━━━━━━━━━━━━━━━━━━━━
-📈 *TELEMETRÍA Y FLUJO DE USUARIOS:*
-• 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} vistas
+📈 *TELEMETRÍA Y FLUJO GENERAL DE USUARIOS:*
+• 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas
 • 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas
-• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)`;
+• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)
+• 💡 *Lectura de telemetría:* Refleja el volumen de interacción en vivo, el interés por disciplina y la adopción digital en los 6 colegios participantes.`;
   }
 
   message += `\n\n━━━━━━━━━━━━━━━━━━━━
@@ -143,14 +144,14 @@ Estimado Don Alejandro y Comité Organizador, les compartimos el resumen del tor
 • ${totalPosts} publicaciones y ${totalApplause} aplausos y reacciones registradas.
 
 🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio
-_Curiol Studio · Ingeniería, Telemetría y Auditoría Deportiva_`;
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
 
   return message;
 }
 
 export const ADMIN_NOTIFICATION_RECIPIENTS = [
-  { name: 'Don Alejandro', phone: '50688445486' },
-  { name: 'Comité Organizador / Soporte', phone: '50660602617' },
+  { name: 'Don Alejandro (Coordinador de Eventos)', phone: '50688445486', role: 'Coordinador de Eventos' },
+  { name: 'Comité de Soporte · Curiol Studio Admin', phone: '50660602617', role: 'Curiol Studio Admin' },
 ];
 
 /**
@@ -191,7 +192,7 @@ export function formatRosterNotificationMessage(roster: TeamRoster): string {
 🔍 *Ver nóminas completas y descargar listados:*
 https://costadeoro.curiol.studio/admin
 
-_Curiol Studio · Sistema Automático de Acreditación Deportiva_`;
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
 }
 
 /**
@@ -203,18 +204,18 @@ export function formatTestSystemMessage(): string {
 Este es un mensaje de prueba de la plataforma digital oficial de la *Liga Costa de Oro 2026* (Festival Deportivo Intercolegial Guanacaste).
 
 📌 *Función de este canal de mensajería:*
-1️⃣ Notificar de manera inmediata a la mesa organizadora cada vez que un colegio registre o actualice su nómina oficial de atletas participantes.
+1️⃣ Notificar de manera inmediata a la coordinación de eventos cada vez que un colegio registre o actualice su nómina oficial de atletas participantes.
 2️⃣ Detallar en tiempo real: institución, disciplina deportiva, categoría, entrenador responsable y cantidad de estudiantes inscritos.
-3️⃣ Enviar los reportes ejecutivos matutinos (7:00 am) y cierres de jornada con tablas de posiciones actualizadas.
+3️⃣ Enviar los reportes ejecutivos matutinos (7:00 am), telemetría de flujo y cierres de jornada con tablas de posiciones actualizadas.
 
 ✅ *Destinatarios vinculados al sistema:*
-• Don Alejandro: +506 8844-5486
-• Comité Organizador / Soporte: +506 6060-2617
+• Don Alejandro (Coordinador de Eventos): +506 8844-5486
+• Comité de Soporte · Curiol Studio Admin: +506 6060-2617
 
 🔗 *Panel de control administrativo:*
 https://costadeoro.curiol.studio/admin
 
-_Curiol Studio · Sistema Automático de Acreditación y Auditoría Deportiva_`;
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
 }
 
 /**
@@ -341,7 +342,7 @@ export function formatClarificationUpdateMessage(stats: {
 📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
 📅 *Fecha:* ${stats.dateStr}
 
-Estimado Don Alejandro y Comité Organizador:
+Estimado Don Alejandro (Coordinador de Eventos) y Comité de Soporte · Curiol Studio Admin:
 
 Le compartimos esta *actualización oficial* con respecto al reporte matutino generado anteriormente:
 
@@ -349,11 +350,12 @@ Le compartimos esta *actualización oficial* con respecto al reporte matutino ge
 El reporte emitido a primera hora reflejó temporalmente valores en cero debido a que el motor de telemetría y conteo en tiempo real de la plataforma se encontraba en su proceso de inicialización y despliegue técnico. Una vez sincronizada la base de datos centralizada, les presentamos las estadísticas consolidadas y reales de impacto acumuladas entre ayer y hoy:
 
 ━━━━━━━━━━━━━━━━━━━━
-📈 *TELEMETRÍA Y FLUJO REAL DE USUARIOS:*
+📈 *TELEMETRÍA Y FLUJO GENERAL DE USUARIOS:*
 • 👁️ *Visitas acumuladas:* ${stats.totalViews} páginas vistas
 • 👥 *Usuarios únicos:* ${stats.uniqueVisitors} personas registradas
 • 📱 *Audiencia móvil:* ${stats.mobilePercent}% smartphones (iOS iPhone / Android)
 • ⏱️ *Picos de actividad:* Mayor afluencia registrada entre 7:00 am y 9:00 am
+• 💡 *Lectura de telemetría:* Este informe general de impacto permite a la coordinación de eventos monitorear en vivo la efectividad de la convocatoria, la respuesta de las familias y el interés institucional en cada disciplina deportiva.
 
 ━━━━━━━━━━━━━━━━━━━━
 🧭 *SECCIONES CON MAYOR INTERÉS EN LA PLATAFORMA:*
@@ -370,13 +372,13 @@ El reporte emitido a primera hora reflejó temporalmente valores en cero debido 
 
 ━━━━━━━━━━━━━━━━━━━━
 🔐 *INVITACIÓN AL PANEL DE CONTROL ADMINISTRATIVO EN TIEMPO REAL:*
-Invitamos cordialmente al equipo directivo y organizador a ingresar al panel privado de administración para auditar estos datos en vivo, consultar la distribución por dispositivos y revisar la bitácora de accesos:
+Invitamos cordialmente a Don Alejandro y al equipo de soporte a ingresar al panel privado de administración para auditar estos datos en vivo, consultar la distribución por dispositivos y revisar la bitácora de accesos:
 
 🔗 *Acceso Administrativo:* https://costadeoro.curiol.studio/admin
 🔑 *Pestaña:* «8. Flujo y Tráfico Web»
 🔑 *Clave Maestra:* 2026ControlAdmin
 
-_Curiol Studio · Ingeniería, Telemetría y Auditoría Deportiva_`;
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
 }
 
 /**
