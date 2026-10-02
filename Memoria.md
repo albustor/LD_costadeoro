@@ -337,6 +337,16 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-01 | Nueva Clave Maestra de Administración `2026ControlAdmin` con Bloqueo de Sesión Nativo | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Arquitectura Grid-Elastic `grid-cols-[1fr_auto_1fr]` con `min-w-0` Anti-Corte en Tarjetas de Partidos | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-01 | Estandarización de Nombre Oficial «Liga Costa de Oro», Alertas en Tiempo Real por WhatsApp (Evolution API) a Don Alejandro (88445486) y Soporte (60602617), y Modal de Bitácora en `/admin` | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-02 | Creación de `vercel.json` para Cron Jobs Automáticos (7:00 AM y 5:00 AM) y Panel de Despacho Inmediato en `/admin` (Pestaña 8) | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-026: Automatización de Vercel Cron (7:00 AM) y Disparo Manual Bajo Demanda en `/admin`
+- **Contexto**: El endpoint `/api/cron/reporte-diario-whatsapp` no se disparó a las 7:00 AM de forma autónoma porque no existía el descriptor `vercel.json` en la raíz del repositorio.
+- **Decisión**:
+  1. Se creó `vercel.json` con la programación `"0 13 * * *"` (7:00 AM Costa Rica / 13:00 UTC) y `"0 11 * * *"` (5:00 AM Costa Rica / 11:00 UTC).
+  2. Se integró una tarjeta de control ejecutivo en `AdminTrafficAnalytics.tsx` con el botón **«Enviar Reporte Diario por WhatsApp Ahora»**, proveyendo confirmación visual instantánea y acceso directo a WhatsApp Web.
+- **Estado**: ✅ Implementado, verificado y desplegado en producción.
 
 ---
 
