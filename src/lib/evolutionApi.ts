@@ -69,7 +69,7 @@ export function generateDailyReportMessage(data: DailyReportData): string {
 📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
 📅 *Fecha:* ${dateStr}
 
-Estimado Don Alejandro y Comité Organizador, les compartimos el resumen del torneo, telemetría de impacto y encuentros programados para hoy:
+Estimado Don Alejandro (Coordinador de Eventos) y Comité de Soporte · Curiol Studio Admin, les compartimos el resumen oficial del torneo, telemetría de impacto y cartelera deportiva:
 
 ━━━━━━━━━━━━━━━━━━━━
 📊 *RESUMEN DE RESULTADOS (Jornada ${jornada}):*
