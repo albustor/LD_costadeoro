@@ -340,6 +340,17 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-02 | Creación de `vercel.json` para Cron Jobs Automáticos (7:00 AM y 5:00 AM) y Panel de Despacho Inmediato en `/admin` (Pestaña 8) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-02 | Consolidación de Base Histórica de Telemetría (Ayer y Hoy) y Despacho Oficial de Actualización a Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-02 | Actualización de Roles (Don Alejandro Coordinador de Eventos, Comité de Soporte Curiol Studio Admin), Firma «Fotografía, Tecnología, Legado» y Enriquecimiento de Lectura de Telemetría | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-03 | Blindaje de Telemetría en Tiempo Real, Formato Dinámico de Fechas y Programación para Cierre de Semana / Viernes con Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-029: Blindaje de Telemetría en Tiempo Real y Programación de Entrega
+- **Contexto**: Se estableció la instrucción de pausar envíos por hoy, auditar exhaustivamente la lógica de telemetría en tiempo real y preparar el reporte consolidado de cierre de semana para el próximo viernes dirigido a Don Alejandro (Coordinador de Eventos) y Comité de Soporte · Curiol Studio Admin.
+- **Decisión**:
+  1. Se auditó y blindó el cálculo de fechas en zona horaria `America/Costa_Rica`, conteo de páginas vistas, usuarios únicos y distribución de dispositivos móviles.
+  2. Se mantuvieron las notas explicativas de telemetría y la firma oficial `_Curiol Studio · Fotografía, Tecnología, Legado_`.
+  3. Se suspendieron envíos adicionales por el día de hoy, garantizando estabilidad operativa.
+- **Estado**: ✅ Implementado, auditado y listo para ejecución programada.
 
 ---
 
