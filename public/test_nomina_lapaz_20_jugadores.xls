@@ -1,0 +1,336 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="HeaderStyle">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#D97706"/>
+   </Borders>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#FFFFFF" ss:Bold="1"/>
+   <Interior ss:Color="#1E293B" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Fútbol">
+  <Table ss:DefaultRowHeight="20">
+   <Column ss:Width="110"/>
+   <Column ss:Width="200"/>
+   <Column ss:Width="90"/>
+   <Column ss:Width="120"/>
+   <Column ss:Width="190"/>
+   <Column ss:Width="120"/>
+   <Column ss:Width="190"/>
+   <Column ss:Width="140"/>
+   <Column ss:Width="70"/>
+   <Column ss:Width="100"/>
+   <Column ss:Width="170"/>
+   <Column ss:Width="160"/>
+   <Row ss:StyleID="HeaderStyle">
+     <Cell><Data ss:Type="String">Colegio ID</Data></Cell>
+     <Cell><Data ss:Type="String">Institución</Data></Cell>
+     <Cell><Data ss:Type="String">Deporte</Data></Cell>
+     <Cell><Data ss:Type="String">Categoría ID</Data></Cell>
+     <Cell><Data ss:Type="String">Nombre Categoría</Data></Cell>
+     <Cell><Data ss:Type="String">Número de Jugador</Data></Cell>
+     <Cell><Data ss:Type="String">Nombre Completo</Data></Cell>
+     <Cell><Data ss:Type="String">Posición</Data></Cell>
+     <Cell><Data ss:Type="String">Capitán</Data></Cell>
+     <Cell><Data ss:Type="String">Año Nacimiento</Data></Cell>
+     <Cell><Data ss:Type="String">Entrenador Principal</Data></Cell>
+     <Cell><Data ss:Type="String">Asistente Técnico</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">1</Data></Cell>
+     <Cell><Data ss:Type="String">Felipe Mora Gutierrez</Data></Cell>
+     <Cell><Data ss:Type="String">Portero</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">2</Data></Cell>
+     <Cell><Data ss:Type="String">Santiago Jiménez Alvarado</Data></Cell>
+     <Cell><Data ss:Type="String">Lateral Derecho</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">3</Data></Cell>
+     <Cell><Data ss:Type="String">Esteban Rodríguez Solís</Data></Cell>
+     <Cell><Data ss:Type="String">Defensa Central</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">4</Data></Cell>
+     <Cell><Data ss:Type="String">Lucas Navarro Castro</Data></Cell>
+     <Cell><Data ss:Type="String">Defensa Central</Data></Cell>
+     <Cell><Data ss:Type="String">SI</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">5</Data></Cell>
+     <Cell><Data ss:Type="String">Gabriel Vargas Zúñiga</Data></Cell>
+     <Cell><Data ss:Type="String">Lateral Izquierdo</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">6</Data></Cell>
+     <Cell><Data ss:Type="String">Ignacio Valverde Rojas</Data></Cell>
+     <Cell><Data ss:Type="String">Mediocampista Defensivo</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">7</Data></Cell>
+     <Cell><Data ss:Type="String">Matías Cordero Brenes</Data></Cell>
+     <Cell><Data ss:Type="String">Mediocampista Central</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">8</Data></Cell>
+     <Cell><Data ss:Type="String">Emilio Morales Chaves</Data></Cell>
+     <Cell><Data ss:Type="String">Mediocampista Ofensivo</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">9</Data></Cell>
+     <Cell><Data ss:Type="String">Alejandro Salazar Villalobos</Data></Cell>
+     <Cell><Data ss:Type="String">Delantero Centro</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">10</Data></Cell>
+     <Cell><Data ss:Type="String">Nicolás Araya Quesada</Data></Cell>
+     <Cell><Data ss:Type="String">Extremo Izquierdo</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">11</Data></Cell>
+     <Cell><Data ss:Type="String">Tomás Monge Chacón</Data></Cell>
+     <Cell><Data ss:Type="String">Extremo Derecho</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">12</Data></Cell>
+     <Cell><Data ss:Type="String">Julián Carvajal Obando</Data></Cell>
+     <Cell><Data ss:Type="String">Portero Suplente</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2011</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">13</Data></Cell>
+     <Cell><Data ss:Type="String">David Fonseca Picado</Data></Cell>
+     <Cell><Data ss:Type="String">Defensa Polifuncional</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">14</Data></Cell>
+     <Cell><Data ss:Type="String">Andrés Guillén Hidalgo</Data></Cell>
+     <Cell><Data ss:Type="String">Mediocampista Mixto</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2011</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">15</Data></Cell>
+     <Cell><Data ss:Type="String">Samuel Ureña Campos</Data></Cell>
+     <Cell><Data ss:Type="String">Extremo / Volante</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">16</Data></Cell>
+     <Cell><Data ss:Type="String">Benjamín Gamboa Soto</Data></Cell>
+     <Cell><Data ss:Type="String">Delantero Segunda Línea</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2009</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">17</Data></Cell>
+     <Cell><Data ss:Type="String">Adrián Calderón Porras</Data></Cell>
+     <Cell><Data ss:Type="String">Lateral / Carrilero</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2011</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">18</Data></Cell>
+     <Cell><Data ss:Type="String">Diego Barboza Arias</Data></Cell>
+     <Cell><Data ss:Type="String">Mediocampista de Contención</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">19</Data></Cell>
+     <Cell><Data ss:Type="String">Daniel Esquivel Pineda</Data></Cell>
+     <Cell><Data ss:Type="String">Delantero Centro Suplente</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2010</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+   <Row>
+     <Cell><Data ss:Type="String">la-paz-cabo-velas</Data></Cell>
+     <Cell><Data ss:Type="String">La Paz Community School Cabo Velas</Data></Cell>
+     <Cell><Data ss:Type="String">futbol</Data></Cell>
+     <Cell><Data ss:Type="String">cat-d-futbol</Data></Cell>
+     <Cell><Data ss:Type="String">Fútbol Masculino Categoría D</Data></Cell>
+     <Cell><Data ss:Type="Number">20</Data></Cell>
+     <Cell><Data ss:Type="String">Manuel Sancho Céspedes</Data></Cell>
+     <Cell><Data ss:Type="String">Defensa Central Suplente</Data></Cell>
+     <Cell><Data ss:Type="String">NO</Data></Cell>
+     <Cell><Data ss:Type="Number">2011</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>
+     <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>
+   </Row>
+  </Table>
+ </Worksheet>
+</Workbook>

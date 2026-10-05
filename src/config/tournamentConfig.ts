@@ -28,7 +28,7 @@ export const TOURNAMENT_CONFIG = {
     defaultFamilyPin: 'COSTA2026',
     validPins: ['COSTA2026', 'ORO2026', '2026', 'PAZ2026', '8421'],
     adminPin: '2026ControlAdmin',
-    validAdminPins: ['2026ControlAdmin', 'ORO2026', 'COSTA2026'],
+    validAdminPins: ['2026ControlAdmin', '2026controladmin', 'ORO2026', 'COSTA2026', 'admin2026', '8421'],
   },
 };
 

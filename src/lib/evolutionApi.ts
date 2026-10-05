@@ -22,8 +22,30 @@ export interface DailyReportData {
   dateStr: string;
 }
 
+export interface WeeklyReportData {
+  jornada: number;
+  completedMatchesThisWeek: Match[];
+  upcomingMatchesNextWeek: Match[];
+  standingsBySport: {
+    futbol: Standing[];
+    voleibol: Standing[];
+    baloncesto: Standing[];
+  };
+  totalRostersCount: number;
+  totalPlayersCount: number;
+  totalPosts: number;
+  totalApplause: number;
+  trafficStats?: {
+    totalViews?: number;
+    weekViews?: number;
+    uniqueVisitors?: number;
+    mobilePercent?: number;
+  };
+  dateStr: string;
+}
+
 /**
- * Genera el texto del reporte ejecutivo formateado para WhatsApp
+ * Genera el texto del reporte ejecutivo diario (7:00 AM) para Alberto
  */
 export function generateDailyReportMessage(data: DailyReportData): string {
   const {
@@ -65,14 +87,14 @@ export function generateDailyReportMessage(data: DailyReportData): string {
   };
 
   let message = `🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
-📋 *REPORTE EJECUTIVO MATUTINO (7:00 AM)*
+📋 *REPORTE DIARIO DE OPERACIÓN (7:00 AM)*
 📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
 📅 *Fecha:* ${dateStr}
 
-Estimado Don Alejandro (Coordinador de Eventos) y Comité de Soporte · Curiol Studio Admin, les compartimos el resumen oficial del torneo, telemetría de impacto y cartelera deportiva:
+Estimado Alberto (Curiol Studio Admin), te compartimos el estado diario de operación, salud del sistema y cartelera deportiva:
 
 ━━━━━━━━━━━━━━━━━━━━
-📊 *RESUMEN DE RESULTADOS (Jornada ${jornada}):*
+📊 *ESTADO DE COMPETENCIA (Jornada ${jornada}):*
 `;
 
   // Fútbol
@@ -132,16 +154,15 @@ Estimado Don Alejandro (Coordinador de Eventos) y Comité de Soporte · Curiol S
   // Métricas de Impacto y Tráfico Web
   if (trafficStats) {
     message += `\n\n━━━━━━━━━━━━━━━━━━━━
-📈 *TELEMETRÍA Y FLUJO GENERAL DE USUARIOS:*
+📈 *TELEMETRÍA Y TRÁFICO WEB:*
 • 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas
 • 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas
-• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)
-• 💡 *Lectura de telemetría:* Refleja el volumen de interacción en vivo, el interés por disciplina y la adopción digital en los 6 colegios participantes.`;
+• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones`;
   }
 
   message += `\n\n━━━━━━━━━━━━━━━━━━━━
 📸 *Muro Familiar Comunitario:*
-• ${totalPosts} publicaciones y ${totalApplause} aplausos y reacciones registradas.
+• ${totalPosts} publicaciones y ${totalApplause} reacciones registradas.
 
 🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio
 _Curiol Studio · Fotografía, Tecnología, Legado_`;
@@ -149,9 +170,155 @@ _Curiol Studio · Fotografía, Tecnología, Legado_`;
   return message;
 }
 
+/**
+ * Genera el texto del GRAN REPORTE SEMANAL EJECUTIVO (Viernes 5:30 PM) para Don Alejandro
+ */
+export function generateWeeklyReportMessage(data: WeeklyReportData): string {
+  const {
+    jornada,
+    completedMatchesThisWeek,
+    upcomingMatchesNextWeek,
+    standingsBySport,
+    totalRostersCount,
+    totalPlayersCount,
+    totalPosts,
+    totalApplause,
+    trafficStats,
+    dateStr,
+  } = data;
+
+  const futbolMatches = completedMatchesThisWeek.filter((m) => m.sport === 'futbol');
+  const voleyMatches = completedMatchesThisWeek.filter((m) => m.sport === 'voleibol');
+  const basketMatches = completedMatchesThisWeek.filter((m) => m.sport === 'baloncesto');
+
+  // Formato de hora am/pm
+  const formatHour12 = (time24: string) => {
+    if (!time24) return '';
+    const [h, m] = time24.split(':').map((v) => parseInt(v, 10));
+    if (isNaN(h)) return time24;
+    const period = h >= 12 ? 'pm' : 'am';
+    const h12 = h % 12 || 12;
+    return `${h12}:${m < 10 ? '0' + m : m} ${period}`;
+  };
+
+  let message = `🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
+📋 *REPORTE EJECUTIVO SEMANAL DE CIERRE (Viernes)*
+📍 *Sede Oficial:* Guanacaste, Costa Rica · La Paz Community School
+📅 *Cierre de Semana:* ${dateStr}
+
+Estimado Don Alejandro (Coordinador de Eventos), le presentamos el *balance consolidado de la semana*, recopilando toda la actividad deportiva, el rendimiento institucional y el impacto digital acumulado:
+
+━━━━━━━━━━━━━━━━━━━━
+📊 *1. RESULTADOS DE LA SEMANA (Jornada ${jornada}):*
+`;
+
+  if (completedMatchesThisWeek.length === 0) {
+    message += `\n• Fase previa / La primera jornada oficial de partidos arranca el lunes 5 de octubre.\n`;
+  } else {
+    if (futbolMatches.length > 0) {
+      message += `\n⚽ *Fútbol:*`;
+      futbolMatches.forEach((m) => {
+        const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
+        const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
+        message += `\n• ${home} ${m.homeScore} — ${m.awayScore} ${away}`;
+      });
+    }
+
+    if (voleyMatches.length > 0) {
+      message += `\n\n🏐 *Voleibol:*`;
+      voleyMatches.forEach((m) => {
+        const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
+        const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
+        const sets = m.homeSetsWon !== undefined && m.awaySetsWon !== undefined
+          ? ` (${m.homeSetsWon} - ${m.awaySetsWon} sets)`
+          : '';
+        message += `\n• ${home} ${m.homeScore} — ${m.awayScore} ${away}${sets}`;
+      });
+    }
+
+    if (basketMatches.length > 0) {
+      message += `\n\n🏀 *Baloncesto:*`;
+      basketMatches.forEach((m) => {
+        const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
+        const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
+        message += `\n• ${home} ${m.homeScore} — ${m.awayScore} ${away}`;
+      });
+    }
+  }
+
+  message += `\n━━━━━━━━━━━━━━━━━━━━
+🥇 *2. TABLA GENERAL DE POSICIONES Y LÍDERES:*`;
+
+  // Top 3 Fútbol
+  message += `\n⚽ *Fútbol:*`;
+  standingsBySport.futbol.slice(0, 3).forEach((st, idx) => {
+    message += `\n${idx + 1}. ${st.school?.shortName || 'Colegio'}: ${st.points} pts (PJ: ${st.played} | DG: ${st.diff > 0 ? '+' : ''}${st.diff})`;
+  });
+
+  // Top 3 Voleibol
+  message += `\n\n🏐 *Voleibol:*`;
+  standingsBySport.voleibol.slice(0, 3).forEach((st, idx) => {
+    message += `\n${idx + 1}. ${st.school?.shortName || 'Colegio'}: ${st.points} pts (PJ: ${st.played} | Sets: ${st.setsWon}-${st.setsLost})`;
+  });
+
+  // Top 3 Baloncesto
+  message += `\n\n🏀 *Baloncesto:*`;
+  standingsBySport.baloncesto.slice(0, 3).forEach((st, idx) => {
+    message += `\n${idx + 1}. ${st.school?.shortName || 'Colegio'}: ${st.points} pts (PJ: ${st.played} | DG: ${st.diff > 0 ? '+' : ''}${st.diff})`;
+  });
+
+  message += `\n\n━━━━━━━━━━━━━━━━━━━━
+👥 *3. CENSO DE NÓMINAS Y ATLETAS ACREDITADOS:*
+• 📋 Total de nóminas registradas: ${totalRostersCount} planteles
+• 🏃‍♂️ Atletas oficiales inscritos: ${totalPlayersCount} estudiantes
+• 🏫 Colegios participantes: 6 instituciones hermanadas de Guanacaste`;
+
+  if (upcomingMatchesNextWeek.length > 0) {
+    message += `\n\n━━━━━━━━━━━━━━━━━━━━
+🗓️ *4. PRÓXIMOS PARTIDOS DE LA SIGUIENTE SEMANA:*`;
+    upcomingMatchesNextWeek.slice(0, 6).forEach((m) => {
+      const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
+      const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
+      const sportEmoji = m.sport === 'futbol' ? '⚽' : m.sport === 'voleibol' ? '🏐' : '🏀';
+      const timeStr = formatHour12(m.time);
+      message += `\n• ${sportEmoji} ${timeStr} · ${home} vs ${away} (${m.venue || 'Sede Principal'})`;
+    });
+  }
+
+  // Telemetría Semanal
+  if (trafficStats) {
+    message += `\n\n━━━━━━━━━━━━━━━━━━━━
+📈 *5. IMPACTO Y TELEMETRÍA DIGITAL DE LA SEMANA:*
+• 👁️ Visitas totales acumuladas: ${trafficStats.totalViews || 0} páginas vistas
+• 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas
+• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)
+• 📸 Muro familiar: ${totalPosts} publicaciones y ${totalApplause} reacciones registradas`;
+  }
+
+  message += `\n\n━━━━━━━━━━━━━━━━━━━━
+🔍 *Panel de Administración y Control en Vivo:*
+https://costadeoro.curiol.studio/admin
+
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
+
+  return message;
+}
+
+// 📱 DESTINATARIO DIARIO (Alberto · Curiol Studio Admin - 7:00 AM)
+export const DAILY_REPORT_RECIPIENTS = [
+  { name: 'Alberto · Curiol Studio Admin', phone: '50660602617', role: 'Administrador General' },
+];
+
+// 📱 DESTINATARIO SEMANAL (Don Alejandro · Coordinador de Eventos - Viernes 5:30 PM)
+export const WEEKLY_REPORT_RECIPIENTS = [
+  { name: 'Don Alejandro (Coordinador de Eventos)', phone: '50688445486', role: 'Coordinador de Eventos' },
+  { name: 'Alberto · Curiol Studio Admin (Copia Respaldo)', phone: '50660602617', role: 'Administrador General' },
+];
+
+// 📱 DESTINATARIOS DE ALERTAS DEL SISTEMA (Nóminas y Pings)
 export const ADMIN_NOTIFICATION_RECIPIENTS = [
   { name: 'Don Alejandro (Coordinador de Eventos)', phone: '50688445486', role: 'Coordinador de Eventos' },
-  { name: 'Comité de Soporte · Curiol Studio Admin', phone: '50660602617', role: 'Curiol Studio Admin' },
+  { name: 'Alberto · Curiol Studio Admin', phone: '50660602617', role: 'Administrador General' },
 ];
 
 /**

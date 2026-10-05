@@ -3,72 +3,81 @@ import { getTournamentDb, getAnalyticsSummaryFromDb } from '@/lib/serverDb';
 import { calculateStandings } from '@/lib/sportsEngine';
 import { SCHOOLS_DATA } from '@/config/tournamentConfig';
 import { 
-  DailyReportData, 
-  generateDailyReportMessage, 
+  WeeklyReportData, 
+  generateWeeklyReportMessage, 
   sendWhatsAppMessageViaEvolutionApi,
   getWhatsAppDirectUrl,
-  DAILY_REPORT_RECIPIENTS
+  WEEKLY_REPORT_RECIPIENTS
 } from '@/lib/evolutionApi';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
-  return handleDailyReport(request);
+  return handleWeeklyReport(request);
 }
 
 export async function POST(request: NextRequest) {
-  return handleDailyReport(request);
+  return handleWeeklyReport(request);
 }
 
-async function handleDailyReport(request: NextRequest) {
+async function handleWeeklyReport(request: NextRequest) {
   const startTime = Date.now();
   const db = await getTournamentDb();
   const analytics = await getAnalyticsSummaryFromDb();
 
-  // Fecha y hora en Costa Rica
+  // Fecha y hora actual en Costa Rica
   const nowCR = new Date().toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' });
 
   const matches = db.matches || [];
-  const completedMatches = matches.filter((m) => m.status === 'completed');
-  const upcomingMatches = matches.filter((m) => m.status === 'scheduled' || m.status === 'live');
+  const completedMatchesThisWeek = matches.filter((m) => m.status === 'completed');
+  const upcomingMatchesNextWeek = matches.filter((m) => m.status === 'scheduled' || m.status === 'live');
 
-  // Calcular tablas de posiciones por deporte
+  // Tablas de posiciones consolidadas
   const standingsFutbol = calculateStandings('cat-fem-futbol', 'futbol', matches, SCHOOLS_DATA);
   const standingsVoley = calculateStandings('cat-fem-c-voley', 'voleibol', matches, SCHOOLS_DATA);
   const standingsBasket = calculateStandings('cat-c-basket', 'baloncesto', matches, SCHOOLS_DATA);
 
+  // Muro comunitario y reacciones
   const posts = db.posts || [];
   const totalApplause = posts.reduce((sum, p) => sum + (p.likesCount || 0) + (p.applauseCount || 0), 0);
 
+  // Censo de nóminas y atletas inscritos
+  const rosters = db.rosters || [];
+  const totalRostersCount = rosters.length;
+  const totalPlayersCount = rosters.reduce((sum, r) => sum + (r.players?.length || 0), 0);
+
+  // Telemetría acumulada
   const totalDeviceHits = (analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android + analytics.deviceDistribution.tablet + analytics.deviceDistribution.desktop) || 1;
   const mobilePercent = Math.round(((analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android) / totalDeviceHits) * 100);
 
-  const reportData: DailyReportData = {
+  const weeklyData: WeeklyReportData = {
     jornada: 1,
-    completedMatches,
-    upcomingMatches,
+    completedMatchesThisWeek,
+    upcomingMatchesNextWeek,
     standingsBySport: {
       futbol: standingsFutbol,
       voleibol: standingsVoley,
       baloncesto: standingsBasket,
     },
+    totalRostersCount,
+    totalPlayersCount,
     totalPosts: posts.length,
     totalApplause,
     trafficStats: {
       totalViews: analytics.totalViews,
-      todayViews: analytics.todayViews,
+      weekViews: analytics.todayViews * 5, // Estimado semanal
       uniqueVisitors: analytics.uniqueVisitorsCount,
       mobilePercent,
     },
     dateStr: nowCR,
   };
 
-  const messageText = generateDailyReportMessage(reportData);
+  const messageText = generateWeeklyReportMessage(weeklyData);
   const deliveryResults = [];
 
-  // Enviar exclusivamente al Administrador General (Alberto · Curiol Studio Admin - 7:00 AM)
-  for (const admin of DAILY_REPORT_RECIPIENTS) {
+  // Enviar a Don Alejandro (Viernes 5:30 PM) y copia a Alberto
+  for (const admin of WEEKLY_REPORT_RECIPIENTS) {
     const sendRes = await sendWhatsAppMessageViaEvolutionApi(admin.phone, messageText);
     const directUrl = getWhatsAppDirectUrl(admin.phone, messageText);
     deliveryResults.push({
@@ -83,17 +92,20 @@ async function handleDailyReport(request: NextRequest) {
 
   return NextResponse.json({
     success: true,
+    type: 'weekly_report_friday',
     timestamp: nowCR,
     executionTimeMs: Date.now() - startTime,
-    recipients: DAILY_REPORT_RECIPIENTS,
+    recipients: WEEKLY_REPORT_RECIPIENTS,
     deliveries: deliveryResults,
     reportMessage: messageText,
     summaryStats: {
-      completedMatches: completedMatches.length,
-      upcomingMatches: upcomingMatches.length,
+      completedMatchesThisWeek: completedMatchesThisWeek.length,
+      upcomingMatchesNextWeek: upcomingMatchesNextWeek.length,
+      totalRostersCount,
+      totalPlayersCount,
       totalCommunityPosts: posts.length,
       totalApplause,
-      totalTrafficViews: analytics.totalViews,
+      totalViews: analytics.totalViews,
       uniqueVisitors: analytics.uniqueVisitorsCount,
     },
   });
