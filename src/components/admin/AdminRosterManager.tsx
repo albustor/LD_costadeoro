@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTournament } from '@/context/TournamentContext';
 import { TeamRoster, Player, SportType, School } from '@/types/tournament';
-import { rosterService } from '@/lib/rosterService';
+import { rosterService, validateFullName } from '@/lib/rosterService';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { 
   Users, 
@@ -212,21 +212,67 @@ export function AdminRosterManager() {
 
   // Guardar Roster Actual
   const handleSaveRoster = () => {
-    const validPlayers = players
-      .filter((p) => p.fullName && p.fullName.trim().length > 0)
-      .map((p, idx) => ({
-        ...p,
-        jerseyNumber: p.jerseyNumber || (idx + 1),
-        fullName: p.fullName.trim(),
-        position: p.position ? p.position.trim() : 'Jugador/a',
-      }));
+    // 1. Validar Entrenador Principal
+    const trimmedCoach = coachName.trim();
+    if (trimmedCoach.length > 0) {
+      const coachVal = validateFullName(trimmedCoach);
+      if (!coachVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El Entrenador/a Principal ("${trimmedCoach}") debe registrar nombre y apellidos completos (ej. Carlos Santana Solano).`,
+        });
+        return;
+      }
+    }
+
+    // 2. Validar Asistente si fue ingresado
+    const trimmedAssistant = assistantCoachName.trim();
+    if (trimmedAssistant.length > 0) {
+      const assistantVal = validateFullName(trimmedAssistant);
+      if (!assistantVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El Asistente Técnico ("${trimmedAssistant}") debe registrar nombre y apellidos completos (ej. Diego Solano Solano).`,
+        });
+        return;
+      }
+    }
+
+    // 3. Filtrar y validar atletas
+    const filledPlayers = players.filter((p) => p.fullName && p.fullName.trim().length > 0);
+
+    if (filledPlayers.length === 0) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Debes registrar al menos un atleta con nombre y apellidos completos antes de guardar.',
+      });
+      return;
+    }
+
+    for (const p of filledPlayers) {
+      const nameVal = validateFullName(p.fullName);
+      if (!nameVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El atleta en el dorsal #${p.jerseyNumber || '?'} ("${p.fullName}") debe incluir nombre y apellidos completos (ej. Sofía Morales Castro).`,
+        });
+        return;
+      }
+    }
+
+    const validPlayers = filledPlayers.map((p, idx) => ({
+      ...p,
+      jerseyNumber: p.jerseyNumber || (idx + 1),
+      fullName: p.fullName.trim(),
+      position: p.position ? p.position.trim() : 'Jugador/a',
+    }));
 
     const newRoster: TeamRoster = {
       schoolId: selectedSchoolId,
       sport: selectedSport,
       categoryId: selectedCategoryId,
-      coachName: coachName.trim() || 'Entrenador Oficial',
-      assistantCoachName: assistantCoachName.trim() || undefined,
+      coachName: trimmedCoach || 'Entrenador Oficial',
+      assistantCoachName: trimmedAssistant || undefined,
       players: validPlayers,
       updatedAt: new Date().toISOString(),
     };
@@ -240,7 +286,7 @@ export function AdminRosterManager() {
 
     setTimeout(() => {
       setStatusMessage(null);
-    }, 2500);
+    }, 4000);
   };
 
   // Manejo de Filas de Jugadores
@@ -541,26 +587,79 @@ export function AdminRosterManager() {
           </div>
         </div>
 
+        {/* Aviso de Validación de Formato de Nombres */}
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-950 font-medium flex items-start gap-2.5">
+          <span className="text-base">📋</span>
+          <div>
+            <strong className="font-extrabold text-amber-900 block">Requisito de acreditación oficial:</strong>
+            <span>Cada atleta y entrenador debe registrarse con <strong>nombre y dos apellidos completos</strong> (ej. <em>Sofía Morales Castro</em>) para las actas arbitrales y certificados.</span>
+          </div>
+        </div>
+
         {/* Entrenadores */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Entrenador Principal:</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-bold text-slate-700">Entrenador Principal:</label>
+              {coachName.trim() && (
+                <span
+                  className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
+                    !validateFullName(coachName).isValid
+                      ? 'bg-rose-100 text-rose-800'
+                      : !validateFullName(coachName).hasTwoSurnames
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-emerald-100 text-emerald-800'
+                  }`}
+                >
+                  {!validateFullName(coachName).isValid
+                    ? '⚠️ Falta apellido'
+                    : !validateFullName(coachName).hasTwoSurnames
+                    ? '💡 Falta 2.º apellido'
+                    : '✓ Nombre completo'}
+                </span>
+              )}
+            </div>
             <input
               type="text"
               value={coachName}
               onChange={(e) => setCoachName(e.target.value)}
-              placeholder="Profesor/a Principal"
-              className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-semibold"
+              placeholder="Nombre y dos apellidos (ej. Carlos Santana Solano)"
+              className={`w-full p-2.5 rounded-xl bg-white border text-xs sm:text-sm font-semibold transition ${
+                coachName.trim() && !validateFullName(coachName).isValid
+                  ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20'
+                  : coachName.trim() && !validateFullName(coachName).hasTwoSurnames
+                  ? 'border-amber-400 focus:ring-amber-400 bg-amber-50/10'
+                  : 'border-slate-300 focus:ring-amber-500'
+              }`}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Asistente Técnico:</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-bold text-slate-700">Asistente Técnico:</label>
+              {assistantCoachName.trim() && (
+                <span
+                  className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
+                    !validateFullName(assistantCoachName).isValid
+                      ? 'bg-rose-100 text-rose-800'
+                      : !validateFullName(assistantCoachName).hasTwoSurnames
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-emerald-100 text-emerald-800'
+                  }`}
+                >
+                  {!validateFullName(assistantCoachName).isValid
+                    ? '⚠️ Falta apellido'
+                    : !validateFullName(assistantCoachName).hasTwoSurnames
+                    ? '💡 Falta 2.º apellido'
+                    : '✓ Nombre completo'}
+                </span>
+              )}
+            </div>
             <input
               type="text"
               value={assistantCoachName}
               onChange={(e) => setAssistantCoachName(e.target.value)}
-              placeholder="Asistente o Delegado"
+              placeholder="Nombre y dos apellidos (ej. Diego Solano Solano)"
               className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-semibold"
             />
           </div>
@@ -568,77 +667,109 @@ export function AdminRosterManager() {
 
         {/* Tabla de Jugadores */}
         <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-          {players.map((p, idx) => (
-            <div
-              key={p.id || idx}
-              className="flex items-center gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-300 transition-colors"
-            >
-              <div className="w-16 shrink-0">
-                <input
-                  type="number"
-                  min={1}
-                  max={99}
-                  value={p.jerseyNumber || ''}
-                  onChange={(e) => handleUpdatePlayer(idx, 'jerseyNumber', parseInt(e.target.value, 10) || '')}
-                  placeholder="N°"
-                  title="Número de Jugador"
-                  className="w-full p-2 rounded-lg bg-white border border-slate-300 text-center font-mono font-black text-xs text-amber-950"
-                />
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <input
-                  type="text"
-                  value={p.fullName}
-                  onChange={(e) => handleUpdatePlayer(idx, 'fullName', e.target.value)}
-                  placeholder="Nombre y Apellidos del atleta..."
-                  className="w-full p-2 rounded-lg bg-white border border-slate-300 font-bold text-xs text-slate-900"
-                />
-              </div>
-
-              <div className="w-28 shrink-0 hidden sm:block">
-                <input
-                  type="text"
-                  value={p.position || ''}
-                  onChange={(e) => handleUpdatePlayer(idx, 'position', e.target.value)}
-                  placeholder="Posición"
-                  className="w-full p-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-700 font-medium"
-                />
-              </div>
-
-              <div className="w-20 shrink-0 hidden sm:block">
-                <input
-                  type="number"
-                  value={p.birthYear || ''}
-                  onChange={(e) => handleUpdatePlayer(idx, 'birthYear', parseInt(e.target.value, 10) || undefined)}
-                  placeholder="Año"
-                  className="w-full p-2 rounded-lg bg-white border border-slate-300 text-xs text-center font-mono text-slate-700"
-                />
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleUpdatePlayer(idx, 'isCaptain', !p.isCaptain)}
-                className={`p-2 rounded-lg text-xs font-black transition-colors shrink-0 cursor-pointer ${
-                  p.isCaptain
-                    ? 'bg-amber-400 text-slate-950 shadow-2xs ring-1 ring-amber-500'
-                    : 'bg-slate-200 text-slate-400 hover:bg-slate-300 hover:text-slate-700'
+          {players.map((p, idx) => {
+            const nameVal = p.fullName.trim() ? validateFullName(p.fullName) : null;
+            return (
+              <div
+                key={p.id || idx}
+                className={`flex items-center gap-2 p-2 rounded-xl border transition-colors ${
+                  nameVal && !nameVal.isValid
+                    ? 'bg-rose-50/40 border-rose-300'
+                    : nameVal && !nameVal.hasTwoSurnames
+                    ? 'bg-amber-50/30 border-amber-300'
+                    : 'bg-slate-50 border-slate-200 hover:border-amber-300'
                 }`}
-                title={p.isCaptain ? 'Es Capitán' : 'Marcar como Capitán'}
               >
-                ©
-              </button>
+                <div className="w-16 shrink-0">
+                  <input
+                    type="number"
+                    min={1}
+                    max={99}
+                    value={p.jerseyNumber || ''}
+                    onChange={(e) => handleUpdatePlayer(idx, 'jerseyNumber', parseInt(e.target.value, 10) || '')}
+                    placeholder="N°"
+                    title="Número de Jugador"
+                    className="w-full p-2 rounded-lg bg-white border border-slate-300 text-center font-mono font-black text-xs text-amber-950"
+                  />
+                </div>
 
-              <button
-                type="button"
-                onClick={() => handleRemovePlayer(idx)}
-                className="p-2 rounded-lg bg-slate-200 hover:bg-rose-100 text-slate-400 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
-                title="Eliminar jugador"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          ))}
+                <div className="flex-1 min-w-0 relative">
+                  <input
+                    type="text"
+                    value={p.fullName}
+                    onChange={(e) => handleUpdatePlayer(idx, 'fullName', e.target.value)}
+                    placeholder="Nombre y dos apellidos (ej. Sofía Morales Castro)"
+                    className={`w-full p-2 rounded-lg bg-white border font-bold text-xs text-slate-900 transition ${
+                      nameVal && !nameVal.isValid
+                        ? 'border-rose-400 focus:ring-2 focus:ring-rose-400 pr-24'
+                        : nameVal && !nameVal.hasTwoSurnames
+                        ? 'border-amber-400 focus:ring-2 focus:ring-amber-400 pr-28'
+                        : 'border-slate-300 focus:ring-2 focus:ring-amber-500'
+                    }`}
+                  />
+                  {nameVal && (
+                    <span
+                      className={`absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md pointer-events-none hidden sm:inline-block ${
+                        !nameVal.isValid
+                          ? 'bg-rose-100 text-rose-800'
+                          : !nameVal.hasTwoSurnames
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-emerald-100 text-emerald-800'
+                      }`}
+                    >
+                      {!nameVal.isValid
+                        ? '⚠️ Falta apellido'
+                        : !nameVal.hasTwoSurnames
+                        ? '💡 Falta 2.º apellido'
+                        : '✓ Completo'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="w-28 shrink-0 hidden sm:block">
+                  <input
+                    type="text"
+                    value={p.position || ''}
+                    onChange={(e) => handleUpdatePlayer(idx, 'position', e.target.value)}
+                    placeholder="Posición"
+                    className="w-full p-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-700 font-medium"
+                  />
+                </div>
+
+                <div className="w-20 shrink-0 hidden sm:block">
+                  <input
+                    type="number"
+                    value={p.birthYear || ''}
+                    onChange={(e) => handleUpdatePlayer(idx, 'birthYear', parseInt(e.target.value, 10) || undefined)}
+                    placeholder="Año"
+                    className="w-full p-2 rounded-lg bg-white border border-slate-300 text-xs text-center font-mono text-slate-700"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleUpdatePlayer(idx, 'isCaptain', !p.isCaptain)}
+                  className={`p-2 rounded-lg text-xs font-black transition-colors shrink-0 cursor-pointer ${
+                    p.isCaptain
+                      ? 'bg-amber-400 text-slate-950 shadow-2xs ring-1 ring-amber-500'
+                      : 'bg-slate-200 text-slate-400 hover:bg-slate-300 hover:text-slate-700'
+                  }`}
+                  title={p.isCaptain ? 'Es Capitán' : 'Marcar como Capitán'}
+                >
+                  ©
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleRemovePlayer(idx)}
+                  className="p-2 rounded-lg bg-slate-200 hover:bg-rose-100 text-slate-400 hover:text-rose-700 transition-colors shrink-0 cursor-pointer"
+                  title="Eliminar jugador"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {/* Mensaje de Estado */}

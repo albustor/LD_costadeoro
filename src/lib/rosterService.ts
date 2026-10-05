@@ -85,6 +85,45 @@ export function getSchoolByPin(pin: string): School | null {
   return SCHOOLS_DATA.find((s) => s.id === schoolId) || null;
 }
 
+/**
+ * Valida que un nombre contenga nombre y apellidos completos.
+ * Retorna estado de validez, conteo de palabras y si tiene ambos apellidos.
+ */
+export function validateFullName(name: string): {
+  isValid: boolean;
+  wordCount: number;
+  hasTwoSurnames: boolean;
+  message?: string;
+} {
+  const trimmed = name?.trim() || '';
+  if (!trimmed) {
+    return { isValid: false, wordCount: 0, hasTwoSurnames: false, message: 'El campo no puede estar vacío.' };
+  }
+
+  // Filtrar palabras de al menos 2 letras
+  const words = trimmed.split(/\s+/).filter((w) => w.length >= 2);
+
+  if (words.length < 2) {
+    return {
+      isValid: false,
+      wordCount: words.length,
+      hasTwoSurnames: false,
+      message: 'Debe ingresar nombre y apellidos completos (ej. Sofía Morales Castro).',
+    };
+  }
+
+  const hasTwoSurnames = words.length >= 3;
+
+  return {
+    isValid: true,
+    wordCount: words.length,
+    hasTwoSurnames,
+    message: hasTwoSurnames
+      ? undefined
+      : '⚠️ Se recomienda incluir ambos apellidos para la acreditación oficial.',
+  };
+}
+
 export const rosterService = {
   // 1. Obtener todas las nóminas
   getAllRosters(): TeamRoster[] {
@@ -341,25 +380,25 @@ ${worksheetsXml}
         sheetName: 'Fútbol',
         sportId: 'futbol',
         categories: [
-          { catId: 'cat-fem-futbol', catName: 'Fútbol Femenino Abierto', defaultPos: 'Delantera', num: 10, birthYear: 2009 },
-          { catId: 'cat-c-futbol', catName: 'Fútbol Masculino Categoría C', defaultPos: 'Mediocampista', num: 7, birthYear: 2010 },
-          { catId: 'cat-d-futbol', catName: 'Fútbol Masculino Categoría D', defaultPos: 'Defensa', num: 4, birthYear: 2012 },
+          { catId: 'cat-fem-futbol', catName: 'Fútbol Femenino Abierto', defaultPos: 'Delantera', num: 10, birthYear: 2009, examplePlayer: 'Sofía Morales Castro' },
+          { catId: 'cat-c-futbol', catName: 'Fútbol Masculino Categoría C', defaultPos: 'Mediocampista', num: 7, birthYear: 2012, examplePlayer: 'Mateo Rodríguez Alvarado' },
+          { catId: 'cat-d-futbol', catName: 'Fútbol Masculino Categoría D', defaultPos: 'Defensa', num: 4, birthYear: 2009, examplePlayer: 'Lucas Navarro Castro' },
         ],
       },
       {
         sheetName: 'Voleibol',
         sportId: 'voleibol',
         categories: [
-          { catId: 'cat-c-voleibol', catName: 'Voleibol Femenino Categoría C', defaultPos: 'Armadora', num: 5, birthYear: 2010 },
-          { catId: 'cat-d-voleibol', catName: 'Voleibol Femenino Categoría D', defaultPos: 'Rematadora', num: 9, birthYear: 2013 },
+          { catId: 'cat-c-voleibol', catName: 'Voleibol Femenino Categoría C', defaultPos: 'Armadora', num: 5, birthYear: 2012, examplePlayer: 'Valentina Soto Jiménez' },
+          { catId: 'cat-d-voleibol', catName: 'Voleibol Femenino Categoría D', defaultPos: 'Rematadora', num: 9, birthYear: 2009, examplePlayer: 'Mariana Vargas Rojas' },
         ],
       },
       {
         sheetName: 'Baloncesto',
         sportId: 'baloncesto',
         categories: [
-          { catId: 'cat-c-baloncesto', catName: 'Baloncesto Masculino Categoría C', defaultPos: 'Base / Armador', num: 23, birthYear: 2011 },
-          { catId: 'cat-d-baloncesto', catName: 'Baloncesto Masculino Categoría D', defaultPos: 'Alero', num: 11, birthYear: 2013 },
+          { catId: 'cat-c-baloncesto', catName: 'Baloncesto Masculino Categoría C', defaultPos: 'Base / Armador', num: 23, birthYear: 2012, examplePlayer: 'Santiago Jiménez Alvarado' },
+          { catId: 'cat-d-baloncesto', catName: 'Baloncesto Masculino Categoría D', defaultPos: 'Alero', num: 11, birthYear: 2009, examplePlayer: 'Felipe Mora Gutiérrez' },
         ],
       },
     ];
@@ -371,12 +410,12 @@ ${worksheetsXml}
       'Categoría ID',
       'Nombre Categoría',
       'Número de Jugador',
-      'Nombre Completo',
+      'Nombre y Apellidos Completos',
       'Posición',
       'Capitán',
       'Año Nacimiento',
-      'Entrenador Principal',
-      'Asistente Técnico',
+      'Entrenador Principal (Nombre y Apellidos)',
+      'Asistente Técnico (Nombre y Apellidos)',
     ];
 
     let worksheetsXml = '';
@@ -396,12 +435,12 @@ ${worksheetsXml}
         rowsXml += `  <Cell><Data ss:Type="String">${cat.catId}</Data></Cell>\n`;
         rowsXml += `  <Cell><Data ss:Type="String">${cat.catName}</Data></Cell>\n`;
         rowsXml += `  <Cell><Data ss:Type="Number">${cat.num}</Data></Cell>\n`;
-        rowsXml += `  <Cell><Data ss:Type="String">Ejemplo Atleta ${idx + 1}</Data></Cell>\n`;
+        rowsXml += `  <Cell><Data ss:Type="String">${cat.examplePlayer}</Data></Cell>\n`;
         rowsXml += `  <Cell><Data ss:Type="String">${cat.defaultPos}</Data></Cell>\n`;
         rowsXml += `  <Cell><Data ss:Type="String">${idx === 0 ? 'SI' : 'NO'}</Data></Cell>\n`;
         rowsXml += `  <Cell><Data ss:Type="Number">${cat.birthYear}</Data></Cell>\n`;
-        rowsXml += `  <Cell><Data ss:Type="String">Prof. Entrenador Principal</Data></Cell>\n`;
-        rowsXml += `  <Cell><Data ss:Type="String">Asistente Técnico</Data></Cell>\n`;
+        rowsXml += `  <Cell><Data ss:Type="String">Prof. Carlos Méndez Vargas</Data></Cell>\n`;
+        rowsXml += `  <Cell><Data ss:Type="String">Prof. Diego Solano Solano</Data></Cell>\n`;
         rowsXml += `</Row>\n`;
       });
 

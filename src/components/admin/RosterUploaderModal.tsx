@@ -19,7 +19,7 @@ import {
   Save,
   ChevronDown
 } from 'lucide-react';
-import { rosterService } from '@/lib/rosterService';
+import { rosterService, validateFullName } from '@/lib/rosterService';
 
 interface RosterUploaderModalProps {
   isOpen: boolean;
@@ -136,11 +136,33 @@ export function RosterUploaderModal({ isOpen, onClose }: RosterUploaderModalProp
       return;
     }
 
+    if (coachName.trim().length > 0) {
+      const coachVal = validateFullName(coachName);
+      if (!coachVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El Entrenador/a Principal ("${coachName}") debe registrar nombre y apellidos completos (ej. Carlos Santana Solano).`,
+        });
+        return;
+      }
+    }
+
+    for (const p of parsedPlayers) {
+      const pVal = validateFullName(p.fullName);
+      if (!pVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El atleta #${p.jerseyNumber || '?'} ("${p.fullName}") debe incluir nombre y apellidos completos (ej. Sofía Morales Castro).`,
+        });
+        return;
+      }
+    }
+
     const newRoster: TeamRoster = {
       schoolId: selectedSchoolId,
       sport: selectedSport,
       categoryId: selectedCategoryId,
-      coachName: coachName || 'Entrenador Oficial',
+      coachName: coachName.trim() || 'Entrenador Oficial',
       players: parsedPlayers,
       updatedAt: new Date().toISOString(),
     };

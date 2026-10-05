@@ -31,7 +31,7 @@ import {
   LogOut
 } from 'lucide-react';
 import Link from 'next/link';
-import { PIN_TO_SCHOOL_MAP, getSchoolByPin, rosterService } from '@/lib/rosterService';
+import { PIN_TO_SCHOOL_MAP, getSchoolByPin, rosterService, validateFullName } from '@/lib/rosterService';
 
 function RegistroNominaContent() {
   const searchParams = useSearchParams();
@@ -194,30 +194,72 @@ function RegistroNominaContent() {
     if (!selectedSchool) return;
     setIsSaving(true);
 
-    const validPlayers = players
-      .filter((p) => p.fullName && p.fullName.trim().length > 0)
-      .map((p, idx) => ({
-        ...p,
-        jerseyNumber: p.jerseyNumber || (idx + 1),
-        fullName: p.fullName.trim(),
-        position: p.position ? p.position.trim() : 'Jugador/a',
-      }));
+    // 1. Validar Entrenador Principal (Nombre y apellidos completos)
+    const trimmedCoach = coachName.trim();
+    if (trimmedCoach.length > 0) {
+      const coachVal = validateFullName(trimmedCoach);
+      if (!coachVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El Entrenador/a Principal ("${trimmedCoach}") debe registrar nombre y apellidos completos (ej. Carlos Santana Solano).`,
+        });
+        setIsSaving(false);
+        return;
+      }
+    }
 
-    if (validPlayers.length === 0) {
+    // 2. Validar Asistente Técnico si fue ingresado
+    const trimmedAssistant = assistantCoachName.trim();
+    if (trimmedAssistant.length > 0) {
+      const assistantVal = validateFullName(trimmedAssistant);
+      if (!assistantVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El Asistente Técnico ("${trimmedAssistant}") debe registrar nombre y apellidos completos (ej. Diego Solano Solano).`,
+        });
+        setIsSaving(false);
+        return;
+      }
+    }
+
+    // 3. Filtrar y validar atletas
+    const filledPlayers = players.filter((p) => p.fullName && p.fullName.trim().length > 0);
+
+    if (filledPlayers.length === 0) {
       setStatusMessage({
         type: 'error',
-        text: 'Debes registrar al menos un atleta con nombre completo antes de guardar.',
+        text: 'Debes registrar al menos un atleta con nombre y apellidos completos antes de guardar.',
       });
       setIsSaving(false);
       return;
     }
 
+    // Validar nombre y apellidos para cada atleta
+    for (const p of filledPlayers) {
+      const nameVal = validateFullName(p.fullName);
+      if (!nameVal.isValid) {
+        setStatusMessage({
+          type: 'error',
+          text: `El atleta en el dorsal #${p.jerseyNumber || '?'} ("${p.fullName}") debe incluir nombre y apellidos completos (ej. Sofía Morales Castro).`,
+        });
+        setIsSaving(false);
+        return;
+      }
+    }
+
+    const validPlayers = filledPlayers.map((p, idx) => ({
+      ...p,
+      jerseyNumber: p.jerseyNumber || (idx + 1),
+      fullName: p.fullName.trim(),
+      position: p.position ? p.position.trim() : 'Jugador/a',
+    }));
+
     const updatedRoster: TeamRoster = {
       schoolId: selectedSchool.id,
       sport: selectedSport,
       categoryId: selectedCategoryId,
-      coachName: coachName.trim() || 'Entrenador Oficial',
-      assistantCoachName: assistantCoachName.trim() || undefined,
+      coachName: trimmedCoach || 'Entrenador Oficial',
+      assistantCoachName: trimmedAssistant || undefined,
       players: validPlayers,
       updatedAt: new Date().toISOString(),
     };
@@ -531,30 +573,83 @@ function RegistroNominaContent() {
                     </div>
                   </div>
 
+                  {/* Aviso de Validación de Formato de Nombres */}
+                  <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-950 font-medium flex items-start gap-2.5">
+                    <span className="text-base">📋</span>
+                    <div>
+                      <strong className="font-extrabold text-amber-900 block">Requisito obligatorio de acreditación:</strong>
+                      <span>Todo atleta y miembro del cuerpo técnico debe registrarse con <strong>nombre y dos apellidos completos</strong> (ej. <em>Sofía Morales Castro</em>) para garantizar la emisión correcta de actas de juego y certificados oficiales.</span>
+                    </div>
+                  </div>
+
                   {/* Cuerpos Técnicos */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Entrenador/a Principal:
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-bold text-slate-700">
+                          Entrenador/a Principal:
+                        </label>
+                        {coachName.trim() && (
+                          <span
+                            className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
+                              !validateFullName(coachName).isValid
+                                ? 'bg-rose-100 text-rose-800'
+                                : !validateFullName(coachName).hasTwoSurnames
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-emerald-100 text-emerald-800'
+                            }`}
+                          >
+                            {!validateFullName(coachName).isValid
+                              ? '⚠️ Falta apellido'
+                              : !validateFullName(coachName).hasTwoSurnames
+                              ? '💡 Falta 2.º apellido'
+                              : '✓ Nombre completo'}
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         value={coachName}
                         onChange={(e) => setCoachName(e.target.value)}
-                        placeholder="Nombre y Apellidos del Entrenador..."
-                        className="w-full py-2.5 px-3.5 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-bold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
+                        placeholder="Nombre y dos apellidos (ej. Carlos Santana Solano)"
+                        className={`w-full py-2.5 px-3.5 rounded-xl bg-white border text-xs sm:text-sm font-bold text-slate-900 focus:ring-2 focus:outline-hidden transition ${
+                          coachName.trim() && !validateFullName(coachName).isValid
+                            ? 'border-rose-400 focus:ring-rose-400 bg-rose-50/20'
+                            : coachName.trim() && !validateFullName(coachName).hasTwoSurnames
+                            ? 'border-amber-400 focus:ring-amber-400 bg-amber-50/10'
+                            : 'border-slate-300 focus:ring-amber-500'
+                        }`}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Asistente Técnico / Delegado (Opcional):
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-bold text-slate-700">
+                          Asistente Técnico / Delegado (Opcional):
+                        </label>
+                        {assistantCoachName.trim() && (
+                          <span
+                            className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
+                              !validateFullName(assistantCoachName).isValid
+                                ? 'bg-rose-100 text-rose-800'
+                                : !validateFullName(assistantCoachName).hasTwoSurnames
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-emerald-100 text-emerald-800'
+                            }`}
+                          >
+                            {!validateFullName(assistantCoachName).isValid
+                              ? '⚠️ Falta apellido'
+                              : !validateFullName(assistantCoachName).hasTwoSurnames
+                              ? '💡 Falta 2.º apellido'
+                              : '✓ Nombre completo'}
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         value={assistantCoachName}
                         onChange={(e) => setAssistantCoachName(e.target.value)}
-                        placeholder="Nombre del Asistente..."
+                        placeholder="Nombre y dos apellidos (ej. Diego Solano Solano)"
                         className="w-full py-2.5 px-3.5 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-medium text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
                       />
                     </div>
@@ -579,83 +674,115 @@ function RegistroNominaContent() {
                     </div>
 
                     <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-                      {players.map((p, idx) => (
-                        <div
-                          key={p.id || idx}
-                          className="flex items-center gap-2 p-2 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-300 transition-colors"
-                        >
-                          {/* Número de Jugador */}
-                          <div className="w-16 shrink-0">
-                            <input
-                              type="number"
-                              min={1}
-                              max={99}
-                              value={p.jerseyNumber || ''}
-                              onChange={(e) => handleUpdatePlayer(idx, 'jerseyNumber', parseInt(e.target.value, 10) || '')}
-                              placeholder="N°"
-                              title="Número de Jugador"
-                              className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-center font-mono font-black text-xs sm:text-sm text-amber-950"
-                            />
-                          </div>
-
-                          {/* Nombre Completo */}
-                          <div className="flex-1 min-w-0">
-                            <input
-                              type="text"
-                              value={p.fullName}
-                              onChange={(e) => handleUpdatePlayer(idx, 'fullName', e.target.value)}
-                              placeholder="Nombre y Apellidos del atleta..."
-                              className="w-full p-2.5 rounded-xl bg-white border border-slate-300 font-bold text-xs sm:text-sm text-slate-900"
-                            />
-                          </div>
-
-                          {/* Posición */}
-                          <div className="w-32 shrink-0 hidden sm:block">
-                            <input
-                              type="text"
-                              value={p.position || ''}
-                              onChange={(e) => handleUpdatePlayer(idx, 'position', e.target.value)}
-                              placeholder="Posición"
-                              className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-700 font-medium"
-                            />
-                          </div>
-
-                          {/* Año Nacimiento */}
-                          <div className="w-20 shrink-0 hidden sm:block">
-                            <input
-                              type="number"
-                              value={p.birthYear || ''}
-                              onChange={(e) => handleUpdatePlayer(idx, 'birthYear', parseInt(e.target.value, 10) || undefined)}
-                              placeholder="Año"
-                              className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs text-center font-mono text-slate-700"
-                            />
-                          </div>
-
-                          {/* Capitán */}
-                          <button
-                            type="button"
-                            onClick={() => handleUpdatePlayer(idx, 'isCaptain', !p.isCaptain)}
-                            className={`p-2.5 rounded-xl text-xs font-black transition-colors shrink-0 cursor-pointer ${
-                              p.isCaptain
-                                ? 'bg-amber-400 text-slate-950 shadow-2xs ring-1 ring-amber-500'
-                                : 'bg-slate-200 text-slate-400 hover:bg-slate-300 hover:text-slate-700'
+                      {players.map((p, idx) => {
+                        const nameVal = p.fullName.trim() ? validateFullName(p.fullName) : null;
+                        return (
+                          <div
+                            key={p.id || idx}
+                            className={`flex items-center gap-2 p-2 rounded-2xl border transition-colors ${
+                              nameVal && !nameVal.isValid
+                                ? 'bg-rose-50/40 border-rose-300'
+                                : nameVal && !nameVal.hasTwoSurnames
+                                ? 'bg-amber-50/30 border-amber-300'
+                                : 'bg-slate-50 border-slate-200 hover:border-amber-300'
                             }`}
-                            title={p.isCaptain ? 'Es Capitán de Equipo' : 'Marcar como Capitán'}
                           >
-                            ©
-                          </button>
+                            {/* Número de Jugador */}
+                            <div className="w-16 shrink-0">
+                              <input
+                                type="number"
+                                min={1}
+                                max={99}
+                                value={p.jerseyNumber || ''}
+                                onChange={(e) => handleUpdatePlayer(idx, 'jerseyNumber', parseInt(e.target.value, 10) || '')}
+                                placeholder="N°"
+                                title="Número de Jugador"
+                                className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-center font-mono font-black text-xs sm:text-sm text-amber-950"
+                              />
+                            </div>
 
-                          {/* Eliminar */}
-                          <button
-                            type="button"
-                            onClick={() => handleRemovePlayer(idx)}
-                            className="p-2.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
-                            title="Eliminar atleta"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
+                            {/* Nombre Completo con Validación */}
+                            <div className="flex-1 min-w-0 relative">
+                              <input
+                                type="text"
+                                value={p.fullName}
+                                onChange={(e) => handleUpdatePlayer(idx, 'fullName', e.target.value)}
+                                placeholder="Nombre y dos apellidos (ej. Sofía Morales Castro)"
+                                className={`w-full p-2.5 rounded-xl bg-white border font-bold text-xs sm:text-sm text-slate-900 transition ${
+                                  nameVal && !nameVal.isValid
+                                    ? 'border-rose-400 focus:ring-2 focus:ring-rose-400 pr-24'
+                                    : nameVal && !nameVal.hasTwoSurnames
+                                    ? 'border-amber-400 focus:ring-2 focus:ring-amber-400 pr-28'
+                                    : 'border-slate-300 focus:ring-2 focus:ring-amber-500'
+                                }`}
+                              />
+                              {nameVal && (
+                                <span
+                                  className={`absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md pointer-events-none hidden sm:inline-block ${
+                                    !nameVal.isValid
+                                      ? 'bg-rose-100 text-rose-800'
+                                      : !nameVal.hasTwoSurnames
+                                      ? 'bg-amber-100 text-amber-800'
+                                      : 'bg-emerald-100 text-emerald-800'
+                                  }`}
+                                >
+                                  {!nameVal.isValid
+                                    ? '⚠️ Falta apellido'
+                                    : !nameVal.hasTwoSurnames
+                                    ? '💡 Falta 2.º apellido'
+                                    : '✓ Completo'}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Posición */}
+                            <div className="w-32 shrink-0 hidden sm:block">
+                              <input
+                                type="text"
+                                value={p.position || ''}
+                                onChange={(e) => handleUpdatePlayer(idx, 'position', e.target.value)}
+                                placeholder="Posición"
+                                className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-700 font-medium"
+                              />
+                            </div>
+
+                            {/* Año Nacimiento */}
+                            <div className="w-20 shrink-0 hidden sm:block">
+                              <input
+                                type="number"
+                                value={p.birthYear || ''}
+                                onChange={(e) => handleUpdatePlayer(idx, 'birthYear', parseInt(e.target.value, 10) || undefined)}
+                                placeholder="Año"
+                                className="w-full p-2.5 rounded-xl bg-white border border-slate-300 text-xs text-center font-mono text-slate-700"
+                              />
+                            </div>
+
+                            {/* Capitán */}
+                            <button
+                              type="button"
+                              onClick={() => handleUpdatePlayer(idx, 'isCaptain', !p.isCaptain)}
+                              className={`p-2.5 rounded-xl text-xs font-black transition-colors shrink-0 cursor-pointer ${
+                                p.isCaptain
+                                  ? 'bg-amber-400 text-slate-950 shadow-2xs ring-1 ring-amber-500'
+                                  : 'bg-slate-200 text-slate-400 hover:bg-slate-300 hover:text-slate-700'
+                              }`}
+                              title={p.isCaptain ? 'Es Capitán de Equipo' : 'Marcar como Capitán'}
+                            >
+                              ©
+                            </button>
+
+                            {/* Eliminar */}
+                            <button
+                              type="button"
+                              onClick={() => handleRemovePlayer(idx)}
+                              className="p-2.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors shrink-0 cursor-pointer"
+                              title="Eliminar atleta"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
