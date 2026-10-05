@@ -40,7 +40,17 @@ export async function GET() {
  */
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    let body: any = {};
+    try {
+      body = await req.json();
+    } catch {
+      try {
+        const text = await req.text();
+        body = text ? JSON.parse(text) : {};
+      } catch {
+        body = {};
+      }
+    }
 
     const userAgent = req.headers.get('user-agent') || '';
     let detectedDevice: PageViewEvent['device'] = 'desktop';

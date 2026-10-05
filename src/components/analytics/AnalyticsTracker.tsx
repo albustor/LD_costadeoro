@@ -17,11 +17,16 @@ export function AnalyticsTracker() {
     if (lastTrackedPath.current === fullPath) return;
     lastTrackedPath.current = fullPath;
 
-    // Obtener o inicializar ID de sesión anónima
-    let sessionId = sessionStorage.getItem('lco_visitor_session');
-    if (!sessionId) {
+    // Obtener o inicializar ID de sesión anónima persistente
+    let sessionId: string | null = null;
+    try {
+      sessionId = localStorage.getItem('lco_visitor_uuid');
+      if (!sessionId) {
+        sessionId = `v_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+        localStorage.setItem('lco_visitor_uuid', sessionId);
+      }
+    } catch {
       sessionId = `v_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-      sessionStorage.setItem('lco_visitor_session', sessionId);
     }
 
     // Detectar dispositivo en cliente

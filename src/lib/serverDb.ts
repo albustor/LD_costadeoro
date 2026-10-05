@@ -326,7 +326,11 @@ export async function recordAnalyticsEventInDb(event: PageViewEvent): Promise<vo
   const db = await getTournamentDb();
   const now = new Date();
   const todayDateStr = now.toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' }); // YYYY-MM-DD
-  const hourKey = `${String(now.getHours()).padStart(2, '0')}:00`;
+  const hourCR = parseInt(
+    now.toLocaleTimeString('en-US', { timeZone: 'America/Costa_Rica', hour12: false, hour: 'numeric' }),
+    10
+  );
+  const hourKey = `${String(isNaN(hourCR) ? 0 : hourCR).padStart(2, '0')}:00`;
 
   if (!db.analytics) {
     db.analytics = getDefaultAnalyticsData(todayDateStr);
