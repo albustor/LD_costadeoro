@@ -304,6 +304,62 @@ _Curiol Studio · Fotografía, Tecnología, Legado_`;
   return message;
 }
 
+/**
+ * Genera el texto del REPORTE SEMANAL EJECUTIVO RESUMIDO (Viernes 5:30 PM) especialmente diseñado para Don Alejandro
+ */
+export function generateExecutiveWeeklyReportForAlejandro(data: WeeklyReportData): string {
+  const {
+    jornada,
+    completedMatchesThisWeek,
+    standingsBySport,
+    totalPosts,
+    totalApplause,
+    trafficStats,
+    dateStr,
+  } = data;
+
+  const leaderFutbol = standingsBySport.futbol[0]?.school?.shortName || 'Por definir';
+  const leaderFutbolPts = standingsBySport.futbol[0]?.points ?? 0;
+  const leaderFutbolDiff = standingsBySport.futbol[0]?.diff ?? 0;
+
+  const leaderVoley = standingsBySport.voleibol[0]?.school?.shortName || 'Por definir';
+  const leaderVoleyPts = standingsBySport.voleibol[0]?.points ?? 0;
+  const leaderVoleyDiff = standingsBySport.voleibol[0]?.setsDiff ?? 0;
+
+  const leaderBasket = standingsBySport.baloncesto[0]?.school?.shortName || 'Por definir';
+  const leaderBasketPts = standingsBySport.baloncesto[0]?.points ?? 0;
+  const leaderBasketDiff = standingsBySport.baloncesto[0]?.diff ?? 0;
+
+  return `🏆 *LIGA COSTA DE ORO 2026 · INFORME EJECUTIVO*
+📍 *Sede:* Guanacaste · La Paz Community School
+📅 *Cierre de Semana:* ${dateStr}
+
+Estimado Don Alejandro (Coordinador de Eventos):
+Le compartimos el balance esencial de la semana y el impacto digital de la plataforma:
+
+━━━━━━━━━━━━━━━━━━━━
+⚽ *PANORAMA DEPORTIVO (Líderes):*
+• ⚽ *Fútbol:* ${leaderFutbol} (${leaderFutbolPts} pts | Dif: ${leaderFutbolDiff > 0 ? '+' : ''}${leaderFutbolDiff})
+• 🏐 *Voleibol:* ${leaderVoley} (${leaderVoleyPts} pts | Dif Sets: ${leaderVoleyDiff > 0 ? '+' : ''}${leaderVoleyDiff})
+• 🏀 *Baloncesto:* ${leaderBasket} (${leaderBasketPts} pts | Dif: ${leaderBasketDiff > 0 ? '+' : ''}${leaderBasketDiff})
+
+━━━━━━━━━━━━━━━━━━━━
+📈 *TELEMETRÍA Y ALCANCE DIGITAL:*
+• 👁️ *Visitas totales:* ${trafficStats?.totalViews || 0} páginas vistas
+• 👥 *Usuarios conectados:* ${trafficStats?.uniqueVisitors || 0} personas únicas
+• 📱 *Navegación móvil:* ${trafficStats?.mobilePercent || 0}% desde smartphones
+• 🔝 *Sección más visitada:* Calendario y Horarios Oficiales
+
+━━━━━━━━━━━━━━━━━━━━
+📸 *COMUNIDAD Y FAMILIAS:*
+• ${totalPosts} publicaciones y ${totalApplause} reacciones de apoyo a los atletas.
+
+🔍 *Panel de control en tiempo real:*
+https://costadeoro.curiol.studio/admin (Pestaña 8 · Clave: 2026ControlAdmin)
+
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
+}
+
 // 📱 DESTINATARIO DIARIO (Alberto · Curiol Studio Admin - 7:00 AM)
 export const DAILY_REPORT_RECIPIENTS = [
   { name: 'Alberto · Curiol Studio Admin', phone: '50660602617', role: 'Administrador General' },

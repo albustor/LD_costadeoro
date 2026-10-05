@@ -5,6 +5,7 @@ import { SCHOOLS_DATA } from '@/config/tournamentConfig';
 import { 
   WeeklyReportData, 
   generateWeeklyReportMessage, 
+  generateExecutiveWeeklyReportForAlejandro,
   sendWhatsAppMessageViaEvolutionApi,
   getWhatsAppDirectUrl,
   WEEKLY_REPORT_RECIPIENTS
@@ -73,16 +74,21 @@ async function handleWeeklyReport(request: NextRequest) {
     dateStr: nowCR,
   };
 
-  const messageText = generateWeeklyReportMessage(weeklyData);
   const deliveryResults = [];
 
-  // Enviar a Don Alejandro (Viernes 5:30 PM) y copia a Alberto
+  // Enviar versión ejecutiva a Don Alejandro (Viernes) y versión técnica a Alberto
   for (const admin of WEEKLY_REPORT_RECIPIENTS) {
+    const isDonAlejandro = admin.phone === '50688445486';
+    const messageText = isDonAlejandro
+      ? generateExecutiveWeeklyReportForAlejandro(weeklyData)
+      : generateWeeklyReportMessage(weeklyData);
+
     const sendRes = await sendWhatsAppMessageViaEvolutionApi(admin.phone, messageText);
     const directUrl = getWhatsAppDirectUrl(admin.phone, messageText);
     deliveryResults.push({
       recipient: admin.name,
       phone: admin.phone,
+      reportType: isDonAlejandro ? 'executive_summary_30s' : 'technical_detailed',
       success: sendRes.success,
       messageId: sendRes.messageId,
       error: sendRes.error,
@@ -97,7 +103,8 @@ async function handleWeeklyReport(request: NextRequest) {
     executionTimeMs: Date.now() - startTime,
     recipients: WEEKLY_REPORT_RECIPIENTS,
     deliveries: deliveryResults,
-    reportMessage: messageText,
+    executiveMessage: generateExecutiveWeeklyReportForAlejandro(weeklyData),
+    technicalMessage: generateWeeklyReportMessage(weeklyData),
     summaryStats: {
       completedMatchesThisWeek: completedMatchesThisWeek.length,
       upcomingMatchesNextWeek: upcomingMatchesNextWeek.length,
