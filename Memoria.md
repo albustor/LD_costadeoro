@@ -342,6 +342,17 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-02 | Actualización de Roles (Don Alejandro Coordinador de Eventos, Comité de Soporte Curiol Studio Admin), Firma «Fotografía, Tecnología, Legado» y Enriquecimiento de Lectura de Telemetría | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-03 | Blindaje de Telemetría en Tiempo Real, Formato Dinámico de Fechas y Programación para Cierre de Semana / Viernes con Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-05 | Auditoría E2E y Blindaje de Telemetría: Anclaje de Timezone CR en Cálculo Horario, Persistencia UUID en Tracker y Tolerancia a Fallos | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-05 | Despacho Dual de Reportes Semanales (Ejecutivo Resumido para Don Alejandro y Técnico Extendido para Soporte) y Análisis Comparativo de Datos | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-031: Arquitectura de Despacho Dual de Reportes Semanales y Comparativa Histórica
+- **Contexto**: Se requería diferenciar la información enviada según el perfil: una versión ejecutiva resumida de 30 segundos para Don Alejandro (Coordinador de Eventos) y la versión técnica detallada completa para el Comité de Soporte (Curiol Studio Admin).
+- **Decisión**:
+  1. Se implementó `generateExecutiveWeeklyReportForAlejandro` enfocado exclusivamente en líderes de tabla, 3 métricas clave de telemetría, apoyo familiar y enlace directo.
+  2. Se mantuvo `generateWeeklyReportMessage` con el desglose técnico integral para soporte.
+  3. Se auditó la comparativa histórica de los días 01, 02 y 05 de octubre con 249 páginas vistas, 65 visitantes únicos y 87.5% de navegación móvil.
+- **Estado**: ✅ Implementado, auditado y en producción.
 
 ---
 
