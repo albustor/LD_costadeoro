@@ -341,6 +341,18 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-02 | Consolidación de Base Histórica de Telemetría (Ayer y Hoy) y Despacho Oficial de Actualización a Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-02 | Actualización de Roles (Don Alejandro Coordinador de Eventos, Comité de Soporte Curiol Studio Admin), Firma «Fotografía, Tecnología, Legado» y Enriquecimiento de Lectura de Telemetría | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-03 | Blindaje de Telemetría en Tiempo Real, Formato Dinámico de Fechas y Programación para Cierre de Semana / Viernes con Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-05 | Auditoría E2E y Blindaje de Telemetría: Anclaje de Timezone CR en Cálculo Horario, Persistencia UUID en Tracker y Tolerancia a Fallos | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-030: Auditoría End-to-End y Blindaje de Telemetría en Tiempo Real
+- **Contexto**: Se realizó una auditoría profunda sobre el motor de telemetría para garantizar su exactitud ante ingresos en vivo de usuarios desde navegadores móviles (iOS Safari, Android Chrome) y desktop.
+- **Decisión**:
+  1. Se corrigió el cálculo de `hourKey` en `serverDb.ts` para extraer estrictamente la hora en `America/Costa_Rica`, evitando desfasajes con servidores cloud (UTC).
+  2. Se optimizó `AnalyticsTracker.tsx` con persistencia `localStorage` (`lco_visitor_uuid`) y fallback resiliente.
+  3. Se hizo el parseo del endpoint `POST /api/analytics` tolerante a payloads `json`, `text` y blobs de `navigator.sendBeacon`.
+  4. Se validó con pruebas simuladas de navegación en vivo: incremento atómico exacto en páginas vistas, usuarios únicos, mapa de calor horario y distribución por plataforma.
+- **Estado**: ✅ Implementado, auditado y verificado con `npm run build`.
 
 ---
 
