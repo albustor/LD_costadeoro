@@ -1,6 +1,6 @@
 # Memoria Técnica y Registro Vivo de Decisiones de Arquitectura 🧠 Memoria.md
 # Proyecto: Liga Costa de Oro 2026 (Guanacaste, Costa Rica)
-*Última Actualización: 01 de Octubre de 2026 | Auditor Técnico: Jim (Curiol Studio)*
+*Última Actualización: 06 de Octubre de 2026 | Auditor Técnico: Jim (Curiol Studio)*
 *Vinculado formalmente con: [AGENTS.md](file:///d:/AntigravityFinal/EventoCostadeOro/AGENTS.md)*
 
 ---
@@ -343,6 +343,34 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-03 | Blindaje de Telemetría en Tiempo Real, Formato Dinámico de Fechas y Programación para Cierre de Semana / Viernes con Don Alejandro | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-05 | Auditoría E2E y Blindaje de Telemetría: Anclaje de Timezone CR en Cálculo Horario, Persistencia UUID en Tracker y Tolerancia a Fallos | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-05 | Despacho Dual de Reportes Semanales (Ejecutivo Resumido para Don Alejandro y Técnico Extendido para Soporte) y Análisis Comparativo de Datos | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-06 | Sincronización y Visualización Dinámica de Estadísticas en Mensajes de WhatsApp (Top Routes, Delta Diario y Despacho Dual) | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-06 | Consola de Mesa Técnica con Segmentación por Día, Rama (Femenino / Masculino) y Visor Táctil de Partidos Jugados | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-033: Consola de Mesa Técnica con Segmentación por Día, Rama y Visor Táctil de Partidos Jugados
+- **Fecha**: 2026-10-06
+- **Contexto**: En la consola de administración (`/admin` -> Pestaña 1 "Mesa Técnica"), los 16 encuentros del torneo estaban dispuestos en un único selector desplegable sin distinción de jornadas ni género, dificultando a la mesa arbitral ubicar con rapidez los partidos finalizados con anterioridad y los partidos programados del día.
+- **Decisión**:
+  1. **Filtrado por Rama (Género)**: Inclusión de botones táctiles para segmentar instantáneamente entre `Todas las ramas`, `👩 Femenino` y `👦 Masculino`, con contadores en tiempo real.
+  2. **Filtrado por Día / Fecha**: Pestañas de acceso directo para cada jornada (`Lunes 5 Oct · 4 jugados`, `Martes 6 Oct · Hoy`, `Miércoles 7 Oct`, `Jueves 8 Oct`, `Viernes 9 Oct`) con indicadores de partidos jugados vs programados.
+  3. **Visor Táctil de Partidos del Día**: Cuadrícula de tarjetas táctiles donde cada encuentro muestra sus colegios, horario, estado visual (`✓ Finalizado (marcador)`, `🔴 En vivo` o `⏰ Programado`) y enfoque instantáneo al pulsar.
+  4. **Persistencia y Accesibilidad**: Mantenimiento del selector desplegable tradicional completamente sincronizado y filtrado para accesibilidad y auditoría rápida.
+- **Estado**: ✅ Implementado, auditado y verificado con `npm run build` (0 errores).
+
+---
+
+## ADR-032: Sincronización y Visualización Dinámica de Estadísticas en Mensajes de WhatsApp
+- **Fecha**: 2026-10-06
+- **Contexto**: Los mensajes automáticos diarios parecían idénticos día tras día debido a que `generateDailyReportMessage` en `evolutionApi.ts` utilizaba una plantilla estática sin ranking de páginas ni deltas de incremento, y el endpoint de base de datos no retornaba las rutas ordenadas descendentemente.
+- **Decisión**:
+  1. **Enriquecimiento de Métricas (`serverDb.ts`)**: `getAnalyticsSummaryFromDb()` ahora procesa y retorna `topRoutes` ordenadas descendentemente por visualizaciones.
+  2. **Traducción Amigable de Rutas (`evolutionApi.ts`)**: Se implementó `formatRouteFriendlyName(path)` para transformar rutas técnicas a nombres visuales con emojis (`🏠 Portada & Video Oficial`, `📅 Calendario y Horarios`, etc.).
+  3. **Plantillas Dinámicas Duales**:
+     - *Reporte Diario (Comité de Soporte · 7:00 AM)*: Incorpora delta diario (`+X hoy · 🟢 En vivo`), alcance digital y el Top 5 de secciones de mayor interés.
+     - *Reporte Semanal Ejecutivo (Don Alejandro · Viernes 5:30 PM)*: Formato de lectura rápida de 30 segundos con líderes de disciplinas, 3 KPIs clave y sección líder con ranking de interés familiar.
+  4. **Controles Administrativos en `/admin` (Pestaña 8)**: Inclusión de botones independientes para prueba y auditoría directa de ambos reportes (`Reporte Diario (Soporte)` y `Reporte Semanal (Don Alejandro)`).
+- **Estado**: ✅ Implementado, auditado y verificado con `npm run build` (0 errores).
 
 ---
 

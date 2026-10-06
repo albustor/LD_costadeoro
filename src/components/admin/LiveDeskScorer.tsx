@@ -31,7 +31,10 @@ import {
   UserCheck,
   Timer,
   RefreshCw,
-  Sliders
+  Sliders,
+  Calendar,
+  Filter,
+  Users
 } from 'lucide-react';
 
 export function LiveDeskScorer() {
@@ -40,6 +43,10 @@ export function LiveDeskScorer() {
   const [selectedMatchId, setSelectedMatchId] = useState<string>(matches[0]?.id || '');
   const [showOfficialSheet, setShowOfficialSheet] = useState<boolean>(false);
   const [savedFeedback, setSavedFeedback] = useState<boolean>(false);
+
+  // Filtros reactivos por Rama (Género) y Día (Fecha)
+  const [selectedGenderFilter, setSelectedGenderFilter] = useState<'all' | 'Femenino' | 'Masculino'>('all');
+  const [selectedDayFilter, setSelectedDayFilter] = useState<string>('all');
 
   const currentMatch = matches.find((m) => m.id === selectedMatchId) || matches[0];
 
@@ -100,6 +107,70 @@ export function LiveDeskScorer() {
         setAwayDelegate(target.officialReport.awayDelegate || '');
       }
     }
+  };
+
+  // Días únicos ordenados cronológicamente
+  const uniqueDates = Array.from(new Set(matches.map((m) => m.date).filter(Boolean))).sort();
+
+  // Partidos filtrados según selección de Rama y Día
+  const filteredMatches = matches.filter((m) => {
+    const cat = getCategoryById(m.categoryId);
+    if (selectedGenderFilter !== 'all' && cat?.gender !== selectedGenderFilter) return false;
+    if (selectedDayFilter !== 'all' && m.date !== selectedDayFilter) return false;
+    return true;
+  });
+
+  // Conteo de partidos por estado dentro de la selección filtrada
+  const completedMatchesCount = filteredMatches.filter((m) => m.status === 'completed').length;
+  const liveMatchesCount = filteredMatches.filter((m) => m.status === 'live').length;
+  const scheduledMatchesCount = filteredMatches.filter((m) => m.status === 'scheduled').length;
+
+  const handleDayFilterChange = (newDay: string) => {
+    setSelectedDayFilter(newDay);
+    const subset = matches.filter((m) => {
+      const cat = getCategoryById(m.categoryId);
+      if (selectedGenderFilter !== 'all' && cat?.gender !== selectedGenderFilter) return false;
+      if (newDay !== 'all' && m.date !== newDay) return false;
+      return true;
+    });
+    if (subset.length > 0 && !subset.some((m) => m.id === selectedMatchId)) {
+      handleSelectMatch(subset[0].id);
+    }
+  };
+
+  const handleGenderFilterChange = (newGender: 'all' | 'Femenino' | 'Masculino') => {
+    setSelectedGenderFilter(newGender);
+    const subset = matches.filter((m) => {
+      const cat = getCategoryById(m.categoryId);
+      if (newGender !== 'all' && cat?.gender !== newGender) return false;
+      if (selectedDayFilter !== 'all' && m.date !== selectedDayFilter) return false;
+      return true;
+    });
+    if (subset.length > 0 && !subset.some((m) => m.id === selectedMatchId)) {
+      handleSelectMatch(subset[0].id);
+    }
+  };
+
+  // Helper de nombres legibles para los días
+  const formatDayButtonLabel = (dateStr: string) => {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+    const day = parseInt(parts[2], 10);
+    const dateObj = new Date(year, month - 1, day);
+    const dayNames = ['Dom', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sáb'];
+    const monthNames = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const dayName = dayNames[dateObj.getDay()] || '';
+    const monthName = monthNames[month] || 'Oct';
+
+    const isToday = dateStr === '2026-10-06';
+    const isYesterday = dateStr === '2026-10-05';
+
+    if (isToday) return `${dayName} ${day} ${monthName} (Hoy)`;
+    if (isYesterday) return `${dayName} ${day} ${monthName} (Ayer)`;
+    return `${dayName} ${day} ${monthName}`;
   };
 
   const home = getSchoolById(currentMatch?.homeTeamId);
@@ -194,36 +265,264 @@ export function LiveDeskScorer() {
   return (
     <div className="space-y-6 animate-fade-in">
       
-      {/* 🧭 SELECTOR RÁPIDO DE PARTIDO PARA MESA DE CONTROL */}
-      <div className="bg-slate-900 text-white p-4 sm:p-5 rounded-3xl border border-amber-500/30 space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+      {/* 🧭 SELECTOR Y CONTROLADOR DE PARTIDOS: FILTRADO POR DÍA, RAMA Y HISTORIAL */}
+      <div className="bg-slate-900 text-white p-4 sm:p-5 rounded-3xl border border-amber-500/30 space-y-4">
+        {/* Cabecera y Contadores */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800">
           <div className="flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
             <span className="font-extrabold text-xs sm:text-sm tracking-wide">
               Mesa Técnica · Consola de Marcador en Vivo
             </span>
           </div>
-          <span className="text-[11px] font-mono text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
-            {matches.length} Encuentros Registrados
-          </span>
+          <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
+            <span className="text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+              {filteredMatches.length} en vista / {matches.length} total
+            </span>
+            {completedMatchesCount > 0 && (
+              <span className="text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                ✓ {completedMatchesCount} jugados
+              </span>
+            )}
+            {liveMatchesCount > 0 && (
+              <span className="text-red-300 bg-red-500/20 px-2 py-0.5 rounded-full border border-red-500/30 animate-pulse">
+                🔴 {liveMatchesCount} en vivo
+              </span>
+            )}
+            {scheduledMatchesCount > 0 && (
+              <span className="text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700">
+                ⏰ {scheduledMatchesCount} por jugar
+              </span>
+            )}
+          </div>
         </div>
 
-        <select
-          value={selectedMatchId}
-          onChange={(e) => handleSelectMatch(e.target.value)}
-          className="w-full bg-slate-950 text-white text-xs sm:text-sm font-semibold rounded-2xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
-        >
-          {matches.map((m) => {
-            const h = getSchoolById(m.homeTeamId);
-            const a = getSchoolById(m.awayTeamId);
-            const cat = getCategoryById(m.categoryId);
-            return (
-              <option key={m.id} value={m.id}>
-                {m.jornadaName} | {m.sport.toUpperCase()} ({cat?.name || 'Cat'}) : {h?.shortName} vs {a?.shortName} [{m.status.toUpperCase()} - {m.homeScore}:{m.awayScore}]
-              </option>
-            );
-          })}
-        </select>
+        {/* 1. SECCIONAR POR RAMA (GÉNERO: FEMENINO / MASCULINO) */}
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-wider">
+            <Users className="w-3.5 h-3.5 text-amber-400" />
+            <span>Rama:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: 'all', label: 'Todas las ramas' },
+              { id: 'Femenino', label: '👩 Femenino' },
+              { id: 'Masculino', label: '👦 Masculino' },
+            ].map((g) => {
+              const isSelected = selectedGenderFilter === g.id;
+              const count = matches.filter((m) => {
+                const cat = getCategoryById(m.categoryId);
+                if (g.id !== 'all' && cat?.gender !== g.id) return false;
+                if (selectedDayFilter !== 'all' && m.date !== selectedDayFilter) return false;
+                return true;
+              }).length;
+
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => handleGenderFilterChange(g.id as any)}
+                  className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-amber-400 text-slate-950 shadow-md ring-2 ring-amber-300'
+                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
+                  }`}
+                >
+                  <span>{g.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    isSelected ? 'bg-slate-900/30 text-slate-950 font-black' : 'bg-slate-900 text-slate-400'
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 2. FILTRAR POR DÍA DE COMPETENCIA */}
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-wider">
+            <Calendar className="w-3.5 h-3.5 text-amber-400" />
+            <span>Día del Torneo:</span>
+          </div>
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar">
+            <button
+              type="button"
+              onClick={() => handleDayFilterChange('all')}
+              className={`px-3 py-1.5 rounded-xl font-bold text-xs whitespace-nowrap transition cursor-pointer shrink-0 ${
+                selectedDayFilter === 'all'
+                  ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 font-extrabold'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
+              }`}
+            >
+              Todos los días
+            </button>
+            {uniqueDates.map((dateStr) => {
+              const isSelected = selectedDayFilter === dateStr;
+              const matchesOfDay = matches.filter((m) => {
+                const cat = getCategoryById(m.categoryId);
+                if (selectedGenderFilter !== 'all' && cat?.gender !== selectedGenderFilter) return false;
+                return m.date === dateStr;
+              });
+              const dayCompletedCount = matchesOfDay.filter((m) => m.status === 'completed').length;
+
+              return (
+                <button
+                  key={dateStr}
+                  type="button"
+                  onClick={() => handleDayFilterChange(dateStr)}
+                  className={`px-3 py-1.5 rounded-xl font-bold text-xs whitespace-nowrap transition cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 font-extrabold'
+                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'
+                  }`}
+                >
+                  <span>{formatDayButtonLabel(dateStr)}</span>
+                  {dayCompletedCount > 0 && (
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                      isSelected ? 'bg-emerald-950 text-emerald-300' : 'bg-emerald-500/20 text-emerald-400'
+                    }`} title={`${dayCompletedCount} jugados anteriormente`}>
+                      ✓ {dayCompletedCount}
+                    </span>
+                  )}
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    isSelected ? 'bg-slate-900/30 text-slate-950' : 'bg-slate-900 text-slate-400'
+                  }`}>
+                    {matchesOfDay.length}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 3. LISTA / TARJETAS TÁCTILES DE PARTIDOS DEL DÍA (JUGADOS ANTERIORMENTE VS POR JUGAR) */}
+        <div className="space-y-2 pt-1">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span className="font-semibold">
+              Partidos disponibles ({filteredMatches.length}):
+            </span>
+            <span className="text-[11px] text-amber-300/80">
+              Toca una tarjeta para cargar el encuentro en la consola
+            </span>
+          </div>
+
+          {filteredMatches.length === 0 ? (
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-center text-xs text-slate-400">
+              No hay partidos que coincidan con la rama y día seleccionados.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+              {filteredMatches.map((m) => {
+                const h = getSchoolById(m.homeTeamId);
+                const a = getSchoolById(m.awayTeamId);
+                const cat = getCategoryById(m.categoryId);
+                const isSelected = m.id === selectedMatchId;
+                const isCompleted = m.status === 'completed';
+                const isLive = m.status === 'live';
+
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => handleSelectMatch(m.id)}
+                    className={`text-left p-3 rounded-2xl transition-all cursor-pointer flex flex-col justify-between gap-2 border ${
+                      isSelected
+                        ? 'bg-amber-950/40 border-amber-400 ring-2 ring-amber-400/50 shadow-md text-white'
+                        : isCompleted
+                        ? 'bg-slate-950/80 border-emerald-900/40 hover:border-emerald-500/50 text-slate-200'
+                        : isLive
+                        ? 'bg-red-950/30 border-red-500/60 hover:border-red-400 text-slate-100'
+                        : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 text-slate-300'
+                    }`}
+                  >
+                    {/* Header de la tarjeta */}
+                    <div className="flex items-center justify-between gap-1 text-[11px]">
+                      <span className="font-bold text-amber-400/90 truncate uppercase tracking-tight">
+                        {m.sport} · {cat?.gender}
+                      </span>
+                      <span className="text-slate-400 text-[10.5px] font-mono">
+                        {formatTime12h(m.time)}
+                      </span>
+                    </div>
+
+                    {/* Equipos */}
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className={`font-extrabold truncate ${isSelected ? 'text-amber-200' : 'text-white'}`}>
+                          {h?.shortName || m.homeTeamId}
+                        </span>
+                        {(isCompleted || isLive) && (
+                          <span className="font-mono font-black text-xs px-1.5 py-0.5 rounded bg-slate-900 text-amber-300">
+                            {m.homeScore}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between gap-1">
+                        <span className={`font-extrabold truncate ${isSelected ? 'text-amber-200' : 'text-white'}`}>
+                          {a?.shortName || m.awayTeamId}
+                        </span>
+                        {(isCompleted || isLive) && (
+                          <span className="font-mono font-black text-xs px-1.5 py-0.5 rounded bg-slate-900 text-amber-300">
+                            {m.awayScore}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Footer de estado */}
+                    <div className="pt-1 border-t border-slate-800/80 flex items-center justify-between text-[10.5px]">
+                      {isCompleted ? (
+                        <span className="text-emerald-400 font-bold flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          Finalizado ({m.homeScore} - {m.awayScore})
+                        </span>
+                      ) : isLive ? (
+                        <span className="text-red-400 font-bold flex items-center gap-1 animate-pulse">
+                          🔴 En vivo
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-slate-500" />
+                          Programado
+                        </span>
+                      )}
+                      {isSelected && (
+                        <span className="text-[10px] text-amber-300 font-bold bg-amber-500/20 px-1.5 py-0.2 rounded">
+                          Activo
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* 4. SELECTOR DESPLEGABLE TRADICIONAL COMPACTO (FILTRADO) */}
+        <div className="pt-1">
+          <label className="text-[11px] text-slate-400 font-semibold block mb-1">
+            O selecciona directamente desde la lista desplegable filtrada:
+          </label>
+          <select
+            value={selectedMatchId}
+            onChange={(e) => handleSelectMatch(e.target.value)}
+            className="w-full bg-slate-950 text-white text-xs sm:text-sm font-semibold rounded-2xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
+          >
+            {filteredMatches.map((m) => {
+              const h = getSchoolById(m.homeTeamId);
+              const a = getSchoolById(m.awayTeamId);
+              const cat = getCategoryById(m.categoryId);
+              return (
+                <option key={m.id} value={m.id}>
+                  {m.date} | {formatTime12h(m.time)} | {m.sport.toUpperCase()} ({cat?.gender || 'Rama'}) : {h?.shortName} vs {a?.shortName} [{m.status === 'completed' ? `✓ FINALIZADO (${m.homeScore}-${m.awayScore})` : m.status === 'live' ? `🔴 EN VIVO (${m.homeScore}-${m.awayScore})` : `PROGRAMADO`}]
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </div>
 
       {/* 🏟️ TABLERO DE CONTROL TÁCTIL EN VIVO */}
