@@ -90,8 +90,10 @@ export function LiveDeskScorer() {
     const target = matches.find((m) => m.id === mId);
     if (target) {
       setSelectedMatchId(mId);
-      setHomeScore(target.homeScore);
-      setAwayScore(target.awayScore);
+      const isAwayWO = target.walkover === 'away_forfeit';
+      const isHomeWO = target.walkover === 'home_forfeit';
+      setHomeScore(isAwayWO && target.homeScore === 0 ? 2 : (isHomeWO ? 0 : target.homeScore));
+      setAwayScore(isHomeWO && target.awayScore === 0 ? 2 : (isAwayWO ? 0 : target.awayScore));
       setStatus(target.status);
       setIsManualOverride(target.isManualOverride ?? false);
       setCustomEndTime(target.customEndTime ?? '');
@@ -255,10 +257,23 @@ export function LiveDeskScorer() {
   const handleSaveMatchData = () => {
     if (!currentMatch) return;
 
+    const finalHomeScore =
+      walkover === 'away_forfeit'
+        ? (homeScore > 0 ? homeScore : 2)
+        : walkover === 'home_forfeit'
+        ? 0
+        : homeScore;
+    const finalAwayScore =
+      walkover === 'home_forfeit'
+        ? (awayScore > 0 ? awayScore : 2)
+        : walkover === 'away_forfeit'
+        ? 0
+        : awayScore;
+
     const updated: Match = {
       ...currentMatch,
-      homeScore,
-      awayScore,
+      homeScore: finalHomeScore,
+      awayScore: finalAwayScore,
       status,
       estimatedDurationMinutes: durationMinutes,
       customEndTime: customEndTime || undefined,

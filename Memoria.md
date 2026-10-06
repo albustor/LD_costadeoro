@@ -447,6 +447,14 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
   2. Se integró una tarjeta de control ejecutivo en `AdminTrafficAnalytics.tsx` con el botón **«Enviar Reporte Diario por WhatsApp Ahora»**, proveyendo confirmación visual instantánea y acceso directo a WhatsApp Web.
 - **Estado**: ✅ Implementado, verificado y desplegado en producción.
 
+## ADR-031: Blindaje Algorítmico de No Presentación (W.O.) y Confirmación de Delegaciones
+- **Contexto**: Se clarificó la participación individual de las sedes: La Paz Cabo Velas y La Paz Tempisque son dos delegaciones independientes con capacidad de jugar más de una vez por jornada en el festival. Se detectó riesgo donde un marcador 0–0 guardado con bandera de W.O. podía computarse accidentalmente como empate otorgando 1 punto al ausente.
+- **Decisión**:
+  1. En `sportsEngine.ts`: Si un partido tiene bandera de incomparecencia (`away_forfeit` o `home_forfeit`), el equipo ausente (Instituto Vittorino) recibe obligatoriamente **0 puntos** y 0 goles, mientras que el rival presente recibe **2 puntos** reglamentarios (MEP) y un piso mínimo de 2 goles (marcador 2–0), incluso si el tanteador manual se guardó en 0–0.
+  2. En `LiveDeskScorer.tsx`: Al seleccionar no presentación, la consola técnica fija de inmediato 2–0 en los dígitos visuales e impide guardar marcadores ambiguos.
+  3. En baloncesto FIBA: Se garantizó que la incomparecencia adjudique 0 puntos al ausente (en lugar del 1 punto por derrota deportiva en cancha).
+- **Estado**: ✅ Implementado, auditado con `npm run build` y en producción.
+
 ---
 
 ## 6. Protocolo Obligatorio para Iniciar o Retomar Procesos

@@ -65,22 +65,56 @@ export function calculateStandings(
     home.played += 1;
     away.played += 1;
 
-    home.pointsFor += match.homeScore;
-    home.pointsAgainst += match.awayScore;
-    away.pointsFor += match.awayScore;
-    away.pointsAgainst += match.homeScore;
+    const isAwayAbsent =
+      match.walkover === 'away_forfeit' ||
+      (match.notes?.toLowerCase().includes('no se presentó') && !match.notes?.toLowerCase().includes('local'));
+    const isHomeAbsent = match.walkover === 'home_forfeit';
+    const isWalkover =
+      isAwayAbsent ||
+      isHomeAbsent ||
+      match.notes?.toLowerCase().includes('w.o.') ||
+      match.notes?.toLowerCase().includes('no presentación');
+
+    // Goles / Puntos reglamentarios: si un equipo no se presentó y el marcador está en empate/0-0, se asegura 2-0 oficial a favor del presente
+    const effectiveHomeScore =
+      isAwayAbsent && match.homeScore === match.awayScore
+        ? Math.max(match.homeScore, 2)
+        : isHomeAbsent
+        ? 0
+        : match.homeScore;
+    const effectiveAwayScore =
+      isHomeAbsent && match.homeScore === match.awayScore
+        ? Math.max(match.awayScore, 2)
+        : isAwayAbsent
+        ? 0
+        : match.awayScore;
+
+    home.pointsFor += effectiveHomeScore;
+    home.pointsAgainst += effectiveAwayScore;
+    away.pointsFor += effectiveAwayScore;
+    away.pointsAgainst += effectiveHomeScore;
 
     if (sport === 'futbol') {
-      const isWalkover =
-        match.walkover === 'home_forfeit' ||
-        match.walkover === 'away_forfeit' ||
-        match.notes?.toLowerCase().includes('w.o.') ||
-        match.notes?.toLowerCase().includes('no presentación');
-
       // Victoria regular: 3 pts. Victoria por no presentación (W.O. / Forfeit): 2 pts según reglamento MEP
       const winPoints = isWalkover ? 2 : 3;
 
-      if (match.homeScore > match.awayScore) {
+      if (isAwayAbsent) {
+        // Visitante no se presentó: queda estrictamente en 0 puntos y se asignan 2 puntos al equipo contrario
+        home.won += 1;
+        home.points += winPoints;
+        home.form.push('W');
+        away.lost += 1;
+        away.points += 0;
+        away.form.push('L');
+      } else if (isHomeAbsent) {
+        // Local no se presentó: queda estrictamente en 0 puntos y se asignan 2 puntos al equipo contrario
+        away.won += 1;
+        away.points += winPoints;
+        away.form.push('W');
+        home.lost += 1;
+        home.points += 0;
+        home.form.push('L');
+      } else if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += winPoints;
         home.form.push('W');
@@ -101,8 +135,22 @@ export function calculateStandings(
         away.form.push('D');
       }
     } else if (sport === 'baloncesto') {
-      // In basketball: Win = 2 pts, Loss = 1 pt (standard FIBA points system)
-      if (match.homeScore > match.awayScore) {
+      // In basketball: Win = 2 pts, Loss = 1 pt (FIBA). Si un equipo no se presenta queda en 0 puntos!
+      if (isAwayAbsent) {
+        home.won += 1;
+        home.points += 2;
+        home.form.push('W');
+        away.lost += 1;
+        away.points += 0;
+        away.form.push('L');
+      } else if (isHomeAbsent) {
+        away.won += 1;
+        away.points += 2;
+        away.form.push('W');
+        home.lost += 1;
+        home.points += 0;
+        home.form.push('L');
+      } else if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += 2;
         home.form.push('W');
