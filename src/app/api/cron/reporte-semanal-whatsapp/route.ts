@@ -6,6 +6,7 @@ import {
   WeeklyReportData, 
   generateWeeklyReportMessage, 
   generateExecutiveWeeklyReportForAlejandro,
+  formatRouteFriendlyName,
   sendWhatsAppMessageViaEvolutionApi,
   getWhatsAppDirectUrl,
   WEEKLY_REPORT_RECIPIENTS
@@ -52,6 +53,16 @@ async function handleWeeklyReport(request: NextRequest) {
   const totalDeviceHits = (analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android + analytics.deviceDistribution.tablet + analytics.deviceDistribution.desktop) || 1;
   const mobilePercent = Math.round(((analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android) / totalDeviceHits) * 100);
 
+  const mappedTopRoutes = Object.entries(analytics.viewsByRoute || {})
+    .map(([routePath, views]) => ({ path: routePath, views }))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5)
+    .map((r) => ({
+      path: r.path,
+      label: formatRouteFriendlyName(r.path),
+      views: r.views,
+    }));
+
   const weeklyData: WeeklyReportData = {
     jornada: 1,
     completedMatchesThisWeek,
@@ -67,9 +78,11 @@ async function handleWeeklyReport(request: NextRequest) {
     totalApplause,
     trafficStats: {
       totalViews: analytics.totalViews,
+      todayViews: analytics.todayViews,
       weekViews: analytics.todayViews * 5, // Estimado semanal
       uniqueVisitors: analytics.uniqueVisitorsCount,
       mobilePercent,
+      topRoutes: mappedTopRoutes,
     },
     dateStr: nowCR,
   };

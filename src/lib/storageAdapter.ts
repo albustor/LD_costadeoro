@@ -6,7 +6,7 @@ import { DEFAULT_ACTIVE_TIER } from '@/config/tierConfig';
 
 const KEYS = {
   TIER: 'costa_de_oro_tier_active',
-  MATCHES: 'costa_de_oro_matches_v3',
+  MATCHES: 'costa_de_oro_matches_v4',
   SPONSORS: 'costa_de_oro_sponsors',
   VIDEOS: 'costa_de_oro_videos',
   PHOTOS: 'costa_de_oro_photos',
@@ -50,6 +50,25 @@ export const tournamentStorage = {
     return safeGet<Match[]>(KEYS.MATCHES, INITIAL_MATCHES);
   },
 
+  async fetchRemoteMatches(): Promise<Match[]> {
+    if (typeof window === 'undefined') return INITIAL_MATCHES;
+    try {
+      const res = await fetch('/api/matches', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        const data = Array.isArray(json) ? json : (json?.matches || []);
+        if (Array.isArray(data) && data.length > 0) {
+          safeSet(KEYS.MATCHES, data);
+          window.dispatchEvent(new CustomEvent('matches_updated', { detail: data }));
+          return data;
+        }
+      }
+    } catch (e) {
+      console.warn('[storageAdapter] Error sincronizando partidos:', e);
+    }
+    return this.getMatches();
+  },
+
   updateMatch(updatedMatch: Match): Match[] {
     const matches = this.getMatches();
     const index = matches.findIndex((m) => m.id === updatedMatch.id);
@@ -63,6 +82,12 @@ export const tournamentStorage = {
     safeSet(KEYS.MATCHES, newMatches);
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('matches_updated', { detail: newMatches }));
+      // Persistir al servidor centralizado
+      fetch('/api/matches', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ match: updatedMatch }),
+      }).catch((e) => console.warn('[storageAdapter] Error guardando partido en servidor:', e));
     }
     return newMatches;
   },

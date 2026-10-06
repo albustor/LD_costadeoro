@@ -2,6 +2,12 @@ import { Match, Standing, TeamRoster, FamilyPost } from '@/types/tournament';
 import { SCHOOLS_DATA, CATEGORIES_DATA } from '@/config/tournamentConfig';
 import { calculateStandings } from './sportsEngine';
 
+export interface RouteStatItem {
+  path: string;
+  label?: string;
+  views: number;
+}
+
 export interface DailyReportData {
   jornada: number;
   completedMatches: Match[];
@@ -18,6 +24,7 @@ export interface DailyReportData {
     todayViews?: number;
     uniqueVisitors?: number;
     mobilePercent?: number;
+    topRoutes?: RouteStatItem[];
   };
   dateStr: string;
 }
@@ -37,15 +44,32 @@ export interface WeeklyReportData {
   totalApplause: number;
   trafficStats?: {
     totalViews?: number;
+    todayViews?: number;
     weekViews?: number;
     uniqueVisitors?: number;
     mobilePercent?: number;
+    topRoutes?: RouteStatItem[];
   };
   dateStr: string;
 }
 
 /**
- * Genera el texto del reporte ejecutivo diario (7:00 AM) para Alberto
+ * Convierte una ruta relativa en un nombre amigable para WhatsApp
+ */
+export function formatRouteFriendlyName(path: string): string {
+  const clean = path.split('?')[0].toLowerCase();
+  if (clean === '/' || clean === '') return '🏠 Portada & Video Oficial';
+  if (clean.includes('calendario')) return '📅 Calendario y Horarios';
+  if (clean.includes('colegio')) return '🏫 Ficha de Colegios e Insignias';
+  if (clean.includes('reglamento') || clean.includes('deporte')) return '📜 Disciplinas y Reglamento';
+  if (clean.includes('mural') || clean.includes('muro')) return '📸 Muro Familiar Comunitario';
+  if (clean.includes('admin')) return '🔐 Panel de Control Técnico';
+  if (clean.includes('registro') || clean.includes('nomina')) return '📋 Acreditación y Nóminas';
+  return `🌐 ${clean}`;
+}
+
+/**
+ * Genera el texto del reporte ejecutivo diario (7:00 AM) para el Comité de Soporte
  */
 export function generateDailyReportMessage(data: DailyReportData): string {
   const {
@@ -87,11 +111,11 @@ export function generateDailyReportMessage(data: DailyReportData): string {
   };
 
   let message = `🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
-📋 *REPORTE DIARIO DE OPERACIÓN (7:00 AM)*
+📋 *REPORTE DIARIO DE OPERACIÓN Y TELEMETRÍA (7:00 AM)*
 📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
 📅 *Fecha:* ${dateStr}
 
-Estimado Alberto (Curiol Studio Admin), te compartimos el estado diario de operación, salud del sistema y cartelera deportiva:
+Estimado Alberto (Comité de Soporte · Curiol Studio Admin), te compartimos el estado diario de operación, salud del sistema y cartelera deportiva:
 
 ━━━━━━━━━━━━━━━━━━━━
 📊 *ESTADO DE COMPETENCIA (Jornada ${jornada}):*
@@ -153,11 +177,21 @@ Estimado Alberto (Curiol Studio Admin), te compartimos el estado diario de opera
 
   // Métricas de Impacto y Tráfico Web
   if (trafficStats) {
+    const todayDelta = trafficStats.todayViews !== undefined ? ` (+${trafficStats.todayViews} hoy · 🟢 En vivo)` : '';
     message += `\n\n━━━━━━━━━━━━━━━━━━━━
-📈 *TELEMETRÍA Y TRÁFICO WEB:*
-• 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas
-• 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas
-• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones`;
+📈 *TELEMETRÍA Y ALCANCE DIGITAL:*
+• 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas${todayDelta}
+• 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas registradas
+• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)`;
+
+    if (trafficStats.topRoutes && trafficStats.topRoutes.length > 0) {
+      message += `\n\n🧭 *SECCIONES DE MAYOR INTERÉS:*`;
+      const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
+      trafficStats.topRoutes.slice(0, 5).forEach((r, idx) => {
+        const emoji = emojis[idx] || '•';
+        message += `\n${emoji} ${r.label || formatRouteFriendlyName(r.path)} (${r.views} visitas)`;
+      });
+    }
   }
 
   message += `\n\n━━━━━━━━━━━━━━━━━━━━
@@ -171,7 +205,7 @@ _Curiol Studio · Fotografía, Tecnología, Legado_`;
 }
 
 /**
- * Genera el texto del GRAN REPORTE SEMANAL EJECUTIVO (Viernes 5:30 PM) para Don Alejandro
+ * Genera el texto del GRAN REPORTE SEMANAL EJECUTIVO (Viernes 5:30 PM) para Don Alejandro y Soporte
  */
 export function generateWeeklyReportMessage(data: WeeklyReportData): string {
   const {
@@ -293,6 +327,15 @@ Estimado Don Alejandro (Coordinador de Eventos), le presentamos el *balance cons
 • 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas
 • 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)
 • 📸 Muro familiar: ${totalPosts} publicaciones y ${totalApplause} reacciones registradas`;
+
+    if (trafficStats.topRoutes && trafficStats.topRoutes.length > 0) {
+      message += `\n\n🧭 *SECCIONES DE MAYOR AFLUENCIA:*`;
+      const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
+      trafficStats.topRoutes.slice(0, 5).forEach((r, idx) => {
+        const emoji = emojis[idx] || '•';
+        message += `\n${emoji} ${r.label || formatRouteFriendlyName(r.path)} (${r.views} visitas)`;
+      });
+    }
   }
 
   message += `\n\n━━━━━━━━━━━━━━━━━━━━
@@ -330,7 +373,14 @@ export function generateExecutiveWeeklyReportForAlejandro(data: WeeklyReportData
   const leaderBasketPts = standingsBySport.baloncesto[0]?.points ?? 0;
   const leaderBasketDiff = standingsBySport.baloncesto[0]?.diff ?? 0;
 
-  return `🏆 *LIGA COSTA DE ORO 2026 · INFORME EJECUTIVO*
+  let topSectionStr = 'Calendario y Horarios Oficiales';
+  if (trafficStats?.topRoutes && trafficStats.topRoutes.length > 0) {
+    topSectionStr = trafficStats.topRoutes[0].label || formatRouteFriendlyName(trafficStats.topRoutes[0].path);
+  }
+
+  const todayDelta = trafficStats?.todayViews !== undefined ? ` (+${trafficStats.todayViews} hoy · 🟢 En vivo)` : '';
+
+  let message = `🏆 *LIGA COSTA DE ORO 2026 · INFORME EJECUTIVO*
 📍 *Sede:* Guanacaste · La Paz Community School
 📅 *Cierre de Semana:* ${dateStr}
 
@@ -345,12 +395,21 @@ Le compartimos el balance esencial de la semana y el impacto digital de la plata
 
 ━━━━━━━━━━━━━━━━━━━━
 📈 *TELEMETRÍA Y ALCANCE DIGITAL:*
-• 👁️ *Visitas totales:* ${trafficStats?.totalViews || 0} páginas vistas
+• 👁️ *Visitas totales:* ${trafficStats?.totalViews || 0} páginas vistas${todayDelta}
 • 👥 *Usuarios conectados:* ${trafficStats?.uniqueVisitors || 0} personas únicas
 • 📱 *Navegación móvil:* ${trafficStats?.mobilePercent || 0}% desde smartphones
-• 🔝 *Sección más visitada:* Calendario y Horarios Oficiales
+• 🔝 *Sección líder:* ${topSectionStr}`;
 
-━━━━━━━━━━━━━━━━━━━━
+  if (trafficStats?.topRoutes && trafficStats.topRoutes.length > 0) {
+    message += `\n\n🧭 *INTERÉS DE LAS FAMILIAS POR SECCIÓN:*`;
+    const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
+    trafficStats.topRoutes.slice(0, 5).forEach((r, idx) => {
+      const emoji = emojis[idx] || '•';
+      message += `\n${emoji} ${r.label || formatRouteFriendlyName(r.path)} (${r.views} visitas)`;
+    });
+  }
+
+  message += `\n\n━━━━━━━━━━━━━━━━━━━━
 📸 *COMUNIDAD Y FAMILIAS:*
 • ${totalPosts} publicaciones y ${totalApplause} reacciones de apoyo a los atletas.
 
@@ -358,11 +417,13 @@ Le compartimos el balance esencial de la semana y el impacto digital de la plata
 https://costadeoro.curiol.studio/admin (Pestaña 8 · Clave: 2026ControlAdmin)
 
 _Curiol Studio · Fotografía, Tecnología, Legado_`;
+
+  return message;
 }
 
 // 📱 DESTINATARIO DIARIO (Alberto · Curiol Studio Admin - 7:00 AM)
 export const DAILY_REPORT_RECIPIENTS = [
-  { name: 'Alberto · Curiol Studio Admin', phone: '50660602617', role: 'Administrador General' },
+  { name: 'Alberto (Comité de Soporte · Curiol Studio Admin)', phone: '50660602617', role: 'Comité de Soporte · Curiol Studio Admin' },
 ];
 
 // 📱 DESTINATARIO SEMANAL (Don Alejandro · Coordinador de Eventos - Viernes 5:30 PM)

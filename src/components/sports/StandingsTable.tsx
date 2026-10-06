@@ -47,10 +47,14 @@ export function StandingsTable() {
           })}
         </div>
 
-        {/* ℹ️ Nota Oficial de Prueba */}
-        <div className="mt-3 flex items-center gap-2 p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 text-[11px]">
-          <span className="font-extrabold px-1.5 py-0.5 rounded bg-amber-200 text-amber-950 uppercase text-[9.5px]">Modo de pruebas</span>
-          <span className="font-medium">Información de prueba de marcadores · Entorno de simulación previa al evento oficial (puntos y marcadores en 0).</span>
+        {/* ℹ️ Indicador de Estado Oficial */}
+        <div className="mt-3 flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-900 text-white text-[11px] shadow-2xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-bold text-amber-300 uppercase tracking-wider text-[10px]">Tabla Oficial en Vivo</span>
+            <span className="text-slate-300 hidden sm:inline">· Puntuación acumulada oficial y criterios de desempate federativos.</span>
+          </div>
+          <span className="text-[10px] text-slate-400 font-mono">Actualización en tiempo real</span>
         </div>
       </div>
 

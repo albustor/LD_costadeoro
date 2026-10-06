@@ -47,6 +47,13 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
     setPhotos(tournamentStorage.getPhotos());
     setFamilyPosts(tournamentStorage.getFamilyPosts());
 
+    // Sincronizar partidos oficiales desde la base de datos centralizada
+    tournamentStorage.fetchRemoteMatches().then((remoteMatches) => {
+      if (remoteMatches && remoteMatches.length > 0) {
+        setMatches(remoteMatches);
+      }
+    });
+
     // Sincronizar con la base de datos centralizada del servidor
     tournamentStorage.fetchRemoteFamilyPosts().then((posts) => {
       if (posts && posts.length > 0) {

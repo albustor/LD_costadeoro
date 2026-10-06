@@ -78,7 +78,36 @@ export function AdminTrafficAnalytics() {
       if (json.success) {
         setDispatchResult({
           success: true,
-          message: 'Reporte matutino despachado con éxito a Don Alejandro y soporte.',
+          message: 'Reporte diario matutino despachado con éxito al Comité de Soporte.',
+          deliveries: json.deliveries,
+        });
+      } else {
+        setDispatchResult({
+          success: false,
+          message: json.error || 'No se pudo completar el envío.',
+          deliveries: json.deliveries,
+        });
+      }
+    } catch (err: any) {
+      setDispatchResult({
+        success: false,
+        message: err.message || 'Error de conexión con el servidor.',
+      });
+    } finally {
+      setDispatchingReport(false);
+    }
+  };
+
+  const handleSendWeeklyReportNow = async () => {
+    setDispatchingReport(true);
+    setDispatchResult(null);
+    try {
+      const res = await fetch('/api/cron/reporte-semanal-whatsapp', { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        setDispatchResult({
+          success: true,
+          message: 'Reporte semanal ejecutivo despachado con éxito a Don Alejandro y soporte.',
           deliveries: json.deliveries,
         });
       } else {
@@ -236,10 +265,21 @@ export function AdminTrafficAnalytics() {
               type="button"
               onClick={handleSendDailyReportNow}
               disabled={dispatchingReport}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition shadow-md cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-black text-xs border border-slate-700 transition shadow-xs cursor-pointer disabled:opacity-50"
+              title="Despachar reporte diario con métricas del día al Comité de Soporte"
             >
               <Send className={`w-3.5 h-3.5 ${dispatchingReport ? 'animate-bounce' : ''}`} />
-              <span>{dispatchingReport ? 'Despachando reporte...' : 'Enviar Reporte por WhatsApp Ahora'}</span>
+              <span>{dispatchingReport ? 'Despachando...' : 'Reporte Diario (Soporte)'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSendWeeklyReportNow}
+              disabled={dispatchingReport}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition shadow-md cursor-pointer disabled:opacity-50"
+              title="Despachar informe ejecutivo resumido de los viernes para Don Alejandro"
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${dispatchingReport ? 'animate-bounce' : ''}`} />
+              <span>{dispatchingReport ? 'Despachando...' : 'Reporte Semanal (Don Alejandro)'}</span>
             </button>
             <a
               href="https://wa.me/50688445486"

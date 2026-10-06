@@ -402,6 +402,10 @@ export async function getAnalyticsSummaryFromDb() {
   const a = db.analytics || getDefaultAnalyticsData(todayDateStr);
   const todayStats = a.dailyHistory?.[todayDateStr] || { views: 0, uniqueSessions: [] };
 
+  const sortedTopRoutes = Object.entries(a.viewsByRoute || {})
+    .map(([path, views]) => ({ path, views }))
+    .sort((a, b) => b.views - a.views);
+
   return {
     totalViews: a.totalViews || 0,
     uniqueVisitorsCount: a.uniqueSessions?.length || 0,
@@ -409,6 +413,7 @@ export async function getAnalyticsSummaryFromDb() {
     todayVisitors: todayStats.uniqueSessions?.length || 0,
     deviceDistribution: a.deviceDistribution || { mobile_ios: 0, mobile_android: 0, tablet: 0, desktop: 0 },
     viewsByRoute: a.viewsByRoute || {},
+    topRoutes: sortedTopRoutes,
     dailyHistory: Object.entries(a.dailyHistory || {}).map(([date, data]) => ({
       date,
       views: data.views,
@@ -418,4 +423,40 @@ export async function getAnalyticsSummaryFromDb() {
     recentEvents: a.recentEvents || [],
     updatedAt: db.updatedAt,
   };
+}
+
+/**
+ * Obtiene todos los partidos oficiales desde la base de datos central
+ */
+export async function getAllMatchesFromDb(): Promise<Match[]> {
+  const db = await getTournamentDb();
+  if (!db.matches || db.matches.length === 0) {
+    db.matches = INITIAL_MATCHES;
+    await saveTournamentDb(db);
+  }
+  return db.matches || [];
+}
+
+/**
+ * Actualiza o registra un partido en la base de datos central
+ */
+export async function updateMatchInDb(updatedMatch: Match): Promise<Match[]> {
+  const db = await getTournamentDb();
+  const current = db.matches || INITIAL_MATCHES;
+  const index = current.findIndex((m) => m.id === updatedMatch.id);
+
+  const finalMatch: Match = {
+    ...updatedMatch,
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (index >= 0) {
+    current[index] = finalMatch;
+  } else {
+    current.push(finalMatch);
+  }
+
+  db.matches = current;
+  await saveTournamentDb(db);
+  return current;
 }

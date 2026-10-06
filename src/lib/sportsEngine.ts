@@ -12,10 +12,23 @@ export function calculateStandings(
     (m) => m.categoryId === categoryId && (m.status === 'completed' || m.status === 'live')
   );
 
-  // Initialize map of standings for all participating schools
+  // Filtrar colegios que efectivamente participan en esta categoría (tienen partidos asignados)
+  const participatingIds = new Set<string>();
+  matches
+    .filter((m) => m.categoryId === categoryId)
+    .forEach((m) => {
+      participatingIds.add(m.homeTeamId);
+      participatingIds.add(m.awayTeamId);
+    });
+
+  const participatingSchools = participatingIds.size > 0
+    ? schools.filter((s) => participatingIds.has(s.id))
+    : schools;
+
+  // Initialize map of standings for participating schools
   const standingsMap = new Map<string, Standing>();
 
-  schools.forEach((school) => {
+  participatingSchools.forEach((school) => {
     standingsMap.set(school.id, {
       teamId: school.id,
       school,
@@ -35,9 +48,13 @@ export function calculateStandings(
   });
 
   // Sort matches chronologically to build accurate form
-  const sortedMatches = [...categoryMatches].sort(
-    (a, b) => new Date(`${a.date}T${a.time}`).getTime() - new Date(`${b.date}T${b.time}`).getTime()
-  );
+  const sortedMatches = [...categoryMatches].sort((a, b) => {
+    const timeA = a.time ? (a.time.length === 5 ? `${a.time}:00` : a.time) : '00:00:00';
+    const timeB = b.time ? (b.time.length === 5 ? `${b.time}:00` : b.time) : '00:00:00';
+    const dateA = new Date(`${a.date}T${timeA}`).getTime() || 0;
+    const dateB = new Date(`${b.date}T${timeB}`).getTime() || 0;
+    return dateA - dateB;
+  });
 
   sortedMatches.forEach((match) => {
     const home = standingsMap.get(match.homeTeamId);

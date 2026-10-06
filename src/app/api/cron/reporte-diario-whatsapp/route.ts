@@ -5,6 +5,7 @@ import { SCHOOLS_DATA } from '@/config/tournamentConfig';
 import { 
   DailyReportData, 
   generateDailyReportMessage, 
+  formatRouteFriendlyName,
   sendWhatsAppMessageViaEvolutionApi,
   getWhatsAppDirectUrl,
   DAILY_REPORT_RECIPIENTS
@@ -44,6 +45,16 @@ async function handleDailyReport(request: NextRequest) {
   const totalDeviceHits = (analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android + analytics.deviceDistribution.tablet + analytics.deviceDistribution.desktop) || 1;
   const mobilePercent = Math.round(((analytics.deviceDistribution.mobile_ios + analytics.deviceDistribution.mobile_android) / totalDeviceHits) * 100);
 
+  const mappedTopRoutes = Object.entries(analytics.viewsByRoute || {})
+    .map(([routePath, views]) => ({ path: routePath, views }))
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 5)
+    .map((r) => ({
+      path: r.path,
+      label: formatRouteFriendlyName(r.path),
+      views: r.views,
+    }));
+
   const reportData: DailyReportData = {
     jornada: 1,
     completedMatches,
@@ -60,6 +71,7 @@ async function handleDailyReport(request: NextRequest) {
       todayViews: analytics.todayViews,
       uniqueVisitors: analytics.uniqueVisitorsCount,
       mobilePercent,
+      topRoutes: mappedTopRoutes,
     },
     dateStr: nowCR,
   };
