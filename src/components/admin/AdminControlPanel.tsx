@@ -396,7 +396,18 @@ export function AdminControlPanel() {
           </p>
 
           {/* Botones de Sincronización: Solamente Descargar Offline y Escáner de Datos */}
-          <div className="flex items-center gap-2 pt-2">
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            <a
+              href="/mesa-control"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-2xs transition cursor-pointer"
+              title="Abrir consola de mesa de control minimalista para Don Alejandro"
+            >
+              <Trophy className="w-3.5 h-3.5 text-slate-950" />
+              <span>Mesa de Control (Don Alejandro)</span>
+            </a>
+
             <button
               type="button"
               onClick={handleDownloadOffline}

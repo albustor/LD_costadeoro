@@ -166,40 +166,60 @@ export function calculateStandings(
         home.form.push('L');
       }
     } else if (sport === 'voleibol') {
-      const homeSets = match.homeSetsWon ?? 0;
-      const awaySets = match.awaySetsWon ?? 0;
-
-      if (home.setsWon !== undefined) home.setsWon += homeSets;
-      if (home.setsLost !== undefined) home.setsLost += awaySets;
-      if (away.setsWon !== undefined) away.setsWon += awaySets;
-      if (away.setsLost !== undefined) away.setsLost += homeSets;
-
-      // Volleyball points: 2-0 / 3-0 / 3-1 = 3 pts win, 0 pts loss. 3-2 = 2 pts win, 1 pt loss.
-      if (homeSets > awaySets) {
+      if (isAwayAbsent) {
         home.won += 1;
+        home.points += 2;
         home.form.push('W');
         away.lost += 1;
+        away.points += 0;
         away.form.push('L');
-
-        if (awaySets >= 2 || (homeSets === 2 && awaySets === 1)) {
-          home.points += 2;
-          away.points += 1;
-        } else {
-          home.points += 3;
-          away.points += 0;
-        }
-      } else if (awaySets > homeSets) {
+        if (home.setsWon !== undefined) home.setsWon += 2;
+        if (away.setsLost !== undefined) away.setsLost += 2;
+      } else if (isHomeAbsent) {
         away.won += 1;
+        away.points += 2;
         away.form.push('W');
         home.lost += 1;
+        home.points += 0;
         home.form.push('L');
+        if (away.setsWon !== undefined) away.setsWon += 2;
+        if (home.setsLost !== undefined) home.setsLost += 2;
+      } else {
+        const homeSets = match.homeSetsWon ?? 0;
+        const awaySets = match.awaySetsWon ?? 0;
 
-        if (homeSets >= 2 || (awaySets === 2 && homeSets === 1)) {
-          away.points += 2;
-          home.points += 1;
-        } else {
-          away.points += 3;
-          home.points += 0;
+        if (home.setsWon !== undefined) home.setsWon += homeSets;
+        if (home.setsLost !== undefined) home.setsLost += awaySets;
+        if (away.setsWon !== undefined) away.setsWon += awaySets;
+        if (away.setsLost !== undefined) away.setsLost += homeSets;
+
+        // Volleyball points: 2-0 / 3-0 / 3-1 = 3 pts win, 0 pts loss. 3-2 = 2 pts win, 1 pt loss.
+        if (homeSets > awaySets) {
+          home.won += 1;
+          home.form.push('W');
+          away.lost += 1;
+          away.form.push('L');
+
+          if (awaySets >= 2 || (homeSets === 2 && awaySets === 1)) {
+            home.points += 2;
+            away.points += 1;
+          } else {
+            home.points += 3;
+            away.points += 0;
+          }
+        } else if (awaySets > homeSets) {
+          away.won += 1;
+          away.form.push('W');
+          home.lost += 1;
+          home.form.push('L');
+
+          if (homeSets >= 2 || (awaySets === 2 && homeSets === 1)) {
+            away.points += 2;
+            home.points += 1;
+          } else {
+            away.points += 3;
+            home.points += 0;
+          }
         }
       }
     }
