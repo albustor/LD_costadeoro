@@ -117,6 +117,7 @@ export interface Match {
   mvpPlayerName?: string;
   mvpSchoolId?: string;
   notes?: string;
+  walkover?: 'none' | 'home_forfeit' | 'away_forfeit'; // Resolución por no presentación / W.O.
   updatedAt: string;
 }
 

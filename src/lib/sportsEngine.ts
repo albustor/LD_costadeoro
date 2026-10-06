@@ -71,15 +71,24 @@ export function calculateStandings(
     away.pointsAgainst += match.homeScore;
 
     if (sport === 'futbol') {
+      const isWalkover =
+        match.walkover === 'home_forfeit' ||
+        match.walkover === 'away_forfeit' ||
+        match.notes?.toLowerCase().includes('w.o.') ||
+        match.notes?.toLowerCase().includes('no presentación');
+
+      // Victoria regular: 3 pts. Victoria por no presentación (W.O. / Forfeit): 2 pts según reglamento MEP
+      const winPoints = isWalkover ? 2 : 3;
+
       if (match.homeScore > match.awayScore) {
         home.won += 1;
-        home.points += 3;
+        home.points += winPoints;
         home.form.push('W');
         away.lost += 1;
         away.form.push('L');
       } else if (match.homeScore < match.awayScore) {
         away.won += 1;
-        away.points += 3;
+        away.points += winPoints;
         away.form.push('W');
         home.lost += 1;
         home.form.push('L');

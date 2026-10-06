@@ -99,10 +99,11 @@
       "venue": "Cancha de La Garita Nueva",
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "vittorino",
-      "homeScore": 3,
+      "homeScore": 2,
       "awayScore": 0,
       "status": "completed",
       "currentPeriod": "Finalizado (W.O.)",
+      "walkover": "away_forfeit",
       "notes": "Victoria por no presentación / W.O. (Instituto Vittorino no se presentó)",
       "updatedAt": "2026-10-05T16:00:00Z"
     },

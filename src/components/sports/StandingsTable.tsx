@@ -5,12 +5,17 @@ import { useTournament } from '@/context/TournamentContext';
 import { Trophy, HelpCircle } from 'lucide-react';
 import { SchoolEmblem } from './SchoolEmblem';
 
-export function StandingsTable() {
+interface StandingsTableProps {
+  categoryId?: string;
+  hideCategoryPills?: boolean;
+}
 
+export function StandingsTable({ categoryId, hideCategoryPills }: StandingsTableProps = {}) {
   const { categories, selectedCategoryId, setSelectedCategoryId, getStandingsForCategory, getCategoryById } =
     useTournament();
 
-  const currentCategory = getCategoryById(selectedCategoryId) || categories[0];
+  const activeCatId = categoryId || selectedCategoryId;
+  const currentCategory = getCategoryById(activeCatId) || categories[0];
   const standings = getStandingsForCategory(currentCategory.id);
   const sport = currentCategory.sport;
 
@@ -28,24 +33,26 @@ export function StandingsTable() {
           </span>
         </div>
 
-        <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
-          {categories.map((cat) => {
-            const isSelected = cat.id === currentCategory.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategoryId(cat.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                  isSelected
-                    ? 'bg-amber-600 text-white shadow-sm font-bold'
-                    : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200'
-                }`}
-              >
-                {cat.name}
-              </button>
-            );
-          })}
-        </div>
+        {!hideCategoryPills && (
+          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+            {categories.map((cat) => {
+              const isSelected = cat.id === currentCategory.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategoryId(cat.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    isSelected
+                      ? 'bg-amber-600 text-white shadow-sm font-bold'
+                      : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {/* ℹ️ Indicador de Estado Oficial */}
         <div className="mt-3 flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-900 text-white text-[11px] shadow-2xs">

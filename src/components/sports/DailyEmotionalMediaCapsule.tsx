@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { SportType } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
+import Link from 'next/link';
 import { 
   Sparkles, 
   Clock, 
@@ -107,67 +108,24 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
 
     const result: EmotionalMediaItem[] = [];
 
-    // Foto 1
-    if (sportPhotos[0]) {
-      const p = sportPhotos[0];
+    // Solo incorporar fotos reales cargadas en el sistema
+    sportPhotos.slice(0, 2).forEach((p, idx) => {
       const school = getSchoolById(p.schoolId || '');
       result.push({
         id: p.id,
         type: 'photo',
         url: p.imageUrl,
-        pillar: 'esfuerzo',
-        pillarLabel: 'Esfuerzo y Superación',
-        pillarEmoji: '💪',
+        pillar: idx === 0 ? 'esfuerzo' : 'companerismo',
+        pillarLabel: idx === 0 ? 'Esfuerzo y Superación' : 'Compañerismo y Respeto',
+        pillarEmoji: idx === 0 ? '💪' : '🤝',
         caption: p.title || 'Entrega total en la cancha. Cada jugada se defiende con el corazón.',
         author: p.photographer || 'Comunidad Costa de Oro',
-        schoolName: school?.name || 'La Paz Community School Cabo Velas',
+        schoolName: school?.name || 'Comunidad Escolar',
       });
-    } else {
-      result.push({
-        id: 'def-p1',
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
-        pillar: 'esfuerzo',
-        pillarLabel: 'Esfuerzo y Superación',
-        pillarEmoji: '💪',
-        caption: 'Entrega total en la recuperación del balón. Cada jugada se defiende con el corazón.',
-        author: 'Familia Ramírez (La Paz Community School Cabo Velas)',
-        schoolName: 'La Paz Community School Cabo Velas',
-      });
-    }
+    });
 
-    // Foto 2
-    if (sportPhotos[1]) {
-      const p = sportPhotos[1];
-      const school = getSchoolById(p.schoolId || '');
-      result.push({
-        id: p.id,
-        type: 'photo',
-        url: p.imageUrl,
-        pillar: 'companerismo',
-        pillarLabel: 'Compañerismo y Respeto',
-        pillarEmoji: '🤝',
-        caption: p.title || 'Mano amiga para levantar al compañero tras una jugada disputada.',
-        author: p.photographer || 'Comunidad Costa de Oro',
-        schoolName: school?.name || 'CRIA',
-      });
-    } else {
-      result.push({
-        id: 'def-p2',
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1529778873920-4da4926a72c2?auto=format&fit=crop&w=1200&q=80',
-        pillar: 'companerismo',
-        pillarLabel: 'Compañerismo y Respeto',
-        pillarEmoji: '🤝',
-        caption: 'Mano amiga para levantar al compañero tras una barrida limpia. El valor del juego limpio.',
-        author: 'Familia Monge (CRIA)',
-        schoolName: 'CRIA',
-      });
-    }
-
-    // Video 1
-    if (sportVideos[0]) {
-      const v = sportVideos[0];
+    // Solo incorporar videos reales cargados en el sistema
+    sportVideos.slice(0, 1).forEach((v) => {
       const school = getSchoolById(v.schoolId || '');
       result.push({
         id: v.id,
@@ -181,20 +139,7 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
         author: v.authorName || 'Comunidad Costa de Oro',
         schoolName: school?.name || 'Liga Costa de Oro',
       });
-    } else {
-      result.push({
-        id: 'def-v1',
-        type: 'video',
-        url: 'https://assets.mixkit.co/videos/preview/mixkit-boys-playing-soccer-in-a-field-41674-large.mp4',
-        posterUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80',
-        pillar: 'resiliencia',
-        pillarLabel: 'Momento Inspirador del Día',
-        pillarEmoji: '✨',
-        caption: 'Abrazo fraternal de ambos equipos al silbatazo final. La verdadera victoria es crecer juntos.',
-        author: 'Comité de Convivencia Costa de Oro',
-        schoolName: 'Liga Costa de Oro',
-      });
-    }
+    });
 
     return result;
   }, [sport, photos, videos, selectedDate, getSchoolById]);
@@ -285,91 +230,88 @@ export function DailyEmotionalMediaCapsule({ sport }: DailyEmotionalMediaCapsule
         </div>
       )}
 
-      {/* ✨ ESTADO 3: CÁPSULA DESBLOQUEADA (2 FOTOS + 1 VIDEO) */}
+      {/* ✨ ESTADO 3: CÁPSULA DESBLOQUEADA (SI HAY FOTOS O VIDEOS REALES) */}
       {!isCanceledOrEmpty && isUnlockedByTime && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5 sm:gap-5 animate-fade-in">
-          {/* Foto 1 */}
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-2xs flex flex-col group hover:shadow-md transition-shadow">
-            <div className="relative aspect-4/3 w-full bg-slate-900 overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={curatedMedia[0].url}
-                alt={curatedMedia[0].caption}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md text-amber-300 font-extrabold text-[10px] flex items-center gap-1 border border-amber-500/30 shadow-xs">
-                <span>{curatedMedia[0].pillarEmoji}</span>
-                <span>{curatedMedia[0].pillarLabel}</span>
+        <>
+          {curatedMedia.length === 0 ? (
+            <div className="py-10 px-6 sm:px-8 rounded-3xl bg-gradient-to-br from-amber-50/60 via-slate-50 to-white border-2 border-dashed border-amber-300 text-center flex flex-col items-center justify-center gap-4 animate-fade-in shadow-2xs">
+              <div className="w-16 h-16 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center text-3xl shadow-xs">
+                📸
               </div>
-            </div>
-            <div className="p-3.5 space-y-1 flex-1 flex flex-col justify-between">
-              <p className="text-xs text-slate-700 font-medium leading-snug">
-                &ldquo;{curatedMedia[0].caption}&rdquo;
-              </p>
-              <div className="pt-2 flex items-center justify-between text-[10.5px] text-slate-500 border-t border-slate-200/60">
-                <span className="font-semibold text-slate-800">{curatedMedia[0].schoolName}</span>
-                <span>{curatedMedia[0].author}</span>
+              <div className="space-y-1.5 max-w-lg">
+                <span className="px-3 py-1 rounded-full bg-amber-200/80 text-amber-950 font-extrabold text-[11px] uppercase tracking-wider">
+                  ¡Sé parte de la memoria del evento!
+                </span>
+                <h4 className="font-black text-slate-900 text-base sm:text-lg">
+                  Aún no hay fotos o videos compartidos para esta jornada
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Te invitamos a capturar y publicar en el <strong>Muro Familiar</strong> los momentos de emoción, esfuerzo y compañerismo de nuestros atletas. ¡Comparte tus fotos, videos y mensajes de aliento!
+                </p>
               </div>
+              <Link
+                href="/mural"
+                className="px-5 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>Compartir fotos, videos y textos en el Muro</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
             </div>
-          </div>
-
-          {/* Foto 2 */}
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-2xs flex flex-col group hover:shadow-md transition-shadow">
-            <div className="relative aspect-4/3 w-full bg-slate-900 overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={curatedMedia[1].url}
-                alt={curatedMedia[1].caption}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md text-amber-300 font-extrabold text-[10px] flex items-center gap-1 border border-amber-500/30 shadow-xs">
-                <span>{curatedMedia[1].pillarEmoji}</span>
-                <span>{curatedMedia[1].pillarLabel}</span>
-              </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5 sm:gap-5 animate-fade-in">
+              {curatedMedia.map((item) => (
+                <div
+                  key={item.id}
+                  className={`rounded-2xl border overflow-hidden shadow-2xs flex flex-col group hover:shadow-md transition-shadow ${
+                    item.type === 'video' ? 'bg-slate-950 text-white border-slate-800' : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}
+                >
+                  <div className="relative aspect-4/3 w-full bg-black overflow-hidden flex items-center justify-center">
+                    {item.type === 'photo' ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={item.url}
+                        alt={item.caption}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <video
+                        src={item.url}
+                        poster={item.posterUrl}
+                        playsInline
+                        webkit-playsinline="true"
+                        muted
+                        autoPlay
+                        loop
+                        crossOrigin="anonymous"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
+                    <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-slate-950/80 backdrop-blur-md text-amber-300 font-extrabold text-[10px] flex items-center gap-1 border border-amber-500/30 shadow-xs">
+                      {item.type === 'video' ? <Film className="w-3 h-3" /> : <span>{item.pillarEmoji}</span>}
+                      <span>{item.pillarLabel}</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 space-y-1 flex-1 flex flex-col justify-between">
+                    <p className={`text-xs font-medium leading-snug ${item.type === 'video' ? 'text-slate-200' : 'text-slate-700'}`}>
+                      &ldquo;{item.caption}&rdquo;
+                    </p>
+                    <div className={`pt-2 flex items-center justify-between text-[10.5px] border-t ${
+                      item.type === 'video' ? 'text-slate-400 border-slate-800' : 'text-slate-500 border-slate-200/60'
+                    }`}>
+                      <span className={`font-semibold ${item.type === 'video' ? 'text-amber-300' : 'text-slate-800'}`}>
+                        {item.schoolName}
+                      </span>
+                      <span>{item.author}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="p-3.5 space-y-1 flex-1 flex flex-col justify-between">
-              <p className="text-xs text-slate-700 font-medium leading-snug">
-                &ldquo;{curatedMedia[1].caption}&rdquo;
-              </p>
-              <div className="pt-2 flex items-center justify-between text-[10.5px] text-slate-500 border-t border-slate-200/60">
-                <span className="font-semibold text-slate-800">{curatedMedia[1].schoolName}</span>
-                <span>{curatedMedia[1].author}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Video Destacado */}
-          <div className="bg-slate-950 text-white rounded-2xl border border-slate-800 overflow-hidden shadow-md flex flex-col group">
-            <div className="relative aspect-4/3 w-full bg-black overflow-hidden flex items-center justify-center">
-              <video
-                src={curatedMedia[2].url}
-                poster={curatedMedia[2].posterUrl}
-                playsInline
-                webkit-playsinline="true"
-                muted
-                autoPlay
-                loop
-                crossOrigin="anonymous"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-amber-500/90 text-slate-950 font-black text-[10px] flex items-center gap-1 shadow-xs">
-                <Film className="w-3 h-3" />
-                <span>{curatedMedia[2].pillarLabel}</span>
-              </div>
-            </div>
-            <div className="p-3.5 space-y-1 flex-1 flex flex-col justify-between">
-              <p className="text-xs text-slate-200 font-medium leading-snug">
-                &ldquo;{curatedMedia[2].caption}&rdquo;
-              </p>
-              <div className="pt-2 flex items-center justify-between text-[10.5px] text-slate-400 border-t border-slate-800">
-                <span className="font-semibold text-amber-300">{curatedMedia[2].schoolName}</span>
-                <span>{curatedMedia[2].author}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
     </div>
   );

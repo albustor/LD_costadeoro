@@ -65,6 +65,7 @@ export function LiveDeskScorer() {
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const [mvpPlayerName, setMvpPlayerName] = useState<string>(currentMatch?.mvpPlayerName ?? '');
   const [notes, setNotes] = useState<string>(currentMatch?.notes ?? '');
+  const [walkover, setWalkover] = useState<'none' | 'home_forfeit' | 'away_forfeit'>(currentMatch?.walkover || 'none');
 
   // Sets & Quarters
   const [sets, setSets] = useState<SetScore[]>(currentMatch?.setScores || [
@@ -99,6 +100,7 @@ export function LiveDeskScorer() {
       setMinute(target.minute || 0);
       setMvpPlayerName(target.mvpPlayerName || '');
       setNotes(target.notes || '');
+      setWalkover(target.walkover || 'none');
       if (target.setScores) setSets(target.setScores);
       if (target.quarterScores) setQuarters(target.quarterScores);
       if (target.officialReport) {
@@ -107,6 +109,34 @@ export function LiveDeskScorer() {
         setAwayDelegate(target.officialReport.awayDelegate || '');
       }
     }
+  };
+
+  // Resolución por No Presentación / Incomparecencia (W.O. - Walkover)
+  const handleWalkover = (absentSide: 'home' | 'away') => {
+    setIsManualOverride(true);
+    setStatus('completed');
+    setCurrentPeriod('Final (W.O.)');
+
+    if (absentSide === 'home') {
+      setWalkover('home_forfeit');
+      setHomeScore(0);
+      setAwayScore(2);
+      setNotes(
+        `Victoria por no presentación / W.O. (${home?.shortName || 'Local'} no se presentó). Puntaje reglamentario de 2 puntos adjudicado a ${away?.shortName || 'Visitante'}.`
+      );
+    } else {
+      setWalkover('away_forfeit');
+      setHomeScore(2);
+      setAwayScore(0);
+      setNotes(
+        `Victoria por no presentación / W.O. (${away?.shortName || 'Visitante'} no se presentó). Puntaje reglamentario de 2 puntos adjudicado a ${home?.shortName || 'Local'}.`
+      );
+    }
+  };
+
+  const handleClearWalkover = () => {
+    setWalkover('none');
+    setNotes('');
   };
 
   // Días únicos ordenados cronológicamente
@@ -238,6 +268,7 @@ export function LiveDeskScorer() {
       minute,
       mvpPlayerName,
       notes,
+      walkover,
       setScores: currentMatch.sport === 'voleibol' ? sets : undefined,
       quarterScores: currentMatch.sport === 'baloncesto' ? quarters : undefined,
       officialReport: {
@@ -673,6 +704,20 @@ export function LiveDeskScorer() {
                   <Minus className="w-3.5 h-3.5" />
                 </button>
               </div>
+
+              {/* Botón de No Presentación (W.O. Local) */}
+              <button
+                type="button"
+                onClick={() => handleWalkover('home')}
+                className={`w-full py-1.5 px-2 rounded-xl border text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
+                  walkover === 'home_forfeit'
+                    ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
+                    : 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700'
+                }`}
+                title="Declarar incomparecencia de este equipo: adjudica marcador 0-2 y 2 puntos al rival"
+              >
+                <span>⚠️ No se presentó Local (Gana Visita 0 - 2)</span>
+              </button>
             </div>
 
             {/* Centro: Periodo y Tiempo */}
@@ -825,8 +870,46 @@ export function LiveDeskScorer() {
                   <Minus className="w-3.5 h-3.5" />
                 </button>
               </div>
+
+              {/* Botón de No Presentación (W.O. Visitante) */}
+              <button
+                type="button"
+                onClick={() => handleWalkover('away')}
+                className={`w-full py-1.5 px-2 rounded-xl border text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer ${
+                  walkover === 'away_forfeit'
+                    ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
+                    : 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700'
+                }`}
+                title="Declarar incomparecencia de este equipo: adjudica marcador 2-0 y 2 puntos al rival"
+              >
+                <span>⚠️ No se presentó Visitante (Gana Local 2 - 0)</span>
+              </button>
             </div>
           </div>
+
+          {/* Banner de Resolución por W.O. si está activo */}
+          {walkover && walkover !== 'none' && (
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">⚠️</span>
+                <div>
+                  <span className="font-extrabold text-amber-900 block sm:inline">
+                    Resolución oficial por no presentación (W.O.) activa:
+                  </span>{' '}
+                  <span className="text-slate-700 font-medium">
+                    {walkover === 'home_forfeit' ? home?.shortName : away?.shortName} no se presentó. Marcador oficial 2–0 y 2 puntos reglamentarios en tabla adjudicados al ganador.
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleClearWalkover}
+                className="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-100 shrink-0 self-start sm:self-auto cursor-pointer shadow-2xs"
+              >
+                Revertir W.O.
+              </button>
+            </div>
+          )}
 
           {/* 🌟 DATOS ADICIONALES DEL ACTA: MVP, ÁRBITRO Y NOTAS */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">

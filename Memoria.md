@@ -345,6 +345,22 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
 | 2026-10-05 | Despacho Dual de Reportes Semanales (Ejecutivo Resumido para Don Alejandro y Técnico Extendido para Soporte) y Análisis Comparativo de Datos | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-06 | Sincronización y Visualización Dinámica de Estadísticas en Mensajes de WhatsApp (Top Routes, Delta Diario y Despacho Dual) | ✅ Completado | Jim (Curiol Studio) |
 | 2026-10-06 | Consola de Mesa Técnica con Segmentación por Día, Rama (Femenino / Masculino) y Visor Táctil de Partidos Jugados | ✅ Completado | Jim (Curiol Studio) |
+| 2026-10-06 | Arquitectura Visual en `/deportes` (Partidos + Tabla Oficial + Cápsula Emotiva), Cero Placeholders y Regla W.O. (2-0, 2 Pts) | ✅ Completado | Jim (Curiol Studio) |
+
+---
+
+## ADR-034: Arquitectura Visual en Deportes, Cero Placeholders y Regla de Incomparecencia W.O.
+- **Fecha**: 2026-10-06
+- **Contexto**: Se requería alinear la experiencia deportiva unificando la jerarquía visual: partidos de la categoría arriba, la tabla de posiciones inmediatamente debajo, y al final la cápsula emotiva. Además, era mandatorio suprimir fotos de stock/placeholders (gatitos) invitando al Muro Familiar (`/mural`), y estandarizar la regla reglamentaria de Walkover (W.O. / No presentación) asignando 2-0 y 2 puntos al equipo asistente.
+- **Decisión**:
+  1. **Jerarquía Visual en `/deportes`**: Selector de deportes -> Selector de ramas/categorías -> Tarjetas de partidos de la jornada -> Tabla Oficial (`StandingsTable`) -> Cápsula Emotiva (`DailyEmotionalMediaCapsule`).
+  2. **Política de Cero Placeholders en Cápsula Emotiva**: Se retiraron todas las imágenes de relleno de Unsplash/Mixkit. Cuando no hay fotos/videos reales de la jornada, se despliega un estado vacío institucional con invitación activa y botón directo para publicar en el Muro Familiar (`/mural`).
+  3. **Reglamento W.O. (2–0 y 2 Puntos)**:
+     - Adición de `walkover?: 'none' | 'home_forfeit' | 'away_forfeit'` en `Match`.
+     - Botones táctiles de incomparecencia en `LiveDeskScorer.tsx` (mesa técnica).
+     - Actualización del motor `sportsEngine.ts`: otorga 2 puntos de victoria en lugar de 3 cuando el triunfo es por incomparecencia.
+     - Ajuste del encuentro inaugural `La Paz Tempisque vs Instituto Vittorino` a 2–0 y 2 puntos para Tempisque (acumula 3 pts totales).
+- **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y desplegado a producción.
 
 ---
 
