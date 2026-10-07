@@ -101,9 +101,10 @@
       "awayTeamId": "vittorino",
       "homeScore": 0,
       "awayScore": 0,
-      "status": "postponed",
-      "currentPeriod": "No Disputado (Incomparecencia)",
-      "notes": "No disputado por incomparecencia de Vittorino (0 en todo, sin cómputo de goles ni puntos)",
+      "status": "completed",
+      "currentPeriod": "Finalizado (W.O.)",
+      "walkover": "away_forfeit",
+      "notes": "Victoria oficial por incomparecencia de Vittorino (3 pts adjudicados a La Paz Tempisque, marcador 0-0)",
       "updatedAt": "2026-10-05T16:00:00Z"
     },
     {

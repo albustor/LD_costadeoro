@@ -259,13 +259,13 @@ export function LiveDeskScorer() {
 
     const finalHomeScore =
       walkover === 'away_forfeit'
-        ? (homeScore > 0 ? homeScore : 2)
+        ? homeScore
         : walkover === 'home_forfeit'
         ? 0
         : homeScore;
     const finalAwayScore =
       walkover === 'home_forfeit'
-        ? (awayScore > 0 ? awayScore : 2)
+        ? awayScore
         : walkover === 'away_forfeit'
         ? 0
         : awayScore;
@@ -729,9 +729,9 @@ export function LiveDeskScorer() {
                     ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
                     : 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700'
                 }`}
-                title="Declarar incomparecencia de este equipo: adjudica marcador 0-2 y 2 puntos al rival"
+                title="Declarar incomparecencia de este equipo: adjudica 3 puntos reglamentarios al rival"
               >
-                <span>⚠️ No se presentó Local (Gana Visita 0 - 2)</span>
+                <span>⚠️ No se presentó Local (Gana Visita · 3 pts)</span>
               </button>
             </div>
 
@@ -895,9 +895,9 @@ export function LiveDeskScorer() {
                     ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
                     : 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700'
                 }`}
-                title="Declarar incomparecencia de este equipo: adjudica marcador 2-0 y 2 puntos al rival"
+                title="Declarar incomparecencia de este equipo: adjudica 3 puntos reglamentarios al rival"
               >
-                <span>⚠️ No se presentó Visitante (Gana Local 2 - 0)</span>
+                <span>⚠️ No se presentó Visitante (Gana Local · 3 pts)</span>
               </button>
             </div>
           </div>
@@ -912,7 +912,7 @@ export function LiveDeskScorer() {
                     Resolución oficial por no presentación (W.O.) activa:
                   </span>{' '}
                   <span className="text-slate-700 font-medium">
-                    {walkover === 'home_forfeit' ? home?.shortName : away?.shortName} no se presentó. Marcador oficial 2–0 y 2 puntos reglamentarios en tabla adjudicados al ganador.
+                    {walkover === 'home_forfeit' ? home?.shortName : away?.shortName} no se presentó. Victoria oficial y 3 puntos reglamentarios en tabla adjudicados al ganador.
                   </span>
                 </div>
               </div>

@@ -75,20 +75,9 @@ export function calculateStandings(
       match.notes?.toLowerCase().includes('w.o.') ||
       match.notes?.toLowerCase().includes('no presentación');
 
-    // Goles / Puntos reglamentarios: si un equipo no se presentó y el marcador está en empate/0-0, se asegura 3-0 oficial (FEDEFUTBOL/Liga Menor) a favor del presente
-    const defaultWoScore = sport === 'futbol' ? 3 : sport === 'voleibol' ? 2 : 2;
-    const effectiveHomeScore =
-      isAwayAbsent && match.homeScore === match.awayScore
-        ? Math.max(match.homeScore, defaultWoScore)
-        : isHomeAbsent
-        ? 0
-        : match.homeScore;
-    const effectiveAwayScore =
-      isHomeAbsent && match.homeScore === match.awayScore
-        ? Math.max(match.awayScore, defaultWoScore)
-        : isAwayAbsent
-        ? 0
-        : match.awayScore;
+    // Goles / Puntos acumulados: se computa el tanteo registrado (0-0 si es W.O. sin goles)
+    const effectiveHomeScore = match.homeScore;
+    const effectiveAwayScore = match.awayScore;
 
     home.pointsFor += effectiveHomeScore;
     home.pointsAgainst += effectiveAwayScore;
