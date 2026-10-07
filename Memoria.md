@@ -385,7 +385,18 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
   3. **Plantillas Dinámicas Duales**:
      - *Reporte Diario (Comité de Soporte · 7:00 AM)*: Incorpora delta diario (`+X hoy · 🟢 En vivo`), alcance digital y el Top 5 de secciones de mayor interés.
      - *Reporte Semanal Ejecutivo (Don Alejandro · Viernes 5:30 PM)*: Formato de lectura rápida de 30 segundos con líderes de disciplinas, 3 KPIs clave y sección líder con ranking de interés familiar.
-  4. **Controles Administrativos en `/admin` (Pestaña 8)**: Inclusión de botones independientes para prueba y auditoría directa de ambos reportes (`Reporte Diario (Soporte)` y `Reporte Semanal (Don Alejandro)`).
+### ADR-034: Ampliación de Escala DUA hasta el 300% (Reflow Universal) y Tarjetas 100% Verticales
+- **Fecha**: 2026-10-06
+- **Contexto**: Se requería ampliar el rango de accesibilidad visual hasta el 300% de escala tipográfica (Modo Máxima Lectura) para personas con baja visión y lectura bajo el sol en canchas, además de transformar la mesa de control a un diseño 100% vertical centrado que garantice visibilidad total de los nombres de equipos y steppers de marcador gigantes.
+- **Decisión**:
+  1. En `globals.css`: Creación de `text-scale-250` (40px / 43.8px móvil) y `text-scale-300` (48px / 52.5px móvil).
+  2. En `TouchReflowZoomProvider.tsx`: Límite de escala por gesto de 2 dedos elevado a `Math.min(300, ...)` con física LERP continua y badge flotante de 6 niveles (Normal, S23 Ultra, Grande, Macro, Extra Macro, Mega Macro 300%).
+  3. En `DuaAccessibilityBar.tsx`: Botones `A- / A+` y selector cíclico ampliados al rango `100% ➔ 130% ➔ 160% ➔ 200% ➔ 250% ➔ 300% ➔ 100%`.
+  4. En `QuickMatchScorer.tsx`: Rediseño 100% vertical de cada partido: bloque centrado del Local con nombre completo y marcador gigante, separador VS, bloque centrado del Visitante y carrusel deslizable horizontal de días.
+- **Estado**: ✅ Implementado, auditado y en producción.
+
+---
+
 ### ADR-033: Optimización Mobile-First y Calce Visual en Celulares para Mesa de Control (/mesa-control)
 - **Fecha**: 2026-10-06
 - **Contexto**: En pantallas móviles de 360px a 390px, los nombres institucionales de 36 caracteres desbordaban las tarjetas de partido en `/mesa-control`, empujando los controles de tanteo `[-] [0] [+]` fuera de la pantalla y fragmentando la botonera de W.O. en 3 líneas desordenadas.
