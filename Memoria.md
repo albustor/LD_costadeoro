@@ -527,7 +527,18 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
      - CRIA: acumula **2 puntos** (2 empates de 1 pt) con **2 PJ**.
 - **Decisión**:
   1. En `sportsEngine.ts`: Se fijó `winPoints = 2` en fútbol. Para `isAwayAbsent` / `isHomeAbsent`, se asigna 1 punto al equipo presente sin computar `played += 1` en cancha, manteniendo intacto el 0 absoluto para el ausente.
-- **Estado**: ✅ Implementado, auditado con `npm run build` (0 errores) y en producción.
+## ADR-038: Reestructuración de Navegación Fluida, Filtro Exclusivo de Día Activo y SportNavCardsHeader Unificado
+- **Fecha**: 2026-10-07
+- **Contexto**: Para optimizar la ergonomía y claridad en dispositivos móviles, se requería que:
+  1. En `/calendario` se visualice exclusivamente el día activo en competencia, ocultando jornadas pasadas para no saturar.
+  2. En `/deportes` se muestre exclusivamente el catálogo institucional de las 6 delegaciones participantes por disciplina.
+  3. En `/marcadores` (anteriormente *Instituciones*) se centralicen los resultados y la tabla de posiciones en tiempo real.
+  4. En las 3 vistas (`/deportes`, `/calendario`, `/marcadores`) se homologue exactamente el mismo bloque superior con las 3 tarjetas de deportes (⚽ Fútbol, 🏐 Voleibol, 🏀 Baloncesto) y el divisor con el logotipo de NextPlay.
+- **Decisión**:
+  1. Se creó el componente `SportNavCardsHeader.tsx` compartido al 100% entre `/deportes`, `/calendario` y `/marcadores`.
+  2. Se actualizó la barra superior `Header.tsx` y la barra fija inferior `MobileBottomNav.tsx` con la ruta y etiqueta `Marcadores`.
+  3. Se preservó toda la base de datos `tournament_db.json`, el motor de cálculo `sportsEngine.ts` y las reglas de incomparecencia y baremo oficial.
+- **Estado**: ✅ Implementado, auditado con `npm run build` (19/19 rutas, 0 errores) y en producción local.
 
 ---
 
@@ -542,4 +553,5 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
    - `GET /api/rosters` ➔ `200 OK`
 4. **Verificación Estática**: Comprobar tipado estricto con `npm run build`.
 5. **Safety Lock**: No modificar ningún archivo sin presentar previamente ruta, líneas y justificación técnica para aprobación del usuario.
+
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, Calendar, Heart, Shield, SlidersHorizontal } from 'lucide-react';
+import { Home, Trophy, Calendar, Heart, Award, SlidersHorizontal } from 'lucide-react';
 
 export function MobileBottomNav() {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ export function MobileBottomNav() {
     { label: 'Deportes', href: '/deportes', icon: Trophy },
     { label: 'Horarios', href: '/calendario', icon: Calendar },
     { label: 'Muro', href: '/mural', icon: Heart },
-    { label: 'Instituciones', href: '/colegios', icon: Shield },
+    { label: 'Marcadores', href: '/marcadores', icon: Award },
     { label: 'Admin', href: '/admin', icon: SlidersHorizontal },
   ];
 

@@ -1,7 +1,8 @@
 'use client';
 
-import DeportesPage from '@/app/deportes/page';
+import MarcadoresPage from '@/app/marcadores/page';
 
 export default function TablaPage() {
-  return <DeportesPage />;
+  return <MarcadoresPage />;
 }
+

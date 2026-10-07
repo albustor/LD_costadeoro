@@ -15,6 +15,9 @@ import {
   Sparkles
 } from 'lucide-react';
 
+import { SportNavCardsHeader } from './SportNavCardsHeader';
+import { SportType } from '@/types/tournament';
+
 interface OfficialSportConfig {
   id: string;
   name: string;
@@ -37,7 +40,7 @@ export function SportScheduleView({
   schools,
   getStandingsForCategory,
 }: SportScheduleViewProps) {
-  const [selectedSport, setSelectedSport] = useState<string>(getActiveCompetitionDayInfo().sport);
+  const [selectedSport, setSelectedSport] = useState<SportType>(getActiveCompetitionDayInfo().sport);
   // 3 Disciplinas Oficiales del Festival Deportivo Costa de Oro 2026
   const officialSports: OfficialSportConfig[] = [
     {
@@ -66,6 +69,8 @@ export function SportScheduleView({
     },
   ];
 
+  const activeDayInfo = getActiveCompetitionDayInfo();
+
   const currentSportConfig = officialSports.find((s) => s.id === selectedSport) || officialSports[0];
 
   // Filtrar categorías del deporte actual
@@ -73,49 +78,22 @@ export function SportScheduleView({
     (c) => c.sport === selectedSport || c.name.toLowerCase().includes(selectedSport)
   );
 
-  // Filtrar partidos del deporte actual
+  // Filtrar exclusivamente los partidos del DÍA ACTIVO en competencia
+  const activeCategoryForSport = 
+    sportCategories.find((c) => c.id === activeDayInfo.categoryId) || 
+    sportCategories[0];
+
   const sportMatches = matches.filter(
-    (m) => m.sport === selectedSport || sportCategories.some((c) => c.id === m.categoryId)
+    (m) => m.categoryId === activeCategoryForSport?.id
   );
 
   return (
     <div className="space-y-6">
-      {/* 🏅 SELECTOR DE DISCIPLINAS OFICIALES 2026 */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-700">
-            Disciplinas:
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-2 bg-slate-100/90 rounded-2xl border border-slate-200">
-          {officialSports.map((sport) => {
-            const isSelected = selectedSport === sport.id;
-
-            const activeSportStyle = 
-              sport.id === 'futbol'
-                ? 'bg-emerald-600 text-white shadow-md ring-2 ring-emerald-300'
-                : sport.id === 'voleibol'
-                ? 'bg-sky-600 text-white shadow-md ring-2 ring-sky-300'
-                : 'bg-orange-600 text-white shadow-md ring-2 ring-orange-300';
-
-            return (
-              <button
-                key={sport.id}
-                onClick={() => setSelectedSport(sport.id)}
-                className={`flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl font-black text-sm sm:text-base transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? activeSportStyle
-                    : 'text-slate-700 hover:text-slate-950 hover:bg-white bg-white/60 shadow-2xs'
-                }`}
-              >
-                <SportIconRenderer sportId={sport.id} size={22} />
-                <span>{sport.name}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* ⚽🏐🏀 1. SELECTOR PRINCIPAL DE DISCIPLINAS (3 TARJETAS CON BALONES + LOGO NEXTPLAY) */}
+      <SportNavCardsHeader
+        selectedSport={selectedSport}
+        onSelectSport={(sport) => setSelectedSport(sport)}
+      />
 
       {/* 📅 CALENDARIO Y HORARIOS DEL DEPORTE SELECCIONADO */}
       <div className="space-y-6 animate-fade-in">
