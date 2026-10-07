@@ -16,11 +16,11 @@ import {
 } from 'lucide-react';
 
 const AVAILABLE_ROUTES = [
-  { path: '/', label: '🏠 Inicio (Portal)' },
-  { path: '/tabla', label: '📊 Posiciones por Deporte' },
-  { path: '/calendario', label: '📅 Deportes y Horarios' },
-  { path: '/mural', label: '📸 Muro Familiar' },
-  { path: '/colegios', label: '🏫 Colegios Participantes' },
+  { path: '/', label: '🏠 Inicio' },
+  { path: '/deportes', label: '🏆 Deportes (Instituciones)' },
+  { path: '/calendario', label: '📅 Horarios del Día' },
+  { path: '/mural', label: '💬 Muro Familiar' },
+  { path: '/marcadores', label: '📊 Marcadores y Posiciones' },
   { path: '/admin', label: '⚙️ Panel Administrador' },
 ];
 
