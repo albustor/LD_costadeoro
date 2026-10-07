@@ -62,9 +62,6 @@ export function calculateStandings(
 
     if (!home || !away) return;
 
-    home.played += 1;
-    away.played += 1;
-
     const isAwayAbsent =
       match.walkover === 'away_forfeit' ||
       (match.notes?.toLowerCase().includes('no se presentó') && !match.notes?.toLowerCase().includes('local'));
@@ -74,6 +71,15 @@ export function calculateStandings(
       isHomeAbsent ||
       match.notes?.toLowerCase().includes('w.o.') ||
       match.notes?.toLowerCase().includes('no presentación');
+
+    if (isAwayAbsent) {
+      home.played += 1;
+    } else if (isHomeAbsent) {
+      away.played += 1;
+    } else {
+      home.played += 1;
+      away.played += 1;
+    }
 
     // Goles / Puntos acumulados: se computa el tanteo registrado (0-0 si es W.O. sin goles)
     const effectiveHomeScore = match.homeScore;
@@ -92,21 +98,15 @@ export function calculateStandings(
       const winPoints = 3;
 
       if (isAwayAbsent) {
-        // Visitante no se presentó: queda estrictamente en 0 puntos y se asignan 3 puntos al equipo contrario
+        // Visitante no se presentó: queda estrictamente en 0 en todo y se asignan 3 puntos al equipo rival presente
         home.won += 1;
         home.points += winPoints;
         home.form.push('W');
-        away.lost += 1;
-        away.points += 0;
-        away.form.push('L');
       } else if (isHomeAbsent) {
-        // Local no se presentó: queda estrictamente en 0 puntos y se asignan 3 puntos al equipo contrario
+        // Local no se presentó: queda estrictamente en 0 en todo y se asignan 3 puntos al equipo rival presente
         away.won += 1;
         away.points += winPoints;
         away.form.push('W');
-        home.lost += 1;
-        home.points += 0;
-        home.form.push('L');
       } else if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += winPoints;
