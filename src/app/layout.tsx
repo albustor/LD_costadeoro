@@ -1,17 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Suspense } from 'react';
 import './globals.css';
 import { TierProvider } from '@/context/TierContext';
 import { TournamentProvider } from '@/context/TournamentContext';
 import { LanguageProvider } from '@/context/LanguageContext';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
-import { LiveMatchBanner } from '@/components/sports/LiveMatchBanner';
-import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
-import { DevViewportBar } from '@/components/dev/DevViewportBar';
 import { TouchReflowZoomProvider } from '@/components/accessibility/TouchReflowZoomProvider';
-import { GestureOnboardingHint } from '@/components/accessibility/GestureOnboardingHint';
-import { AnalyticsTracker } from '@/components/analytics/AnalyticsTracker';
+import { AppLayoutShell } from '@/components/layout/AppLayoutShell';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://costadeoro.curiol.studio'),
@@ -74,61 +67,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="light overflow-x-hidden">
-      <head>
-        {/* Cache-Buster & Legacy PWA Service Worker Purge */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                  for(let registration of registrations) {
-                    registration.unregister();
-                  }
-                });
-              }
-              if ('caches' in window) {
-                caches.keys().then(function(names) {
-                  for (let name of names) {
-                    caches.delete(name);
-                  }
-                });
-              }
-            `,
-          }}
-        />
-      </head>
-      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased pb-28 lg:pb-0 w-full overflow-x-hidden relative">
+      <body className="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased w-full overflow-x-hidden relative">
         <TierProvider>
           <LanguageProvider>
             <TournamentProvider>
               <TouchReflowZoomProvider>
-                {/* Minimalist Sticky Header */}
-                <Header />
-
-                {/* Dynamic Live Match Indicator */}
-                <LiveMatchBanner />
-
-                {/* Main Content Area */}
-                <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-3 sm:pt-5 pb-2 sm:pb-4 overflow-x-hidden">
-                  {children}
-                </main>
-
-                {/* Minimalist Footer */}
-                <Footer />
-
-                {/* Mobile PWA Bottom Navigation */}
-                <MobileBottomNav />
-
-                {/* Gesture Onboarding Hint (2 Fingers Animation) */}
-                <GestureOnboardingHint />
-
-                {/* Floating Multi-Device Dev Viewport Toolbar */}
-                <DevViewportBar />
-
-                {/* Real-time Web Traffic & User Flow Tracker */}
-                <Suspense fallback={null}>
-                  <AnalyticsTracker />
-                </Suspense>
+                <AppLayoutShell>{children}</AppLayoutShell>
               </TouchReflowZoomProvider>
             </TournamentProvider>
           </LanguageProvider>
