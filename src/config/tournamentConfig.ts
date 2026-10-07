@@ -36,7 +36,7 @@ export const SCHOOLS_DATA: School[] = [
   {
     id: 'la-paz-cabo-velas',
     name: 'La Paz Community School Cabo Velas',
-    shortName: 'La Paz Community School Cabo Velas',
+    shortName: 'La Paz Cabo Velas',
     acronym: 'LPCV',
     logo: '🌊',
     primaryColor: '#0284c7', // Sky Blue
@@ -48,7 +48,7 @@ export const SCHOOLS_DATA: School[] = [
   {
     id: 'la-paz-tempisque',
     name: 'La Paz Community School Tempisque',
-    shortName: 'La Paz Community School Tempisque',
+    shortName: 'La Paz Tempisque',
     acronym: 'LPTP',
     logo: '🌿',
     primaryColor: '#059669', // Emerald Green

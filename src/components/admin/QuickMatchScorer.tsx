@@ -25,6 +25,7 @@ import { Match, Standing } from '@/types/tournament';
 import { SCHOOLS_DATA, CATEGORIES_DATA } from '@/config/tournamentConfig';
 import { useTournament } from '@/context/TournamentContext';
 import { calculateStandings } from '@/lib/sportsEngine';
+import { tournamentStorage } from '@/lib/storageAdapter';
 
 interface QuickMatchScorerProps {
   initialMatches?: Match[];
@@ -213,7 +214,7 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
       // 1. Actualizar estado local inmediatamente
       setMatches((prev) => prev.map((m) => (m.id === matchId ? updatedMatch : m)));
 
-      // 2. Actualizar contexto reactivo
+      // 2. Actualizar contexto reactivo y persistencia local/remota
       updateMatch(updatedMatch);
 
       // 3. Persistir en servidor vía API central
@@ -225,9 +226,10 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
 
       if (res.ok) {
         setSavedSuccessId(matchId);
-        // Notificar en tiempo real a todo el navegador y componentes
+        // Notificar en tiempo real a todo el navegador y componentes con array completo
         if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('matches_updated', { detail: updatedMatch }));
+          const currentAll = tournamentStorage.getMatches();
+          window.dispatchEvent(new CustomEvent('matches_updated', { detail: currentAll }));
           window.dispatchEvent(new Event('storage'));
         }
         setTimeout(() => setSavedSuccessId(null), 3500);
@@ -399,67 +401,70 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                 }`}
               >
                 {/* Cabecera del Partido */}
-                <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md bg-slate-900 text-amber-300 font-black text-[10px] uppercase">
+                <div className="px-3 sm:px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-1.5 text-xs">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="px-2 py-0.5 rounded-md bg-slate-900 text-amber-300 font-black text-[10px] uppercase shrink-0">
                       {m.sport === 'futbol' ? '⚽ Fútbol' : m.sport === 'voleibol' ? '🏐 Voleibol' : '🏀 Baloncesto'}
                     </span>
-                    <span className="text-xs font-bold text-slate-800">
+                    <span className="font-bold text-slate-800 text-[11px] sm:text-xs truncate">
                       {category?.name || m.categoryId}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs text-slate-500 font-semibold">
+                  <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 font-semibold shrink-0">
                     <Clock className="w-3.5 h-3.5 text-slate-400" />
                     <span>{m.time}</span>
-                    <span>•</span>
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{m.venue || 'Sede Principal'}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 hidden sm:inline" />
+                    <span className="hidden sm:inline">{m.venue || 'Sede Principal'}</span>
                   </div>
                 </div>
 
                 {/* Banner de Éxito al Guardar */}
                 {isSavedSuccess && (
-                  <div className="bg-emerald-600 text-white px-4 py-2 text-xs font-bold flex items-center justify-center gap-1.5 animate-fade-in">
-                    <CheckCircle2 className="w-4 h-4" />
+                  <div className="bg-emerald-600 text-white px-3 sm:px-4 py-2 text-xs font-bold flex items-center justify-center gap-1.5 animate-fade-in">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span>¡Marcador guardado con éxito! Tablas y estadísticas actualizadas en vivo.</span>
                   </div>
                 )}
 
                 {/* Alerta de Walkover activo */}
                 {form.walkover === 'home_forfeit' && (
-                  <div className="bg-rose-100 text-rose-900 px-4 py-2 text-xs font-bold flex items-center gap-2 border-b border-rose-200">
+                  <div className="bg-rose-100 text-rose-900 px-3 sm:px-4 py-2 text-xs font-bold flex items-center gap-2 border-b border-rose-200">
                     <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                    <span>⚠️ AUSENCIA: No se presentó {homeSchool?.shortName}. Victoria reglamentaria (2 pts) a {awaySchool?.shortName}.</span>
+                    <span>⚠️ AUSENCIA: No se presentó {homeSchool?.shortName}. Victoria (2 pts) a {awaySchool?.shortName}.</span>
                   </div>
                 )}
 
                 {form.walkover === 'away_forfeit' && (
-                  <div className="bg-rose-100 text-rose-900 px-4 py-2 text-xs font-bold flex items-center gap-2 border-b border-rose-200">
+                  <div className="bg-rose-100 text-rose-900 px-3 sm:px-4 py-2 text-xs font-bold flex items-center gap-2 border-b border-rose-200">
                     <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                    <span>⚠️ AUSENCIA: No se presentó {awaySchool?.shortName}. Victoria reglamentaria (2 pts) a {homeSchool?.shortName}.</span>
+                    <span>⚠️ AUSENCIA: No se presentó {awaySchool?.shortName}. Victoria (2 pts) a {homeSchool?.shortName}.</span>
                   </div>
                 )}
 
                 {/* Enfrentamiento y Marcador Táctil */}
-                <div className="p-4 sm:p-5">
-                  <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-4">
+                <div className="p-3 sm:p-4 space-y-2.5">
+                  <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-2.5">
                     {/* EQUIPO LOCAL */}
-                    <div className="flex items-center justify-between gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="text-2xl shrink-0">{homeSchool?.logo || '🏫'}</span>
-                        <div className="min-w-0">
-                          <span className="text-[10px] font-black uppercase text-slate-400 block">Local</span>
-                          <span className="text-xs sm:text-sm font-black text-slate-900 truncate block">{homeSchool?.shortName}</span>
+                    <div className="flex items-center justify-between gap-2 p-2 sm:p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <span className="text-xl sm:text-2xl shrink-0">{homeSchool?.logo || '🏫'}</span>
+                        <div className="min-w-0 flex-1">
+                          <span className="text-[9px] font-black uppercase text-slate-400 block leading-none mb-0.5">Local</span>
+                          <span className="text-xs sm:text-sm font-black text-slate-900 truncate block" title={homeSchool?.name}>
+                            {homeSchool?.shortName || homeSchool?.name}
+                          </span>
                         </div>
                       </div>
 
                       {/* Stepper Tanteo Local */}
-                      <div className="flex items-center gap-1.5 shrink-0">
+                      <div className="flex items-center gap-1 shrink-0">
                         <button
                           type="button"
                           onClick={() => handleScoreChange(m.id, 'home', -1)}
-                          className="w-9 h-9 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-900 font-black text-base flex items-center justify-center transition cursor-pointer"
+                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-200 hover:bg-slate-300 active:scale-95 text-slate-900 font-black text-base flex items-center justify-center transition cursor-pointer"
+                          aria-label="Restar gol o punto local"
                         >
                           -
                         </button>
@@ -473,12 +478,13 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                               [m.id]: { ...prev[m.id], homeScore: Math.max(0, val), walkover: 'none' },
                             }));
                           }}
-                          className="w-12 h-10 text-center font-mono font-black text-xl bg-white border border-slate-300 rounded-xl text-slate-900"
+                          className="w-10 h-8 sm:w-12 sm:h-9 text-center font-mono font-black text-base sm:text-lg bg-white border border-slate-300 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden"
                         />
                         <button
                           type="button"
                           onClick={() => handleScoreChange(m.id, 'home', 1)}
-                          className="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-base flex items-center justify-center transition cursor-pointer shadow-xs"
+                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-base flex items-center justify-center transition cursor-pointer shadow-xs"
+                          aria-label="Sumar gol o punto local"
                         >
                           +
                         </button>
@@ -486,42 +492,42 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                     </div>
 
                     {/* CENTRO: VS O SETS */}
-                    <div className="text-center py-1">
-                      <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-black text-xs">
-                        <span>VS</span>
-                      </div>
-
-                      {/* Control de Sets para Voleibol */}
-                      {isVolleyball && (
-                        <div className="mt-2 flex items-center justify-center gap-2 text-xs font-bold">
-                          <span className="text-[10px] text-slate-500">Sets:</span>
+                    <div className="text-center py-0.5 md:py-1">
+                      {isVolleyball ? (
+                        <div className="flex items-center justify-center gap-1.5 px-2.5 py-1 bg-sky-50 rounded-xl border border-sky-100 text-xs">
+                          <span className="text-[10px] font-black uppercase text-sky-800">Sets:</span>
                           <button
                             type="button"
                             onClick={() => handleSetsChange(m.id, 'home', 1)}
-                            className="px-2 py-0.5 bg-sky-100 hover:bg-sky-200 text-sky-900 rounded font-black text-xs"
+                            className="px-2 py-0.5 bg-sky-200 hover:bg-sky-300 text-sky-900 rounded font-black text-xs transition cursor-pointer"
                           >
                             L: {form.homeSetsWon || 0}
                           </button>
-                          <span>-</span>
+                          <span className="text-slate-400 font-bold">-</span>
                           <button
                             type="button"
                             onClick={() => handleSetsChange(m.id, 'away', 1)}
-                            className="px-2 py-0.5 bg-sky-100 hover:bg-sky-200 text-sky-900 rounded font-black text-xs"
+                            className="px-2 py-0.5 bg-sky-200 hover:bg-sky-300 text-sky-900 rounded font-black text-xs transition cursor-pointer"
                           >
                             V: {form.awaySetsWon || 0}
                           </button>
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-black text-[10px] uppercase tracking-wider">
+                          <span>VS</span>
                         </div>
                       )}
                     </div>
 
                     {/* EQUIPO VISITANTE */}
-                    <div className="flex items-center justify-between gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div className="flex items-center justify-between gap-2 p-2 sm:p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
                       {/* Stepper Tanteo Visita */}
-                      <div className="flex items-center gap-1.5 shrink-0 order-2 md:order-1">
+                      <div className="flex items-center gap-1 shrink-0 order-2 md:order-1">
                         <button
                           type="button"
                           onClick={() => handleScoreChange(m.id, 'away', -1)}
-                          className="w-9 h-9 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-900 font-black text-base flex items-center justify-center transition cursor-pointer"
+                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-200 hover:bg-slate-300 active:scale-95 text-slate-900 font-black text-base flex items-center justify-center transition cursor-pointer"
+                          aria-label="Restar gol o punto visita"
                         >
                           -
                         </button>
@@ -535,78 +541,87 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                               [m.id]: { ...prev[m.id], awayScore: Math.max(0, val), walkover: 'none' },
                             }));
                           }}
-                          className="w-12 h-10 text-center font-mono font-black text-xl bg-white border border-slate-300 rounded-xl text-slate-900"
+                          className="w-10 h-8 sm:w-12 sm:h-9 text-center font-mono font-black text-base sm:text-lg bg-white border border-slate-300 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden"
                         />
                         <button
                           type="button"
                           onClick={() => handleScoreChange(m.id, 'away', 1)}
-                          className="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-base flex items-center justify-center transition cursor-pointer shadow-xs"
+                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-base flex items-center justify-center transition cursor-pointer shadow-xs"
+                          aria-label="Sumar gol o punto visita"
                         >
                           +
                         </button>
                       </div>
 
-                      <div className="flex items-center gap-2.5 min-w-0 order-1 md:order-2 text-right">
-                        <div className="min-w-0">
-                          <span className="text-[10px] font-black uppercase text-slate-400 block">Visita</span>
-                          <span className="text-xs sm:text-sm font-black text-slate-900 truncate block">{awaySchool?.shortName}</span>
+                      <div className="flex items-center gap-2 min-w-0 order-1 md:order-2 flex-1 text-right justify-end">
+                        <div className="min-w-0 flex-1">
+                          <span className="text-[9px] font-black uppercase text-slate-400 block leading-none mb-0.5">Visita</span>
+                          <span className="text-xs sm:text-sm font-black text-slate-900 truncate block" title={awaySchool?.name}>
+                            {awaySchool?.shortName || awaySchool?.name}
+                          </span>
                         </div>
-                        <span className="text-2xl shrink-0">{awaySchool?.logo || '🏫'}</span>
+                        <span className="text-xl sm:text-2xl shrink-0">{awaySchool?.logo || '🏫'}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* ⚡ BOTONES RÁPIDOS DE AUSENCIA Y GUARDADO */}
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-[11px] font-black text-slate-500 uppercase mr-1">Condición:</span>
+                  {/* ⚡ BOTONES RÁPIDOS DE CONDICIÓN / AUSENCIA Y GUARDADO */}
+                  <div className="pt-2 border-t border-slate-100 space-y-2">
+                    <div className="flex items-center justify-between gap-1 text-[10px] font-black uppercase text-slate-400 px-0.5">
+                      <span>Condición del partido:</span>
+                      {form.walkover !== 'none' && (
+                        <span className="text-rose-600 font-bold">⚠️ W.O. Aplicado</span>
+                      )}
+                    </div>
 
+                    <div className="grid grid-cols-3 gap-1.5 w-full">
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'none')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                        className={`py-2 px-1 rounded-xl text-[11px] font-black text-center transition cursor-pointer ${
                           form.walkover === 'none' && form.status === 'completed'
                             ? 'bg-emerald-600 text-white shadow-xs'
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
-                        ✓ Jugado Normal
+                        ✓ Jugado
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'home_forfeit')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                        className={`py-2 px-1 rounded-xl text-[11px] font-black text-center transition cursor-pointer truncate ${
                           form.walkover === 'home_forfeit'
                             ? 'bg-rose-600 text-white shadow-xs'
                             : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
                         }`}
-                        title="El local no se presentó. Queda en 0 pts y la visita gana 2 pts."
+                        title={`No se presentó ${homeSchool?.shortName} (W.O.). Queda en 0 pts y la visita gana 2 pts.`}
                       >
-                        ⚠️ Ausente: {homeSchool?.shortName || 'Local'}
+                        ⚠️ Aus. Local
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'away_forfeit')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                        className={`py-2 px-1 rounded-xl text-[11px] font-black text-center transition cursor-pointer truncate ${
                           form.walkover === 'away_forfeit'
                             ? 'bg-rose-600 text-white shadow-xs'
                             : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
                         }`}
-                        title="El visitante no se presentó. Queda en 0 pts y el local gana 2 pts."
+                        title={`No se presentó ${awaySchool?.shortName} (W.O.). Queda en 0 pts y el local gana 2 pts.`}
                       >
-                        ⚠️ Ausente: {awaySchool?.shortName || 'Visita'}
+                        ⚠️ Aus. Visita
                       </button>
                     </div>
 
-                    {/* BOTÓN GUARDAR */}
-                    <div className="flex items-center gap-2">
+                    {/* BOTÓN GUARDAR Y EXPANDIR */}
+                    <div className="flex items-center gap-2 pt-1">
                       <button
                         type="button"
                         onClick={() => setExpandedMatchId(isExpanded ? null : m.id)}
-                        className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition"
-                        title="Opcional: Goleador / MVP / Notas"
+                        className="p-2.5 text-slate-500 hover:text-slate-800 rounded-xl bg-slate-100 hover:bg-slate-200 transition shrink-0 cursor-pointer"
+                        title="Opcional: Goleador / MVP / Observaciones"
+                        aria-label="Detalles adicionales"
                       >
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </button>
@@ -615,10 +630,10 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                         type="button"
                         onClick={() => handleSaveMatch(m.id)}
                         disabled={isSaving}
-                        className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs transition shadow-md cursor-pointer disabled:opacity-50 ${
+                        className={`flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-black text-xs transition shadow-sm cursor-pointer disabled:opacity-50 ${
                           isSavedSuccess
                             ? 'bg-emerald-600 text-white'
-                            : 'bg-slate-900 hover:bg-slate-800 text-amber-300'
+                            : 'bg-slate-950 hover:bg-slate-800 text-amber-300'
                         }`}
                       >
                         {isSaving ? (
