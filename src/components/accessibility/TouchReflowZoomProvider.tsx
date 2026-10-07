@@ -26,12 +26,14 @@ export function TouchReflowZoomProvider({ children }: TouchReflowZoomProviderPro
       setTimeout(() => html.classList.remove('scale-animating'), 200);
     }
 
-    html.classList.remove('text-scale-100', 'text-scale-130', 'text-scale-160', 'text-scale-200');
+    html.classList.remove('text-scale-100', 'text-scale-130', 'text-scale-160', 'text-scale-200', 'text-scale-250', 'text-scale-300');
 
     if (scale <= 115) html.classList.add('text-scale-100');
     else if (scale <= 145) html.classList.add('text-scale-130');
     else if (scale <= 180) html.classList.add('text-scale-160');
-    else html.classList.add('text-scale-200');
+    else if (scale <= 225) html.classList.add('text-scale-200');
+    else if (scale <= 275) html.classList.add('text-scale-250');
+    else html.classList.add('text-scale-300');
 
     // Escala continua precisa en px base
     const basePx = window.innerWidth <= 640 ? 17.5 : 16;
@@ -124,9 +126,9 @@ export function TouchReflowZoomProvider({ children }: TouchReflowZoomProviderPro
         const currentDistance = Math.hypot(x2 - x1, y2 - y1);
         const ratio = currentDistance / initialTouchDistance.current;
 
-        // Calcular nueva escala objetivo con amortiguación suave entre 100% y 200%
+        // Calcular nueva escala objetivo con amortiguación suave entre 100% y 300%
         let target = Math.round(startScale.current * ratio);
-        target = Math.min(200, Math.max(100, target));
+        target = Math.min(300, Math.max(100, target));
 
         targetScaleRef.current = target;
         startPhysicsLoop();
@@ -162,14 +164,14 @@ export function TouchReflowZoomProvider({ children }: TouchReflowZoomProviderPro
     <>
       {children}
 
-      {/* 🔍 Badge Flotante de Porcentaje de Reflow en Tiempo Real */}
+      {/* 🔍 Badge Flotante de Porcentaje de Reflow en Tiempo Real (Hasta 300%) */}
       {showBadge && (
         <div className="fixed bottom-24 right-4 z-50 pointer-events-none transition-all duration-300 animate-in fade-in zoom-in-95">
           <div className="flex items-center gap-2 bg-slate-950/90 text-amber-300 border border-amber-400/40 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-2xl font-mono font-black text-sm">
             <ZoomIn className={`w-4 h-4 text-amber-400 ${isZooming ? 'animate-bounce' : ''}`} />
             <span>{currentScale}%</span>
             <span className="text-[10px] text-slate-400 font-sans font-normal ml-0.5">
-              {currentScale >= 200 ? 'Macro' : currentScale >= 160 ? 'Grande' : currentScale >= 130 ? 'S23 Ultra' : 'Normal'}
+              {currentScale >= 300 ? 'Mega Macro (300%)' : currentScale >= 250 ? 'Extra Macro' : currentScale >= 200 ? 'Macro' : currentScale >= 160 ? 'Grande' : currentScale >= 130 ? 'S23 Ultra' : 'Normal'}
             </span>
           </div>
         </div>

@@ -42,17 +42,21 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* 🔍 Niveles de Escala Tipográfica DUA Accesibles con Reflow */
+/* 🔍 Niveles de Escala Tipográfica DUA Accesibles con Reflow (Hasta 300%) */
 html.text-scale-100 { font-size: 16px !important; }
 html.text-scale-130 { font-size: 20.8px !important; } /* Nivel Cómodo S23 Ultra (130%) */
 html.text-scale-160 { font-size: 25.6px !important; } /* Nivel Grande (160%) */
-html.text-scale-200 { font-size: 32.0px !important; } /* Nivel Ultra Macro (200%) */
+html.text-scale-200 { font-size: 32.0px !important; } /* Nivel Macro (200%) */
+html.text-scale-250 { font-size: 40.0px !important; } /* Nivel Extra Macro (250%) */
+html.text-scale-300 { font-size: 48.0px !important; } /* Nivel Máxima Lectura (300%) */
 
 @media (max-width: 640px) {
   html.text-scale-100 { font-size: 17.5px; }
   html.text-scale-130 { font-size: 22.8px; } /* Nivel Cómodo S23 Ultra en móvil */
   html.text-scale-160 { font-size: 28.0px; } /* Nivel Grande en móvil */
-  html.text-scale-200 { font-size: 35.0px; } /* Nivel Ultra Macro en móvil (200%) */
+  html.text-scale-200 { font-size: 35.0px; } /* Nivel Macro en móvil (200%) */
+  html.text-scale-250 { font-size: 43.8px; } /* Nivel Extra Macro en móvil (250%) */
+  html.text-scale-300 { font-size: 52.5px; } /* Nivel Máxima Lectura en móvil (300%) */
 }
 
 /* 🛡️ Reglas de Reflow Universal (Cero Desbordamiento Horizontal) */

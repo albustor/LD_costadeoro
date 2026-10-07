@@ -50,12 +50,14 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
   const applyScaleToHtml = (scale: number) => {
     if (typeof window === 'undefined') return;
     const html = document.documentElement;
-    html.classList.remove('text-scale-100', 'text-scale-130', 'text-scale-160', 'text-scale-200');
+    html.classList.remove('text-scale-100', 'text-scale-130', 'text-scale-160', 'text-scale-200', 'text-scale-250', 'text-scale-300');
     
     if (scale <= 115) html.classList.add('text-scale-100');
     else if (scale <= 145) html.classList.add('text-scale-130');
     else if (scale <= 180) html.classList.add('text-scale-160');
-    else html.classList.add('text-scale-200');
+    else if (scale <= 225) html.classList.add('text-scale-200');
+    else if (scale <= 275) html.classList.add('text-scale-250');
+    else html.classList.add('text-scale-300');
 
     const basePx = window.innerWidth <= 640 ? 17.5 : 16;
     html.style.fontSize = `${(scale / 100) * basePx}px`;
@@ -95,7 +97,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
   const changeTextScale = (delta: number) => {
     setTextScale((prev) => {
-      const nextScale = Math.min(200, Math.max(100, prev + delta));
+      const nextScale = Math.min(300, Math.max(100, prev + delta));
       if (typeof window !== 'undefined') {
         localStorage.setItem('costa_de_oro_text_scale', nextScale.toString());
         applyScaleToHtml(nextScale);
@@ -108,10 +110,12 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
   const cycleTextScale = () => {
     setTextScale((prev) => {
       let next = 130;
-      if (prev <= 115) next = 130; // Modo Cómodo S23 Ultra
-      else if (prev <= 145) next = 160; // Modo Grande
-      else if (prev <= 180) next = 200; // Modo Ultra 200%
-      else next = 100; // Restablecer a estándar
+      if (prev <= 115) next = 130; // Modo Cómodo S23 Ultra (130%)
+      else if (prev <= 145) next = 160; // Modo Grande (160%)
+      else if (prev <= 180) next = 200; // Modo Macro (200%)
+      else if (prev <= 225) next = 250; // Modo Extra Macro (250%)
+      else if (prev <= 275) next = 300; // Modo Máxima Lectura (300%)
+      else next = 100; // Restablecer a estándar 100%
 
       if (typeof window !== 'undefined') {
         localStorage.setItem('costa_de_oro_text_scale', next.toString());
@@ -253,11 +257,11 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
           )}
         </button>
 
-        {/* 🔍 Botón Rápido de Zoom Adaptativo (100% -> 115% -> 130% S23 Ultra -> 145%) */}
+        {/* 🔍 Botón Rápido de Zoom Adaptativo (100% -> 130% -> 160% -> 200% -> 250% -> 300%) */}
         <button
           type="button"
           onClick={cycleTextScale}
-          title={`Tamaño actual: ${textScale}%. Toca para cambiar (100%, 115%, 130% S23 Ultra, 145%)`}
+          title={`Tamaño actual: ${textScale}%. Toca para cambiar (100%, 130% S23 Ultra, 160%, 200%, 250%, 300%)`}
           className="h-9 px-2 sm:px-2.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-300 hover:text-amber-200 hover:bg-slate-800 font-mono font-black text-xs flex items-center gap-0.5 shadow-2xs cursor-pointer transition-all active:scale-95"
         >
           <span className="text-[10px] text-amber-400/80">A</span>
@@ -299,7 +303,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
 
       <div className="h-5 w-[1px] bg-slate-800 mx-0.5" />
 
-      {/* 🔍 Controles de Zoom Tipográfico DUA */}
+      {/* 🔍 Controles de Zoom Tipográfico DUA (Hasta 300%) */}
       <button
         type="button"
         onClick={() => changeTextScale(-15)}
@@ -313,7 +317,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
       <button
         type="button"
         onClick={cycleTextScale}
-        title={`Tamaño actual: ${textScale}%. Clic para alternar a 130% (S23 Ultra), 160% o 200% (Ultra)`}
+        title={`Tamaño actual: ${textScale}%. Clic para alternar a 130% (S23 Ultra), 160%, 200%, 250% o 300% (Máxima Lectura)`}
         className={`px-2 py-1 rounded-md font-mono font-black text-xs transition-colors cursor-pointer ${
           textScale > 100
             ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
@@ -327,7 +331,7 @@ export function DuaAccessibilityBar({ compact = false }: DuaAccessibilityBarProp
         type="button"
         onClick={() => changeTextScale(15)}
         title="Aumentar tamaño de texto (A+)"
-        disabled={textScale >= 200}
+        disabled={textScale >= 300}
         className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed font-black text-xs transition-colors cursor-pointer"
       >
         A+

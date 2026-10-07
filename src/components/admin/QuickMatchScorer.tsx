@@ -325,13 +325,13 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
         </div>
       </div>
 
-      {/* 📅 SELECTOR DE DÍAS EN 1 TOQUE */}
+      {/* 📅 SELECTOR DE DÍAS EN 1 TOQUE (CARRUSEL TÁCTIL DESLIZABLE) */}
       <div className="bg-white rounded-3xl border border-slate-200 p-3 sm:p-4 shadow-xs">
         <div className="text-[11px] font-black uppercase text-slate-500 tracking-wider mb-2 px-1">
           Paso 1: Seleccione el día de juego:
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1.5 pt-0.5 no-scrollbar snap-x touch-pan-x">
           {daysList.map((d) => {
             const isSelected = selectedDay === d.key;
             return (
@@ -339,15 +339,15 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                 key={d.key}
                 type="button"
                 onClick={() => setSelectedDay(d.key)}
-                className={`p-2.5 rounded-2xl text-center transition cursor-pointer border ${
+                className={`flex-1 min-w-[105px] sm:min-w-[120px] p-2.5 rounded-2xl text-center transition cursor-pointer border shrink-0 snap-start ${
                   isSelected
                     ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-md font-black scale-102'
                     : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 font-bold'
                 }`}
               >
-                <div className="text-sm">{d.icon}</div>
-                <div className="text-xs leading-tight mt-0.5">{d.dayName}</div>
-                <div className="text-[10px] text-slate-600 opacity-90 mt-0.5">{d.detail}</div>
+                <div className="text-base">{d.icon}</div>
+                <div className="text-xs font-black whitespace-nowrap mt-0.5">{d.dayName}</div>
+                <div className="text-[10px] text-slate-600 opacity-90 whitespace-nowrap mt-0.5">{d.detail}</div>
               </button>
             );
           })}
@@ -355,7 +355,7 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
       </div>
 
       {/* 📋 LISTA TÁCTIL DE PARTIDOS PROGRAMADOS */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {filteredMatches.length === 0 ? (
           <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-2">
             <span className="text-2xl">📅</span>
@@ -401,7 +401,7 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                 }`}
               >
                 {/* Cabecera del Partido */}
-                <div className="px-3 sm:px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-1.5 text-xs">
+                <div className="px-3 sm:px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-1.5 text-xs">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="px-2 py-0.5 rounded-md bg-slate-900 text-amber-300 font-black text-[10px] uppercase shrink-0">
                       {m.sport === 'futbol' ? '⚽ Fútbol' : m.sport === 'voleibol' ? '🏐 Voleibol' : '🏀 Baloncesto'}
@@ -443,134 +443,138 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                   </div>
                 )}
 
-                {/* Enfrentamiento y Marcador Táctil */}
-                <div className="p-3 sm:p-4 space-y-2.5">
-                  <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-2.5">
-                    {/* EQUIPO LOCAL */}
-                    <div className="flex items-center justify-between gap-2 p-2 sm:p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <span className="text-xl sm:text-2xl shrink-0">{homeSchool?.logo || '🏫'}</span>
-                        <div className="min-w-0 flex-1">
-                          <span className="text-[9px] font-black uppercase text-slate-400 block leading-none mb-0.5">Local</span>
-                          <span className="text-xs sm:text-sm font-black text-slate-900 truncate block" title={homeSchool?.name}>
-                            {homeSchool?.shortName || homeSchool?.name}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Stepper Tanteo Local */}
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => handleScoreChange(m.id, 'home', -1)}
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-200 hover:bg-slate-300 active:scale-95 text-slate-900 font-black text-base flex items-center justify-center transition cursor-pointer"
-                          aria-label="Restar gol o punto local"
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          value={form.homeScore}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value, 10) || 0;
-                            setMatchForms((prev) => ({
-                              ...prev,
-                              [m.id]: { ...prev[m.id], homeScore: Math.max(0, val), walkover: 'none' },
-                            }));
-                          }}
-                          className="w-10 h-8 sm:w-12 sm:h-9 text-center font-mono font-black text-base sm:text-lg bg-white border border-slate-300 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleScoreChange(m.id, 'home', 1)}
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-base flex items-center justify-center transition cursor-pointer shadow-xs"
-                          aria-label="Sumar gol o punto local"
-                        >
-                          +
-                        </button>
+                {/* Enfrentamiento y Marcador Táctil (100% Vertical Centrado) */}
+                <div className="p-4 sm:p-5 space-y-4">
+                  {/* EQUIPO LOCAL (BLOQUE CENTRADO COMPLETO) */}
+                  <div className="p-3 sm:p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80 flex flex-col items-center text-center space-y-2.5">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-2xl sm:text-3xl shrink-0">{homeSchool?.logo || '🏫'}</span>
+                      <div className="text-left">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-200 text-slate-700 text-[9px] font-black uppercase tracking-wider block w-fit">
+                          Equipo Local
+                        </span>
+                        <h3 className="text-sm sm:text-base font-black text-slate-900 mt-0.5">
+                          {homeSchool?.name || homeSchool?.shortName}
+                        </h3>
                       </div>
                     </div>
 
-                    {/* CENTRO: VS O SETS */}
-                    <div className="text-center py-0.5 md:py-1">
-                      {isVolleyball ? (
-                        <div className="flex items-center justify-center gap-1.5 px-2.5 py-1 bg-sky-50 rounded-xl border border-sky-100 text-xs">
-                          <span className="text-[10px] font-black uppercase text-sky-800">Sets:</span>
-                          <button
-                            type="button"
-                            onClick={() => handleSetsChange(m.id, 'home', 1)}
-                            className="px-2 py-0.5 bg-sky-200 hover:bg-sky-300 text-sky-900 rounded font-black text-xs transition cursor-pointer"
-                          >
-                            L: {form.homeSetsWon || 0}
-                          </button>
-                          <span className="text-slate-400 font-bold">-</span>
-                          <button
-                            type="button"
-                            onClick={() => handleSetsChange(m.id, 'away', 1)}
-                            className="px-2 py-0.5 bg-sky-200 hover:bg-sky-300 text-sky-900 rounded font-black text-xs transition cursor-pointer"
-                          >
-                            V: {form.awaySetsWon || 0}
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-black text-[10px] uppercase tracking-wider">
-                          <span>VS</span>
-                        </div>
-                      )}
+                    {/* Stepper Tanteo Local Grande Centrado */}
+                    <div className="flex items-center justify-center gap-2 pt-1 w-full max-w-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleScoreChange(m.id, 'home', -1)}
+                        className="w-12 h-11 sm:w-14 sm:h-12 rounded-2xl bg-slate-200 hover:bg-slate-300 active:scale-90 text-slate-900 font-black text-2xl flex items-center justify-center transition cursor-pointer shadow-xs"
+                        aria-label="Restar gol o punto local"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        value={form.homeScore}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value, 10) || 0;
+                          setMatchForms((prev) => ({
+                            ...prev,
+                            [m.id]: { ...prev[m.id], homeScore: Math.max(0, val), walkover: 'none' },
+                          }));
+                        }}
+                        className="flex-1 h-11 sm:h-12 text-center font-mono font-black text-2xl sm:text-3xl bg-white border-2 border-slate-300 rounded-2xl text-slate-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-400 focus:outline-hidden shadow-inner"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleScoreChange(m.id, 'home', 1)}
+                        className="w-12 h-11 sm:w-14 sm:h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 active:scale-90 text-slate-950 font-black text-2xl flex items-center justify-center transition cursor-pointer shadow-md"
+                        aria-label="Sumar gol o punto local"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* SEPARADOR VS Y CONTROL DE SETS */}
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="h-[1px] flex-1 bg-slate-200"></div>
+                    {isVolleyball ? (
+                      <div className="flex items-center gap-2 px-3 py-1 bg-sky-100/80 rounded-full border border-sky-200 text-xs font-bold">
+                        <span className="text-[10px] font-black uppercase text-sky-900">🏐 Sets:</span>
+                        <button
+                          type="button"
+                          onClick={() => handleSetsChange(m.id, 'home', 1)}
+                          className="px-2.5 py-0.5 bg-sky-300 hover:bg-sky-400 text-sky-950 rounded-lg font-black text-xs transition cursor-pointer"
+                        >
+                          L: {form.homeSetsWon || 0}
+                        </button>
+                        <span className="text-slate-400 font-bold">-</span>
+                        <button
+                          type="button"
+                          onClick={() => handleSetsChange(m.id, 'away', 1)}
+                          className="px-2.5 py-0.5 bg-sky-300 hover:bg-sky-400 text-sky-950 rounded-lg font-black text-xs transition cursor-pointer"
+                        >
+                          V: {form.awaySetsWon || 0}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="px-3.5 py-1 rounded-full bg-slate-100 text-slate-600 font-black text-xs uppercase tracking-wider border border-slate-200">
+                        VS
+                      </div>
+                    )}
+                    <div className="h-[1px] flex-1 bg-slate-200"></div>
+                  </div>
+
+                  {/* EQUIPO VISITANTE (BLOQUE CENTRADO COMPLETO) */}
+                  <div className="p-3 sm:p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80 flex flex-col items-center text-center space-y-2.5">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-2xl sm:text-3xl shrink-0">{awaySchool?.logo || '🏫'}</span>
+                      <div className="text-left">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-200 text-slate-700 text-[9px] font-black uppercase tracking-wider block w-fit">
+                          Equipo Visitante
+                        </span>
+                        <h3 className="text-sm sm:text-base font-black text-slate-900 mt-0.5">
+                          {awaySchool?.name || awaySchool?.shortName}
+                        </h3>
+                      </div>
                     </div>
 
-                    {/* EQUIPO VISITANTE */}
-                    <div className="flex items-center justify-between gap-2 p-2 sm:p-2.5 bg-slate-50 rounded-2xl border border-slate-100">
-                      {/* Stepper Tanteo Visita */}
-                      <div className="flex items-center gap-1 shrink-0 order-2 md:order-1">
-                        <button
-                          type="button"
-                          onClick={() => handleScoreChange(m.id, 'away', -1)}
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-200 hover:bg-slate-300 active:scale-95 text-slate-900 font-black text-base flex items-center justify-center transition cursor-pointer"
-                          aria-label="Restar gol o punto visita"
-                        >
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          value={form.awayScore}
-                          onChange={(e) => {
-                            const val = parseInt(e.target.value, 10) || 0;
-                            setMatchForms((prev) => ({
-                              ...prev,
-                              [m.id]: { ...prev[m.id], awayScore: Math.max(0, val), walkover: 'none' },
-                            }));
-                          }}
-                          className="w-10 h-8 sm:w-12 sm:h-9 text-center font-mono font-black text-base sm:text-lg bg-white border border-slate-300 rounded-xl text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleScoreChange(m.id, 'away', 1)}
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-black text-base flex items-center justify-center transition cursor-pointer shadow-xs"
-                          aria-label="Sumar gol o punto visita"
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <div className="flex items-center gap-2 min-w-0 order-1 md:order-2 flex-1 text-right justify-end">
-                        <div className="min-w-0 flex-1">
-                          <span className="text-[9px] font-black uppercase text-slate-400 block leading-none mb-0.5">Visita</span>
-                          <span className="text-xs sm:text-sm font-black text-slate-900 truncate block" title={awaySchool?.name}>
-                            {awaySchool?.shortName || awaySchool?.name}
-                          </span>
-                        </div>
-                        <span className="text-xl sm:text-2xl shrink-0">{awaySchool?.logo || '🏫'}</span>
-                      </div>
+                    {/* Stepper Tanteo Visita Grande Centrado */}
+                    <div className="flex items-center justify-center gap-2 pt-1 w-full max-w-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleScoreChange(m.id, 'away', -1)}
+                        className="w-12 h-11 sm:w-14 sm:h-12 rounded-2xl bg-slate-200 hover:bg-slate-300 active:scale-90 text-slate-900 font-black text-2xl flex items-center justify-center transition cursor-pointer shadow-xs"
+                        aria-label="Restar gol o punto visita"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        value={form.awayScore}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value, 10) || 0;
+                          setMatchForms((prev) => ({
+                            ...prev,
+                            [m.id]: { ...prev[m.id], awayScore: Math.max(0, val), walkover: 'none' },
+                          }));
+                        }}
+                        className="flex-1 h-11 sm:h-12 text-center font-mono font-black text-2xl sm:text-3xl bg-white border-2 border-slate-300 rounded-2xl text-slate-950 focus:border-amber-500 focus:ring-2 focus:ring-amber-400 focus:outline-hidden shadow-inner"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleScoreChange(m.id, 'away', 1)}
+                        className="w-12 h-11 sm:w-14 sm:h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 active:scale-90 text-slate-950 font-black text-2xl flex items-center justify-center transition cursor-pointer shadow-md"
+                        aria-label="Sumar gol o punto visita"
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
 
                   {/* ⚡ BOTONES RÁPIDOS DE CONDICIÓN / AUSENCIA Y GUARDADO */}
-                  <div className="pt-2 border-t border-slate-100 space-y-2">
-                    <div className="flex items-center justify-between gap-1 text-[10px] font-black uppercase text-slate-400 px-0.5">
+                  <div className="pt-2 border-t border-slate-100 space-y-2.5">
+                    <div className="flex items-center justify-between gap-1 text-[10px] font-black uppercase text-slate-500 px-0.5">
                       <span>Condición del partido:</span>
                       {form.walkover !== 'none' && (
-                        <span className="text-rose-600 font-bold">⚠️ W.O. Aplicado</span>
+                        <span className="text-rose-600 font-black">⚠️ W.O. Aplicado</span>
                       )}
                     </div>
 
@@ -578,9 +582,9 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'none')}
-                        className={`py-2 px-1 rounded-xl text-[11px] font-black text-center transition cursor-pointer ${
+                        className={`py-2.5 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer ${
                           form.walkover === 'none' && form.status === 'completed'
-                            ? 'bg-emerald-600 text-white shadow-xs'
+                            ? 'bg-emerald-600 text-white shadow-xs ring-2 ring-emerald-400'
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
@@ -590,9 +594,9 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'home_forfeit')}
-                        className={`py-2 px-1 rounded-xl text-[11px] font-black text-center transition cursor-pointer truncate ${
+                        className={`py-2.5 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
                           form.walkover === 'home_forfeit'
-                            ? 'bg-rose-600 text-white shadow-xs'
+                            ? 'bg-rose-600 text-white shadow-xs ring-2 ring-rose-400'
                             : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
                         }`}
                         title={`No se presentó ${homeSchool?.shortName} (W.O.). Queda en 0 pts y la visita gana 2 pts.`}
@@ -603,9 +607,9 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'away_forfeit')}
-                        className={`py-2 px-1 rounded-xl text-[11px] font-black text-center transition cursor-pointer truncate ${
+                        className={`py-2.5 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
                           form.walkover === 'away_forfeit'
-                            ? 'bg-rose-600 text-white shadow-xs'
+                            ? 'bg-rose-600 text-white shadow-xs ring-2 ring-rose-400'
                             : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
                         }`}
                         title={`No se presentó ${awaySchool?.shortName} (W.O.). Queda en 0 pts y el local gana 2 pts.`}
@@ -619,36 +623,36 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                       <button
                         type="button"
                         onClick={() => setExpandedMatchId(isExpanded ? null : m.id)}
-                        className="p-2.5 text-slate-500 hover:text-slate-800 rounded-xl bg-slate-100 hover:bg-slate-200 transition shrink-0 cursor-pointer"
+                        className="p-3 text-slate-500 hover:text-slate-800 rounded-2xl bg-slate-100 hover:bg-slate-200 transition shrink-0 cursor-pointer"
                         title="Opcional: Goleador / MVP / Observaciones"
                         aria-label="Detalles adicionales"
                       >
-                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleSaveMatch(m.id)}
                         disabled={isSaving}
-                        className={`flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-black text-xs transition shadow-sm cursor-pointer disabled:opacity-50 ${
+                        className={`flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl font-black text-sm transition shadow-md cursor-pointer disabled:opacity-50 ${
                           isSavedSuccess
-                            ? 'bg-emerald-600 text-white'
+                            ? 'bg-emerald-600 text-white animate-pulse'
                             : 'bg-slate-950 hover:bg-slate-800 text-amber-300'
                         }`}
                       >
                         {isSaving ? (
                           <>
-                            <RotateCcw className="w-3.5 h-3.5 animate-spin" />
+                            <RotateCcw className="w-4 h-4 animate-spin" />
                             <span>Guardando...</span>
                           </>
                         ) : isSavedSuccess ? (
                           <>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                            <span>¡Guardado Oficial!</span>
+                            <CheckCircle2 className="w-4 h-4 text-white" />
+                            <span>¡Marcador Guardado Oficial!</span>
                           </>
                         ) : (
                           <>
-                            <Save className="w-3.5 h-3.5" />
+                            <Save className="w-4 h-4" />
                             <span>Guardar Marcador</span>
                           </>
                         )}
