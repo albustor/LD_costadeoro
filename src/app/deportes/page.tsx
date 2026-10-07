@@ -8,6 +8,7 @@ import { StandingsTable } from '@/components/sports/StandingsTable';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { DailyEmotionalMediaCapsule } from '@/components/sports/DailyEmotionalMediaCapsule';
 import { formatTime12h, formatFullDateCostaRica } from '@/lib/utils';
+import { getActiveCompetitionDayInfo } from '@/lib/sportsEngine';
 import { 
   Trophy, 
   Calendar, 
@@ -24,10 +25,17 @@ import Link from 'next/link';
 export default function DeportesPage() {
   const { categories, matches, getSchoolById } = useTournament();
   const { t } = useLanguage();
-  const [activeSport, setActiveSport] = useState<SportType>('futbol');
+
+  // Detección automática del día y categoría en competición
+  const initialDayInfo = getActiveCompetitionDayInfo();
+  const [activeSport, setActiveSport] = useState<SportType>(initialDayInfo.sport);
 
   const sportCategories = categories.filter((c) => c.sport === activeSport);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(sportCategories[0]?.id || 'cat-fem-futbol');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+    categories.some((c) => c.id === initialDayInfo.categoryId)
+      ? initialDayInfo.categoryId
+      : sportCategories[0]?.id || 'cat-c-futbol'
+  );
 
   // Actualizar categoría al cambiar deporte
   const handleSportSelect = (sport: SportType) => {

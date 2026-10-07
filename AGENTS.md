@@ -187,13 +187,15 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 
 ---
 
-## 13. Regla Oficial de Ausencia / No Presentación de Equipos
+## 13. Regla Oficial de Ausencia / No Presentación y Baremo del Festival
 
-1. **Marcador Fijo 0–0 y Cero Goles Artificiales:**
+1. **Baremo Oficial del Festival Deportivo:**
+   - Victoria = **2 puntos**, Empate = **1 punto**, Derrota = **0 puntos**.
+2. **Marcador Fijo 0–0 y Cero Goles Artificiales:**
    - Cuando un equipo no se presenta a un encuentro, el marcador visual y estadístico queda estrictamente en **0 – 0** (no se agregan goles artificiales ni a favor ni en contra de ninguna de las delegaciones).
-2. **Totalidad de Puntos al Equipo Presente:**
-   - A pesar de que el marcador sea 0–0, el equipo que sí se presentó recibe la **totalidad de puntos por victoria** (**3 puntos** en fútbol federado / LINAFA).
-3. **Cero Absoluto para el Equipo Ausente:**
+3. **Asignación de Puntos al Equipo Presente:**
+   - Al no disputarse el partido en cancha, el equipo presente no acumula un partido jugado ficticio (`played += 0`), pero se le asigna **1 punto reglamentario** por la no presentación del rival.
+4. **Cero Absoluto para el Equipo Ausente:**
    - La delegación no presentada no acumula partidos jugados ni goles, quedando en **0 absoluto en todas sus estadísticas** (0 PJ, 0 PG, 0 PE, 0 PP, 0 GF, 0 GC, 0 GD, 0 PTS).
 
 ---

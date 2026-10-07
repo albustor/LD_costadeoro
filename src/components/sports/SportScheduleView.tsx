@@ -5,6 +5,7 @@ import { Category, Match, School, Standing } from '@/types/tournament';
 import { SchoolEmblem } from './SchoolEmblem';
 import { SportIconRenderer } from './SportGraphicIcons';
 import { formatFullDateCostaRica, formatTime12h } from '@/lib/utils';
+import { getActiveCompetitionDayInfo } from '@/lib/sportsEngine';
 import { 
   Calendar, 
   Clock, 
@@ -36,7 +37,7 @@ export function SportScheduleView({
   schools,
   getStandingsForCategory,
 }: SportScheduleViewProps) {
-  const [selectedSport, setSelectedSport] = useState<string>('futbol');
+  const [selectedSport, setSelectedSport] = useState<string>(getActiveCompetitionDayInfo().sport);
   // 3 Disciplinas Oficiales del Festival Deportivo Costa de Oro 2026
   const officialSports: OfficialSportConfig[] = [
     {

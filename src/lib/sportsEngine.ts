@@ -73,17 +73,23 @@ export function calculateStandings(
       match.notes?.toLowerCase().includes('no presentación');
 
     if (isAwayAbsent) {
-      home.played += 1;
+      // El ausente queda estrictamente en 0 absoluto (0 PJ, 0 PTS).
+      // El equipo presente recibe 1 punto asignado por la no presentación del rival (sin sumar PJ ficticio en cancha).
+      home.points += 1;
+      home.form.push('W');
     } else if (isHomeAbsent) {
-      away.played += 1;
+      // El ausente queda estrictamente en 0 absoluto (0 PJ, 0 PTS).
+      // El equipo presente recibe 1 punto asignado por la no presentación del rival (sin sumar PJ ficticio en cancha).
+      away.points += 1;
+      away.form.push('W');
     } else {
       home.played += 1;
       away.played += 1;
     }
 
     // Goles / Puntos acumulados: se computa el tanteo registrado (0-0 si es W.O. sin goles)
-    const effectiveHomeScore = match.homeScore;
-    const effectiveAwayScore = match.awayScore;
+    const effectiveHomeScore = isAwayAbsent || isHomeAbsent ? 0 : match.homeScore;
+    const effectiveAwayScore = isAwayAbsent || isHomeAbsent ? 0 : match.awayScore;
 
     home.pointsFor += effectiveHomeScore;
     home.pointsAgainst += effectiveAwayScore;
@@ -91,22 +97,12 @@ export function calculateStandings(
     away.pointsAgainst += effectiveHomeScore;
 
     if (sport === 'futbol') {
-      // Formato Oficial FEDEFUTBOL / LINAFA / Liga Menor Costa Rica:
-      // Victoria (en cancha o por W.O. incomparecencia) = 3 Puntos
-      // Empate = 1 Punto
-      // Derrota / No presentación = 0 Puntos
-      const winPoints = 3;
+      // Formato Oficial Festival Deportivo Costa de Oro:
+      // Victoria = 2 Puntos | Empate = 1 Punto | Derrota = 0 Puntos
+      const winPoints = 2;
 
-      if (isAwayAbsent) {
-        // Visitante no se presentó: queda estrictamente en 0 en todo y se asignan 3 puntos al equipo rival presente
-        home.won += 1;
-        home.points += winPoints;
-        home.form.push('W');
-      } else if (isHomeAbsent) {
-        // Local no se presentó: queda estrictamente en 0 en todo y se asignan 3 puntos al equipo rival presente
-        away.won += 1;
-        away.points += winPoints;
-        away.form.push('W');
+      if (isAwayAbsent || isHomeAbsent) {
+        // La asignación de puntos por ausencia ya se computó arriba (1 pt al presente, 0 al ausente)
       } else if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += winPoints;
@@ -270,3 +266,31 @@ export function calculateStandings(
     position: index + 1,
   }));
 }
+
+/**
+ * Determina la disciplina y categoría activa por defecto según el día de competición oficial en Costa Rica
+ */
+export function getActiveCompetitionDayInfo(): {
+  sport: SportType;
+  categoryId: string;
+  dayName: string;
+} {
+  // Día de la semana (0 = Domingo, 1 = Lunes, 2 = Martes, 3 = Miércoles, 4 = Jueves, 5 = Viernes, 6 = Sábado)
+  const day = new Date().getDay();
+
+  switch (day) {
+    case 1: // Lunes: Fútbol Femenino Abierto
+      return { sport: 'futbol', categoryId: 'cat-fem-futbol', dayName: 'Lunes' };
+    case 2: // Martes: Fútbol Masculino Categoría C
+      return { sport: 'futbol', categoryId: 'cat-c-futbol', dayName: 'Martes' };
+    case 3: // Miércoles: Fútbol Masculino Categoría D
+      return { sport: 'futbol', categoryId: 'cat-d-futbol', dayName: 'Miércoles' };
+    case 4: // Jueves: Voleibol Femenino Categoría C
+      return { sport: 'voleibol', categoryId: 'cat-c-voleibol', dayName: 'Jueves' };
+    case 5: // Viernes: Baloncesto Masculino Categoría C
+      return { sport: 'baloncesto', categoryId: 'cat-c-baloncesto', dayName: 'Viernes' };
+    default: // Fin de semana o fuera de horario: Martes (Categoría C activa)
+      return { sport: 'futbol', categoryId: 'cat-c-futbol', dayName: 'Martes' };
+  }
+}
+

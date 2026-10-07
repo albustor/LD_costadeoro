@@ -514,6 +514,21 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
   3. En baloncesto FIBA: Se garantizó que la incomparecencia adjudique 0 puntos al ausente (en lugar del 1 punto por derrota deportiva en cancha).
 - **Estado**: ✅ Implementado, auditado con `npm run build` y en producción.
 
+## ADR-037: Calibración Definitiva al Baremo Oficial del Festival Deportivo (2 Pts Victoria, 1 Pt Empate, 1 Pt por Incomparecencia)
+- **Fecha**: 2026-10-07
+- **Contexto**: El usuario validó formalmente con la coordinación del festival deportivo el modelo de puntuación formativo/escolar:
+  1. Victoria en fútbol: **2 puntos** (en lugar de 3).
+  2. Empate: **1 punto**.
+  3. Derrota deportiva: **0 puntos**.
+  4. Ausencia / No presentación:
+     - El equipo ausente (Monseñor Vittorino) no suma partidos jugados ni goles: **0 absoluto** (0 PJ, 0 PG, 0 PE, 0 PP, 0 GF, 0 GC, 0 GD, 0 PTS).
+     - El equipo presente (La Paz Tempisque): al no disputarse el encuentro en cancha, no suma un partido jugado ficticio (`home.played += 0`), pero se le asigna **1 punto reglamentario** por la incomparecencia del rival, acumulando **2 puntos totales** (1 del empate en cancha + 1 asignado) y **2 PJ** en cancha.
+     - La Paz Cabo Velas: acumula **3 puntos** (1 victoria de 2 pts + 1 empate de 1 pt) con **2 PJ**.
+     - CRIA: acumula **2 puntos** (2 empates de 1 pt) con **2 PJ**.
+- **Decisión**:
+  1. En `sportsEngine.ts`: Se fijó `winPoints = 2` en fútbol. Para `isAwayAbsent` / `isHomeAbsent`, se asigna 1 punto al equipo presente sin computar `played += 1` en cancha, manteniendo intacto el 0 absoluto para el ausente.
+- **Estado**: ✅ Implementado, auditado con `npm run build` (0 errores) y en producción.
+
 ---
 
 ## 6. Protocolo Obligatorio para Iniciar o Retomar Procesos
