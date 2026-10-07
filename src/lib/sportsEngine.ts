@@ -75,16 +75,17 @@ export function calculateStandings(
       match.notes?.toLowerCase().includes('w.o.') ||
       match.notes?.toLowerCase().includes('no presentación');
 
-    // Goles / Puntos reglamentarios: si un equipo no se presentó y el marcador está en empate/0-0, se asegura 2-0 oficial a favor del presente
+    // Goles / Puntos reglamentarios: si un equipo no se presentó y el marcador está en empate/0-0, se asegura 3-0 oficial (FEDEFUTBOL/Liga Menor) a favor del presente
+    const defaultWoScore = sport === 'futbol' ? 3 : sport === 'voleibol' ? 2 : 2;
     const effectiveHomeScore =
       isAwayAbsent && match.homeScore === match.awayScore
-        ? Math.max(match.homeScore, 2)
+        ? Math.max(match.homeScore, defaultWoScore)
         : isHomeAbsent
         ? 0
         : match.homeScore;
     const effectiveAwayScore =
       isHomeAbsent && match.homeScore === match.awayScore
-        ? Math.max(match.awayScore, 2)
+        ? Math.max(match.awayScore, defaultWoScore)
         : isAwayAbsent
         ? 0
         : match.awayScore;
@@ -95,11 +96,14 @@ export function calculateStandings(
     away.pointsAgainst += effectiveHomeScore;
 
     if (sport === 'futbol') {
-      // Victoria regular: 3 pts. Victoria por no presentación (W.O. / Forfeit): 2 pts según reglamento MEP
-      const winPoints = isWalkover ? 2 : 3;
+      // Formato Oficial FEDEFUTBOL / LINAFA / Liga Menor Costa Rica:
+      // Victoria (en cancha o por W.O. incomparecencia) = 3 Puntos
+      // Empate = 1 Punto
+      // Derrota / No presentación = 0 Puntos
+      const winPoints = 3;
 
       if (isAwayAbsent) {
-        // Visitante no se presentó: queda estrictamente en 0 puntos y se asignan 2 puntos al equipo contrario
+        // Visitante no se presentó: queda estrictamente en 0 puntos y se asignan 3 puntos al equipo contrario
         home.won += 1;
         home.points += winPoints;
         home.form.push('W');
@@ -107,7 +111,7 @@ export function calculateStandings(
         away.points += 0;
         away.form.push('L');
       } else if (isHomeAbsent) {
-        // Local no se presentó: queda estrictamente en 0 puntos y se asignan 2 puntos al equipo contrario
+        // Local no se presentó: queda estrictamente en 0 puntos y se asignan 3 puntos al equipo contrario
         away.won += 1;
         away.points += winPoints;
         away.form.push('W');
@@ -236,26 +240,38 @@ export function calculateStandings(
     return st;
   });
 
-  // Sort standings with official tie-breakers
+  // Sort standings with official tie-breakers (FEDEFUTBOL / LINAFA / Liga Menor Costa Rica)
   standingsList.sort((a, b) => {
-    // 1. Points
+    // 1. Mayor Puntaje Oficial (PTS)
     if (b.points !== a.points) return b.points - a.points;
 
-    // 2. Volleyball: Sets Differential
+    // 2. Voleibol: Mayor Diferencia de Sets (DS)
     if (sport === 'voleibol' && a.setsDiff !== undefined && b.setsDiff !== undefined) {
       if (b.setsDiff !== a.setsDiff) return b.setsDiff - a.setsDiff;
     }
 
-    // 3. Goal / Point Differential
+    // 3. Mayor Gol / Punto Diferencia (GD / DG)
     if (b.diff !== a.diff) return b.diff - a.diff;
 
-    // 4. Points / Goals For (Most scored)
+    // 4. Mayor Cantidad de Goles / Puntos a Favor (GF / PF)
     if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
 
-    // 5. Least points / goals against
+    // 5. Enfrentamiento particular / Serie directa entre equipos empatados
+    const headToHead = categoryMatches.find(
+      (m) =>
+        (m.homeTeamId === a.teamId && m.awayTeamId === b.teamId) ||
+        (m.homeTeamId === b.teamId && m.awayTeamId === a.teamId)
+    );
+    if (headToHead) {
+      const aScore = headToHead.homeTeamId === a.teamId ? headToHead.homeScore : headToHead.awayScore;
+      const bScore = headToHead.homeTeamId === b.teamId ? headToHead.homeScore : headToHead.awayScore;
+      if (aScore !== bScore) return bScore - aScore;
+    }
+
+    // 6. Menor cantidad de goles / puntos recibidos (GC / PC)
     if (a.pointsAgainst !== b.pointsAgainst) return a.pointsAgainst - b.pointsAgainst;
 
-    // 6. Alphabetical
+    // 7. Orden alfabético
     return a.school.shortName.localeCompare(b.school.shortName);
   });
 

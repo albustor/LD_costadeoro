@@ -385,6 +385,20 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
   3. **Plantillas Dinámicas Duales**:
      - *Reporte Diario (Comité de Soporte · 7:00 AM)*: Incorpora delta diario (`+X hoy · 🟢 En vivo`), alcance digital y el Top 5 de secciones de mayor interés.
      - *Reporte Semanal Ejecutivo (Don Alejandro · Viernes 5:30 PM)*: Formato de lectura rápida de 30 segundos con líderes de disciplinas, 3 KPIs clave y sección líder con ranking de interés familiar.
+### ADR-035: Formato Oficial de Puntuación FEDEFUTBOL / LINAFA (3 Puntos por Victoria, 3–0 en W.O.)
+- **Fecha**: 2026-10-06
+- **Contexto**: Siguiendo el reglamento oficial avalado de fútbol en Costa Rica y ligas menores (FEDEFUTBOL / LINAFA / UNAFUT), se requería actualizar la asignación de puntos y el tratamiento reglamentario de incomparecencias (W.O.):
+  1. Victoria en cancha o por incomparecencia: **3 puntos**.
+  2. Empate: **1 punto**.
+  3. Derrota deportiva: **0 puntos**.
+  4. Incomparecencia (W.O.): El equipo no presentado recibe **estrictamente 0 puntos** y 0 goles a favor. El equipo presente se adjudica la victoria oficial por marcador administrativo de **3–0** (3 goles a favor, 0 en contra) y suma los **3 puntos**.
+  5. Criterios de desempate jerárquicos: Puntos (PTS) ➔ Gol Diferencia (GD = GF - GC) ➔ Goles a Favor (GF) ➔ Enfrentamiento Directo (Head-to-head) ➔ Menor Cantidad de Goles en Contra (GC) ➔ Sorteo / Orden Alfabético.
+- **Decisión**:
+  1. En `sportsEngine.ts`: Se ajustó `winPoints = 3` para fútbol (masculino y femenino), marcador por defecto W.O. `defaultWoScore = 3` (3–0), blindaje estricto de 0 puntos para el ausente y resolución de desempate por enfrentamiento directo.
+  2. En `QuickMatchScorer.tsx`: Mensajes de W.O. actualizados a "3–0 reglamentario (3 pts)", botones táctiles ajustados al estándar y re-cálculo instantáneo.
+  3. En `initialData.ts` y `tournament_db.json`: Homologación del partido `j1-fut-fem-02` (La Paz Tempisque vs Instituto Vittorino W.O.) a marcador 3–0 y 3 puntos para la delegación presente.
+- **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y en producción.
+
 ### ADR-034: Ampliación de Escala DUA hasta el 300% (Reflow Universal) y Tarjetas 100% Verticales
 - **Fecha**: 2026-10-06
 - **Contexto**: Se requería ampliar el rango de accesibilidad visual hasta el 300% de escala tipográfica (Modo Máxima Lectura) para personas con baja visión y lectura bajo el sol en canchas, además de transformar la mesa de control a un diseño 100% vertical centrado que garantice visibilidad total de los nombres de equipos y steppers de marcador gigantes.

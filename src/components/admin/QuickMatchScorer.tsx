@@ -135,13 +135,16 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
     });
   };
 
-  // ⚠️ APLICACIÓN DE LA REGLA DE AUSENCIA / W.O. (2 PTS VICTORIA AL PRESENTE / 0 PTS AUSENTE)
+  // ⚠️ APLICACIÓN DE LA REGLA DE AUSENCIA / W.O. (FEDEFUTBOL / LIGA MENOR COSTA RICA)
   const handleWalkoverApply = (matchId: string, type: 'none' | 'home_forfeit' | 'away_forfeit') => {
     const targetMatch = matches.find((m) => m.id === matchId);
     if (!targetMatch) return;
 
     const homeSchool = SCHOOLS_DATA.find((s) => s.id === targetMatch.homeTeamId)?.shortName || 'Local';
     const awaySchool = SCHOOLS_DATA.find((s) => s.id === targetMatch.awayTeamId)?.shortName || 'Visitante';
+    const isSoccer = targetMatch.sport === 'futbol';
+    const winPts = isSoccer ? 3 : 2;
+    const defaultGoals = isSoccer ? 3 : 0;
 
     setMatchForms((prev) => {
       const current = prev[matchId] || { homeScore: 0, awayScore: 0, status: 'scheduled', walkover: 'none' };
@@ -153,11 +156,11 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
             ...current,
             walkover: 'home_forfeit',
             homeScore: 0,
-            awayScore: 0,
+            awayScore: isSoccer ? defaultGoals : 0,
             homeSetsWon: 0,
             awaySetsWon: targetMatch.sport === 'voleibol' ? 2 : 0,
             status: 'completed',
-            notes: `⚠️ No se presentó ${homeSchool} (W.O.). Se asignan 2 puntos reglamentarios de victoria a ${awaySchool} y 0 a ${homeSchool}.`,
+            notes: `⚠️ No se presentó ${homeSchool} (W.O.). Victoria oficial (${winPts} pts${isSoccer ? ' · 3-0' : ''}) a ${awaySchool} y 0 pts a ${homeSchool}.`,
           },
         };
       } else if (type === 'away_forfeit') {
@@ -166,12 +169,12 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
           [matchId]: {
             ...current,
             walkover: 'away_forfeit',
-            homeScore: 0,
+            homeScore: isSoccer ? defaultGoals : 0,
             awayScore: 0,
             homeSetsWon: targetMatch.sport === 'voleibol' ? 2 : 0,
             awaySetsWon: 0,
             status: 'completed',
-            notes: `⚠️ No se presentó ${awaySchool} (W.O.). Se asignan 2 puntos reglamentarios de victoria a ${homeSchool} y 0 a ${awaySchool}.`,
+            notes: `⚠️ No se presentó ${awaySchool} (W.O.). Victoria oficial (${winPts} pts${isSoccer ? ' · 3-0' : ''}) a ${homeSchool} y 0 pts a ${awaySchool}.`,
           },
         };
       } else {
@@ -316,11 +319,11 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
           </div>
         </div>
 
-        {/* ℹ️ RESUMEN DE LA REGLA DE NO PRESENTACIÓN */}
+        {/* ℹ️ RESUMEN DE LA REGLA OFICIAL DE PUNTOS Y NO PRESENTACIÓN */}
         <div className="mt-3.5 p-3 rounded-2xl bg-amber-950/50 border border-amber-500/30 text-amber-200 text-xs flex items-center gap-2">
           <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
           <span>
-            <strong>Regla de Ausencia (W.O.):</strong> Si un equipo no se presenta, toque <em>«No se presentó»</em>. Quedará en <strong>0 puntos</strong> y el equipo presente ganará <strong>2 puntos reglamentarios</strong>.
+            <strong>Formato Oficial Fútbol (Costa Rica / Liga Menor):</strong> Victoria = <strong>3 pts</strong> (incluye W.O. 3-0 administrativo) • Empate = <strong>1 pt</strong> • Derrota / Ausente = <strong>0 pts</strong>.
           </span>
         </div>
       </div>
