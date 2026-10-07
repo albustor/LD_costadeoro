@@ -37,18 +37,6 @@ import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 
-const VALID_PINS: Record<string, string | 'all'> = {
-  '2026': 'all',
-  'PAZ2026': 'all',
-  'COSTA2026': 'all',
-  '8421': 'all',
-  '1001': 'la-paz-cabo-velas',
-  '1002': 'la-paz-tempisque',
-  '2001': 'cria',
-  '3001': 'journey-school',
-  '4001': 'vittorino',
-  '5001': 'educarte',
-};
 
 // Días oficiales registrados para los festivales
 const OFFICIAL_FESTIVAL_RANGES = [
@@ -77,16 +65,11 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
   const posts = Array.isArray(familyPosts) ? familyPosts : [];
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
-  
-  // PIN de Seguridad y Verificación Familiar
-  const [isPinVerified, setIsPinVerified] = useState<boolean>(false);
-  const [enteredPin, setEnteredPin] = useState<string>('');
-  const [pinError, setPinError] = useState<string | null>(null);
 
   // Términos y Normas de Convivencia Familiar (Se guarda 1 sola vez por celular)
-  const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(true);
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
-  const [termsCheckbox, setTermsCheckbox] = useState<boolean>(false);
+  const [termsCheckbox, setTermsCheckbox] = useState<boolean>(true);
 
   // Estado de fecha activa para multimedia
   const [isFestivalActiveDay, setIsFestivalActiveDay] = useState<boolean>(true);
@@ -109,43 +92,14 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [commentText, setCommentText] = useState<string>('');
   const [commentAuthor, setCommentAuthor] = useState<string>('');
 
-  // Cargar estado inicial desde localStorage (PIN y Términos aceptados una sola vez)
+  // Cargar estado inicial desde localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // 1. Verificar si ya aceptó las normas en este dispositivo
       const acceptedTerms = localStorage.getItem('costa_de_oro_terms_accepted');
       if (acceptedTerms === 'true') {
         setIsTermsAccepted(true);
         setTermsCheckbox(true);
       }
-
-      // 2. Verificar PIN en localStorage
-      const storedPin = localStorage.getItem('costa_de_oro_family_pin_verified');
-      if (storedPin === 'true') {
-        setIsPinVerified(true);
-      }
-
-      // 3. Comprobar parámetros de URL para acceso por QR (?pin=COSTA2026 o ?pass=2026)
-      const params = new URLSearchParams(window.location.search);
-      const urlPin = params.get('pass') || params.get('pin') || params.get('code');
-      const customPin = localStorage.getItem('costa_de_oro_event_pin');
-      
-      if (urlPin) {
-        const cleanUrlPin = urlPin.toUpperCase();
-        if (
-          VALID_PINS[cleanUrlPin] || 
-          TOURNAMENT_CONFIG.security.validPins.includes(cleanUrlPin) ||
-          (customPin && customPin.toUpperCase() === cleanUrlPin)
-        ) {
-          setIsPinVerified(true);
-          localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
-          const matchedSchool = VALID_PINS[cleanUrlPin];
-          if (matchedSchool && matchedSchool !== 'all') {
-            setSelectedSchoolId(matchedSchool);
-          }
-        }
-      }
-
       setIsFestivalActiveDay(true);
     }
   }, []);
@@ -157,32 +111,6 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     setShowTermsModal(false);
     if (typeof window !== 'undefined') {
       localStorage.setItem('costa_de_oro_terms_accepted', 'true');
-    }
-  };
-
-  // Validar PIN ingresado a nivel de todo el evento
-  const handleValidatePin = (pinToTest: string) => {
-    const cleanPin = pinToTest.trim().toUpperCase() || 'COSTA2026';
-    const customEventPin = typeof window !== 'undefined' ? localStorage.getItem('costa_de_oro_event_pin') : null;
-
-    if (
-      VALID_PINS[cleanPin] ||
-      TOURNAMENT_CONFIG.security.validPins.includes(cleanPin) ||
-      (customEventPin && customEventPin.toUpperCase() === cleanPin)
-    ) {
-      setIsPinVerified(true);
-      setPinError(null);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('costa_de_oro_family_pin_verified', 'true');
-      }
-      const matchedSchool = VALID_PINS[cleanPin];
-      if (matchedSchool && matchedSchool !== 'all') {
-        setSelectedSchoolId(matchedSchool);
-      }
-      return true;
-    } else {
-      setPinError('PIN no reconocido. Ingresa el PIN oficial del evento (ej: COSTA2026 o 2026).');
-      return false;
     }
   };
 
@@ -234,23 +162,6 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   // Enviar mensaje / foto con persistencia garantizada
   const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // 1. Exigir aceptación de términos si es primera vez
-    if (!isTermsAccepted && !termsCheckbox) {
-      setShowTermsModal(true);
-      return;
-    }
-
-    if (!isTermsAccepted && termsCheckbox) {
-      handleAcceptTerms();
-    }
-
-    // 2. Validar PIN
-    if (!isPinVerified) {
-      const pinToValidate = enteredPin.trim() || 'COSTA2026';
-      const isValid = handleValidatePin(pinToValidate);
-      if (!isValid) return;
-    }
 
     if (!message.trim() && !mediaPreview && !selectedFile) return;
 
@@ -407,9 +318,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* ✍️ FORMULARIO DE APOYO CON SEGURIDAD PIN, NORMAS Y BLOQUEO MULTIMEDIA */}
+      {/* ✍️ FORMULARIO DE APOYO CON ALTA FUERZA VISUAL EN 3 PASOS Y NORMAS DE CONVIVENCIA */}
       {!featuredOnly && (
-        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-4">
+        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-5">
+          {/* Encabezado del Muro */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
               <div className="flex items-center gap-2">
@@ -419,56 +331,46 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 </h3>
               </div>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Envía porras y comentarios a los deportistas. Protegido con normas de respeto y PIN del festival.
+                Envía tus porras, felicitaciones y fotos a los atletas de todas las delegaciones.
               </p>
             </div>
 
-            {/* Badges de Estado */}
-            <div className="flex items-center gap-2 flex-wrap">
-              {isPinVerified ? (
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <span>PIN de Familias Activo</span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsPinVerified(false);
-                      if (typeof window !== 'undefined') {
-                        localStorage.removeItem('costa_de_oro_family_pin_verified');
-                      }
-                    }}
-                    className="text-[11px] text-slate-400 hover:text-slate-600 underline cursor-pointer"
-                  >
-                    Cambiar PIN
-                  </button>
-                </div>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-xs font-bold border border-amber-200">
-                  <Lock className="w-3.5 h-3.5 text-amber-700" />
-                  <span>Requiere PIN del Evento</span>
-                </span>
-              )}
+            <button
+              type="button"
+              onClick={() => setShowTermsModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer self-start sm:self-auto"
+            >
+              <FileText className="w-3.5 h-3.5 text-slate-500" />
+              <span>Normas de Publicación</span>
+            </button>
+          </div>
 
-              <button
-                type="button"
-                onClick={() => setShowTermsModal(true)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
-              >
-                <FileText className="w-3.5 h-3.5 text-slate-500" />
-                <span>Normas de Publicación</span>
-              </button>
+          {/* 🤝 AVISO OFICIAL SOBRE EL CORRECTO Y RESPETUOSO USO DEL ESPACIO */}
+          <div className="p-3.5 bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-emerald-500/10 rounded-2xl border border-amber-300/70 flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="text-xs space-y-0.5">
+              <span className="font-extrabold text-slate-900 block">
+                Espacio Comunitario de Convivencia y Respeto Deportivo
+              </span>
+              <p className="text-slate-600 leading-relaxed font-medium">
+                Este mural es un punto de encuentro familiar abierto a toda la comunidad. Comparte tus porras, fotos y mensajes de apoyo siempre bajo principios de respeto mutuo, juego limpio y compañerismo hacia todos los estudiantes e instituciones.
+              </p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmitPost} className="space-y-4">
-            {/* Paso 1: Selecciona a tu Colegio */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-2">
-                1. Selecciona a tu Colegio / Equipo:
-              </label>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+          <form onSubmit={handleSubmitPost} className="space-y-5">
+            {/* 🏷️ PASO 1: SELECCIONA TU COLEGIO / EQUIPO */}
+            <div className="space-y-2.5">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shadow-2xs">
+                  1
+                </span>
+                <label className="text-xs sm:text-sm font-extrabold text-slate-900">
+                  Selecciona a tu Colegio / Delegación:
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-2.5">
                 {schools.map((school) => {
                   const isSelected = selectedSchoolId === school.id;
                   return (
@@ -476,14 +378,14 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       key={school.id}
                       type="button"
                       onClick={() => setSelectedSchoolId(school.id)}
-                      className={`p-2 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                      className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 cursor-pointer ${
                         isSelected
-                          ? 'bg-amber-50/80 border-amber-400 ring-2 ring-amber-400/30 shadow-xs'
-                          : 'bg-white hover:bg-slate-50 border-slate-200'
+                          ? 'bg-amber-500/15 border-2 border-amber-500 ring-2 ring-amber-400/30 text-slate-950 font-black shadow-xs scale-[1.02]'
+                          : 'bg-slate-50/70 hover:bg-white border-slate-200 text-slate-700 font-bold'
                       }`}
                     >
-                      <SchoolEmblem schoolId={school.id} size="sm" />
-                      <span className="text-[10.5px] font-bold text-slate-800 truncate w-full">
+                      <SchoolEmblem schoolId={school.id} size="md" />
+                      <span className="text-[11px] leading-tight truncate w-full">
                         {school.shortName}
                       </span>
                     </button>
@@ -492,11 +394,21 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               </div>
             </div>
 
-            {/* Paso 2: Mensaje y Porras */}
-            <div className="space-y-3">
-              <label className="block text-xs font-bold text-slate-700">
-                2. Mensaje de Aliento y Felicitaciones:
-              </label>
+            {/* 💬 PASO 2: MENSAJE Y PORRAS RÁPIDAS */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shadow-2xs">
+                    2
+                  </span>
+                  <label className="text-xs sm:text-sm font-extrabold text-slate-900">
+                    Escribe tu Mensaje de Aliento o Porra:
+                  </label>
+                </div>
+                <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
+                  Toca una porra o escribe tu propio texto
+                </span>
+              </div>
 
               {/* Botones de Porras Rápidas */}
               <div className="flex flex-wrap gap-1.5">
@@ -512,7 +424,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     key={chip}
                     type="button"
                     onClick={() => setMessage((prev) => (prev ? `${prev} ${chip}` : chip))}
-                    className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-all"
+                    className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-amber-100/70 hover:text-amber-900 text-slate-700 text-xs font-semibold transition-all cursor-pointer border border-slate-200/70"
                   >
                     {chip}
                   </button>
@@ -525,132 +437,16 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 placeholder="Escribe tu mensaje de apoyo para los chicos y familias..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-300/80 rounded-2xl text-xs sm:text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:bg-white transition-all shadow-inner"
               />
 
-              {/* Vista previa de foto o video si está habilitado y seleccionado */}
-              {mediaPreview && (
-                <div className="relative rounded-2xl overflow-hidden aspect-video max-h-48 bg-slate-900 border border-slate-200">
-                  {mediaType === 'photo' ? (
-                    <img
-                      src={mediaPreview}
-                      alt="Vista previa"
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <video src={mediaPreview} className="w-full h-full object-contain" controls />
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMediaPreview(null);
-                      setMediaType('none');
-                    }}
-                    className="absolute top-2 right-2 px-2.5 py-1 rounded-lg bg-black/70 text-white text-xs font-bold hover:bg-black"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              )}
-
-              {/* Fila de PIN de Seguridad si no está verificado */}
-              {!isPinVerified && (
-                <div className="p-3.5 bg-amber-50/80 border border-amber-300/80 rounded-2xl space-y-2">
-                  <div className="flex items-center gap-2 text-amber-950 text-xs font-bold">
-                    <KeyRound className="w-4 h-4 text-amber-700" />
-                    <span>PIN Oficial del Evento Requerido para Publicar:</span>
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <input
-                      type="text"
-                      placeholder="PIN del Evento (Ej: COSTA2026 o 2026)"
-                      value={enteredPin}
-                      onChange={(e) => {
-                        setEnteredPin(e.target.value);
-                        setPinError(null);
-                      }}
-                      className="px-3.5 py-2 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 w-64 focus:outline-hidden focus:ring-2 focus:ring-amber-500 uppercase"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleValidatePin(enteredPin)}
-                      className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer transition shadow-xs"
-                    >
-                      Validar PIN
-                    </button>
-                    <span className="text-[11px] text-amber-900/80 font-medium">
-                      (Válido para todas las fechas)
-                    </span>
-                  </div>
-                  {pinError && (
-                    <p className="text-[11px] text-red-600 font-semibold flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>{pinError}</span>
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Casilla de Normas de Responsabilidad (Si es primera vez en el celular) */}
-              {!isTermsAccepted && (
-                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1">
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={termsCheckbox}
-                      onChange={(e) => setTermsCheckbox(e.target.checked)}
-                      className="mt-0.5 w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500"
-                    />
-                    <span className="text-slate-700">
-                      He leído y acepto las{' '}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setShowTermsModal(true);
-                        }}
-                        className="text-amber-700 font-bold underline hover:text-amber-800"
-                      >
-                        Normas de Publicación, Convivencia y Responsabilidad Familiar
-                      </button>{' '}
-                      de la Liga Costa de Oro. *(Se aplica una sola vez por celular)*
-                    </span>
-                  </label>
-                </div>
-              )}
-
-              {/* Barra de Acciones y Botón de Publicar */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
-                {/* Datos del Autor */}
+              {/* Adjuntar Foto / Video */}
+              <div className="flex items-center justify-between gap-2 pt-0.5">
                 <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    placeholder="Tu Nombre (Ej: Familia Soto)"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs flex-1 sm:w-44 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
-                  />
-                  <select
-                    value={authorRelation}
-                    onChange={(e) => setAuthorRelation(e.target.value as FamilyPost['authorRelation'])}
-                    className="px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-hidden"
-                  >
-                    <option value="Mamá">Mamá</option>
-                    <option value="Papá">Papá</option>
-                    <option value="Abuelo/a">Abuelo/a</option>
-                    <option value="Hermano/a">Hermano/a</option>
-                    <option value="Familia">Familia</option>
-                    <option value="Compañero/a">Compañero/a</option>
-                    <option value="Entrenador">Entrenador</option>
-                  </select>
-                </div>
-
-                {/* Botón de Adjuntar Foto/Video (con bloqueo inteligente) + Publicar */}
-                <div className="flex items-center gap-2 justify-end">
                   {isFestivalActiveDay ? (
-                    <label className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all">
+                    <label className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all border border-slate-200 shadow-2xs">
                       <Camera className="w-4 h-4 text-amber-600" />
-                      <span>Foto / Video</span>
+                      <span>{selectedFile ? 'Cambiar Foto / Video' : 'Adjuntar Foto / Video (Opcional)'}</span>
                       <input
                         type="file"
                         accept="image/*,video/*"
@@ -660,24 +456,97 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     </label>
                   ) : (
                     <div
-                      title="La carga de fotos y videos se activa exclusivamente en días oficiales de festival en cancha."
+                      title="La carga de fotos y videos se activa exclusivamente en días oficiales de festival."
                       className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed border border-slate-200"
                     >
                       <Lock className="w-3.5 h-3.5 text-slate-400" />
-                      <span className="hidden sm:inline">Fotos/Videos en Pausa</span>
-                      <span className="sm:hidden">Multimedia 🔒</span>
+                      <span>Multimedia en Pausa</span>
                     </div>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={isPosting || (!message.trim() && !mediaPreview) || (!isTermsAccepted && !termsCheckbox)}
-                    className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-black shadow-sm transition-all cursor-pointer"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>{isPosting ? 'Publicando...' : 'Publicar'}</span>
-                  </button>
+                  {selectedFile && (
+                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 truncate max-w-[200px]">
+                      ✓ {selectedFile.name}
+                    </span>
+                  )}
                 </div>
+
+                {mediaPreview && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMediaPreview(null);
+                      setSelectedFile(null);
+                      setMediaType('none');
+                    }}
+                    className="text-xs text-rose-600 hover:text-rose-800 font-bold underline cursor-pointer"
+                  >
+                    Quitar archivo
+                  </button>
+                )}
+              </div>
+
+              {/* Vista previa de foto o video */}
+              {mediaPreview && (
+                <div className="relative rounded-2xl overflow-hidden aspect-video max-h-48 bg-slate-900 border border-slate-200 shadow-xs">
+                  {mediaType === 'photo' ? (
+                    <img
+                      src={mediaPreview}
+                      alt="Vista previa"
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <video src={mediaPreview} className="w-full h-full object-contain" controls />
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* 👤 PASO 3: IDENTIFÍCATE Y PUBLICA */}
+            <div className="space-y-3 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shadow-2xs">
+                  3
+                </span>
+                <label className="text-xs sm:text-sm font-extrabold text-slate-900">
+                  Identifícate y Publica en el Muro:
+                </label>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                {/* Datos del Autor */}
+                <div className="flex items-center gap-2 flex-1 max-w-md">
+                  <input
+                    type="text"
+                    placeholder="Tu Nombre o Familia (Ej: Familia Soto)"
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs flex-1 focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-medium"
+                  />
+                  <select
+                    value={authorRelation}
+                    onChange={(e) => setAuthorRelation(e.target.value as FamilyPost['authorRelation'])}
+                    className="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-hidden font-semibold cursor-pointer"
+                  >
+                    <option value="Familia">Familia</option>
+                    <option value="Mamá">Mamá</option>
+                    <option value="Papá">Papá</option>
+                    <option value="Abuelo/a">Abuelo/a</option>
+                    <option value="Hermano/a">Hermano/a</option>
+                    <option value="Compañero/a">Compañero/a</option>
+                    <option value="Entrenador">Entrenador</option>
+                  </select>
+                </div>
+
+                {/* Botón de Publicar Destacado */}
+                <button
+                  type="submit"
+                  disabled={isPosting || (!message.trim() && !mediaPreview)}
+                  className="px-7 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs sm:text-sm font-black shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>{isPosting ? 'Publicando en el Muro...' : 'Publicar Mensaje Ahora'}</span>
+                </button>
               </div>
             </div>
           </form>
