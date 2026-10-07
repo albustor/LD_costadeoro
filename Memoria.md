@@ -385,6 +385,22 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
   3. **Plantillas Dinámicas Duales**:
      - *Reporte Diario (Comité de Soporte · 7:00 AM)*: Incorpora delta diario (`+X hoy · 🟢 En vivo`), alcance digital y el Top 5 de secciones de mayor interés.
      - *Reporte Semanal Ejecutivo (Don Alejandro · Viernes 5:30 PM)*: Formato de lectura rápida de 30 segundos con líderes de disciplinas, 3 KPIs clave y sección líder con ranking de interés familiar.
+### ADR-036: Puntuación Total por Ausencia a Marcador 0–0, Nomenclatura Sagrada y Supresión de Tecnicismos
+- **Fecha**: 2026-10-06
+- **Contexto**: Se requería homologar el tratamiento visual y estadístico de las ausencias, simplificar el lenguaje hacia las familias eliminando jerga técnica y consagrar la nomenclatura oficial institucional:
+  1. **Ausencia a Marcador 0–0**: Cuando una institución no se presenta, el marcador queda fijado exactamente en **0–0** (sin inventar goles artificiales a favor ni en contra). El equipo que sí se presentó recibe la **totalidad de los puntos de victoria** (3 puntos en fútbol). La delegación ausente queda con **0 absoluto en todas sus estadísticas** (0 PJ, 0 PG, 0 PE, 0 PP, 0 GF, 0 GC, 0 GD, 0 PTS).
+  2. **Nomenclatura Oficial Sagrada**: **Centro Educativo Católico Monseñor Vittorino Girardi Stellin** (nombre corto: **Monseñor Vittorino**; se suprime totalmente el vocablo "Instituto").
+  3. **Supresión de Tecnicismos**: Prohibido usar expresiones como *"Finalizado por incomparecencia"* o *"W.O."* en interfaces y reportes. Se estandarizó la fórmula clara y resumida: `«[Equipo] no se presentó · Puntos asignados a [Equipo rival]»`.
+  4. **Apertura del Muro Familiar (`/mural`)**: Se eliminó la solicitud de PIN para remover toda fricción de participación y se implementó una interfaz de 3 pasos visuales con un mensaje institucional de convivencia, respeto mutuo y juego limpio.
+- **Decisión**:
+  1. En `tournament_db.json` e `initialData.ts`: Partidos `j1-fut-fem-02` (Monseñor Vittorino vs La Paz Tempisque) y `j1-fut-c-03` (Monseñor Vittorino vs CRIA) registrados con marcador 0–0, adjudicando 3 puntos al equipo presente y 0 en todo a Monseñor Vittorino.
+  2. En `sportsEngine.ts`: Cálculo ajustado para preservar los goles reales del tanteador (0–0) garantizando los 3 puntos íntegros de victoria al equipo presente y 0 PJ / 0 PTS al ausente.
+  3. En `FamilyCheerWall.tsx`: Muro familiar libre de PIN con 3 pasos numerados e instructivo pedagógico de convivencia.
+  4. En `tournamentConfig.ts` y `AGENTS.md`: Homologación de Monseñor Vittorino y directrices operativas.
+- **Estado**: ✅ Implementado, auditado con `npm run build` (0 errores) y en producción.
+
+---
+
 ### ADR-035: Formato Oficial de Puntuación FEDEFUTBOL / LINAFA (3 Puntos por Victoria, 3–0 en W.O.)
 - **Fecha**: 2026-10-06
 - **Contexto**: Siguiendo el reglamento oficial avalado de fútbol en Costa Rica y ligas menores (FEDEFUTBOL / LINAFA / UNAFUT), se requería actualizar la asignación de puntos y el tratamiento reglamentario de incomparecencias (W.O.):

@@ -184,3 +184,26 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
    - Renderizar de forma preferente `homeSchool.shortName` y `awaySchool.shortName` con clases `line-clamp-2`, `leading-snug` y `break-words`.
 3. **Ortografía de Días de Competencia:**
    - Los días de la semana en español (*Lunes, Martes, Miércoles, Jueves, Viernes*) son invariables en plural y ya concluyen en 's'. PROHIBIDO concatenar sufijos `'s'` al formatear etiquetas de días.
+
+---
+
+## 13. Regla Oficial de Ausencia / No Presentación de Equipos
+
+1. **Marcador Fijo 0–0 y Cero Goles Artificiales:**
+   - Cuando un equipo no se presenta a un encuentro, el marcador visual y estadístico queda estrictamente en **0 – 0** (no se agregan goles artificiales ni a favor ni en contra de ninguna de las delegaciones).
+2. **Totalidad de Puntos al Equipo Presente:**
+   - A pesar de que el marcador sea 0–0, el equipo que sí se presentó recibe la **totalidad de puntos por victoria** (**3 puntos** en fútbol federado / LINAFA).
+3. **Cero Absoluto para el Equipo Ausente:**
+   - La delegación no presentada no acumula partidos jugados ni goles, quedando en **0 absoluto en todas sus estadísticas** (0 PJ, 0 PG, 0 PE, 0 PP, 0 GF, 0 GC, 0 GD, 0 PTS).
+
+---
+
+## 14. Redacción Amigable, Cero Tecnicismos y Muro Familiar Abierto
+
+1. **Supresión Total de Jerga Técnica:**
+   - Queda estrictamente PROHIBIDO usar expresiones como *"Finalizado por incomparecencia"* o *"W.O."* en tarjetas de partido, actas públicas o reportes.
+   - Usar redacción clara y resumida: `«[Equipo] no se presentó · Puntos asignados a [Equipo rival]»`.
+2. **Nomenclatura Institucional Exacta:**
+   - Nombre oficial: **Centro Educativo Católico Monseñor Vittorino Girardi Stellin** (Nombre corto: **Monseñor Vittorino**; prohibido usar "Instituto").
+3. **Apertura del Muro Familiar (`/mural`):**
+   - El muro opera **sin PIN** para eliminar fricciones y motivar a las familias a publicar libremente en 3 pasos visuales claros (1. Selecciona delegación, 2. Escribe porra, 3. Firma y publica).
