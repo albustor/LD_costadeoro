@@ -386,7 +386,25 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
      - *Reporte Diario (Comité de Soporte · 7:00 AM)*: Incorpora delta diario (`+X hoy · 🟢 En vivo`), alcance digital y el Top 5 de secciones de mayor interés.
      - *Reporte Semanal Ejecutivo (Don Alejandro · Viernes 5:30 PM)*: Formato de lectura rápida de 30 segundos con líderes de disciplinas, 3 KPIs clave y sección líder con ranking de interés familiar.
   4. **Controles Administrativos en `/admin` (Pestaña 8)**: Inclusión de botones independientes para prueba y auditoría directa de ambos reportes (`Reporte Diario (Soporte)` y `Reporte Semanal (Don Alejandro)`).
-- **Estado**: ✅ Implementado, auditado y verificado con `npm run build` (0 errores).
+### ADR-033: Optimización Mobile-First y Calce Visual en Celulares para Mesa de Control (/mesa-control)
+- **Fecha**: 2026-10-06
+- **Contexto**: En pantallas móviles de 360px a 390px, los nombres institucionales de 36 caracteres desbordaban las tarjetas de partido en `/mesa-control`, empujando los controles de tanteo `[-] [0] [+]` fuera de la pantalla y fragmentando la botonera de W.O. en 3 líneas desordenadas.
+- **Decisión**:
+  1. En `tournamentConfig.ts`: Homologación de `shortName` conciso para las dos sedes anfitrionas (`"La Paz Cabo Velas"` y `"La Paz Tempisque"`).
+  2. En `QuickMatchScorer.tsx`: Rediseño elástico simétrico de cada tarjeta con `min-w-0 flex-1`, steppers táctiles compactos (`w-8 h-8`) y cuadrícula uniforme de 3 columnas para la condición (`[✓ Jugado]`, `[⚠️ Aus. Local]`, `[⚠️ Aus. Visita]`).
+  3. Despacho reactivo de `matches_updated` con la lista completa de partidos (`currentAll`) para actualizar tablas y estadísticas en 0ms.
+- **Estado**: ✅ Implementado, auditado y en producción.
+
+---
+
+### ADR-032: Consola Base de Mesa de Control Sin Clave para Don Alejandro (/mesa-control)
+- **Fecha**: 2026-10-06
+- **Contexto**: Se requería una vía de acceso directo y minimalista para que Don Alejandro (Coordinador de Eventos) ingrese marcadores diarios o declare incomparecencias (W.O.) sin solicitar credenciales ni contraseñas intermedias en cancha.
+- **Decisión**:
+  1. Se creó la ruta pública `/mesa-control` conectada con el componente `QuickMatchScorer.tsx`.
+  2. Aplicación estricta de la regla W.O.: 0 puntos al ausente y 2 puntos reglamentarios al equipo presente.
+  3. Sincronización atómica con `tournament_db.json` vía `POST /api/matches`.
+- **Estado**: ✅ Implementado, auditado y en producción.
 
 ---
 
