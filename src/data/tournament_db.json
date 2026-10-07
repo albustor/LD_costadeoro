@@ -382,7 +382,7 @@
     }
   ],
   "analytics": {
-    "totalViews": 249,
+    "totalViews": 257,
     "uniqueSessions": [
       "usr_s_oct1_01",
       "usr_s_oct1_02",
@@ -448,20 +448,22 @@
       "usr_s_oct2_14",
       "test_user_sim_01",
       "test_user_sim_02",
-      "test_user_sim_03"
+      "test_user_sim_03",
+      "v_1791390286402_okcxzog"
     ],
     "viewsByRoute": {
-      "/": 98,
-      "/calendario": 55,
+      "/": 100,
+      "/calendario": 56,
       "/colegios": 39,
-      "/deportes": 26,
-      "/mural": 19,
-      "/registro-nomina": 12
+      "/deportes": 27,
+      "/mural": 21,
+      "/registro-nomina": 12,
+      "/marcadores": 2
     },
     "deviceDistribution": {
       "mobile_ios": 133,
       "mobile_android": 85,
-      "desktop": 23,
+      "desktop": 31,
       "tablet": 8
     },
     "dailyHistory": {
@@ -544,13 +546,67 @@
           "test_user_sim_02",
           "test_user_sim_03"
         ]
+      },
+      "2026-10-07": {
+        "views": 8,
+        "uniqueSessions": [
+          "v_1791390286402_okcxzog"
+        ]
       }
     },
     "hourlyToday": {
-      "08:00": 3
+      "10:00": 8
     },
-    "todayDateStr": "2026-10-05",
+    "todayDateStr": "2026-10-07",
     "recentEvents": [
+      {
+        "path": "/",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:26:57.896Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/marcadores",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:26:50.595Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/mural",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:26:36.196Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/marcadores",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:25:33.055Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/mural",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:25:22.347Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/calendario",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:25:13.956Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/deportes",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:24:49.220Z",
+        "referrer": "Directo / Acceso PWA"
+      },
+      {
+        "path": "/",
+        "device": "desktop",
+        "timestamp": "2026-10-07T16:24:47.510Z",
+        "referrer": "Directo / Acceso PWA"
+      },
       {
         "path": "/mural",
         "device": "desktop",
@@ -601,5 +657,5 @@
       }
     ]
   },
-  "updatedAt": "2026-10-07T03:52:56.005Z"
+  "updatedAt": "2026-10-07T16:26:57.896Z"
 }
