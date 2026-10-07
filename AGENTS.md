@@ -50,7 +50,7 @@ El asistente opera bajo el rol de **Jim (Ingeniero Full-Stack y Auditor Técnico
 1. **Terminología Institucional Sagrada**:
    - El evento se denomina oficialmente **«Festival Deportivo»** (no simplemente torneo o copa).
    - Las sedes de La Paz deben nombrarse con su nomenclatura completa: **La Paz Community School Cabo Velas** y **La Paz Community School Tempisque**.
-   - Los otros 4 colegios participantes son: **CRIA (Costa Rica International Academy)**, **The Journey School**, **Instituto Vittorino** y **Educarte**.
+   - Los otros 4 colegios participantes son: **CRIA (Costa Rica International Academy)**, **The Journey School**, **Centro Educativo Católico Monseñor Vittorino Girardi Stellin** (nombre corto: **Monseñor Vittorino**) y **Educarte**.
 
 2. **Identidad Visual del Header**:
    - Cabecera sólida en color negro (`bg-black text-white`) con filete superior en gradiente dorado ultra-fino (`from-transparent via-amber-400 to-transparent`).

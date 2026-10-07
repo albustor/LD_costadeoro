@@ -38,7 +38,7 @@ export const INITIAL_MATCHES: Match[] = [
     status: 'completed',
     currentPeriod: 'Finalizado (W.O.)',
     walkover: 'away_forfeit',
-    notes: 'Victoria oficial por incomparecencia de Vittorino (3 pts adjudicados a La Paz Tempisque, marcador 0-0)',
+    notes: 'Victoria oficial por incomparecencia de Monseñor Vittorino (3 pts adjudicados a La Paz Tempisque, marcador 0-0)',
     updatedAt: '2026-10-05T16:00:00Z',
   },
   {

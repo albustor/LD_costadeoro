@@ -84,7 +84,7 @@ export const SCHOOLS_DATA: School[] = [
   {
     id: 'vittorino',
     name: 'Centro Educativo Católico Monseñor Vittorino Girardi Stellin',
-    shortName: 'Instituto Vittorino',
+    shortName: 'Monseñor Vittorino',
     acronym: 'VIT',
     logo: '🛡️',
     primaryColor: '#0284c7', // Cyan Blue
