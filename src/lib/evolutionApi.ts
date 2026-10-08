@@ -73,6 +73,22 @@ export function formatRouteFriendlyName(path: string): string {
 }
 
 /**
+ * Convierte un identificador geográfico del Edge CDN en un nombre legible
+ */
+export function formatLocationFriendlyName(loc: string): string {
+  if (!loc) return 'Ubicación no identificada';
+  return loc
+    .replace(/\s*\(G\),\s*CR/i, ', Guanacaste (CR)')
+    .replace(/\s*\(SJ\),\s*CR/i, ', San José (CR)')
+    .replace(/\s*\(A\),\s*CR/i, ', Alajuela (CR)')
+    .replace(/\s*\(H\),\s*CR/i, ', Heredia (CR)')
+    .replace(/\s*\(C\),\s*CR/i, ', Cartago (CR)')
+    .replace(/\s*\(P\),\s*CR/i, ', Puntarenas (CR)')
+    .replace(/\s*\(L\),\s*CR/i, ', Limón (CR)')
+    .replace(/,\s*CR/i, ' (Costa Rica)');
+}
+
+/**
  * Genera el texto del reporte ejecutivo diario (7:00 AM) para el Comité de Soporte
  */
 export function generateDailyReportMessage(data: DailyReportData): string {
@@ -152,11 +168,6 @@ Estimado Alberto (Comité de Soporte · Curiol Studio Admin), te compartimos el 
   // Telemetría Real Sintetizada (Regla 15)
   if (trafficStats) {
     const todayDelta = trafficStats.todayViews !== undefined ? ` (+${trafficStats.todayViews} hoy · 🟢 En vivo)` : '';
-    const geoEntries = Object.entries(trafficStats.geoDistribution || {}).sort((a, b) => b[1] - a[1]);
-    const geoStr = geoEntries.length > 0
-      ? geoEntries.slice(0, 3).map(([loc, hits]) => `${loc} (${hits})`).join(' · ')
-      : 'Sin registros por cabecera IP aún';
-
     const topRoutesStr = (trafficStats.topRoutes || [])
       .slice(0, 3)
       .map((r) => `${r.label || formatRouteFriendlyName(r.path)} (${r.views})`)
@@ -166,9 +177,22 @@ Estimado Alberto (Comité de Soporte · Curiol Studio Admin), te compartimos el 
 📈 *TELEMETRÍA Y ALCANCE DIGITAL:*
 • 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas${todayDelta}
 • 👥 Audiencia única: ${trafficStats.uniqueVisitors || 0} personas (83% desde celulares)
-• 📍 Ubicaciones (Edge CDN): ${geoStr}
 • 🧭 Secciones líderes: ${topRoutesStr}
 • 📸 Muro Familiar: ${totalPosts} publicaciones y ${totalApplause} reacciones`;
+
+    // 🗺️ Sección destacada de Ubicación de Conexiones
+    const geoEntries = Object.entries(trafficStats.geoDistribution || {}).sort((a, b) => b[1] - a[1]);
+    message += `\n\n━━━━━━━━━━━━━━━━━━━━\n🗺️ *UBICACIÓN DE DONDE SE CONECTAN (Edge CDN):*`;
+    if (geoEntries.length > 0) {
+      const totalGeoHits = geoEntries.reduce((sum, [, hits]) => sum + hits, 0) || 1;
+      geoEntries.slice(0, 5).forEach(([location, hits]) => {
+        const friendly = formatLocationFriendlyName(location);
+        const percent = Math.round((hits / totalGeoHits) * 100);
+        message += `\n• 📍 ${friendly}: ${hits} conexiones (${percent}%)`;
+      });
+    } else {
+      message += `\n• Sin mediciones registradas por cabeceras Edge IP aún.`;
+    }
   }
 
   message += `\n\n🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio

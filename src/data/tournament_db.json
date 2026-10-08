@@ -861,7 +861,8 @@
       }
     ],
     "geoDistribution": {
-      "Santa Cruz (G), CR": 1
+      "Santa Cruz (G), CR": 6,
+      "Tempate (G), CR": 1
     }
   },
   "updatedAt": "2026-10-08T15:16:52.771Z"
