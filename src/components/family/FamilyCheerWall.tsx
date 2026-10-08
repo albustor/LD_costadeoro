@@ -752,15 +752,20 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       <SchoolEmblem schoolId={school.id} size="sm" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline justify-between gap-2">
-                          <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug">
-                            {post.authorName}
+                          <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug flex items-center gap-1.5 flex-wrap">
+                            <span>{post.authorName}</span>
+                            {post.authorName.includes('Comité') && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider shadow-2xs">
+                                Oficial
+                              </span>
+                            )}
                           </h4>
                           <span className="text-[10px] text-slate-400 font-mono shrink-0">
                             {post.createdAt}
                           </span>
                         </div>
                         <p className="text-[11px] text-amber-800 font-bold leading-tight mt-0.5">
-                          {post.authorRelation} · {school.name}
+                          {post.authorName.includes('Comité') ? 'Comité Organizador' : post.authorRelation} · {school.name}
                         </p>
                       </div>
                     </div>
@@ -770,7 +775,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       {post.isFeatured && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-200 shadow-2xs">
                           <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                          <span>Destacado</span>
+                          <span>{post.authorName.includes('Comité') ? 'Bienvenida Oficial' : 'Destacado'}</span>
                         </span>
                       )}
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9.5px] font-bold border border-emerald-200 shadow-2xs">
