@@ -516,7 +516,7 @@ export async function getAnalyticsSummaryFromDb() {
         let todayVisitors = 0;
         const totalUniqueSessionsSet = new Set<string>();
 
-        dailySnaps.forEach((doc) => {
+        dailySnaps.forEach((doc: any) => {
           if (doc.id.startsWith('daily_')) {
             const d = doc.data();
             const dateStr = d.date || doc.id.replace('daily_', '');
