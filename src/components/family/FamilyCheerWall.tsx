@@ -29,13 +29,15 @@ import {
   ShieldAlert,
   ChevronDown,
   UploadCloud,
-  Filter
+  Filter,
+  Download
 } from 'lucide-react';
 import { uploadMediaToBunny } from '@/lib/bunnyMediaService';
-import { processImageForUpload } from '@/lib/imageProcessor';
+import { processImageForUpload, downloadImageAsJpg } from '@/lib/imageProcessor';
 import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
+import { tournamentStorage } from '@/lib/storageAdapter';
 
 
 // Días oficiales registrados para los festivales
@@ -69,6 +71,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   // Términos y Normas de Convivencia Familiar (Se guarda 1 sola vez por celular)
   const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(true);
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
+  const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
   const [termsCheckbox, setTermsCheckbox] = useState<boolean>(true);
 
   // Estado de fecha activa para multimedia
@@ -92,7 +95,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [commentText, setCommentText] = useState<string>('');
   const [commentAuthor, setCommentAuthor] = useState<string>('');
 
-  // Cargar estado inicial desde localStorage
+  // Cargar estado inicial desde localStorage y Live Polling cada 20 segundos
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const acceptedTerms = localStorage.getItem('costa_de_oro_terms_accepted');
@@ -101,8 +104,40 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         setTermsCheckbox(true);
       }
       setIsFestivalActiveDay(true);
+
+      // Sincronización periódica silenciosa en segundo plano
+      const interval = setInterval(() => {
+        tournamentStorage.fetchRemoteFamilyPosts();
+      }, 20000);
+
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible') {
+          tournamentStorage.fetchRemoteFamilyPosts();
+        }
+      };
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      return () => {
+        clearInterval(interval);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
     }
   }, []);
+
+  // Compartir mensaje de apoyo en WhatsApp / Redes Sociales
+  const handleSharePost = (post: FamilyPost, schoolName: string) => {
+    const shareText = `🏆 *Liga Costa de Oro 2026*\n"${post.message}"\n— Por: ${post.authorName} (${schoolName})\n\n¡Sube tus saludos, fotos y videos cortos al Muro Oficial aquí!: ${typeof window !== 'undefined' ? window.location.origin : ''}/mural`;
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      navigator.share({
+        title: `Saludo Costa de Oro - ${schoolName}`,
+        text: shareText,
+        url: `${window.location.origin}/mural`,
+      }).catch(() => {});
+    } else if (typeof window !== 'undefined') {
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+    }
+  };
 
   // Guardar aceptación formal de términos en este dispositivo
   const handleAcceptTerms = () => {
@@ -190,7 +225,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         // Registrar en la Galería General si es fotografía
         if (!isVid && finalMediaUrl) {
           addPhoto({
-            title: `Porra & Momento Familiar: ${authorName || 'Comunidad'}`,
+            title: `Saludo & Momento Familiar: ${authorName || 'Comunidad'}`,
             categoryId: selectedSport,
             schoolId: selectedSchoolId,
             jornada: 1,
@@ -263,10 +298,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
           <div className="flex items-center justify-between">
             <h3 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
               <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-              <span>Momentos y Porras Destacadas del Torneo</span>
+              <span>Momentos y mensajes destacados del torneo</span>
             </h3>
             <span className="text-xs text-amber-700 font-bold bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-              Votado por las Familias
+              Votado por las familias
             </span>
           </div>
 
@@ -290,13 +325,24 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   </div>
 
                   {post.mediaUrl && (
-                    <div className="rounded-xl overflow-hidden aspect-video bg-slate-100 border border-slate-100">
+                    <div className="relative group rounded-xl overflow-hidden aspect-video bg-slate-100 border border-slate-100">
                       {post.mediaType === 'photo' ? (
-                        <img
-                          src={post.mediaUrl}
-                          alt="Foto del evento"
-                          className="w-full h-full object-cover"
-                        />
+                        <>
+                          <img
+                            src={post.mediaUrl}
+                            alt="Foto del evento"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`)}
+                            className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-black text-white text-[10.5px] font-bold flex items-center gap-1 backdrop-blur-xs transition-all cursor-pointer shadow-xs active:scale-95"
+                            title="Descargar fotografía en formato JPG"
+                          >
+                            <Download className="w-3 h-3 text-amber-300" />
+                            <span>Descargar JPG</span>
+                          </button>
+                        </>
                       ) : (
                         <video src={post.mediaUrl} className="w-full h-full object-cover" controls />
                       )}
@@ -327,22 +373,33 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-                  Muro de Familias y Mensajes de Apoyo
+                  Muro de familias y mensajes de apoyo
                 </h3>
               </div>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Envía tus porras, felicitaciones y fotos a los atletas de todas las delegaciones.
+                Envía tus saludos, felicitaciones, fotos y videos cortos a los atletas de todas las delegaciones.
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setShowTermsModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer self-start sm:self-auto"
-            >
-              <FileText className="w-3.5 h-3.5 text-slate-500" />
-              <span>Normas de Publicación</span>
-            </button>
+            <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+              <button
+                type="button"
+                onClick={() => setShowGuideModal(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-colors cursor-pointer border border-amber-200 shadow-2xs"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                <span>¿Cómo publicar?</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5 text-slate-500" />
+                <span>Normas de publicación</span>
+              </button>
+            </div>
           </div>
 
           {/* 🤝 AVISO OFICIAL SOBRE EL CORRECTO Y RESPETUOSO USO DEL ESPACIO */}
@@ -350,10 +407,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="text-xs space-y-0.5">
               <span className="font-extrabold text-slate-900 block">
-                Espacio Comunitario de Convivencia y Respeto Deportivo
+                Espacio comunitario de convivencia y respeto deportivo
               </span>
               <p className="text-slate-600 leading-relaxed font-medium">
-                Este mural es un punto de encuentro familiar abierto a toda la comunidad. Comparte tus porras, fotos y mensajes de apoyo siempre bajo principios de respeto mutuo, juego limpio y compañerismo hacia todos los estudiantes e instituciones.
+                Este mural es un punto de encuentro familiar abierto a toda la comunidad. Comparte tus saludos, fotos, videos cortos y mensajes de apoyo siempre bajo principios de respeto mutuo, juego limpio y compañerismo hacia todos los estudiantes e instituciones.
               </p>
             </div>
           </div>
@@ -366,7 +423,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   1
                 </span>
                 <label className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  Selecciona a tu Colegio / Delegación:
+                  Selecciona a tu colegio o delegación:
                 </label>
               </div>
 
@@ -394,7 +451,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               </div>
             </div>
 
-            {/* 💬 PASO 2: MENSAJE Y PORRAS RÁPIDAS */}
+            {/* 💬 PASO 2: MENSAJE Y SALUDOS RÁPIDOS */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
@@ -402,15 +459,15 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     2
                   </span>
                   <label className="text-xs sm:text-sm font-extrabold text-slate-900">
-                    Escribe tu Mensaje de Aliento o Porra:
+                    Escribe tu mensaje de apoyo o saludo:
                   </label>
                 </div>
                 <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
-                  Toca una porra o escribe tu propio texto
+                  Toca un saludo o escribe tu propio texto
                 </span>
               </div>
 
-              {/* Botones de Porras Rápidas */}
+              {/* Botones de Saludos Rápidos */}
               <div className="flex flex-wrap gap-1.5">
                 {[
                   '¡Con todo equipo! 👏',
@@ -446,7 +503,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   {isFestivalActiveDay ? (
                     <label className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all border border-slate-200 shadow-2xs">
                       <Camera className="w-4 h-4 text-amber-600" />
-                      <span>{selectedFile ? 'Cambiar Foto / Video' : 'Adjuntar Foto / Video (Opcional)'}</span>
+                      <span>{selectedFile ? 'Cambiar foto o video' : 'Adjuntar foto o video (opcional)'}</span>
                       <input
                         type="file"
                         accept="image/*,video/*"
@@ -460,7 +517,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed border border-slate-200"
                     >
                       <Lock className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Multimedia en Pausa</span>
+                      <span>Multimedia en pausa</span>
                     </div>
                   )}
 
@@ -509,7 +566,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   3
                 </span>
                 <label className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  Identifícate y Publica en el Muro:
+                  Identifícate y publica en el muro:
                 </label>
               </div>
 
@@ -518,7 +575,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 <div className="flex items-center gap-2 flex-1 max-w-md">
                   <input
                     type="text"
-                    placeholder="Tu Nombre o Familia (Ej: Familia Soto)"
+                    placeholder="Tu nombre o familia (ej. Familia Soto)"
                     value={authorName}
                     onChange={(e) => setAuthorName(e.target.value)}
                     className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs flex-1 focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-medium"
@@ -545,7 +602,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   className="px-7 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs sm:text-sm font-black shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />
-                  <span>{isPosting ? 'Publicando en el Muro...' : 'Publicar Mensaje Ahora'}</span>
+                  <span>{isPosting ? 'Publicando en el muro...' : 'Publicar mensaje ahora'}</span>
                 </button>
               </div>
             </div>
@@ -553,7 +610,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* 💬 FEED DE PORRAS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
+      {/* 💬 FEED DE SALUDOS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
       {!featuredOnly && (
         <div className="space-y-4">
           {/* 🌟 BANNER DE CONFIRMACIÓN DE PUBLICACIÓN EXITOSA */}
@@ -637,7 +694,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             )}
           </div>
 
-          {/* Tarjetas de Porras o Estado Vacío */}
+          {/* Tarjetas de Mensajes o Estado Vacío */}
           {filteredPosts.length === 0 ? (
             <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 text-center space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
@@ -645,7 +702,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               </div>
               <div className="space-y-1">
                 <h4 className="font-extrabold text-sm sm:text-base text-slate-900">
-                  Aún no hay porras registradas para esta delegación
+                  Aún no hay mensajes de apoyo registrados para esta delegación
                 </h4>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto">
                   {selectedSchoolFilter !== 'all'
@@ -725,13 +782,24 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
                   {/* Foto o Video Adjunto */}
                   {post.mediaUrl && (
-                    <div className="rounded-2xl overflow-hidden aspect-video bg-slate-900 border border-slate-100">
+                    <div className="relative group rounded-2xl overflow-hidden aspect-video bg-slate-900 border border-slate-100">
                       {post.mediaType === 'photo' ? (
-                        <img
-                          src={post.mediaUrl}
-                          alt="Foto del partido"
-                          className="w-full h-full object-cover"
-                        />
+                        <>
+                          <img
+                            src={post.mediaUrl}
+                            alt="Foto del partido"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`)}
+                            className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-xs transition-all cursor-pointer shadow-sm active:scale-95"
+                            title="Descargar fotografía en formato JPG"
+                          >
+                            <Download className="w-3.5 h-3.5 text-amber-300" />
+                            <span>Descargar JPG</span>
+                          </button>
+                        </>
                       ) : (
                         <video src={post.mediaUrl} className="w-full h-full object-cover" controls />
                       )}
@@ -778,13 +846,25 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       </button>
                     </div>
 
-                    <button
-                      onClick={() => handleReaction(post.id, 'feature')}
-                      className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-200 transition-all cursor-pointer"
-                    >
-                      <Star className="w-3 h-3 fill-amber-500 text-amber-600" />
-                      <span>Votar Destacado ({post.featuredVotes})</span>
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => handleSharePost(post, school.shortName)}
+                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-200 transition-all cursor-pointer shadow-2xs active:scale-95"
+                        title="Compartir mensaje de apoyo en WhatsApp"
+                      >
+                        <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="hidden sm:inline">Compartir</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleReaction(post.id, 'feature')}
+                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-200 transition-all cursor-pointer"
+                      >
+                        <Star className="w-3 h-3 fill-amber-500 text-amber-600" />
+                        <span>Votar Destacado ({post.featuredVotes})</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Sección Desplegable de Comentarios (Siempre activa) */}
@@ -853,7 +933,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* 🪟 MODAL DE NORMAS DE PUBLICACIÓN Y RESPONSABILIDAD FAMILIAR */}
+      {/* 🪟 MODAL DE NORMAS DE CONVIVENCIA Y PUBLICACIÓN */}
       {showTermsModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-4 animate-fade-in max-h-[90vh] overflow-y-auto">
@@ -861,7 +941,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               <div className="flex items-center gap-2 text-slate-900">
                 <ShieldCheck className="w-6 h-6 text-amber-600" />
                 <h3 className="font-extrabold text-base sm:text-lg">
-                  Normas de Convivencia y Publicación
+                  Normas de convivencia y publicación
                 </h3>
               </div>
               <button
@@ -879,7 +959,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
             <div className="space-y-2.5 text-xs text-slate-700">
               <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl">
                 <h5 className="font-bold text-emerald-950 flex items-center gap-1.5 mb-1">
-                  <span>1. Espíritu Deportivo y Apoyo Positivo</span>
+                  <span>1. Espíritu deportivo y apoyo positivo</span>
                 </h5>
                 <p className="text-[11px] text-slate-600">
                   Las publicaciones deben celebrar el esfuerzo, compañerismo y respeto entre todas las 6 delegaciones escolares participantes.
@@ -888,7 +968,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
               <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-2xl">
                 <h5 className="font-bold text-amber-950 flex items-center gap-1.5 mb-1">
-                  <span>2. Protección de la Niñez y Privacidad</span>
+                  <span>2. Protección de la niñez y privacidad</span>
                 </h5>
                 <p className="text-[11px] text-slate-600">
                   Las fotos y videos deben ser estrictamente del ámbito deportivo en cancha. Queda prohibida cualquier imagen o dato que vulnere la intimidad de los estudiantes menores de edad.
@@ -897,7 +977,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
               <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-2xl">
                 <h5 className="font-bold text-rose-950 flex items-center gap-1.5 mb-1">
-                  <span>3. Cero Tolerancia a la Agresividad</span>
+                  <span>3. Cero tolerancia a la agresividad</span>
                 </h5>
                 <p className="text-[11px] text-slate-600">
                   Se prohíben descalificaciones, reclamos arbitrales ofensivos, lenguaje vulgar o agresiones entre barras. El comité organizador se reserva el derecho de retirar cualquier contenido inapropiado.
@@ -906,10 +986,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl">
                 <h5 className="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
-                  <span>4. Responsabilidad del Usuario</span>
+                  <span>4. Responsabilidad del usuario</span>
                 </h5>
                 <p className="text-[11px] text-slate-600">
-                  Cada usuario es responsable del contenido transmitido desde su dispositivo mediante el PIN de seguridad del festival.
+                  Cada familiar es responsable del contenido transmitido desde su dispositivo, manteniendo siempre el respeto, el compañerismo y la convivencia deportiva.
                 </p>
               </div>
             </div>
@@ -923,7 +1003,98 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 onClick={handleAcceptTerms}
                 className="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all cursor-pointer"
               >
-                Comprendo y Acepto las Normas
+                Comprendo y acepto las normas
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 📱 MODAL DE INFOGRAFÍA Y GUÍA PASO A PASO */}
+      {showGuideModal && (
+        <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-amber-500/10 text-amber-700">
+                  <Sparkles className="w-5 h-5 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 leading-tight">
+                    ¿Cómo publicar en el muro?
+                  </h3>
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    Guía rápida en 3 pasos sencillos
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowGuideModal(false)}
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {/* Paso 1 */}
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-start gap-3">
+                <span className="w-7 h-7 rounded-xl bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shrink-0 shadow-2xs">
+                  1
+                </span>
+                <div className="space-y-0.5">
+                  <h4 className="font-extrabold text-xs text-slate-900">
+                    Ingresa al mural de la comunidad
+                  </h4>
+                  <p className="text-[11px] text-slate-600 leading-snug">
+                    Escanea el código QR oficial en canchas o entra a <strong>costadeoro.curiol.studio/mural</strong> desde cualquier celular.
+                  </p>
+                </div>
+              </div>
+
+              {/* Paso 2 */}
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-start gap-3">
+                <span className="w-7 h-7 rounded-xl bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shrink-0 shadow-2xs">
+                  2
+                </span>
+                <div className="space-y-0.5">
+                  <h4 className="font-extrabold text-xs text-slate-900">
+                    Elige tu colegio y escribe tu saludo
+                  </h4>
+                  <p className="text-[11px] text-slate-600 leading-snug">
+                    Toca el escudo de la delegación de tu hijo/a y redacta tu mensaje de aliento (o usa los botones rápidos).
+                  </p>
+                </div>
+              </div>
+
+              {/* Paso 3 */}
+              <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-start gap-3">
+                <span className="w-7 h-7 rounded-xl bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shrink-0 shadow-2xs">
+                  3
+                </span>
+                <div className="space-y-0.5">
+                  <h4 className="font-extrabold text-xs text-slate-900">
+                    Adjunta tu foto o video corto y publica
+                  </h4>
+                  <p className="text-[11px] text-slate-600 leading-snug">
+                    Sube fotos de jugadas o videos cortos (10–30 seg), escribe tu nombre o parentesco y toca <strong>«Publicar mensaje ahora»</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Aviso de Convivencia */}
+            <div className="p-3 bg-emerald-50/80 rounded-2xl border border-emerald-200 text-emerald-950 text-[11px] font-medium leading-relaxed">
+              ✨ <strong>Sin contraseñas:</strong> El mural es un espacio abierto para todas las familias con moderación comunitaria y respeto deportivo.
+            </div>
+
+            <div className="pt-2 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowGuideModal(false)}
+                className="px-5 py-2.5 bg-slate-950 hover:bg-slate-800 text-amber-300 font-bold text-xs rounded-xl shadow-xs transition cursor-pointer"
+              >
+                Entendido, ¡quiero publicar!
               </button>
             </div>
           </div>

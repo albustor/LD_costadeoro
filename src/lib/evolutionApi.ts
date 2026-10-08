@@ -25,6 +25,8 @@ export interface DailyReportData {
     uniqueVisitors?: number;
     mobilePercent?: number;
     topRoutes?: RouteStatItem[];
+    geoDistribution?: Record<string, number>;
+    dailyHistory?: Array<{ date: string; views: number; visitors: number }>;
   };
   dateStr: string;
 }
@@ -49,6 +51,8 @@ export interface WeeklyReportData {
     uniqueVisitors?: number;
     mobilePercent?: number;
     topRoutes?: RouteStatItem[];
+    geoDistribution?: Record<string, number>;
+    dailyHistory?: Array<{ date: string; views: number; visitors: number }>;
   };
   dateStr: string;
 }
@@ -183,6 +187,28 @@ Estimado Alberto (Comité de Soporte · Curiol Studio Admin), te compartimos el 
 • 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas${todayDelta}
 • 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas registradas
 • 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)`;
+
+    // Historial diario comparativo
+    if (trafficStats.dailyHistory && trafficStats.dailyHistory.length > 0) {
+      message += `\n\n📊 *HISTORIAL DÍA A DÍA ACUMULADO:*`;
+      trafficStats.dailyHistory.forEach((day) => {
+        // Formato DD/MM
+        const parts = day.date.split('-');
+        const shortDate = parts.length === 3 ? `${parts[2]}/${parts[1]}` : day.date;
+        message += `\n• *${shortDate}*: ${day.views} vistas · ${day.visitors} usuarios únicos`;
+      });
+    }
+
+    // Geolocalización real medida por cabeceras Edge CDN (Regla 15: Cero datos proyectados)
+    const geoEntries = Object.entries(trafficStats.geoDistribution || {}).sort((a, b) => b[1] - a[1]);
+    if (geoEntries.length > 0) {
+      message += `\n\n🗺️ *GEOLOCALIZACIÓN REAL (EDGE CDN):*`;
+      geoEntries.slice(0, 6).forEach(([location, hits]) => {
+        message += `\n• 📍 ${location}: ${hits} conexiones`;
+      });
+    } else {
+      message += `\n\n🗺️ *GEOLOCALIZACIÓN:* Sin mediciones registradas por cabeceras Edge IP aún.`;
+    }
 
     if (trafficStats.topRoutes && trafficStats.topRoutes.length > 0) {
       message += `\n\n🧭 *SECCIONES DE MAYOR INTERÉS:*`;
@@ -400,6 +426,27 @@ Le compartimos el balance esencial de la semana y el impacto digital de la plata
 • 📱 *Navegación móvil:* ${trafficStats?.mobilePercent || 0}% desde smartphones
 • 🔝 *Sección líder:* ${topSectionStr}`;
 
+  // Historial diario comparativo de la semana
+  if (trafficStats?.dailyHistory && trafficStats.dailyHistory.length > 0) {
+    message += `\n\n📊 *HISTORIAL DÍA A DÍA ACUMULADO:*`;
+    trafficStats.dailyHistory.forEach((day) => {
+      const parts = day.date.split('-');
+      const shortDate = parts.length === 3 ? `${parts[2]}/${parts[1]}` : day.date;
+      message += `\n• *${shortDate}*: ${day.views} vistas · ${day.visitors} usuarios únicos`;
+    });
+  }
+
+  // Geolocalización real medida por cabeceras Edge CDN (Regla 15)
+  const geoEntries = Object.entries(trafficStats?.geoDistribution || {}).sort((a, b) => b[1] - a[1]);
+  if (geoEntries.length > 0) {
+    message += `\n\n🗺️ *GEOLOCALIZACIÓN REAL (EDGE CDN):*`;
+    geoEntries.slice(0, 6).forEach(([location, hits]) => {
+      message += `\n• 📍 ${location}: ${hits} conexiones`;
+    });
+  } else {
+    message += `\n\n🗺️ *GEOLOCALIZACIÓN:* Sin mediciones registradas por cabeceras Edge IP aún.`;
+  }
+
   if (trafficStats?.topRoutes && trafficStats.topRoutes.length > 0) {
     message += `\n\n🧭 *INTERÉS DE LAS FAMILIAS POR SECCIÓN:*`;
     const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
@@ -413,9 +460,7 @@ Le compartimos el balance esencial de la semana y el impacto digital de la plata
 📸 *COMUNIDAD Y FAMILIAS:*
 • ${totalPosts} publicaciones y ${totalApplause} reacciones de apoyo a los atletas.
 
-🔍 *Panel de control en tiempo real:*
-https://costadeoro.curiol.studio/admin (Pestaña 8 · Clave: 2026ControlAdmin)
-
+🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio
 _Curiol Studio · Fotografía, Tecnología, Legado_`;
 
   return message;

@@ -7,7 +7,7 @@ import { PhotoItem } from '@/types/tournament';
 import { Camera, Download, Eye, UploadCloud, X, CheckCircle2, AlertCircle, Sparkles, Image as ImageIcon } from 'lucide-react';
 import { PinchZoomPhotoModal } from './PinchZoomPhotoModal';
 import { uploadPhotoToBunny, validateMediaFile } from '@/lib/bunnyMediaService';
-import { processAndCompressPhoto } from '@/lib/imageProcessor';
+import { processImageForUpload, downloadImageAsJpg } from '@/lib/imageProcessor';
 
 export function PhotoGalleryGrid() {
   const { photos, addPhoto, schools } = useTournament();
@@ -74,14 +74,11 @@ export function PhotoGalleryGrid() {
     setUploadError(null);
 
     try {
-      // 1. Optimizar imagen en el cliente mediante Canvas Web API
+      // 1. Optimizar imagen en el cliente a formato WebP ultraligero
       let fileToUpload = selectedFile;
       try {
-        const compressed = await processAndCompressPhoto(selectedFile, 2048, 0.88);
-        // Convertir DataURL comprimido a Blob para subida rápida
-        const resBlob = await fetch(compressed.previewUrl);
-        const blob = await resBlob.blob();
-        fileToUpload = new File([blob], selectedFile.name.replace(/\.[^/.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+        const processed = await processImageForUpload(selectedFile, { maxWidth: 1600, quality: 0.82 });
+        fileToUpload = processed.file;
       } catch (compressErr) {
         console.warn('Compresión local omitida, subiendo original:', compressErr);
       }
@@ -225,16 +222,18 @@ export function PhotoGalleryGrid() {
                 </span>
               </div>
 
-              <a
-                href={photo.imageUrl}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition-all"
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const cleanTitle = photo.title.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                  downloadImageAsJpg(photo.imageUrl, `costa_de_oro_${cleanTitle}`);
+                }}
+                className="p-1.5 rounded-lg bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition-all cursor-pointer"
                 title={t('gallery.download')}
               >
                 <Download className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
         ))}

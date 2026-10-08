@@ -540,6 +540,52 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
   3. Se preservó toda la base de datos `tournament_db.json`, el motor de cálculo `sportsEngine.ts` y las reglas de incomparecencia y baremo oficial.
 - **Estado**: ✅ Implementado, auditado con `npm run build` (19/19 rutas, 0 errores) y en producción local.
 
+## ADR-039: Principio de Veracidad Absoluta de Datos y Telemetría Real por Cabeceras de Red Edge
+- **Fecha**: 2026-10-07
+- **Contexto**: El usuario ordenó explícitamente erradicar cualquier dato proyectado, estimado o interpretado. Toda estadística, telemetría o reporte debe sustentarse al 100% en mediciones reales y verificables.
+- **Decisión**:
+  1. En `AGENTS.md`: Se formalizó la Regla 15 con prohibición absoluta de estimaciones o proyecciones simuladas.
+  2. En `serverDb.ts` y `analytics/route.ts`: Se integró la captura estricta de cabeceras Edge CDN (`x-vercel-ip-city`, `x-vercel-ip-country-region`, `x-vercel-ip-country`, `cf-ipcity`).
+  3. En `tournament_db.json`: Se habilitó el almacenamiento atómico del objeto `geoDistribution` acumulando exclusivamente hits reales por ciudad y país.
+  4. En `evolutionApi.ts`: El generador de reportes diarios solo expone ubicaciones que cuenten con registros reales en la base de datos; si un parámetro no tiene mediciones, se reporta explícitamente como "Sin mediciones registradas aún".
+  5. Política de destinatarios: El reporte diario (7:00 a.m.) se despacha exclusivamente a Alberto (`+506 6060-2617`). Don Alejandro (`+506 8844-5486`) recibe únicamente el reporte semanal consolidado los viernes (5:30 p.m.) con balance general y recomendaciones, evitando saturar su canal de coordinación.
+- **Estado**: ✅ Implementado y en producción.
+
+## ADR-040: Pipeline Multimedia WebP/JPG y Depuración Integral del Muro Comunitario
+- **Fecha**: 2026-10-08
+- **Contexto**: Se requería auditar la inactividad del Muro Familiar, suprimir cualquier bloqueo residual de PIN, acelerar la subida de fotografías desde celulares mediante compresión WebP y garantizar descargas de fotos familiares en formato universal JPG de alta fidelidad.
+- **Decisión**:
+  1. En `imageProcessor.ts`: Se ajustó la compresión cliente Canvas a formato WebP (`image/webp` a 1600px y calidad 0.82), reduciendo fotos de 12 MB a ~160 KB. Se implementó `downloadImageAsJpg` con Canvas offscreen que convierte cualquier WebP/Blob a archivo `.jpg` real.
+  2. En `/api/media/upload`: Se optimizó el guardado y nombrado de imágenes `.webp` y archivos multimedia locales.
+  3. En `FamilyCheerWall.tsx`: Se añadió el botón flotante de «Descargar JPG» sobre cada fotografía del muro y de momentos destacados. Se eliminó cualquier mención de PIN en el modal de normas de convivencia y se garantizó la subida multimedia permanente y abierta.
+- **Estado**: ✅ Implementado, verificado con `npm run build` (19/19 rutas, 0 errores) y en producción local.
+
+## ADR-041: Moderación del Muro, Cartel QR Imprimible para Canchas y Semillero de Mensajes de Bienvenida
+- **Fecha**: 2026-10-08
+- **Contexto**: Para erradicar el efecto de muro vacío y facilitar la difusión en las sedes de Cabo Velas y Tempisque, se implementó el semillero de mensajes de bienvenida oficiales por delegación, la curaduría administrativa y el generador de carteles QR listos para imprimir.
+- **Decisión**:
+  1. En `initialData.ts` y `tournament_db.json`: Se sembraron 7 publicaciones oficiales de bienvenida y porras iniciales para las 6 delegaciones y el comité organizador.
+  2. En `serverDb.ts`, `api/posts/[id]/route.ts` y `TournamentContext.tsx`: Se habilitó el endpoint `DELETE` y `PATCH` para moderación de posts y alternancia de estado destacado (`isFeatured`).
+  3. En `AdminMuralModeration.tsx`: Se creó la pestaña «10. Muro Familiar» en `/admin` con buscador, filtro por colegio, destacado con 1 clic y eliminación segura.
+  4. En `AdminQrPosterModal.tsx`: Se implementó el generador de cartel QR de alta definición listo para imprimir (`window.print()`) con los 3 pasos familiares y los escudos institucionales.
+  5. En `PhotoGalleryGrid.tsx` y `FamilyCheerWall.tsx`: Se unificó la compresión cliente WebP (1600px, 0.82), las descargas en JPG, la difusión en WhatsApp (`navigator.share`) y el refresco en vivo silencioso cada 20 segundos.
+- **Estado**: ✅ Implementado, auditado con `npm run build` (19/19 rutas, 0 errores) y en producción local en puerto `3014`.
+
+## ADR-042: Homologación Terminológica (Saludos y Videos Cortos) y Kit WhatsApp para Don Alejandro
+- **Fecha**: 2026-10-08
+- **Contexto**: El usuario ordenó:
+  1. Erradicar la palabra "porras" en todo el sistema, sustituyéndola por "saludos", "mensajes de apoyo" y "mensajes de aliento".
+  2. Incorporar de forma destacada y explícita la publicación de **videos cortos** (junto a fotografías y mensajes) en todas las comunicaciones del mural.
+  3. Crear un **Kit de Difusión por WhatsApp** específico para **Don Alejandro** en `/admin` para compartir en grupos de entrenadores, directores y padres de familia, con plantilla formateada, copiado en un clic, descarga de código QR en imagen (PNG) y apertura directa de WhatsApp.
+- **Decisión**:
+  1. En `FamilyCheerWall.tsx`: Sustitución completa de "porras" por "saludos", "mensajes de apoyo" y adición explícita de "videos cortos" en descripciones, normas de convivencia y textos de compartir (`handleSharePost`).
+  2. En `AdminMuralModeration.tsx` y `AdminControlPanel.tsx`: Ajuste terminológico en contadores, cabeceras y panel de configuración de PIN.
+  3. En `AdminQrPosterModal.tsx`:
+     - Pestaña 1: **Cartel QR Canchas** con título *"¡Muro de Saludos, Fotos y Videos Cortos!"*, código QR vectorial de alta definición, botón de descarga de imagen PNG y botón de impresión directa.
+     - Pestaña 2: **Kit WhatsApp para Don Alejandro** con mensaje estructurado oficial listo para WhatsApp, vista previa estilo chat, botón de «Copiar Mensaje», botón de «Descargar QR (Imagen)» y botón de «Abrir en WhatsApp».
+     - Integración y renderizado directo del modal en `AdminControlPanel.tsx`.
+- **Estado**: ✅ Implementado, verificado con `npm run build` (19/19 rutas, 0 errores) y activo en `http://localhost:3014`.
+
 ---
 
 ## 6. Protocolo Obligatorio para Iniciar o Retomar Procesos
@@ -553,5 +599,8 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
    - `GET /api/rosters` ➔ `200 OK`
 4. **Verificación Estática**: Comprobar tipado estricto con `npm run build`.
 5. **Safety Lock**: No modificar ningún archivo sin presentar previamente ruta, líneas y justificación técnica para aprobación del usuario.
+
+
+
 
 

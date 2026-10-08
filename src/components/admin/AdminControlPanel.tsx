@@ -40,7 +40,8 @@ import {
   Send,
   MessageSquare,
   Phone,
-  Activity
+  Activity,
+  Heart
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -52,6 +53,8 @@ import { AdminRosterManager } from './AdminRosterManager';
 import { AdminDailyStats } from './AdminDailyStats';
 import { SystemAuditPlanView } from './SystemAuditPlanView';
 import { AdminTrafficAnalytics } from './AdminTrafficAnalytics';
+import { AdminMuralModeration } from './AdminMuralModeration';
+import { AdminQrPosterModal } from './AdminQrPosterModal';
 
 export function AdminControlPanel() {
   const { matches, updateMatch, schools, categories, getSchoolById, getCategoryById, addPhoto, addVideo } = useTournament();
@@ -106,7 +109,7 @@ export function AdminControlPanel() {
   };
 
   // Active Management Tab
-  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'daily_stats' | 'traffic' | 'audit'>('results');
+  const [activeTab, setActiveTab] = useState<'results' | 'new_match' | 'schedule' | 'bunny_media' | 'event_pin' | 'rosters' | 'daily_stats' | 'traffic' | 'audit' | 'mural_moderation'>('results');
 
   // Event-wide Family PIN Configuration State
   const [eventPinInput, setEventPinInput] = useState<string>(() => {
@@ -117,11 +120,12 @@ export function AdminControlPanel() {
   });
   const [pinSavedSuccess, setPinSavedSuccess] = useState<boolean>(false);
 
-  // Modal para Escáner de Datos, Carga de Rosters, Certificados y Alertas
+  // Modal para Escáner de Datos, Carga de Rosters, Certificados, Alertas y Cartel QR
   const [showScannerModal, setShowScannerModal] = useState<boolean>(false);
   const [showRosterModal, setShowRosterModal] = useState<boolean>(false);
   const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
   const [showAlertsModal, setShowAlertsModal] = useState<boolean>(false);
+  const [showQrPosterModal, setShowQrPosterModal] = useState<boolean>(false);
   const [testSending, setTestSending] = useState<boolean>(false);
   const [testResponseStatus, setTestResponseStatus] = useState<string | null>(null);
   const [registeredRostersList, setRegisteredRostersList] = useState<any[]>([]);
@@ -457,6 +461,16 @@ export function AdminControlPanel() {
               <Bell className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
               <span>Alertas WhatsApp</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => setShowQrPosterModal(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-amber-300 text-xs font-black shadow-2xs transition cursor-pointer"
+              title="Abrir cartel oficial con código QR listo para imprimir y colocar en canchas"
+            >
+              <QrCode className="w-3.5 h-3.5 text-amber-400" />
+              <span>Cartel QR Canchas</span>
+            </button>
           </div>
         </div>
 
@@ -557,6 +571,17 @@ export function AdminControlPanel() {
           >
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
             <span>9. Plan de Auditoría y Pruebas</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('mural_moderation')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              activeTab === 'mural_moderation'
+                ? 'bg-rose-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Heart className="w-3.5 h-3.5 text-rose-400" />
+            <span>10. Muro Familiar</span>
           </button>
         </div>
       </div>
@@ -1011,7 +1036,7 @@ export function AdminControlPanel() {
                 <span>Configuración de PIN para Familias y Padres</span>
               </h2>
               <p className="text-xs text-slate-500">
-                Define el código de seguridad oficial que utilizarán las familias para publicar porras, fotografías y videos en el Muro durante todas las fechas del evento.
+                Define el código de seguridad oficial que utilizarán las familias para publicar saludos, mensajes de apoyo y fotografías en el Muro durante todas las fechas del evento.
               </p>
             </div>
 
@@ -1102,6 +1127,18 @@ export function AdminControlPanel() {
       {activeTab === 'audit' && (
         <SystemAuditPlanView />
       )}
+
+      {/* 💬 PESTAÑA 10: MODERACIÓN Y CURADURÍA DEL MURO FAMILIAR */}
+      {activeTab === 'mural_moderation' && (
+        <AdminMuralModeration />
+      )}
+
+      {/* 🖨️ MODAL DE CARTEL QR IMPRIMIBLE PARA CANCHAS */}
+      <AdminQrPosterModal
+        isOpen={showQrPosterModal}
+        onClose={() => setShowQrPosterModal(false)}
+        schools={schools}
+      />
 
       {/* 📱 MODAL DEL ESCÁNER DE DATOS Y CÓDIGOS QR */}
       {showScannerModal && (
@@ -1354,6 +1391,13 @@ export function AdminControlPanel() {
           </div>
         </div>
       )}
+
+      {/* Modal de Cartel QR y Kit de WhatsApp para Don Alejandro */}
+      <AdminQrPosterModal
+        isOpen={showQrPosterModal}
+        onClose={() => setShowQrPosterModal(false)}
+        schools={schools}
+      />
     </div>
   );
 }

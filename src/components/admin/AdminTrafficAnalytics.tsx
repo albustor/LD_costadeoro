@@ -20,7 +20,9 @@ import {
   CheckCircle2,
   AlertCircle,
   ExternalLink,
-  MessageSquare
+  MessageSquare,
+  Globe,
+  MapPin
 } from 'lucide-react';
 
 interface AnalyticsData {
@@ -34,6 +36,7 @@ interface AnalyticsData {
     tablet: number;
     desktop: number;
   };
+  geoDistribution?: Record<string, number>;
   viewsByRoute: Record<string, number>;
   dailyHistory: Array<{ date: string; views: number; visitors: number }>;
   hourlyToday: Record<string, number>;
@@ -468,6 +471,47 @@ export function AdminTrafficAnalytics() {
             <span>Telemetría anónima y privada sin rastreo invasivo ni cookies de terceros.</span>
           </div>
         </div>
+      </div>
+
+      {/* 🗺️ GEOLOCALIZACIÓN REAL (EDGE CDN) */}
+      <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="flex items-center gap-2">
+            <Globe className="w-5 h-5 text-indigo-600" />
+            <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+              Procedencia Geográfica Real (Edge CDN)
+            </h3>
+          </div>
+          <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+            Regla 15 · Cero estimaciones
+          </span>
+        </div>
+
+        {(!data?.geoDistribution || Object.keys(data.geoDistribution).length === 0) ? (
+          <div className="p-6 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <MapPin className="w-6 h-6 text-slate-400 mx-auto mb-2 animate-pulse" />
+            Esperando primeras conexiones con cabecera de red Edge CDN (Vercel / Cloudflare)...
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            {Object.entries(data.geoDistribution)
+              .sort((a, b) => b[1] - a[1])
+              .map(([location, hits]) => (
+                <div
+                  key={location}
+                  className="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/70 border border-slate-200 flex items-center justify-between transition"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <MapPin className="w-4 h-4 text-indigo-600 shrink-0" />
+                    <span className="text-xs font-bold text-slate-800 truncate">{location}</span>
+                  </div>
+                  <span className="font-mono text-xs font-black text-slate-900 bg-white px-2 py-0.5 rounded-lg border border-slate-200 shrink-0">
+                    {hits} {hits === 1 ? 'hit' : 'hits'}
+                  </span>
+                </div>
+              ))}
+          </div>
+        )}
       </div>
 
       {/* ⏱️ MAPA DE ACTIVIDAD POR HORA (HOY) */}

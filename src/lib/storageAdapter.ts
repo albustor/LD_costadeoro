@@ -283,6 +283,44 @@ export const tournamentStorage = {
     return updated;
   },
 
+  deleteFamilyPost(postId: string): FamilyPost[] {
+    const posts = this.getFamilyPosts();
+    const updated = posts.filter((p) => p.id !== postId);
+    safeSet(KEYS.FAMILY_POSTS, updated);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: updated }));
+
+      // Sincronizar eliminación en el servidor central
+      fetch(`/api/posts/${encodeURIComponent(postId)}`, {
+        method: 'DELETE',
+      }).catch((err) => console.warn('[StorageAdapter Delete Post Error]:', err));
+    }
+    return updated;
+  },
+
+  toggleFeatureFamilyPost(postId: string): FamilyPost[] {
+    const posts = this.getFamilyPosts();
+    const updated = posts.map((p) => {
+      if (p.id === postId) {
+        return {
+          ...p,
+          isFeatured: !p.isFeatured,
+        };
+      }
+      return p;
+    });
+    safeSet(KEYS.FAMILY_POSTS, updated);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: updated }));
+
+      // Sincronizar en servidor central
+      fetch(`/api/posts/${encodeURIComponent(postId)}`, {
+        method: 'PATCH',
+      }).catch((err) => console.warn('[StorageAdapter Toggle Feature Error]:', err));
+    }
+    return updated;
+  },
+
   resetToInitial(): void {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(KEYS.TIER);

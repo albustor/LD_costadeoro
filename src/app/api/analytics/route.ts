@@ -65,12 +65,30 @@ export async function POST(req: NextRequest) {
       detectedDevice = 'mobile_android';
     }
 
+    // Extracción de geolocalización real por cabeceras Edge CDN (Vercel / Cloudflare)
+    const rawCity = req.headers.get('x-vercel-ip-city') || req.headers.get('cf-ipcity');
+    const rawRegion = req.headers.get('x-vercel-ip-country-region') || req.headers.get('cf-region');
+    const rawCountry = req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry');
+    const host = req.headers.get('host') || '';
+
+    let detectedCity = rawCity ? decodeURIComponent(rawCity) : undefined;
+    let detectedRegion = rawRegion || undefined;
+    let detectedCountry = rawCountry || undefined;
+
+    if (!detectedCity && (host.includes('localhost') || host.includes('127.0.0.1'))) {
+      detectedCity = 'Localhost (Entorno Local)';
+      detectedCountry = 'CR';
+    }
+
     const event: PageViewEvent = {
       path: body.path || '/',
       device: body.device || detectedDevice,
       timestamp: new Date().toISOString(),
       sessionId: body.sessionId,
       referrer: body.referrer || req.headers.get('referer') || 'Directo / PWA',
+      city: detectedCity,
+      region: detectedRegion,
+      country: detectedCountry,
     };
 
     // Registro atómico

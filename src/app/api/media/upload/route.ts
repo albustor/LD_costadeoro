@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
 
     const isVideo = file.type.startsWith('video/');
     const timestamp = Date.now();
-    const ext = file.name.split('.').pop()?.toLowerCase() || (isVideo ? 'mp4' : 'jpg');
+    let ext = file.name.split('.').pop()?.toLowerCase() || (isVideo ? 'mp4' : 'webp');
+    if (!isVideo && (file.type.includes('webp') || ext === 'webp')) {
+      ext = 'webp';
+    } else if (!isVideo && !ext) {
+      ext = 'jpg';
+    }
     const safeBaseName = file.name
       .replace(/\.[^/.]+$/, '')
       .replace(/[^a-zA-Z0-9_-]/g, '_')

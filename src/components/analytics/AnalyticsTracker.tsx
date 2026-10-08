@@ -49,19 +49,22 @@ export function AnalyticsTracker() {
         referrer: document.referrer || 'Directo / Acceso PWA',
       });
 
-      if (navigator.sendBeacon) {
-        const blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon('/api/analytics', blob);
-      } else {
-        fetch('/api/analytics', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: payload,
-          keepalive: true,
-        }).catch(() => {});
-      }
+      // Enviar evento de telemetría sin bloquear el render (fetch keepalive universal)
+      fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true,
+        cache: 'no-store',
+      }).catch(() => {
+        // Fallback secundario si fetch falla
+        if (navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: 'application/json' });
+          navigator.sendBeacon('/api/analytics', blob);
+        }
+      });
     } catch {
-      // Ignorar silenciosamente errores de red
+      // Ignorar errores de red
     }
   }, [pathname, searchParams]);
 

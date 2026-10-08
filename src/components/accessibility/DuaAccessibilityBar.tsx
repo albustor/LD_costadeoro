@@ -8,9 +8,9 @@ import { Volume2, VolumeX } from 'lucide-react';
 const PAGE_AUDIO_SUMMARIES_ES: Record<string, string> = {
   '/': '¡Bienvenidos a la Liga Costa de Oro 2026! Este festival deportivo reúne a seis instituciones educativas de Guanacaste en fútbol, voleibol y baloncesto. Puedes disfrutar del video oficial o explorar las sedes, fechas de los cuatro festivales y normas de convivencia. ¡Vamos todos a apoyar a nuestros estudiantes con entusiasmo y juego limpio!',
   '/deportes': '¡Pasión y compañerismo en cada jugada! En esta sección puedes consultar las tablas de posiciones, los resultados en vivo y las actas oficiales de los partidos en todas las categorías. Recordemos que el verdadero triunfo es el respeto, la sana competencia y la amistad entre nuestros colegios.',
-  '/calendario': '¡Prepárate para la jornada! Aquí encuentras la programación de partidos de lunes a viernes, con las fechas y sedes de cada encuentro deportivo. Te invitamos a acompañar a tu equipo favorito y llenar las canchas de porras positivas y juego limpio.',
-  '/mural': '¡El corazón de nuestra comunidad! En el Muro Familiar puedes compartir tus fotos, videos y mensajes de aliento para las atletas y jugadores. Deja tu porra, celebra el esfuerzo de cada estudiante y vive la fiesta deportiva.',
-  '/colegios': '¡Nuestra juventud de Guanacaste! Conoce a las seis instituciones educativas hermanadas en esta liga: La Paz Community School Cabo Velas, La Paz Community School Tempisque, CRIA, The Journey School, Instituto Vittorino y Educarte. Todas unidas por la educación y el deporte.',
+  '/calendario': '¡Prepárate para la jornada! Aquí encuentras la programación de partidos de lunes a viernes, con las fechas y sedes de cada encuentro deportivo. Te invitamos a acompañar a tu equipo favorito y llenar las canchas de mensajes de apoyo positivos y juego limpio.',
+  '/mural': '¡El corazón de nuestra comunidad! En el Muro Familiar puedes compartir tus fotos, videos y mensajes de aliento para las atletas y jugadores. Deja tus saludos, celebra el esfuerzo de cada estudiante y vive la fiesta deportiva.',
+  '/colegios': '¡Nuestra juventud de Guanacaste! Conoce a las seis instituciones educativas hermanadas en esta liga: La Paz Community School Cabo Velas, La Paz Community School Tempisque, CRIA, The Journey School, Monseñor Vittorino y Educarte. Todas unidas por la educación y el deporte.',
   '/admin': 'Mesa técnica y panel de control. Espacio para registrar y validar los marcadores oficiales de los encuentros con total transparencia y precisión deportiva.',
 };
 

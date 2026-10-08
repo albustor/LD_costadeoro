@@ -79,10 +79,12 @@ async function handleWeeklyReport(request: NextRequest) {
     trafficStats: {
       totalViews: analytics.totalViews,
       todayViews: analytics.todayViews,
-      weekViews: analytics.todayViews * 5, // Estimado semanal
+      weekViews: (analytics.dailyHistory || []).reduce((sum, d) => sum + (d.views || 0), 0),
       uniqueVisitors: analytics.uniqueVisitorsCount,
       mobilePercent,
       topRoutes: mappedTopRoutes,
+      geoDistribution: analytics.geoDistribution,
+      dailyHistory: analytics.dailyHistory,
     },
     dateStr: nowCR,
   };

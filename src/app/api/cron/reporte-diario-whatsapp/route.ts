@@ -72,6 +72,8 @@ async function handleDailyReport(request: NextRequest) {
       uniqueVisitors: analytics.uniqueVisitorsCount,
       mobilePercent,
       topRoutes: mappedTopRoutes,
+      geoDistribution: analytics.geoDistribution,
+      dailyHistory: analytics.dailyHistory,
     },
     dateStr: nowCR,
   };

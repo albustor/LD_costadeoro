@@ -25,6 +25,8 @@ interface TournamentContextType {
   addFamilyPost: (post: Omit<FamilyPost, 'id' | 'createdAt' | 'likesCount' | 'applauseCount' | 'featuredVotes' | 'comments'> & { comments?: PostComment[] }) => FamilyPost;
   reactToFamilyPost: (postId: string, type: 'like' | 'applause' | 'feature') => void;
   addCommentToFamilyPost: (postId: string, comment: Omit<PostComment, 'id' | 'createdAt'>) => void;
+  deleteFamilyPost: (postId: string) => void;
+  toggleFeatureFamilyPost: (postId: string) => void;
   likeVideo: (videoId: string) => void;
   getSchoolById: (id: string) => School | undefined;
   getCategoryById: (id: string) => Category | undefined;
@@ -132,6 +134,16 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
     setFamilyPosts(updated);
   };
 
+  const deleteFamilyPost = (postId: string) => {
+    const updated = tournamentStorage.deleteFamilyPost(postId);
+    setFamilyPosts(updated);
+  };
+
+  const toggleFeatureFamilyPost = (postId: string) => {
+    const updated = tournamentStorage.toggleFeatureFamilyPost(postId);
+    setFamilyPosts(updated);
+  };
+
   const likeVideo = (videoId: string) => {
     tournamentStorage.likeVideo(videoId);
     setVideos(tournamentStorage.getVideos());
@@ -172,6 +184,8 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
         addFamilyPost,
         reactToFamilyPost,
         addCommentToFamilyPost,
+        deleteFamilyPost,
+        toggleFeatureFamilyPost,
         likeVideo,
         getSchoolById,
         getCategoryById,

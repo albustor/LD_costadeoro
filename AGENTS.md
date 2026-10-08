@@ -172,6 +172,9 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 2. **Privacidad de Atletas (Privacy by Design):**
    - Prohibido exponer enlaces públicos de descarga masiva de nóminas o documentos de identidad deportiva en vistas abiertas de la webapp.
    - La descarga y consolidación de nóminas `.xls` queda restringida a la mesa de control en `/admin` y el portal de acreditación institucional protegido por PIN (`/registro-nomina`).
+3. **Política de Despacho de Reportes WhatsApp (Segregación de Audiencias):**
+   - **Reporte Diario Matutino (7:00 a.m.):** Despacho exclusivo a **Alberto (Comité de Soporte · Curiol Studio Admin · `+506 6060-2617`)**. Don Alejandro **NO** recibe reportes diarios para evitar saturar su canal operativo.
+   - **Reporte Semanal Consolidado (Viernes 5:30 p.m.):** Despacho a **Don Alejandro (Coordinador General de Eventos · `+506 8844-5486`)** con el resumen ejecutivo de la semana, líderes deportivos, telemetría real y recomendaciones, con copia de respaldo a Alberto.
 
 ---
 
@@ -209,3 +212,16 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
    - Nombre oficial: **Centro Educativo Católico Monseñor Vittorino Girardi Stellin** (Nombre corto: **Monseñor Vittorino**; prohibido usar "Instituto").
 3. **Apertura del Muro Familiar (`/mural`):**
    - El muro opera **sin PIN** para eliminar fricciones y motivar a las familias a publicar libremente en 3 pasos visuales claros (1. Selecciona delegación, 2. Escribe porra, 3. Firma y publica).
+
+---
+
+## 15. Principio Inquebrantable de Veracidad de Datos y Cero Proyecciones Simuladas
+
+1. **Prohibición Total de Datos Estimados o Proyectados:**
+   - Toda cifra, estadística de acceso, métrica de audiencia, reporte de telemetría o resultado deportivo debe ser **estrictamente real, medible y auditable**, extraída directamente de la base de datos centralizada (`tournament_db.json`) o de cabeceras de red verificadas.
+   - Queda **terminantemente PROHIBIDO** inventar, estimar, proyectar o interpretar datos (por ejemplo, desglosar porcentajes de ciudades o países que no hayan sido capturados físicamente por los endpoints de telemetría).
+2. **Transparencia en Estados Sin Medición:**
+   - Si un parámetro, métrica o ubicación no ha sido registrada por el sistema, el asistente y los reportes deben declarar explícitamente: `«Sin mediciones registradas aún»` o `«Pendiente de captura por cabecera IP»`, sin rellenar vacíos con supuestos demográficos.
+3. **Captura Real por Cabeceras de Red:**
+   - La geolocalización debe registrarse única y exclusivamente a través de cabeceras provistas por el Edge CDN (`x-vercel-ip-city`, `x-vercel-ip-country-region`, `x-vercel-ip-country`, `cf-ipcity`). Si las cabeceras no están presentes (ej. entorno localhost), se debe categorizar de forma verídica como `«Localhost / Desarrollo»` o `«Red Local»`.
+
