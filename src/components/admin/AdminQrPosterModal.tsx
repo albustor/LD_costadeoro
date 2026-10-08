@@ -42,23 +42,29 @@ export function AdminQrPosterModal({ isOpen, onClose, schools }: AdminQrPosterMo
   const qrCodeSvgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(muralUrl)}&format=svg&margin=12`;
   const qrCodePngUrl = `https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=${encodeURIComponent(muralUrl)}&format=png&margin=20`;
 
-  // Plantilla oficial para difusión de Don Alejandro en WhatsApp
-  const whatsAppTemplate = `🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
-¡Muro oficial de saludos, apoyo, fotografías y videos cortos! 📸🎥✨
+  // Plantilla oficial de bienvenida del comité organizador para difusión en WhatsApp
+  const whatsAppTemplate = `🏆 *LIGA DE LA COSTA DE ORO 2026 · FESTIVAL DEPORTIVO*
+¡El comité organizador les da la más cordial bienvenida! 🌟⚽🏐
 
-Estimadas familias, delegaciones y entrenadores:
+Estimadas familias, estudiantes, delegaciones y cuerpo técnico:
 
-Les invitamos a ingresar al *Muro de la comunidad*, donde pueden compartir sus saludos de aliento, fotografías y videos cortos para celebrar el esfuerzo de nuestros estudiantes en tiempo real:
+A nombre del Comité Organizador, les damos una calurosa bienvenida a esta gran fiesta deportiva intercolegial. Queremos que cada momento en cancha y gradería se viva con alegría, respeto mutuo y compañerismo.
 
-📲 *Ingreso directo al mural:*
+Les invitamos a ingresar al *Muro de la comunidad*, un espacio interactivo y abierto donde pueden:
+💬 *Enviar sus mensajes de bienvenida y palabras de aliento* a los estudiantes.
+📸 *Publicar fotografías* de las mejores jugadas, celebraciones y momentos de equipo.
+🎥 *Subir videos cortos (10 a 30 segundos)* con la emoción y el ambiente de las barras familiares.
+
+🌐 *Ingreso directo al mural oficial (sin descargas ni contraseñas):*
 👉 ${muralUrl}
 
-✨ *¿Cómo participar?*
-1️⃣ Entra al enlace o escanea el código QR oficial.
-2️⃣ Selecciona tu colegio o delegación.
-3️⃣ Escribe tu mensaje de apoyo y adjunta tus mejores fotos o videos cortos del partido.
+✨ *¿Cómo participar en 3 pasos sencillos?*
+1️⃣ Entra al enlace desde tu celular.
+2️⃣ Elige tu colegio o delegación deportiva.
+3️⃣ Escribe tu mensaje de apoyo y adjunta tus fotos o videos cortos.
 
-_¡Apoyemos con orgullo, respeto mutuo y juego limpio!_ 💙⚽🏐`;
+_¡Que gane el juego limpio, el compañerismo y la unión de nuestras instituciones!_ 💙🏆✨
+*Comité Organizador · Liga de la Costa de Oro 2026*`;
 
   const handleCopyText = async () => {
     try {
@@ -297,15 +303,21 @@ _¡Apoyemos con orgullo, respeto mutuo y juego limpio!_ 💙⚽🏐`;
             <div className="p-4 bg-[#EFEAE2] rounded-2xl border border-slate-300 shadow-inner space-y-3 font-sans">
               <div className="bg-white p-3.5 rounded-2xl rounded-tl-xs shadow-xs text-xs text-slate-800 space-y-2 border border-slate-200/60 max-w-lg">
                 <p className="font-bold text-slate-900">
-                  🏆 <span className="underline">FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026</span><br />
-                  ¡Muro oficial de saludos, apoyo, fotografías y videos cortos! 📸🎥✨
+                  🏆 <span className="underline">LIGA DE LA COSTA DE ORO 2026 · FESTIVAL DEPORTIVO</span><br />
+                  ¡El comité organizador les da la más cordial bienvenida! 🌟⚽🏐
                 </p>
                 <p className="text-slate-700 leading-relaxed text-[11.5px]">
-                  Estimadas familias, delegaciones y entrenadores:<br /><br />
-                  Les invitamos a ingresar al <strong>Muro de la comunidad</strong>, donde pueden compartir sus saludos de aliento, fotografías y videos cortos para celebrar el esfuerzo de nuestros estudiantes en tiempo real:
+                  Estimadas familias, estudiantes, delegaciones y cuerpo técnico:<br /><br />
+                  A nombre del Comité Organizador, les damos una calurosa bienvenida a esta gran fiesta deportiva intercolegial. Queremos que cada momento en cancha y gradería se viva con alegría, respeto mutuo y compañerismo.<br /><br />
+                  Les invitamos a ingresar al <strong>Muro de la comunidad</strong>, un espacio interactivo y abierto donde pueden:
                 </p>
+                <div className="p-2.5 bg-amber-50/70 rounded-xl border border-amber-200 text-[11px] space-y-1 text-slate-800">
+                  <p>💬 <strong>Enviar palabras de aliento</strong> y mensajes de apoyo a los estudiantes.</p>
+                  <p>📸 <strong>Publicar fotografías</strong> de las mejores jugadas y momentos de equipo.</p>
+                  <p>🎥 <strong>Subir videos cortos (10–30 s)</strong> con la emoción y el ambiente de las barras.</p>
+                </div>
                 <div className="p-2.5 bg-emerald-50/70 rounded-xl border border-emerald-200 text-[11px]">
-                  <span className="font-bold text-emerald-950 block mb-0.5">📲 Ingreso directo al mural:</span>
+                  <span className="font-bold text-emerald-950 block mb-0.5">🌐 Ingreso directo al mural oficial (sin contraseñas):</span>
                   <a 
                     href={muralUrl} 
                     target="_blank" 
@@ -316,13 +328,14 @@ _¡Apoyemos con orgullo, respeto mutuo y juego limpio!_ 💙⚽🏐`;
                   </a>
                 </div>
                 <div className="text-[11px] text-slate-600 space-y-0.5">
-                  <span className="font-bold text-slate-900 block">✨ ¿Cómo participar?</span>
-                  <p>1️⃣ Entra al enlace o escanea el código QR oficial.</p>
-                  <p>2️⃣ Selecciona tu colegio o delegación.</p>
-                  <p>3️⃣ Escribe tu mensaje de apoyo y adjunta tus mejores fotos o videos cortos del partido.</p>
+                  <span className="font-bold text-slate-900 block">✨ ¿Cómo participar en 3 pasos sencillos?</span>
+                  <p>1️⃣ Entra al enlace desde tu celular.</p>
+                  <p>2️⃣ Elige tu colegio o delegación deportiva.</p>
+                  <p>3️⃣ Escribe tu mensaje de apoyo y adjunta tus fotos o videos cortos.</p>
                 </div>
                 <p className="text-[10.5px] text-slate-500 italic pt-1 border-t border-slate-100">
-                  ¡Apoyemos con orgullo, respeto mutuo y juego limpio! 💙⚽🏐
+                  ¡Que gane el juego limpio, el compañerismo y la unión de nuestras instituciones! 💙🏆✨<br />
+                  <strong>Comité Organizador · Liga de la Costa de Oro 2026</strong>
                 </p>
               </div>
             </div>
