@@ -586,6 +586,15 @@ La **Liga Costa de Oro 2026** es una plataforma web progresiva (PWA) de alto ren
      - Integración y renderizado directo del modal en `AdminControlPanel.tsx`.
 - **Estado**: ✅ Implementado, verificado con `npm run build` (19/19 rutas, 0 errores) y activo en `http://localhost:3014`.
 
+## ADR-043: Exclusividad de Reportes Automatizados WhatsApp para Alberto
+- **Fecha**: 2026-10-08
+- **Contexto**: Por instrucción explícita del usuario, se suprime el envío del reporte semanal consolidado a Don Alejandro (`+506 8844-5486`). Los reportes de telemetría, salud del sistema y estado de competencia quedan restringidos de forma única y exclusiva a Alberto (`+506 6060-2617`) a diario (7:00 AM).
+- **Decisión**:
+  1. En `src/lib/evolutionApi.ts`: Se ajusta `WEEKLY_REPORT_RECIPIENTS` para dejar exclusivamente a Alberto como receptor del balance técnico. Don Alejandro queda completamente excluido de envíos automatizados de telemetría para proteger su canal operativo.
+  2. En `AGENTS.md`: Se actualizó la Regla 11.3 formalizando la política de exclusividad total para Alberto.
+  3. Se ejecutó el despacho inmediato del reporte diario de telemetría real a Alberto vía Evolution API.
+- **Estado**: ✅ Implementado, registrado y validado en producción.
+
 ---
 
 ## 6. Protocolo Obligatorio para Iniciar o Retomar Procesos
@@ -599,6 +608,7 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
    - `GET /api/rosters` ➔ `200 OK`
 4. **Verificación Estática**: Comprobar tipado estricto con `npm run build`.
 5. **Safety Lock**: No modificar ningún archivo sin presentar previamente ruta, líneas y justificación técnica para aprobación del usuario.
+
 
 
 

@@ -172,9 +172,9 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 2. **Privacidad de Atletas (Privacy by Design):**
    - Prohibido exponer enlaces públicos de descarga masiva de nóminas o documentos de identidad deportiva en vistas abiertas de la webapp.
    - La descarga y consolidación de nóminas `.xls` queda restringida a la mesa de control en `/admin` y el portal de acreditación institucional protegido por PIN (`/registro-nomina`).
-3. **Política de Despacho de Reportes WhatsApp (Segregación de Audiencias):**
-   - **Reporte Diario Matutino (7:00 a.m.):** Despacho exclusivo a **Alberto (Comité de Soporte · Curiol Studio Admin · `+506 6060-2617`)**. Don Alejandro **NO** recibe reportes diarios para evitar saturar su canal operativo.
-   - **Reporte Semanal Consolidado (Viernes 5:30 p.m.):** Despacho a **Don Alejandro (Coordinador General de Eventos · `+506 8844-5486`)** con el resumen ejecutivo de la semana, líderes deportivos, telemetría real y recomendaciones, con copia de respaldo a Alberto.
+3. **Política de Despacho de Reportes WhatsApp (Exclusividad Total para Alberto):**
+   - **Reporte Diario (7:00 a.m.):** Despacho exclusivo a **Alberto (Comité de Soporte · Curiol Studio Admin · `+506 6060-2617`)**.
+   - **Don Alejandro:** Queda completamente excluido del envío de reportes automatizados (tanto diarios como semanales). No se le envía ningún reporte de telemetría por WhatsApp para no saturar su canal operativo.
 
 ---
 

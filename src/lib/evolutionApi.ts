@@ -471,10 +471,9 @@ export const DAILY_REPORT_RECIPIENTS = [
   { name: 'Alberto (Comité de Soporte · Curiol Studio Admin)', phone: '50660602617', role: 'Comité de Soporte · Curiol Studio Admin' },
 ];
 
-// 📱 DESTINATARIO SEMANAL (Don Alejandro · Coordinador de Eventos - Viernes 5:30 PM)
+// 📱 DESTINATARIO SEMANAL (Exclusivo Alberto · Curiol Studio Admin)
 export const WEEKLY_REPORT_RECIPIENTS = [
-  { name: 'Don Alejandro (Coordinador de Eventos)', phone: '50688445486', role: 'Coordinador de Eventos' },
-  { name: 'Alberto · Curiol Studio Admin (Copia Respaldo)', phone: '50660602617', role: 'Administrador General' },
+  { name: 'Alberto (Comité de Soporte · Curiol Studio Admin)', phone: '50660602617', role: 'Comité de Soporte · Curiol Studio Admin' },
 ];
 
 // 📱 DESTINATARIOS DE ALERTAS DEL SISTEMA (Nóminas y Pings)
