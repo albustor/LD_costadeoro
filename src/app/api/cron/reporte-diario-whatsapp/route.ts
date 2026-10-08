@@ -30,9 +30,13 @@ async function handleDailyReport(request: NextRequest) {
   // Fecha y hora en Costa Rica
   const nowCR = new Date().toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' });
 
+  // Fecha en formato YYYY-MM-DD de Costa Rica
+  const todayDateStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Costa_Rica' }).format(new Date());
+
   const matches = db.matches || [];
   const completedMatches = matches.filter((m) => m.status === 'completed');
-  const upcomingMatches = matches.filter((m) => m.status === 'scheduled' || m.status === 'live');
+  // Partidos programados estrictamente para HOY
+  const upcomingMatches = matches.filter((m) => m.date === todayDateStr && (m.status === 'scheduled' || m.status === 'live'));
 
   // Calcular tablas de posiciones por deporte
   const standingsFutbol = calculateStandings('cat-fem-futbol', 'futbol', matches, SCHOOLS_DATA);

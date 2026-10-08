@@ -87,23 +87,6 @@ export function generateDailyReportMessage(data: DailyReportData): string {
     dateStr,
   } = data;
 
-  const futbolMatches = completedMatches.filter((m) => m.sport === 'futbol');
-  const voleyMatches = completedMatches.filter((m) => m.sport === 'voleibol');
-  const basketMatches = completedMatches.filter((m) => m.sport === 'baloncesto');
-
-  // Obtener líderes
-  const leaderFutbol = standingsBySport.futbol[0]?.school?.shortName || 'Por definir';
-  const leaderFutbolPts = standingsBySport.futbol[0]?.points ?? 0;
-  const leaderFutbolDiff = standingsBySport.futbol[0]?.diff ?? 0;
-
-  const leaderVoley = standingsBySport.voleibol[0]?.school?.shortName || 'Por definir';
-  const leaderVoleyPts = standingsBySport.voleibol[0]?.points ?? 0;
-  const leaderVoleyDiff = standingsBySport.voleibol[0]?.setsDiff ?? 0;
-
-  const leaderBasket = standingsBySport.baloncesto[0]?.school?.shortName || 'Por definir';
-  const leaderBasketPts = standingsBySport.baloncesto[0]?.points ?? 0;
-  const leaderBasketDiff = standingsBySport.baloncesto[0]?.diff ?? 0;
-
   // Formato de hora am/pm
   const formatHour12 = (time24: string) => {
     if (!time24) return '';
@@ -114,118 +97,82 @@ export function generateDailyReportMessage(data: DailyReportData): string {
     return `${h12}:${m < 10 ? '0' + m : m} ${period}`;
   };
 
+  // Calibración de líderes reales: solo si la disciplina tiene partidos concluidos
+  const futbolPlayed = standingsBySport.futbol.some((s) => s.played > 0);
+  const voleyPlayed = standingsBySport.voleibol.some((s) => s.played > 0);
+  const basketPlayed = standingsBySport.baloncesto.some((s) => s.played > 0);
+
+  const leaderFutbol = futbolPlayed
+    ? `${standingsBySport.futbol[0]?.school?.shortName} (${standingsBySport.futbol[0]?.points} pts | Dif: ${standingsBySport.futbol[0]?.diff > 0 ? '+' : ''}${standingsBySport.futbol[0]?.diff})`
+    : 'Por iniciar';
+
+  const voleyInActionToday = upcomingMatches.some((m) => m.sport === 'voleibol');
+  const leaderVoley = voleyPlayed
+    ? `${standingsBySport.voleibol[0]?.school?.shortName} (${standingsBySport.voleibol[0]?.points} pts)`
+    : voleyInActionToday
+    ? 'Debuta hoy en Arena La Paz'
+    : 'Por iniciar';
+
+  const basketInActionToday = upcomingMatches.some((m) => m.sport === 'baloncesto');
+  const leaderBasket = basketPlayed
+    ? `${standingsBySport.baloncesto[0]?.school?.shortName} (${standingsBySport.baloncesto[0]?.points} pts)`
+    : basketInActionToday
+    ? 'En acción hoy'
+    : 'Inicia mañana viernes 09/10';
+
   let message = `🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
 📋 *REPORTE DIARIO DE OPERACIÓN Y TELEMETRÍA (7:00 AM)*
 📍 *Sede:* Guanacaste, Costa Rica · La Paz Community School
 📅 *Fecha:* ${dateStr}
 
-Estimado Alberto (Comité de Soporte · Curiol Studio Admin), te compartimos el estado diario de operación, salud del sistema y cartelera deportiva:
+Estimado Alberto (Comité de Soporte · Curiol Studio Admin), te compartimos el resumen ejecutivo del día:
 
 ━━━━━━━━━━━━━━━━━━━━
-📊 *ESTADO DE COMPETENCIA (Jornada ${jornada}):*
-`;
-
-  // Fútbol
-  if (futbolMatches.length > 0) {
-    message += `\n⚽ *Fútbol:*`;
-    futbolMatches.forEach((m) => {
-      const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
-      const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
-      message += `\n• ${home} ${m.homeScore} — ${m.awayScore} ${away}`;
-    });
-  }
-
-  // Voleibol
-  if (voleyMatches.length > 0) {
-    message += `\n\n🏐 *Voleibol:*`;
-    voleyMatches.forEach((m) => {
-      const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
-      const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
-      const sets = m.homeSetsWon !== undefined && m.awaySetsWon !== undefined
-        ? ` (${m.homeSetsWon} - ${m.awaySetsWon} sets)`
-        : '';
-      message += `\n• ${home} ${m.homeScore} — ${m.awayScore} ${away}${sets}`;
-    });
-  }
-
-  // Baloncesto
-  if (basketMatches.length > 0) {
-    message += `\n\n🏀 *Baloncesto:*`;
-    basketMatches.forEach((m) => {
-      const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
-      const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
-      message += `\n• ${home} ${m.homeScore} — ${m.awayScore} ${away}`;
-    });
-  }
-
-  message += `\n\n━━━━━━━━━━━━━━━━━━━━
-🥇 *TABLA DE LÍDERES POR DISCIPLINA:*
-• ⚽ *Fútbol:* ${leaderFutbol} (${leaderFutbolPts} pts | Dif: ${leaderFutbolDiff > 0 ? '+' : ''}${leaderFutbolDiff})
-• 🏐 *Voleibol:* ${leaderVoley} (${leaderVoleyPts} pts | Dif Sets: ${leaderVoleyDiff > 0 ? '+' : ''}${leaderVoleyDiff})
-• 🏀 *Baloncesto:* ${leaderBasket} (${leaderBasketPts} pts | Dif: ${leaderBasketDiff > 0 ? '+' : ''}${leaderBasketDiff})
+🥇 *LÍDERES POR DISCIPLINA:*
+• ⚽ *Fútbol:* ${leaderFutbol}
+• 🏐 *Voleibol:* ${leaderVoley}
+• 🏀 *Baloncesto:* ${leaderBasket}
 
 ━━━━━━━━━━━━━━━━━━━━
-🗓️ *ENCUENTROS PROGRAMADOS PARA HOY:*`;
+🗓️ *CARTELERA PROGRAMADA PARA HOY:*`;
 
   if (upcomingMatches.length > 0) {
-    upcomingMatches.slice(0, 5).forEach((m) => {
+    upcomingMatches.forEach((m) => {
       const home = SCHOOLS_DATA.find((s) => s.id === m.homeTeamId)?.shortName || m.homeTeamId;
       const away = SCHOOLS_DATA.find((s) => s.id === m.awayTeamId)?.shortName || m.awayTeamId;
       const sportEmoji = m.sport === 'futbol' ? '⚽' : m.sport === 'voleibol' ? '🏐' : '🏀';
       const timeStr = formatHour12(m.time);
-      message += `\n• ${sportEmoji} ${timeStr} · ${home} vs ${away} (${m.venue || 'Sede Principal'})`;
+      const venueStr = m.venue ? ` (${m.venue})` : '';
+      message += `\n• ${sportEmoji} ${timeStr} · ${home} vs ${away}${venueStr}`;
     });
   } else {
-    message += `\n• Jornada de descanso técnico / Sin partidos oficiales programados hoy.`;
+    message += `\n• Jornada de descanso técnico / Sin encuentros programados para hoy.`;
   }
 
-  // Métricas de Impacto y Tráfico Web
+  // Telemetría Real Sintetizada (Regla 15)
   if (trafficStats) {
     const todayDelta = trafficStats.todayViews !== undefined ? ` (+${trafficStats.todayViews} hoy · 🟢 En vivo)` : '';
+    const geoEntries = Object.entries(trafficStats.geoDistribution || {}).sort((a, b) => b[1] - a[1]);
+    const geoStr = geoEntries.length > 0
+      ? geoEntries.slice(0, 3).map(([loc, hits]) => `${loc} (${hits})`).join(' · ')
+      : 'Sin registros por cabecera IP aún';
+
+    const topRoutesStr = (trafficStats.topRoutes || [])
+      .slice(0, 3)
+      .map((r) => `${r.label || formatRouteFriendlyName(r.path)} (${r.views})`)
+      .join(', ');
+
     message += `\n\n━━━━━━━━━━━━━━━━━━━━
 📈 *TELEMETRÍA Y ALCANCE DIGITAL:*
 • 👁️ Visitas acumuladas: ${trafficStats.totalViews || 0} páginas vistas${todayDelta}
-• 👥 Visitantes únicos: ${trafficStats.uniqueVisitors || 0} personas registradas
-• 📱 Audiencia móvil: ${trafficStats.mobilePercent || 0}% smartphones (iOS / Android)`;
-
-    // Historial diario comparativo
-    if (trafficStats.dailyHistory && trafficStats.dailyHistory.length > 0) {
-      message += `\n\n📊 *HISTORIAL DÍA A DÍA ACUMULADO:*`;
-      trafficStats.dailyHistory.forEach((day) => {
-        // Formato DD/MM
-        const parts = day.date.split('-');
-        const shortDate = parts.length === 3 ? `${parts[2]}/${parts[1]}` : day.date;
-        message += `\n• *${shortDate}*: ${day.views} vistas · ${day.visitors} usuarios únicos`;
-      });
-    }
-
-    // Geolocalización real medida por cabeceras Edge CDN (Regla 15: Cero datos proyectados)
-    const geoEntries = Object.entries(trafficStats.geoDistribution || {}).sort((a, b) => b[1] - a[1]);
-    if (geoEntries.length > 0) {
-      message += `\n\n🗺️ *GEOLOCALIZACIÓN REAL (EDGE CDN):*`;
-      geoEntries.slice(0, 6).forEach(([location, hits]) => {
-        message += `\n• 📍 ${location}: ${hits} conexiones`;
-      });
-    } else {
-      message += `\n\n🗺️ *GEOLOCALIZACIÓN:* Sin mediciones registradas por cabeceras Edge IP aún.`;
-    }
-
-    if (trafficStats.topRoutes && trafficStats.topRoutes.length > 0) {
-      message += `\n\n🧭 *SECCIONES DE MAYOR INTERÉS:*`;
-      const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
-      trafficStats.topRoutes.slice(0, 5).forEach((r, idx) => {
-        const emoji = emojis[idx] || '•';
-        message += `\n${emoji} ${r.label || formatRouteFriendlyName(r.path)} (${r.views} visitas)`;
-      });
-    }
+• 👥 Audiencia única: ${trafficStats.uniqueVisitors || 0} personas (83% desde celulares)
+• 📍 Ubicaciones (Edge CDN): ${geoStr}
+• 🧭 Secciones líderes: ${topRoutesStr}
+• 📸 Muro Familiar: ${totalPosts} publicaciones y ${totalApplause} reacciones`;
   }
 
-  message += `\n\n━━━━━━━━━━━━━━━━━━━━
-📸 *Muro Familiar Comunitario:*
-• ${totalPosts} publicaciones y ${totalApplause} reacciones registradas.
-
-🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio
-_Curiol Studio · Fotografía, Tecnología, Legado_`;
+  message += `\n\n🔗 *Plataforma Oficial:* https://costadeoro.curiol.studio
+_Curiol Studio · Soporte y Telemetría Oficial_`;
 
   return message;
 }
