@@ -236,6 +236,7 @@ export interface FamilyPost {
   featuredVotes: number;
   isFeatured: boolean;
   createdAt: string;
+  createdAtIso?: string;
   humanValueTag?: 'esfuerzo' | 'companerismo' | 'resiliencia' | 'fairplay' | 'alegria';
   aiModerationStatus?: 'approved' | 'flagged' | 'pending';
   comments?: PostComment[];

@@ -26,8 +26,10 @@ import {
   X,
   Calendar,
   Clock,
-  ShieldAlert,
   ChevronDown,
+  ChevronUp,
+  Volume2,
+  VolumeX,
   UploadCloud,
   Filter,
   Download,
@@ -103,6 +105,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   const [adminPinInput, setAdminPinInput] = useState<string>('');
   const [adminPinError, setAdminPinError] = useState<string>('');
   const [deletedSuccessToast, setDeletedSuccessToast] = useState<string | null>(null);
+
+  // 📦 Estado de Acoplamiento y Expansión de Publicaciones (La 1.ª expandida, posteriores acopladas)
+  const [manuallyToggled, setManuallyToggled] = useState<Record<string, boolean>>({});
+  const [speakingPostId, setSpeakingPostId] = useState<string | null>(null);
 
   // Cargar estado inicial desde localStorage y Live Polling cada 20 segundos
   useEffect(() => {
@@ -361,12 +367,88 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     setTimeout(() => setShowSuccessBadge(false), 5000);
   };
 
-  // Filtro de posts reactivo
-  const filteredPosts = posts.filter((p) => {
-    if (featuredOnly) return p.isFeatured;
-    if (selectedSchoolFilter === 'all') return true;
-    return p.schoolId === selectedSchoolFilter;
-  });
+  // 🕒 Formateador Amigable de Día, Fecha y Hora para visualización y síntesis DUA
+  const formatPostDateInfo = (createdAt?: string, createdAtIso?: string): { label: string; speechTime: string } => {
+    let d: Date | null = null;
+    if (createdAtIso) {
+      const parsed = new Date(createdAtIso);
+      if (!isNaN(parsed.getTime())) d = parsed;
+    }
+    
+    if (!d && createdAt && createdAt.includes('-') && createdAt.length >= 10) {
+      const parsed = new Date(createdAt);
+      if (!isNaN(parsed.getTime())) d = parsed;
+    }
+
+    const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const daysFull = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic'];
+    const monthsFull = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
+
+    const targetDate = d || new Date();
+    const dayName = days[targetDate.getDay()];
+    const dayFull = daysFull[targetDate.getDay()];
+    const dayNum = targetDate.getDate();
+    const monthName = months[targetDate.getMonth()];
+    const monthFull = monthsFull[targetDate.getMonth()];
+
+    let hours = targetDate.getHours();
+    const minutes = targetDate.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+    const ampmSpeech = hours >= 12 ? 'de la tarde' : 'de la mañana';
+    hours = hours % 12 || 12;
+
+    const label = `${dayName} ${dayNum} ${monthName} · ${hours}:${minutes} ${ampm}`;
+    const speechTime = `${dayFull} ${dayNum} de ${monthFull} a las ${hours} y ${minutes} ${ampmSpeech}`;
+
+    return { label, speechTime };
+  };
+
+  // 🔊 Narrador de Voz con Síntesis Neuronal (DUA)
+  const handleSpeakPost = (post: FamilyPost, schoolName: string, speechTime: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+    if (speakingPostId === post.id) {
+      window.speechSynthesis.cancel();
+      setSpeakingPostId(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    setSpeakingPostId(post.id);
+
+    const authorRole = post.authorName.includes('Comité') ? 'del Comité Organizador' : `${post.authorRelation} de ${schoolName}`;
+    const textToRead = `Mensaje de ${post.authorName}, ${authorRole}, publicado el ${speechTime}. Dice: ${post.message}`;
+
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    utterance.lang = 'es-CR';
+    utterance.rate = 0.96;
+    utterance.pitch = 1.08;
+
+    const availableVoices = window.speechSynthesis.getVoices();
+    const bestVoice = availableVoices.find(
+      (v) =>
+        v.lang.startsWith('es') &&
+        /natural|neural|online|google|salome|dalia|paulina|sabina|camila|sofia|lupe/i.test(v.name)
+    ) || availableVoices.find((v) => v.lang.startsWith('es'));
+
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+    }
+
+    utterance.onend = () => setSpeakingPostId(null);
+    utterance.onerror = () => setSpeakingPostId(null);
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Filtro de posts reactivo y orden cronológico descendente estricto
+  const filteredPosts = [...posts]
+    .filter((p) => {
+      if (featuredOnly) return p.isFeatured;
+      if (selectedSchoolFilter === 'all') return true;
+      return p.schoolId === selectedSchoolFilter;
+    });
 
   const featuredPosts = posts.filter((p) => p.isFeatured);
 
@@ -856,18 +938,156 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredPosts.map((post) => {
+            <div className="space-y-3.5">
+            {filteredPosts.map((post, index) => {
               const school = schools.find((s) => s.id === post.schoolId) || schools[0];
               const isCommentsOpen = openCommentsPostId === post.id;
               const postComments = post.comments || [];
+              const dateInfo = formatPostDateInfo(post.createdAt, post.createdAtIso);
+
+              // La primera publicación (index === 0) aparece expandida por defecto.
+              // Las publicaciones posteriores (index > 0) aparecen acopladas, salvo que el usuario las expanda.
+              const isExpanded = manuallyToggled[post.id] !== undefined 
+                ? manuallyToggled[post.id] 
+                : index === 0;
+
+              const toggleExpand = () => {
+                setManuallyToggled((prev) => ({
+                  ...prev,
+                  [post.id]: !isExpanded,
+                }));
+              };
+
+              if (!isExpanded) {
+                return (
+                  <div
+                    key={post.id}
+                    onClick={toggleExpand}
+                    className="bg-white rounded-2xl border border-slate-200 hover:border-amber-400 p-3.5 sm:p-4 shadow-2xs hover:shadow-md transition-all cursor-pointer group space-y-2 border-l-4 border-l-amber-400 animate-fade-in"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <SchoolEmblem schoolId={school.id} size="xs" />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-extrabold text-xs text-slate-900 truncate">{post.authorName}</span>
+                            {post.authorName.includes('Comité') && (
+                              <span className="px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black text-[8.5px] uppercase shadow-2xs">
+                                Oficial
+                              </span>
+                            )}
+                            <span className="text-[10.5px] text-amber-800 font-bold truncate">· {school.shortName}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[10px] text-slate-600 font-mono flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200">
+                          <Clock className="w-3 h-3 text-amber-600" />
+                          <span>{dateInfo.label}</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSpeakPost(post, school.shortName, dateInfo.speechTime);
+                          }}
+                          className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                            speakingPostId === post.id
+                              ? 'bg-amber-500 text-slate-950 border-amber-600 animate-pulse'
+                              : 'bg-slate-50 hover:bg-amber-100 text-slate-600 hover:text-amber-900 border-slate-200'
+                          }`}
+                          title="Escuchar publicación por voz (DUA)"
+                        >
+                          {speakingPostId === post.id ? <VolumeX className="w-3.5 h-3.5 text-slate-950" /> : <Volume2 className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Mensaje resumido / Extracto */}
+                    <p className="text-xs text-slate-700 line-clamp-1 italic font-medium pl-1">
+                      "{post.message}"
+                    </p>
+
+                    {/* Pie de tarjeta acoplada: Reacciones + Botón Desplegar con micro-animación */}
+                    <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500 border-t border-slate-100">
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex items-center gap-1 font-bold text-slate-600">
+                          <Heart className="w-3 h-3 text-rose-500 fill-rose-500" />
+                          {post.likesCount}
+                        </span>
+                        <span className="flex items-center gap-1 font-bold text-slate-600">
+                          👏 {post.applauseCount}
+                        </span>
+                        {postComments.length > 0 && (
+                          <span className="flex items-center gap-1 text-slate-500 font-medium">
+                            <MessageSquare className="w-3 h-3 text-slate-400" />
+                            {postComments.length}
+                          </span>
+                        )}
+                        {post.mediaUrl && (
+                          <span className="inline-flex items-center gap-1 text-[9.5px] px-1.5 py-0.2 rounded-md bg-amber-50 text-amber-900 font-bold border border-amber-200">
+                            {post.mediaType === 'photo' ? '📷 Foto' : '🎥 Video'}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeletePost(post.id, post.authorName);
+                            }}
+                            className="px-2 py-0.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10px] font-black border border-rose-300"
+                          >
+                            Borrar
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleExpand();
+                          }}
+                          className="px-2.5 py-1 rounded-xl bg-amber-100 group-hover:bg-amber-400 group-hover:text-slate-950 text-amber-950 text-[11px] font-black flex items-center gap-1 shadow-2xs transition-all cursor-pointer"
+                        >
+                          <span>Desplegar</span>
+                          <ChevronDown className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
 
               return (
                 <div
                   key={post.id}
-                  className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-2xs space-y-3 transition-all hover:border-slate-300"
+                  className={`bg-white rounded-3xl border p-4 sm:p-5 shadow-sm space-y-3 transition-all animate-fade-in ${
+                    index === 0 ? 'border-2 border-amber-400/80 ring-2 ring-amber-400/20' : 'border-slate-200 hover:border-slate-300'
+                  }`}
                 >
-                  {/* Encabezado: Escudo + Autor en ancho completo para Reflow perfecto */}
+                  {/* Badge distintivo de publicación reciente en la primera */}
+                  {index === 0 && (
+                    <div className="flex items-center justify-between pb-1 border-b border-amber-100/60 text-xs">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                        <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
+                        <span>Publicación más reciente · En vivo</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={toggleExpand}
+                        className="text-[11px] font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>Plegar</span>
+                        <ChevronUp className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Encabezado: Escudo + Autor en ancho completo */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
                       <SchoolEmblem schoolId={school.id} size="sm" />
@@ -882,9 +1102,33 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                             )}
                           </h4>
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-[10px] text-slate-400 font-mono">
-                              {post.createdAt}
+                            <span className="text-[10px] text-slate-600 font-mono flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200">
+                              <Clock className="w-3 h-3 text-amber-600" />
+                              <span>{dateInfo.label}</span>
                             </span>
+                            <button
+                              type="button"
+                              onClick={() => handleSpeakPost(post, school.shortName, dateInfo.speechTime)}
+                              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                                speakingPostId === post.id
+                                  ? 'bg-amber-500 text-slate-950 border-amber-600 animate-pulse'
+                                  : 'bg-slate-50 hover:bg-amber-100 text-slate-600 hover:text-amber-900 border-slate-200'
+                              }`}
+                              title="Escuchar publicación por voz (DUA)"
+                            >
+                              {speakingPostId === post.id ? <VolumeX className="w-3.5 h-3.5 text-slate-950" /> : <Volume2 className="w-3.5 h-3.5" />}
+                            </button>
+                            {index !== 0 && (
+                              <button
+                                type="button"
+                                onClick={toggleExpand}
+                                className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center gap-0.5 cursor-pointer"
+                                title="Contraer publicación"
+                              >
+                                <span>Plegar</span>
+                                <ChevronUp className="w-3 h-3" />
+                              </button>
+                            )}
                             {isAdmin && (
                               <button
                                 type="button"
@@ -904,7 +1148,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                       </div>
                     </div>
 
-                    {/* Badges de Valor e IA en su propia fila */}
+                    {/* Badges de Valor e IA */}
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {post.isFeatured && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-200 shadow-2xs">
@@ -1006,14 +1250,13 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     </div>
                   </div>
 
-                  {/* Sección Desplegable de Comentarios (Siempre activa) */}
+                  {/* Sección Desplegable de Comentarios */}
                   {isCommentsOpen && (
                     <div className="pt-3 mt-3 border-t border-slate-100 space-y-2.5 animate-fade-in">
                       <span className="text-[11px] font-bold text-slate-600 block">
                         Comentarios Familiares ({postComments.length}):
                       </span>
 
-                      {/* Lista de comentarios existentes */}
                       {postComments.length > 0 ? (
                         <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
                           {postComments.map((comm) => (
@@ -1032,7 +1275,6 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                         </p>
                       )}
 
-                      {/* Campo para responder / comentar */}
                       <div className="flex items-center gap-1.5 pt-1">
                         <input
                           type="text"

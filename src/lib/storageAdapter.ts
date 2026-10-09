@@ -194,10 +194,12 @@ export const tournamentStorage = {
 
   addFamilyPost(newPost: Omit<FamilyPost, 'id' | 'createdAt' | 'likesCount' | 'applauseCount' | 'featuredVotes' | 'comments'> & { comments?: PostComment[] }): FamilyPost {
     const posts = this.getFamilyPosts();
+    const nowIso = new Date().toISOString();
     const created: FamilyPost = {
       ...newPost,
       id: `fp-${Date.now()}`,
       createdAt: 'Justo ahora',
+      createdAtIso: nowIso,
       likesCount: 0,
       applauseCount: 0,
       featuredVotes: 0,

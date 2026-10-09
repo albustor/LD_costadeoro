@@ -759,3 +759,19 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
   2. En `AGENTS.md`, `GEMINI.md` y `C:\Users\curio\.gemini\config\AGENTS.md`:
      - Consagrada la **Regla Universal de No Presentación**: todo partido con ausencia en Fútbol, Voleibol o Baloncesto **SIEMPRE se reprograma** (`status: 'postponed'`, 0 puntos y 0 PJ para ambos, marcador neutro 0–0 y cero goles/sets/puntos artificiales).
 - **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y publicado en producción.
+
+---
+
+## ADR-055: Publicaciones Acopladas en Acordeón, Formato de Día/Hora y Síntesis por Voz DUA en el Muro Familiar
+- **Fecha**: 2026-10-09
+- **Contexto**: En el Muro Familiar (`/mural`), todas las publicaciones se presentaban en tarjetas expandidas del mismo tamaño, lo que dificultaba el escaneo rápido de mensajes anteriores. Asimismo, se requería mostrar el día de la semana y la hora exacta de publicación y ofrecer soporte de accesibilidad DUA con narración por voz.
+- **Decisión**:
+  1. En `src/components/family/FamilyCheerWall.tsx`:
+     - **Primera publicación (`index === 0`)**: Se presenta **expandida por defecto** con filete dorado, badge `✨ Publicación más reciente · En vivo` y botón `[Plegar ▴]`.
+     - **Publicaciones posteriores (`index > 0`)**: Se presentan **acopladas/contraídas** en tarjetas compactas con filete izquierdo ámbar (`border-l-4 border-l-amber-400`), escudo, autor, fecha y hora exacta (`Clock`), extracto en cursiva, contadores y botón interactivo `[Desplegar ▾]` con micro-animación al hover.
+     - **Formateador de Día y Hora (`formatPostDateInfo`)**: Muestra día de la semana, día, mes y hora en formato costarricense (ej. `Lun 6 Oct · 3:45 p.m.`).
+     - **Narración por Voz DUA (`handleSpeakPost`)**: Lee de forma fluida y cálida: *«Mensaje de [Autor], [Relación] de [Colegio], publicado el [Día] a las [Hora]. Dice: [Mensaje]»*.
+  2. En `src/types/tournament.ts`, `storageAdapter.ts`, `initialData.ts` y `tournament_db.json`:
+     - Incorporado el campo `createdAtIso` y sincronizados los timestamps ISO para todas las delegaciones.
+- **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
+

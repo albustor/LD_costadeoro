@@ -1,6 +1,102 @@
 {
   "posts": [
     {
+      "id": "fp-fam-cabo-01",
+      "schoolId": "la-paz-cabo-velas",
+      "authorName": "Familia Sharks",
+      "authorRelation": "Familia",
+      "message": "¡Con todo Peace Sharks Cabo Velas! A dejar el corazón en la cancha con respeto, pasión y juego limpio. 🦈⚽",
+      "mediaType": "none",
+      "sportId": "futbol",
+      "isFeatured": true,
+      "likesCount": 15,
+      "applauseCount": 12,
+      "featuredVotes": 6,
+      "createdAt": "2026-10-09T16:45:00Z",
+      "createdAtIso": "2026-10-09T16:45:00Z",
+      "comments": []
+    },
+    {
+      "id": "fp-fam-educarte-01",
+      "schoolId": "educarte",
+      "authorName": "Comunidad Educarte",
+      "authorRelation": "Familia",
+      "message": "¡Orgullo total Educarte! A vivir el deporte con alegría, amistad y sana convivencia. ¡Vamos equipo! ⚽🏐🏀",
+      "mediaType": "none",
+      "sportId": "futbol",
+      "isFeatured": false,
+      "likesCount": 16,
+      "applauseCount": 14,
+      "featuredVotes": 6,
+      "createdAt": "2026-10-09T16:15:00Z",
+      "createdAtIso": "2026-10-09T16:15:00Z",
+      "comments": []
+    },
+    {
+      "id": "fp-fam-vittorino-01",
+      "schoolId": "vittorino",
+      "authorName": "Familia Vittorino",
+      "authorRelation": "Familia",
+      "message": "¡Con la frente en alto Monseñor Vittorino! Valores, fe y espíritu deportivo en cada encuentro. ¡Adelante jóvenes! 🏆",
+      "mediaType": "none",
+      "sportId": "voleibol",
+      "isFeatured": false,
+      "likesCount": 13,
+      "applauseCount": 11,
+      "featuredVotes": 5,
+      "createdAt": "2026-10-09T15:40:00Z",
+      "createdAtIso": "2026-10-09T15:40:00Z",
+      "comments": []
+    },
+    {
+      "id": "fp-fam-journey-01",
+      "schoolId": "journey-school",
+      "authorName": "Comunidad Journey",
+      "authorRelation": "Familia",
+      "message": "¡Vamos The Journey School! Pasión, compañerismo y mucho aprendizaje en cada jugada. ¡Estamos con ustedes! 🔥👏",
+      "mediaType": "none",
+      "sportId": "baloncesto",
+      "isFeatured": false,
+      "likesCount": 12,
+      "applauseCount": 9,
+      "featuredVotes": 4,
+      "createdAt": "2026-10-09T15:10:00Z",
+      "createdAtIso": "2026-10-09T15:10:00Z",
+      "comments": []
+    },
+    {
+      "id": "fp-fam-cria-01",
+      "schoolId": "cria",
+      "authorName": "Familia Dolphins",
+      "authorRelation": "Familia",
+      "message": "¡Go Dolphins! Con toda la energía y disciplina que caracteriza a CRIA. ¡Gran festival deportivo para todos! 🐬✨",
+      "mediaType": "none",
+      "sportId": "baloncesto",
+      "isFeatured": false,
+      "likesCount": 14,
+      "applauseCount": 10,
+      "featuredVotes": 5,
+      "createdAt": "2026-10-09T14:25:00Z",
+      "createdAtIso": "2026-10-09T14:25:00Z",
+      "comments": []
+    },
+    {
+      "id": "fp-fam-temp-01",
+      "schoolId": "la-paz-tempisque",
+      "authorName": "Familia Tempisque",
+      "authorRelation": "Familia",
+      "message": "¡Fuerza La Paz Tempisque! Muy orgullosos de la entrega y el trabajo en equipo de nuestros chicos. ¡A disfrutar! 💙",
+      "mediaType": "none",
+      "sportId": "voleibol",
+      "isFeatured": false,
+      "likesCount": 11,
+      "applauseCount": 8,
+      "featuredVotes": 4,
+      "createdAt": "2026-10-09T13:30:00Z",
+      "createdAtIso": "2026-10-09T13:30:00Z",
+      "comments": []
+    },
+    {
       "id": "fp-welcome-org-cabo",
       "schoolId": "la-paz-cabo-velas",
       "authorName": "Comité Organizador · Liga Costa de Oro",
@@ -12,13 +108,14 @@
       "likesCount": 24,
       "applauseCount": 18,
       "featuredVotes": 9,
-      "createdAt": "Hace un momento",
+      "createdAt": "2026-10-05T08:00:00Z",
+      "createdAtIso": "2026-10-05T08:00:00Z",
       "comments": [
         {
           "id": "comm-welcome-01",
           "authorName": "Comunidad La Paz",
           "text": "¡Éxitos a todas las 6 delegaciones en esta hermosa jornada deportiva!",
-          "createdAt": "Hace unos instantes"
+          "createdAt": "2026-10-05T08:30:00Z"
         }
       ]
     },
@@ -34,7 +131,8 @@
       "likesCount": 20,
       "applauseCount": 15,
       "featuredVotes": 8,
-      "createdAt": "Hace un momento",
+      "createdAt": "2026-10-05T08:05:00Z",
+      "createdAtIso": "2026-10-05T08:05:00Z",
       "comments": []
     },
     {
@@ -49,7 +147,8 @@
       "likesCount": 22,
       "applauseCount": 17,
       "featuredVotes": 8,
-      "createdAt": "Hace un momento",
+      "createdAt": "2026-10-05T08:10:00Z",
+      "createdAtIso": "2026-10-05T08:10:00Z",
       "comments": []
     },
     {
@@ -64,7 +163,8 @@
       "likesCount": 21,
       "applauseCount": 16,
       "featuredVotes": 7,
-      "createdAt": "Hace un momento",
+      "createdAt": "2026-10-05T08:15:00Z",
+      "createdAtIso": "2026-10-05T08:15:00Z",
       "comments": []
     },
     {
@@ -79,7 +179,8 @@
       "likesCount": 23,
       "applauseCount": 19,
       "featuredVotes": 9,
-      "createdAt": "Hace un momento",
+      "createdAt": "2026-10-05T08:20:00Z",
+      "createdAtIso": "2026-10-05T08:20:00Z",
       "comments": []
     },
     {
@@ -94,97 +195,8 @@
       "likesCount": 25,
       "applauseCount": 20,
       "featuredVotes": 10,
-      "createdAt": "Hace un momento",
-      "comments": []
-    },
-    {
-      "id": "fp-fam-cabo-01",
-      "schoolId": "la-paz-cabo-velas",
-      "authorName": "Familia Sharks",
-      "authorRelation": "Familia",
-      "message": "¡Con todo Peace Sharks Cabo Velas! A dejar el corazón en la cancha con respeto, pasión y juego limpio. 🦈⚽",
-      "mediaType": "none",
-      "sportId": "futbol",
-      "isFeatured": true,
-      "likesCount": 15,
-      "applauseCount": 12,
-      "featuredVotes": 6,
-      "createdAt": "Hace un momento",
-      "comments": []
-    },
-    {
-      "id": "fp-fam-temp-01",
-      "schoolId": "la-paz-tempisque",
-      "authorName": "Familia Tempisque",
-      "authorRelation": "Familia",
-      "message": "¡Fuerza La Paz Tempisque! Muy orgullosos de la entrega y el trabajo en equipo de nuestros chicos. ¡A disfrutar! 💙",
-      "mediaType": "none",
-      "sportId": "voleibol",
-      "isFeatured": false,
-      "likesCount": 11,
-      "applauseCount": 8,
-      "featuredVotes": 4,
-      "createdAt": "Hace un momento",
-      "comments": []
-    },
-    {
-      "id": "fp-fam-cria-01",
-      "schoolId": "cria",
-      "authorName": "Familia Dolphins",
-      "authorRelation": "Familia",
-      "message": "¡Go Dolphins! Con toda la energía y disciplina que caracteriza a CRIA. ¡Gran festival deportivo para todos! 🐬✨",
-      "mediaType": "none",
-      "sportId": "baloncesto",
-      "isFeatured": false,
-      "likesCount": 14,
-      "applauseCount": 10,
-      "featuredVotes": 5,
-      "createdAt": "Hace un momento",
-      "comments": []
-    },
-    {
-      "id": "fp-fam-journey-01",
-      "schoolId": "journey-school",
-      "authorName": "Comunidad Journey",
-      "authorRelation": "Familia",
-      "message": "¡Vamos The Journey School! Pasión, compañerismo y mucho aprendizaje en cada jugada. ¡Estamos con ustedes! 🔥👏",
-      "mediaType": "none",
-      "sportId": "baloncesto",
-      "isFeatured": false,
-      "likesCount": 12,
-      "applauseCount": 9,
-      "featuredVotes": 4,
-      "createdAt": "Hace un momento",
-      "comments": []
-    },
-    {
-      "id": "fp-fam-vittorino-01",
-      "schoolId": "vittorino",
-      "authorName": "Familia Vittorino",
-      "authorRelation": "Familia",
-      "message": "¡Con la frente en alto Monseñor Vittorino! Valores, fe y espíritu deportivo en cada encuentro. ¡Adelante jóvenes! 🏆",
-      "mediaType": "none",
-      "sportId": "voleibol",
-      "isFeatured": false,
-      "likesCount": 13,
-      "applauseCount": 11,
-      "featuredVotes": 5,
-      "createdAt": "Hace un momento",
-      "comments": []
-    },
-    {
-      "id": "fp-fam-educarte-01",
-      "schoolId": "educarte",
-      "authorName": "Comunidad Educarte",
-      "authorRelation": "Familia",
-      "message": "¡Orgullo total Educarte! A vivir el deporte con alegría, amistad y sana convivencia. ¡Vamos equipo! ⚽🏐🏀",
-      "mediaType": "none",
-      "sportId": "futbol",
-      "isFeatured": false,
-      "likesCount": 16,
-      "applauseCount": 14,
-      "featuredVotes": 6,
-      "createdAt": "Hace un momento",
+      "createdAt": "2026-10-05T08:25:00Z",
+      "createdAtIso": "2026-10-05T08:25:00Z",
       "comments": []
     }
   ],
@@ -465,8 +477,14 @@
       "homeSetsWon": 2,
       "awaySetsWon": 0,
       "setScores": [
-        { "home": 25, "away": 20 },
-        { "home": 25, "away": 23 }
+        {
+          "home": 25,
+          "away": 20
+        },
+        {
+          "home": 25,
+          "away": 23
+        }
       ],
       "status": "completed",
       "currentPeriod": "Finalizado",
@@ -490,8 +508,14 @@
       "homeSetsWon": 2,
       "awaySetsWon": 0,
       "setScores": [
-        { "home": 25, "away": 13 },
-        { "home": 25, "away": 21 }
+        {
+          "home": 25,
+          "away": 13
+        },
+        {
+          "home": 25,
+          "away": 21
+        }
       ],
       "status": "completed",
       "currentPeriod": "Finalizado",
@@ -557,8 +581,14 @@
       "homeSetsWon": 2,
       "awaySetsWon": 0,
       "setScores": [
-        { "home": 25, "away": 6 },
-        { "home": 25, "away": 8 }
+        {
+          "home": 25,
+          "away": 6
+        },
+        {
+          "home": 25,
+          "away": 8
+        }
       ],
       "status": "completed",
       "currentPeriod": "Finalizado",
@@ -624,7 +654,7 @@
     }
   ],
   "analytics": {
-    "totalViews": 258,
+    "totalViews": 260,
     "uniqueSessions": [
       "usr_s_oct1_01",
       "usr_s_oct1_02",
@@ -692,21 +722,22 @@
       "test_user_sim_02",
       "test_user_sim_03",
       "v_1791390286402_okcxzog",
-      "v_santa_cruz_live_test"
+      "v_santa_cruz_live_test",
+      "v_1791587662431_l49ktke"
     ],
     "viewsByRoute": {
       "/": 100,
       "/calendario": 57,
       "/colegios": 39,
       "/deportes": 27,
-      "/mural": 21,
+      "/mural": 23,
       "/registro-nomina": 12,
       "/marcadores": 2
     },
     "deviceDistribution": {
       "mobile_ios": 134,
       "mobile_android": 85,
-      "desktop": 31,
+      "desktop": 33,
       "tablet": 8
     },
     "dailyHistory": {
@@ -801,13 +832,35 @@
         "uniqueSessions": [
           "v_santa_cruz_live_test"
         ]
+      },
+      "2026-10-09": {
+        "views": 2,
+        "uniqueSessions": [
+          "v_1791587662431_l49ktke"
+        ]
       }
     },
     "hourlyToday": {
-      "09:00": 1
+      "17:00": 2
     },
-    "todayDateStr": "2026-10-08",
+    "todayDateStr": "2026-10-09",
     "recentEvents": [
+      {
+        "path": "/mural",
+        "device": "desktop",
+        "timestamp": "2026-10-09T23:15:14.869Z",
+        "referrer": "Directo / Acceso PWA",
+        "city": "Localhost (Entorno Local)",
+        "country": "CR"
+      },
+      {
+        "path": "/mural",
+        "device": "desktop",
+        "timestamp": "2026-10-09T23:14:24.324Z",
+        "referrer": "Directo / Acceso PWA",
+        "city": "Localhost (Entorno Local)",
+        "country": "CR"
+      },
       {
         "path": "/calendario",
         "device": "mobile_ios",
@@ -916,8 +969,9 @@
     ],
     "geoDistribution": {
       "Santa Cruz (G), CR": 6,
-      "Tempate (G), CR": 1
+      "Tempate (G), CR": 1,
+      "Localhost (Entorno Local), CR": 2
     }
   },
-  "updatedAt": "2026-10-08T15:16:52.771Z"
+  "updatedAt": "2026-10-09T23:15:14.869Z"
 }
