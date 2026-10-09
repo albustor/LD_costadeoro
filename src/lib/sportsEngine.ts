@@ -192,15 +192,23 @@ export function calculateStandings(
     // 1. Mayor Puntaje Oficial (PTS)
     if (b.points !== a.points) return b.points - a.points;
 
-    // 2. Voleibol: Mayor Diferencia de Sets (DS)
+    // 2. Mayor cantidad de Partidos Ganados (PG) - Criterio Oficial FECOVOL / FIVB / FIBA
+    if (b.won !== a.won) return b.won - a.won;
+
+    // 3. Voleibol: Mayor Diferencia de Sets (DS) - FECOVOL / FIVB
     if (sport === 'voleibol' && a.setsDiff !== undefined && b.setsDiff !== undefined) {
+      // Si ambos tienen 0 puntos y uno no ha jugado (0 PJ), el equipo sin debutar no sobrepasa a los que ya compitieron
+      if (a.points === 0 && b.points === 0) {
+        if (a.played === 0 && b.played > 0) return 1;
+        if (b.played === 0 && a.played > 0) return -1;
+      }
       if (b.setsDiff !== a.setsDiff) return b.setsDiff - a.setsDiff;
     }
 
-    // 3. Mayor Gol / Punto Diferencia (GD / DG)
+    // 4. Mayor Gol / Punto Diferencia (GD / DG)
     if (b.diff !== a.diff) return b.diff - a.diff;
 
-    // 4. Mayor Cantidad de Goles / Puntos a Favor (GF / PF)
+    // 5. Mayor Cantidad de Goles / Puntos a Favor (GF / PF)
     if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
 
     // 5. Enfrentamiento particular / Serie directa entre equipos empatados
