@@ -216,6 +216,10 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     homeSetsWon: 2,
     awaySetsWon: 0,
+    setScores: [
+      { home: 25, away: 20 },
+      { home: 25, away: 23 },
+    ],
     status: 'completed',
     currentPeriod: 'Finalizado',
     notes: 'Jornada 1 - Voleibol C (La Paz Cabo Velas 2-0 Vittorino · Set 1: 25-20, Set 2: 25-23)',
@@ -237,6 +241,10 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     homeSetsWon: 2,
     awaySetsWon: 0,
+    setScores: [
+      { home: 25, away: 13 },
+      { home: 25, away: 21 },
+    ],
     status: 'completed',
     currentPeriod: 'Finalizado',
     notes: 'Jornada 1 - Voleibol C (La Paz Cabo Velas 2-0 Educarte · Set 1: 25-13, Set 2: 25-21)',
@@ -300,6 +308,10 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     homeSetsWon: 2,
     awaySetsWon: 0,
+    setScores: [
+      { home: 25, away: 6 },
+      { home: 25, away: 8 },
+    ],
     status: 'completed',
     currentPeriod: 'Finalizado',
     notes: 'Jornada 1 - Voleibol D (La Paz Cabo Velas 2-0 Vittorino · Set 1: 25-6, Set 2: 25-8)',
