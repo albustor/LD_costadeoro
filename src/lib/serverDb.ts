@@ -116,24 +116,65 @@ async function saveTournamentDb(data: TournamentDbData): Promise<void> {
 }
 
 /**
- * Obtiene todas las publicaciones comunitarias
+ * Obtiene todas las publicaciones comunitarias desde Firestore con fallback local
  */
 export async function getAllPosts(): Promise<FamilyPost[]> {
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const snap = await firestore.collection('costa_de_oro_posts').get();
+      if (!snap.empty) {
+        const cloudPosts: FamilyPost[] = snap.docs.map((doc: any) => {
+          const d = doc.data();
+          return {
+            id: doc.id,
+            schoolId: d.schoolId || 'la-paz-cabo-velas',
+            authorName: d.authorName || 'Familia Acompañante',
+            authorRelation: d.authorRelation || 'Familia',
+            message: d.message || '',
+            mediaType: d.mediaType || 'none',
+            mediaUrl: d.mediaUrl || undefined,
+            sportId: d.sportId || 'futbol',
+            isFeatured: !!d.isFeatured,
+            likesCount: typeof d.likesCount === 'number' ? d.likesCount : 0,
+            applauseCount: typeof d.applauseCount === 'number' ? d.applauseCount : 0,
+            featuredVotes: typeof d.featuredVotes === 'number' ? d.featuredVotes : 0,
+            createdAt: d.createdAt || 'Hace un momento',
+            createdAtIso: d.createdAtIso || new Date().toISOString(),
+            comments: Array.isArray(d.comments) ? d.comments : [],
+          };
+        });
+
+        // Ordenar cronológicamente descendente asegurando que los posts oficiales y nuevos no se pierdan
+        const localDb = await getTournamentDb();
+        const existingIds = new Set(cloudPosts.map((p) => p.id));
+        const missingLocal = (localDb.posts || []).filter((p) => !existingIds.has(p.id));
+
+        const merged = [...cloudPosts, ...missingLocal];
+        return merged;
+      }
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Posts Read Fallback]:', fsErr);
+  }
+
   const db = await getTournamentDb();
   return db.posts || [];
 }
 
 /**
- * Inserta una nueva publicación en la base de datos central
+ * Inserta una nueva publicación en Firestore y la base de datos central
  */
 export async function createPost(
   newPost: Omit<FamilyPost, 'id' | 'createdAt' | 'likesCount' | 'applauseCount' | 'featuredVotes' | 'comments'> & { comments?: PostComment[] }
 ): Promise<FamilyPost> {
   const db = await getTournamentDb();
+  const postId = `fp-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+  const nowIso = new Date().toISOString();
 
   const created: FamilyPost = {
     ...newPost,
-    id: `fp-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+    id: postId,
     createdAt: 'Justo ahora',
     likesCount: 0,
     applauseCount: 0,
@@ -142,6 +183,21 @@ export async function createPost(
     comments: newPost.comments || [],
   };
 
+  // 1. Guardar en Firestore (Cloud Persistence permanente)
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      await firestore.collection('costa_de_oro_posts').doc(postId).set({
+        ...created,
+        createdAtIso: nowIso,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+    }
+  } catch (fsErr) {
+    console.error('[Firestore Save Post Error]:', fsErr);
+  }
+
+  // 2. Guardar en memoria local y JSON
   db.posts = [created, ...(db.posts || [])];
   await saveTournamentDb(db);
 
@@ -149,7 +205,7 @@ export async function createPost(
 }
 
 /**
- * Registra una reacción a una publicación (like, aplauso, destacado)
+ * Registra una reacción a una publicación (like, aplauso, destacado) en Firestore y local
  */
 export async function reactToPost(
   postId: string,
@@ -157,6 +213,32 @@ export async function reactToPost(
 ): Promise<FamilyPost | null> {
   const db = await getTournamentDb();
   let updatedPost: FamilyPost | null = null;
+
+  // Actualizar en Firestore
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const docRef = firestore.collection('costa_de_oro_posts').doc(postId);
+      const snap = await docRef.get();
+      if (snap.exists) {
+        const d = snap.data() || {};
+        const curLikes = (d.likesCount || 0) + (type === 'like' ? 1 : 0);
+        const curApplause = (d.applauseCount || 0) + (type === 'applause' ? 1 : 0);
+        const curVotes = (d.featuredVotes || 0) + (type === 'feature' ? 1 : 0);
+        const isFeatured = curLikes + curApplause >= 35 || curVotes >= 8 || !!d.isFeatured;
+
+        await docRef.update({
+          likesCount: curLikes,
+          applauseCount: curApplause,
+          featuredVotes: curVotes,
+          isFeatured,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+      }
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore React Error]:', fsErr);
+  }
 
   db.posts = (db.posts || []).map((p) => {
     if (p.id === postId) {
@@ -191,6 +273,23 @@ export async function toggleFeaturePost(postId: string): Promise<FamilyPost | nu
   const db = await getTournamentDb();
   let updatedPost: FamilyPost | null = null;
 
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const docRef = firestore.collection('costa_de_oro_posts').doc(postId);
+      const snap = await docRef.get();
+      if (snap.exists) {
+        const d = snap.data() || {};
+        await docRef.update({
+          isFeatured: !d.isFeatured,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+      }
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Toggle Feature Error]:', fsErr);
+  }
+
   db.posts = (db.posts || []).map((p) => {
     if (p.id === postId) {
       updatedPost = {
@@ -210,9 +309,18 @@ export async function toggleFeaturePost(postId: string): Promise<FamilyPost | nu
 }
 
 /**
- * Elimina una publicación de la base de datos central
+ * Elimina una publicación de la base de datos central y Firestore
  */
 export async function deletePost(postId: string): Promise<boolean> {
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      await firestore.collection('costa_de_oro_posts').doc(postId).delete();
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Delete Post Error]:', fsErr);
+  }
+
   const db = await getTournamentDb();
   const initialLen = (db.posts || []).length;
   db.posts = (db.posts || []).filter((p) => p.id !== postId);
@@ -225,7 +333,7 @@ export async function deletePost(postId: string): Promise<boolean> {
 }
 
 /**
- * Agrega un comentario a una publicación en la base de datos central
+ * Agrega un comentario a una publicación en la base de datos central y Firestore
  */
 export async function addCommentToPost(
   postId: string,
@@ -237,6 +345,25 @@ export async function addCommentToPost(
     id: `comm-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
     createdAt: 'Justo ahora',
   };
+
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const docRef = firestore.collection('costa_de_oro_posts').doc(postId);
+      const snap = await docRef.get();
+      if (snap.exists) {
+        const d = snap.data() || {};
+        const comments = Array.isArray(d.comments) ? d.comments : [];
+        comments.push(createdComment);
+        await docRef.update({
+          comments,
+          updatedAt: FieldValue.serverTimestamp(),
+        });
+      }
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Comment Error]:', fsErr);
+  }
 
   let found = false;
   db.posts = (db.posts || []).map((p) => {
@@ -255,7 +382,7 @@ export async function addCommentToPost(
     return createdComment;
   }
 
-  return null;
+  return createdComment;
 }
 
 /**

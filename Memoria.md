@@ -614,3 +614,10 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
 
 
 
+
+
+---
+
+## ADR: Adopción de Simplicidad Radical (Octubre 2026)
+- **Decisión:** Priorizar la usabilidad directa del Festival Deportivo, eliminando la sobrecarga de dependencias y simplificando la navegación para los usuarios móviles de los colegios participantes.
+- **Acción:** Depurar prototipos obsoletos y concentrar la UI en partidos, marcadores y fotos de alta velocidad.

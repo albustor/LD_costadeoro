@@ -225,3 +225,15 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 3. **Captura Real por Cabeceras de Red:**
    - La geolocalización debe registrarse única y exclusivamente a través de cabeceras provistas por el Edge CDN (`x-vercel-ip-city`, `x-vercel-ip-country-region`, `x-vercel-ip-country`, `cf-ipcity`). Si las cabeceras no están presentes (ej. entorno localhost), se debe categorizar de forma verídica como `«Localhost / Desarrollo»` o `«Red Local»`.
 
+
+
+---
+
+## 16. Principio de Simplicidad Radical y Descarte de Sobre-Ingeniería
+
+1. **Objetivo Central del Torneo:** Servir a los colegios, familias y atletas con información inmediata y sin fricción (Marcadores, Calendario, Fotos).
+2. **Depuración de Prototipos:** Prohibido mantener código muerto o prototipos duplicados en la raíz que compitan con la ruta principal de Next.js.
+3. **Frontend y UX Directa:**
+   - Navegación móvil concentrada en 3 vistas esenciales (Partidos, Fotos, Sedes/Reglamento).
+   - Eliminar dependencias innecesarias de IA multicapa; si se requiere búsqueda, priorizar indexación directa o una sola consulta a Gemini Flash.
+4. **Guardián de la Simplicidad:** Jim supervisará que cualquier módulo nuevo respete la premisa de ser ligero, rápido de abrir en celulares bajo el sol y fácil de operar para la directiva deportiva.
