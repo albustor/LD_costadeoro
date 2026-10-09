@@ -64,12 +64,6 @@ const schoolLogoFiles: Record<string, { src: string; fallbackSrc?: string; alt: 
     alt: 'Logo Oficial Educarte Bilingual High School',
     name: 'Educarte',
   },
-  'colegio-invitado': {
-    src: '/logos/colegios/colegio_invitado.svg',
-    fallbackSrc: '/logos/colegios/colegio_invitado.svg',
-    alt: 'Logo Delegación Invitada / Escazú (Ciudad Colón)',
-    name: 'Delegación Invitada / Escazú (Ciudad Colón)',
-  },
 };
 
 /**
