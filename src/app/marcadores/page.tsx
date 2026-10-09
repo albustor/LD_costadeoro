@@ -285,7 +285,9 @@ export default function MarcadoresPage() {
               </h2>
             </div>
             <span className="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">
-              3 pts Victoria • 1 pt Empate
+              {currentCategory.sport === 'futbol' && '3 pts Victoria • 1 pt Empate'}
+              {currentCategory.sport === 'voleibol' && '3 pts (2-0) • 2 pts (2-1) • 1 pt (1-2)'}
+              {currentCategory.sport === 'baloncesto' && '2 pts Victoria • 1 pt Derrota'}
             </span>
           </div>
 

@@ -340,11 +340,11 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
           </div>
         </div>
 
-        {/* ℹ️ RESUMEN DE LA REGLA OFICIAL DE PUNTOS Y NO PRESENTACIÓN */}
+        {/* ℹ️ RESUMEN DE LOS BAREMOS OFICIALES POR DISCIPLINA */}
         <div className="mt-3.5 p-3 rounded-2xl bg-amber-950/50 border border-amber-500/30 text-amber-200 text-xs flex items-center gap-2">
           <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
           <span>
-            <strong>Formato Oficial Fútbol (Costa Rica / Liga Menor):</strong> Victoria = <strong>3 pts</strong> (incluye W.O. 3-0 administrativo) • Empate = <strong>1 pt</strong> • Derrota / Ausente = <strong>0 pts</strong>.
+            <strong>Baremos Oficiales Costa Rica:</strong> ⚽ Fútbol: Victoria = <strong>3 pts</strong>, Empate = <strong>1 pt</strong> • 🏐 Voleibol (Sets): 2-0 = <strong>3 pts</strong>, 2-1 = <strong>2 pts</strong> (1 pt al perdedor) • 🏀 Baloncesto: Victoria = <strong>2 pts</strong>, Derrota = <strong>1 pt</strong>.
           </span>
         </div>
       </div>

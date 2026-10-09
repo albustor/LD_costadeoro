@@ -208,9 +208,9 @@ export function StandingsTable({ categoryId, hideCategoryPills }: StandingsTable
         <div className="flex items-center gap-1.5">
           <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
           <span>
-            {sport === 'futbol' && 'Reglamento: victoria = 3 pts | empate = 1 pt | derrota = 0 pts. Desempate: GD, GF, duelo directo.'}
-            {sport === 'baloncesto' && 'Reglamento FIBA: victoria = 2 pts | derrota = 1 pt. Desempate: puntos en tabla, diferencia, PF.'}
-            {sport === 'voleibol' && 'Reglamento: 2-0 / 3-0 / 3-1 = 3 pts | 3-2 = 2 pts / 1 pt. Desempate: ratio de sets.'}
+            {sport === 'futbol' && 'Reglamento FEDEFUTBOL: Victoria = 3 pts | Empate = 1 pt | Derrota = 0 pts. Desempate: GD, GF, duelo directo.'}
+            {sport === 'baloncesto' && 'Reglamento FIBA/FECOBA: Victoria = 2 pts | Derrota en cancha = 1 pt | No presentación = 0 pts. Desempate: duelo directo, diferencia.'}
+            {sport === 'voleibol' && 'Reglamento MEP/FIVB: Victoria 2-0 = 3 pts | Victoria 2-1 = 2 pts | Derrota 1-2 = 1 pt | Derrota 0-2 = 0 pts. Desempate: ratio de sets.'}
           </span>
         </div>
         <span className="text-amber-700 font-semibold">Actualización en tiempo real</span>
