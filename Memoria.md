@@ -652,8 +652,17 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
 
 ---
 
-## ADR: Adopción de Simplicidad Radical (Octubre 2026)
-- **Decisión:** Priorizar la usabilidad directa del Festival Deportivo, eliminando la sobrecarga de dependencias y simplificando la navegación para los usuarios móviles de los colegios participantes.
-- **Acción:** Depurar prototipos obsoletos y concentrar la UI en partidos, marcadores y fotos de alta velocidad.
+## ADR-047: Persistencia Híbrida Antiborrado en Muro Familiar, 7.ª Delegación en Nóminas y Tarjetas de Partidos Reprogramados
+- **Fecha**: 2026-10-09
+- **Contexto**: 
+  1. El usuario reportó que las fotos publicadas en el Muro Familiar (`/mural`) desaparecían al recargar la página en producción (`costadeoro.curiol.studio`). El polling periódico `GET /api/posts` sobreescribía el almacenamiento local con la respuesta estática del servidor.
+  2. Se solicitó agregar la opción de un 7.º equipo/institución en el Gestor Central de Nóminas (`AdminRosterManager.tsx`), el portal de acreditación (`/registro-nomina`) y los despachos directos de WhatsApp/Correo.
+  3. El partido de Fútbol Masculino D (La Paz Tempisque vs. Monseñor Vittorino / Escazú Ciudad Colón) aparecía erróneamente marcado como `Finalizado (0 - 0)` en lugar de `⚠️ Por reprogramar (0 - 0)`, debiendo reflejar 0 puntos para ambos equipos.
+- **Decisión**:
+  1. En `storageAdapter.ts`: Se implementó un algoritmo de *Merge Bidireccional* en `fetchRemoteFamilyPosts()` que preserva todas las publicaciones locales y las combina con las del servidor sin sobreescritura destructiva.
+  2. En `FamilyCheerWall.tsx`: Se aseguró que las fotos comprimidas en WebP DataURL / Cloud CDN mantengan persistencia permanente y no dependan de objetos Blob volátiles.
+  3. En `tournamentConfig.ts`, `rosterService.ts`, `AdminRosterManager.tsx` y `SchoolEmblem.tsx`: Se registró la 7.ª institución activa `colegio-invitado` (*«Delegación Invitada / Escazú (Ciudad Colón)»*) con PIN oficial `6001` para autogestión y nóminas.
+  4. En `LiveDeskScorer.tsx`, `MatchCard.tsx`, `MatchDetailModal.tsx` y `tournament_db.json`: Se integró la función universal `isRescheduledMatch(match)` para presentar de forma destacada el badge ámbar `⚠️ Por reprogramar` y la leyenda oficial *«Partido reprogramado · Sin asignación de puntos a ningún equipo»* (0 PJ y 0 pts).
+- **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y publicado en `origin main`.
 
 

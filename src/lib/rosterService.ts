@@ -76,6 +76,7 @@ export const PIN_TO_SCHOOL_MAP: Record<string, string> = {
   '3001': 'journey-school',
   '4001': 'vittorino',
   '5001': 'educarte',
+  '6001': 'colegio-invitado',
 };
 
 export function getSchoolByPin(pin: string): School | null {

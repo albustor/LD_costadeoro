@@ -292,7 +292,14 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         );
         
         if (bunnyResult.success && (bunnyResult.secureUrl || bunnyResult.url)) {
-          finalMediaUrl = bunnyResult.secureUrl || bunnyResult.url;
+          const resUrl = bunnyResult.secureUrl || bunnyResult.url;
+          if (!resUrl.startsWith('blob:')) {
+            finalMediaUrl = resUrl;
+          } else if (mediaPreview && !mediaPreview.startsWith('blob:')) {
+            finalMediaUrl = mediaPreview;
+          }
+        } else if (mediaPreview && !mediaPreview.startsWith('blob:')) {
+          finalMediaUrl = mediaPreview;
         }
 
         // Registrar en la Galería General si es fotografía

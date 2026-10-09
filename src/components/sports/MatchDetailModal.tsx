@@ -5,6 +5,7 @@ import { Match, PhotoItem, ShortVideo } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
 import { useTier } from '@/context/TierContext';
 import { formatDateCostaRica, formatTime12h } from '@/lib/utils';
+import { isRescheduledMatch } from '@/lib/sportsEngine';
 import { 
   X, 
   MapPin, 
@@ -166,7 +167,16 @@ export function MatchDetailModal({ match, onClose }: MatchDetailModalProps) {
 
             {/* Score */}
             <div className="col-span-1 text-center">
-              {match.status === 'scheduled' ? (
+              {isRescheduledMatch(match) ? (
+                <div className="space-y-1">
+                  <span className="text-xl sm:text-2xl font-black text-amber-950 font-mono tracking-wider block">
+                    0 : 0
+                  </span>
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold border border-amber-300">
+                    Por reprogramar
+                  </span>
+                </div>
+              ) : match.status === 'scheduled' ? (
                 <div className="text-xs font-bold text-slate-600 bg-white py-1.5 px-2 rounded-lg border border-slate-200 shadow-sm">
                   {formatTime12h(match.time)}
                 </div>

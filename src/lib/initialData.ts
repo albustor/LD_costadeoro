@@ -194,8 +194,8 @@ export const INITIAL_MATCHES: Match[] = [
     homeScore: 0,
     awayScore: 0,
     status: 'postponed',
-    currentPeriod: 'Reprogramado',
-    notes: 'SE REPROGRAMA',
+    currentPeriod: 'Por reprogramar',
+    notes: 'Partido por reprogramar (sin asignación de puntos a ningún equipo)',
     updatedAt: '2026-10-07T15:15:00Z',
   },
 

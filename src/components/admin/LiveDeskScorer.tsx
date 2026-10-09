@@ -13,6 +13,7 @@ import {
   evaluateMatchLifecycle,
   extendMatchTime 
 } from '@/lib/matchLifecycleEngine';
+import { isRescheduledMatch } from '@/lib/sportsEngine';
 import { 
   Play, 
   Pause, 
@@ -499,7 +500,8 @@ export function LiveDeskScorer() {
                 const a = getSchoolById(m.awayTeamId);
                 const cat = getCategoryById(m.categoryId);
                 const isSelected = m.id === selectedMatchId;
-                const isCompleted = m.status === 'completed';
+                const isRescheduled = isRescheduledMatch(m);
+                const isCompleted = m.status === 'completed' && !isRescheduled;
                 const isLive = m.status === 'live';
 
                 return (
@@ -510,6 +512,8 @@ export function LiveDeskScorer() {
                     className={`text-left p-3 rounded-2xl transition-all cursor-pointer flex flex-col justify-between gap-2 border ${
                       isSelected
                         ? 'bg-amber-950/40 border-amber-400 ring-2 ring-amber-400/50 shadow-md text-white'
+                        : isRescheduled
+                        ? 'bg-amber-950/30 border-amber-500/50 hover:border-amber-400 text-amber-200'
                         : isCompleted
                         ? 'bg-slate-950/80 border-emerald-900/40 hover:border-emerald-500/50 text-slate-200'
                         : isLive
@@ -553,7 +557,11 @@ export function LiveDeskScorer() {
 
                     {/* Footer de estado */}
                     <div className="pt-1 border-t border-slate-800/80 flex items-center justify-between text-[10.5px]">
-                      {isCompleted ? (
+                      {isRescheduled ? (
+                        <span className="text-amber-400 font-bold flex items-center gap-1">
+                          ⚠️ Por reprogramar (0 - 0)
+                        </span>
+                      ) : isCompleted ? (
                         <span className="text-emerald-400 font-bold flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                           Finalizado ({m.homeScore} - {m.awayScore})
@@ -595,9 +603,10 @@ export function LiveDeskScorer() {
               const h = getSchoolById(m.homeTeamId);
               const a = getSchoolById(m.awayTeamId);
               const cat = getCategoryById(m.categoryId);
+              const isRescheduled = isRescheduledMatch(m);
               return (
                 <option key={m.id} value={m.id}>
-                  {m.date} | {formatTime12h(m.time)} | {m.sport.toUpperCase()} ({cat?.gender || 'Rama'}) : {h?.shortName} vs {a?.shortName} [{m.status === 'completed' ? `✓ FINALIZADO (${m.homeScore}-${m.awayScore})` : m.status === 'live' ? `🔴 EN VIVO (${m.homeScore}-${m.awayScore})` : `PROGRAMADO`}]
+                  {m.date} | {formatTime12h(m.time)} | {m.sport.toUpperCase()} ({cat?.gender || 'Rama'}) : {h?.shortName} vs {a?.shortName} [{isRescheduled ? `⚠️ POR REPROGRAMAR (Sin puntos)` : m.status === 'completed' ? `✓ FINALIZADO (${m.homeScore}-${m.awayScore})` : m.status === 'live' ? `🔴 EN VIVO (${m.homeScore}-${m.awayScore})` : `PROGRAMADO`}]
                 </option>
               );
             })}

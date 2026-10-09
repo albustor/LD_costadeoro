@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { Match } from '@/types/tournament';
 import { useTournament } from '@/context/TournamentContext';
 import { formatDateCostaRica, formatFullDateCostaRica, formatTime12h } from '@/lib/utils';
-import { MapPin, Clock, Award, CheckCircle2, ChevronRight, Calendar } from 'lucide-react';
+import { isRescheduledMatch } from '@/lib/sportsEngine';
+import { MapPin, Clock, Award, CheckCircle2, ChevronRight, Calendar, AlertTriangle } from 'lucide-react';
 import { MatchDetailModal } from './MatchDetailModal';
 import { SportWatermark, getSportTheme } from './SportGlyphs';
 import { SchoolEmblem } from './SchoolEmblem';
@@ -22,9 +23,10 @@ export function MatchCard({ match }: MatchCardProps) {
 
   const theme = getSportTheme(match.sport);
 
-  const isCompleted = match.status === 'completed';
+  const isRescheduled = isRescheduledMatch(match);
+  const isCompleted = match.status === 'completed' && !isRescheduled;
   const isLive = match.status === 'live';
-  const isScheduled = match.status === 'scheduled';
+  const isScheduled = match.status === 'scheduled' && !isRescheduled;
 
   return (
     <>
@@ -49,6 +51,12 @@ export function MatchCard({ match }: MatchCardProps) {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {isRescheduled && (
+              <span className="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 font-bold text-[10.5px] flex items-center gap-1 border border-amber-300 shadow-2xs">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
+                Por reprogramar
+              </span>
+            )}
             {isLive && (
               <span className="px-2.5 py-1 rounded-xl bg-red-100 text-red-700 font-black text-[10.5px] flex items-center gap-1 border border-red-200 animate-pulse shadow-2xs">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-ping"></span>
@@ -84,7 +92,12 @@ export function MatchCard({ match }: MatchCardProps) {
 
           {/* Score or VS */}
           <div className="shrink-0 text-center px-1">
-            {isScheduled ? (
+            {isRescheduled ? (
+              <div className="py-1 px-2 rounded-xl border border-amber-300 bg-amber-50 text-amber-950 text-center shadow-2xs">
+                <span className="block text-[10.5px] font-black uppercase tracking-tight">Reprogramar</span>
+                <span className="block text-[9px] font-bold text-amber-700">0 pts</span>
+              </div>
+            ) : isScheduled ? (
               <div className="inline-block py-1 px-2.5 rounded-xl bg-amber-400 border border-amber-500 shadow-2xs">
                 <span className="text-xs font-black text-slate-950">VS</span>
               </div>
@@ -122,6 +135,13 @@ export function MatchCard({ match }: MatchCardProps) {
                 S{idx + 1}: {set.home}-{set.away}
               </span>
             ))}
+          </div>
+        )}
+
+        {/* Banner Informativo para Partidos Reprogramados */}
+        {isRescheduled && (
+          <div className="mt-2 py-1.5 px-3 rounded-xl bg-amber-50 border border-amber-300 text-center text-[11px] font-bold text-amber-900 relative z-10">
+            ⚠️ Partido reprogramado · Sin asignación de puntos a ningún equipo
           </div>
         )}
 

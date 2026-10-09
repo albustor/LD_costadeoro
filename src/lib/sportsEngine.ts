@@ -1,6 +1,16 @@
 import { Match, School, Standing, SportType } from '@/types/tournament';
 import { SCHOOLS_DATA } from '@/config/tournamentConfig';
 
+export function isRescheduledMatch(match: Match): boolean {
+  if (!match) return false;
+  if (match.status === 'postponed') return true;
+  if (match.currentPeriod === 'Por reprogramar' || match.currentPeriod === 'Reprogramado') return true;
+  if (match.walkover && match.walkover !== 'none') return true;
+  const notes = (match.notes || '').toLowerCase();
+  if (notes.includes('reprogram') || notes.includes('no se presentó') || notes.includes('incomparecencia') || notes.includes('ausencia')) return true;
+  return false;
+}
+
 export function calculateStandings(
   categoryId: string,
   sport: SportType,
@@ -9,7 +19,7 @@ export function calculateStandings(
 ): Standing[] {
   // Filter matches for this category and completed or live status
   const categoryMatches = matches.filter(
-    (m) => m.categoryId === categoryId && (m.status === 'completed' || m.status === 'live')
+    (m) => m.categoryId === categoryId && (m.status === 'completed' || m.status === 'live' || m.status === 'postponed')
   );
 
   // Filtrar colegios que efectivamente participan en esta categoría (tienen partidos asignados)
@@ -62,28 +72,21 @@ export function calculateStandings(
 
     if (!home || !away) return;
 
-    const isAwayAbsent =
-      match.walkover === 'away_forfeit' ||
-      (match.notes?.toLowerCase().includes('no se presentó') && !match.notes?.toLowerCase().includes('local'));
-    const isHomeAbsent = match.walkover === 'home_forfeit';
-    const isWalkover =
-      isAwayAbsent ||
-      isHomeAbsent ||
-      match.notes?.toLowerCase().includes('w.o.') ||
-      match.notes?.toLowerCase().includes('no presentación');
+    const isRescheduled = isRescheduledMatch(match);
 
-    if (isAwayAbsent || isHomeAbsent) {
-      // Regla Oficial Festival Deportivo Costa de Oro:
-      // Cuando un equipo no se presenta, el partido se reprograma y NO se le asigna puntos a ninguno de los dos equipos.
-      // Ninguno de los dos equipos suma partidos jugados en cancha (0 PJ ficticios).
-    } else {
-      home.played += 1;
-      away.played += 1;
+    // Regla Oficial Festival Deportivo Costa de Oro:
+    // Cuando un partido se reprograma (o un equipo no se presenta), NO se asignan puntos a ningún equipo.
+    // Ninguno de los dos equipos suma partidos jugados (0 PJ ficticios) ni goles artificiales.
+    if (isRescheduled) {
+      return;
     }
 
-    // Goles / Puntos acumulados: se computa el tanteo registrado (0-0 si es partido pendiente de reprogramación)
-    const effectiveHomeScore = isAwayAbsent || isHomeAbsent ? 0 : match.homeScore;
-    const effectiveAwayScore = isAwayAbsent || isHomeAbsent ? 0 : match.awayScore;
+    home.played += 1;
+    away.played += 1;
+
+    // Goles / Puntos acumulados en partidos válidos disputados
+    const effectiveHomeScore = match.homeScore || 0;
+    const effectiveAwayScore = match.awayScore || 0;
 
     home.pointsFor += effectiveHomeScore;
     home.pointsAgainst += effectiveAwayScore;
@@ -96,9 +99,7 @@ export function calculateStandings(
       const winPoints = 3;
       const drawPoints = 1;
 
-      if (isAwayAbsent || isHomeAbsent) {
-        // No se asignan puntos a ningún equipo; partido pendiente de reprogramación
-      } else if (match.homeScore > match.awayScore) {
+      if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += winPoints;
         home.form.push('W');
@@ -120,9 +121,7 @@ export function calculateStandings(
       }
     } else if (sport === 'baloncesto') {
       // En baloncesto (FIBA): Victoria = 2 pts | Derrota = 1 pt.
-      if (isAwayAbsent || isHomeAbsent) {
-        // Reprogramación sin puntos
-      } else if (match.homeScore > match.awayScore) {
+      if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += 2;
         home.form.push('W');
@@ -138,23 +137,20 @@ export function calculateStandings(
         home.form.push('L');
       }
     } else if (sport === 'voleibol') {
-      if (isAwayAbsent || isHomeAbsent) {
-        // Reprogramación sin puntos
-      } else {
-        const homeSets = match.homeSetsWon ?? 0;
-        const awaySets = match.awaySetsWon ?? 0;
+      const homeSets = match.homeSetsWon ?? 0;
+      const awaySets = match.awaySetsWon ?? 0;
 
-        if (home.setsWon !== undefined) home.setsWon += homeSets;
-        if (home.setsLost !== undefined) home.setsLost += awaySets;
-        if (away.setsWon !== undefined) away.setsWon += awaySets;
-        if (away.setsLost !== undefined) away.setsLost += homeSets;
+      if (home.setsWon !== undefined) home.setsWon += homeSets;
+      if (home.setsLost !== undefined) home.setsLost += awaySets;
+      if (away.setsWon !== undefined) away.setsWon += awaySets;
+      if (away.setsLost !== undefined) away.setsLost += homeSets;
 
-        // Volleyball points: 2-0 / 3-0 / 3-1 = 3 pts win, 0 pts loss. 3-2 = 2 pts win, 1 pt loss.
-        if (homeSets > awaySets) {
-          home.won += 1;
-          home.form.push('W');
-          away.lost += 1;
-          away.form.push('L');
+      // Volleyball points: 2-0 / 3-0 / 3-1 = 3 pts win, 0 pts loss. 3-2 = 2 pts win, 1 pt loss.
+      if (homeSets > awaySets) {
+        home.won += 1;
+        home.form.push('W');
+        away.lost += 1;
+        away.form.push('L');
 
           if (awaySets >= 2 || (homeSets === 2 && awaySets === 1)) {
             home.points += 2;
@@ -169,13 +165,12 @@ export function calculateStandings(
           home.lost += 1;
           home.form.push('L');
 
-          if (homeSets >= 2 || (awaySets === 2 && homeSets === 1)) {
-            away.points += 2;
-            home.points += 1;
-          } else {
-            away.points += 3;
-            home.points += 0;
-          }
+        if (homeSets >= 2 || (awaySets === 2 && homeSets === 1)) {
+          away.points += 2;
+          home.points += 1;
+        } else {
+          away.points += 3;
+          home.points += 0;
         }
       }
     }

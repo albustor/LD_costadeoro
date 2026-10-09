@@ -37,6 +37,7 @@ const SCHOOL_PINS_MAP: Record<string, string> = {
   'journey-school': '3001',
   'vittorino': '4001',
   'educarte': '5001',
+  'colegio-invitado': '6001',
 };
 
 export function AdminRosterManager() {

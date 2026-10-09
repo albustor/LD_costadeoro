@@ -173,9 +173,17 @@ export const tournamentStorage = {
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
-          safeSet(KEYS.FAMILY_POSTS, json.data);
-          window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: json.data }));
-          return json.data;
+          const localPosts = this.getFamilyPosts();
+          const serverPosts: FamilyPost[] = json.data;
+          const serverIds = new Set(serverPosts.map((p) => p.id));
+          
+          // Preservar posts creados localmente que aún no están indexados en el servidor
+          const localOnly = localPosts.filter((p) => !serverIds.has(p.id));
+          const merged = [...localOnly, ...serverPosts];
+
+          safeSet(KEYS.FAMILY_POSTS, merged);
+          window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: merged }));
+          return merged;
         }
       }
     } catch (err) {

@@ -105,6 +105,18 @@ export const SCHOOLS_DATA: School[] = [
     city: 'Santa Cruz, Guanacaste',
     founded: 2008,
   },
+  {
+    id: 'colegio-invitado',
+    name: 'Delegación Invitada / Escazú (Ciudad Colón)',
+    shortName: 'Equipo Invitado / Escazú',
+    acronym: 'INV',
+    logo: '⭐',
+    primaryColor: '#7c3aed', // Violet
+    secondaryColor: '#6d28d9',
+    location: 'Ciudad Colón / Escazú',
+    city: 'San José',
+    founded: 2026,
+  },
 ];
 
 export const CATEGORIES_DATA: Category[] = [

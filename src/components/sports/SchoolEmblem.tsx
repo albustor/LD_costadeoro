@@ -64,6 +64,12 @@ const schoolLogoFiles: Record<string, { src: string; fallbackSrc?: string; alt: 
     alt: 'Logo Oficial Educarte Bilingual High School',
     name: 'Educarte',
   },
+  'colegio-invitado': {
+    src: '/logos/curiol_logo_oficial_transparente_hd.png',
+    fallbackSrc: '/logos/curiol_logo_oficial_transparente_hd.png',
+    alt: 'Logo Delegación Invitada / Escazú (Ciudad Colón)',
+    name: 'Delegación Invitada / Escazú (Ciudad Colón)',
+  },
 };
 
 /**
