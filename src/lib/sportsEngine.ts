@@ -145,73 +145,144 @@ export function calculateStandings(
       if (away.setsWon !== undefined) away.setsWon += awaySets;
       if (away.setsLost !== undefined) away.setsLost += homeSets;
 
-      // Volleyball points: 2-0 / 3-0 / 3-1 = 3 pts win, 0 pts loss. 3-2 = 2 pts win, 1 pt loss.
+      const isFiveSetsMatch = homeSets === 3 || awaySets === 3;
+
       if (homeSets > awaySets) {
         home.won += 1;
         home.form.push('W');
         away.lost += 1;
         away.form.push('L');
 
-          if (awaySets >= 2 || (homeSets === 2 && awaySets === 1)) {
+        if (isFiveSetsMatch) {
+          // Normativa MEP 2026 Art. 77.4 (3 de 5 sets): 3-0: 5pts | 3-1: 4pts/1pt | 3-2: 3pts/2pts
+          if (awaySets === 0) {
+            home.points += 5;
+            away.points += 0;
+          } else if (awaySets === 1) {
+            home.points += 4;
+            away.points += 1;
+          } else {
+            home.points += 3;
+            away.points += 2;
+          }
+        } else {
+          // Normativa MEP 2026 Art. 77.4 (2 de 3 sets): 2-0: 3pts/0pts | 2-1: 2pts/1pt
+          if (awaySets === 1) {
             home.points += 2;
             away.points += 1;
           } else {
             home.points += 3;
             away.points += 0;
           }
-        } else if (awaySets > homeSets) {
-          away.won += 1;
-          away.form.push('W');
-          home.lost += 1;
-          home.form.push('L');
+        }
+      } else if (awaySets > homeSets) {
+        away.won += 1;
+        away.form.push('W');
+        home.lost += 1;
+        home.form.push('L');
 
-        if (homeSets >= 2 || (awaySets === 2 && homeSets === 1)) {
-          away.points += 2;
-          home.points += 1;
+        if (isFiveSetsMatch) {
+          if (homeSets === 0) {
+            away.points += 5;
+            home.points += 0;
+          } else if (homeSets === 1) {
+            away.points += 4;
+            home.points += 1;
+          } else {
+            away.points += 3;
+            home.points += 2;
+          }
         } else {
-          away.points += 3;
-          home.points += 0;
+          if (homeSets === 1) {
+            away.points += 2;
+            home.points += 1;
+          } else {
+            away.points += 3;
+            home.points += 0;
+          }
         }
       }
     }
   });
 
-  // Calculate differentials
+  // Calculate differentials and official ratios
   const standingsList = Array.from(standingsMap.values()).map((st) => {
     st.diff = st.pointsFor - st.pointsAgainst;
     if (st.setsWon !== undefined && st.setsLost !== undefined) {
       st.setsDiff = st.setsWon - st.setsLost;
+      st.setsRatio = st.setsWon / Math.max(st.setsLost, 1);
     }
+    st.pointsRatio = st.pointsFor / Math.max(st.pointsAgainst, 1);
     // Keep last 5 form results
     st.form = st.form.slice(-5);
     return st;
   });
 
-  // Sort standings with official tie-breakers (FEDEFUTBOL / LINAFA / Liga Menor Costa Rica)
+  // Sort standings with official tie-breakers per sport (MEP / ICODER / FECOVOL / FECOBA / FEDEFUTBOL)
   standingsList.sort((a, b) => {
     // 1. Mayor Puntaje Oficial (PTS)
     if (b.points !== a.points) return b.points - a.points;
 
-    // 2. Mayor cantidad de Partidos Ganados (PG) - Criterio Oficial FECOVOL / FIVB / FIBA
+    // 2. Mayor cantidad de Partidos Ganados (PG) - Criterio Oficial FECOVOL / FIVB / FIBA / MEP
     if (b.won !== a.won) return b.won - a.won;
 
-    // 3. Voleibol: Mayor Diferencia de Sets (DS) - FECOVOL / FIVB
-    if (sport === 'voleibol' && a.setsDiff !== undefined && b.setsDiff !== undefined) {
-      // Si ambos tienen 0 puntos y uno no ha jugado (0 PJ), el equipo sin debutar no sobrepasa a los que ya compitieron
+    // A. VOLEIBOL (Normativa MEP 2026 Art. 77 numeral 5 / FECOVOL / FIVB)
+    if (sport === 'voleibol') {
+      // Protección 0 PJ: Si ambos tienen 0 puntos y uno no ha debutado, el equipo inactivo no salta por encima
       if (a.points === 0 && b.points === 0) {
         if (a.played === 0 && b.played > 0) return 1;
         if (b.played === 0 && a.played > 0) return -1;
       }
-      if (b.setsDiff !== a.setsDiff) return b.setsDiff - a.setsDiff;
+
+      // 5.b Cociente de Puntos (Ratio PF / PC)
+      const aPointsRatio = a.pointsFor / Math.max(a.pointsAgainst, 1);
+      const bPointsRatio = b.pointsFor / Math.max(b.pointsAgainst, 1);
+      if (Math.abs(bPointsRatio - aPointsRatio) > 0.0001) {
+        return bPointsRatio - aPointsRatio;
+      }
+
+      // 5.c Cociente de Sets (Ratio SG / SP)
+      const aSetsRatio = (a.setsWon ?? 0) / Math.max(a.setsLost ?? 0, 1);
+      const bSetsRatio = (b.setsWon ?? 0) / Math.max(b.setsLost ?? 0, 1);
+      if (Math.abs(bSetsRatio - aSetsRatio) > 0.0001) {
+        return bSetsRatio - aSetsRatio;
+      }
+
+      // 5.d Mayor Diferencia de Sets (DS)
+      if (a.setsDiff !== undefined && b.setsDiff !== undefined && b.setsDiff !== a.setsDiff) {
+        return b.setsDiff - a.setsDiff;
+      }
     }
 
-    // 4. Mayor Gol / Punto Diferencia (GD / DG)
+    // B. BALONCESTO (Normativa MEP 2026 Art. 68 numeral 4.b / FECOBA / FIBA)
+    if (sport === 'baloncesto') {
+      // 4.b.i Mayor diferencia de puntos en serie particular entre equipos empatados
+      const headToHead = categoryMatches.find(
+        (m) =>
+          (m.homeTeamId === a.teamId && m.awayTeamId === b.teamId) ||
+          (m.homeTeamId === b.teamId && m.awayTeamId === a.teamId)
+      );
+      if (headToHead) {
+        const aScore = headToHead.homeTeamId === a.teamId ? headToHead.homeScore : headToHead.awayScore;
+        const bScore = headToHead.homeTeamId === b.teamId ? headToHead.homeScore : headToHead.awayScore;
+        if (aScore !== bScore) return bScore - aScore;
+      }
+
+      // 4.b.iii Mayor diferencia de puntos en todos los partidos del grupo (DG)
+      if (b.diff !== a.diff) return b.diff - a.diff;
+
+      // 4.b.iv Mayor número de puntos anotados en todos los partidos del grupo (PF)
+      if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
+    }
+
+    // C. FÚTBOL / GENERAL (Normativa MEP 2026 Art. 72 numeral 6.b / FEDEFUTBOL)
+    // Mayor Gol / Punto Diferencia (GD / DG)
     if (b.diff !== a.diff) return b.diff - a.diff;
 
-    // 5. Mayor Cantidad de Goles / Puntos a Favor (GF / PF)
+    // Mayor Cantidad de Goles / Puntos a Favor (GF / PF)
     if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
 
-    // 5. Enfrentamiento particular / Serie directa entre equipos empatados
+    // Enfrentamiento particular / Serie directa entre equipos empatados
     const headToHead = categoryMatches.find(
       (m) =>
         (m.homeTeamId === a.teamId && m.awayTeamId === b.teamId) ||
@@ -223,10 +294,10 @@ export function calculateStandings(
       if (aScore !== bScore) return bScore - aScore;
     }
 
-    // 6. Menor cantidad de goles / puntos recibidos (GC / PC)
+    // Menor cantidad de goles / puntos recibidos (GC / PC)
     if (a.pointsAgainst !== b.pointsAgainst) return a.pointsAgainst - b.pointsAgainst;
 
-    // 7. Orden alfabético
+    // Orden alfabético por nombre corto
     return a.school.shortName.localeCompare(b.school.shortName);
   });
 

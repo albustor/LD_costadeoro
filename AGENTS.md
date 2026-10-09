@@ -190,19 +190,21 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 
 ---
 
-## 13. Regla Oficial de Ausencia / No Presentación y Baremo del Fútbol
+## 13. Regla Oficial Universal de Ausencia / No Presentación y Reprogramación (Fútbol, Voleibol y Baloncesto)
 
-1. **Baremo Oficial de Puntuación en Fútbol:**
-   - Victoria = **3 puntos**, Empate = **1 punto**, Derrota = **0 puntos**.
-2. **Regla Oficial de No Presentación / Ausencia (Reprogramación):**
-   - Cuando un equipo no se presenta a un encuentro (ej. Monseñor Vittorino):
-     - El partido queda en estado de **reprogramación pendiente** (`Por reprogramar`).
+1. **Baremo Oficial de Puntuación por Disciplina:**
+   - **Fútbol**: Victoria = **3 puntos**, Empate = **1 punto**, Derrota = **0 puntos**.
+   - **Voleibol (2 de 3 sets)**: Victoria 2-0 = **3 puntos**, Victoria 2-1 = **2 puntos**, Derrota 1-2 = **1 punto**, Derrota 0-2 = **0 puntos**.
+   - **Baloncesto**: Victoria = **2 puntos**, Derrota = **1 punto**.
+2. **Regla Universal de No Presentación / Ausencia (Reprogramación Obligatoria en Todos los Deportes):**
+   - Cuando un equipo no se presenta a un encuentro (en **Fútbol, Voleibol o Baloncesto**):
+     - El partido **SIEMPRE pasa a estado de reprogramación pendiente** (`status: 'postponed'`, `currentPeriod: 'Por reprogramar'`).
      - **NO se asignan puntos a ningún equipo** (0 puntos para ambos).
-     - Ninguno de los dos equipos suma partidos jugados ficticios en cancha (`played += 0`).
-3. **Marcador Fijo 0–0 y Cero Goles Artificiales:**
-   - El marcador estadístico queda en **0 – 0** (no se agregan goles artificiales ni a favor ni en contra).
-4. **Cero Absoluto para el Equipo Ausente:**
-   - La delegación no presentada queda en **0 absoluto** en partidos jugados y puntos hasta que dispute el encuentro reprogramado.
+     - Ninguno de los dos equipos suma partidos jugados en cancha (`played += 0`).
+     - El marcador estadístico queda en **0 – 0** (no se agregan sets, puntos ni goles artificiales).
+     - La delegación ausente queda en **0 absoluto** hasta disputar el encuentro reprogramado.
+3. **Mensaje Oficial Amigable en Tarjetas y Actas:**
+   - `«[Equipo] no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)»`. Prohibido el uso de jerga como "W.O." o "Incomparecencia".
 
 ---
 

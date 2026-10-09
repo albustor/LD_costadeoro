@@ -746,3 +746,16 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - En Voleibol, cuando dos o más equipos están empatados en 0 puntos, aquellos equipos con **0 partidos jugados (`PJ = 0`)** que no han debutado no superan a equipos que ya compitieron en cancha por mera diferencia neutra.
      - Se mantiene la Diferencia de Sets (`DS`) y Puntos a Favor/Contra (`PF/PC`) entre equipos con encuentros disputados.
 - **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
+
+---
+
+## ADR-054: Alineación con Normativa Oficial MEP 2026 y Regla Universal de Reprogramación (Todos los Deportes)
+- **Fecha**: 2026-10-09
+- **Contexto**: Auditoría contra el documento oficial *«Normativa Juegos Deportivos Estudiantiles 2026 (MEP / ICODER)»* para Voleibol (Art. 77) y Baloncesto (Art. 68), además de la directriz de reprogramación universal por no presentación.
+- **Decisión**:
+  1. En `src/lib/sportsEngine.ts`:
+     - **Voleibol**: Incorporada la escala MEP para partidos a 5 sets (3-0: 5pts | 3-1: 4pts/1pt | 3-2: 3pts/2pts) y cálculo de Cociente de Puntos (`PF / PC`) y Cociente de Sets (`SG / SP`) como criterios oficiales de desempate federativo (Art. 77.5).
+     - **Baloncesto**: Priorizado el desempate por serie particular antes de la diferencia general del grupo (Art. 68.4.b).
+  2. En `AGENTS.md`, `GEMINI.md` y `C:\Users\curio\.gemini\config\AGENTS.md`:
+     - Consagrada la **Regla Universal de No Presentación**: todo partido con ausencia en Fútbol, Voleibol o Baloncesto **SIEMPRE se reprograma** (`status: 'postponed'`, 0 puntos y 0 PJ para ambos, marcador neutro 0–0 y cero goles/sets/puntos artificiales).
+- **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y publicado en producción.

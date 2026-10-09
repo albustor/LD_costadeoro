@@ -135,6 +135,8 @@ export interface Standing {
   setsWon?: number;
   setsLost?: number;
   setsDiff?: number;
+  setsRatio?: number;
+  pointsRatio?: number;
   form: ('W' | 'D' | 'L')[];
   position?: number;
 }
