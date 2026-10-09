@@ -735,7 +735,14 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
   3. En `src/lib/evolutionApi.ts` y `src/app/api/matches/route.ts`:
      - Implementado `formatMatchResultNotificationMessage(match)` y `sendMatchNotificationToAlberto(match)`.
      - Automatizado el despacho por Evolution API en `POST /api/matches` al guardar o actualizar cualquier encuentro.
-- **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y desplegado en producción.
+---
 
-
-
+## ADR-053: Criterio Oficial de Desempate en Voleibol y Jerarquía de Equipos sin Debutar (0 PJ)
+- **Fecha**: 2026-10-09
+- **Contexto**: En la tabla de posiciones de Voleibol Femenino Categoría C, La Paz Tempisque (0 PJ, 0 pts, 0 DS) aparecía clasificado de 2.º lugar por encima de Educarte y Monseñor Vittorino (1 PJ, 0 pts, -2 DS), debido a que la resta matemática `0 DS > -2 DS` beneficiaba artificialmente a un equipo que no había debutado.
+- **Decisión**:
+  1. En `src/lib/sportsEngine.ts`:
+     - Se incorporó como segundo criterio de desempate oficial (FECOVOL / FIVB / FIBA) la **Mayor cantidad de Partidos Ganados (`PG / won`)**.
+     - En Voleibol, cuando dos o más equipos están empatados en 0 puntos, aquellos equipos con **0 partidos jugados (`PJ = 0`)** que no han debutado no superan a equipos que ya compitieron en cancha por mera diferencia neutra.
+     - Se mantiene la Diferencia de Sets (`DS`) y Puntos a Favor/Contra (`PF/PC`) entre equipos con encuentros disputados.
+- **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
