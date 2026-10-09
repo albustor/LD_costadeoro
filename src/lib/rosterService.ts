@@ -32,6 +32,15 @@ export const INITIAL_DEFAULT_ROSTERS: TeamRoster[] = [
     updatedAt: new Date().toISOString(),
   },
   {
+    schoolId: 'la-paz-tempisque',
+    sport: 'voleibol',
+    categoryId: 'cat-c-voleibol',
+    coachName: '',
+    assistantCoachName: '',
+    players: [],
+    updatedAt: new Date().toISOString(),
+  },
+  {
     schoolId: 'cria',
     sport: 'futbol',
     categoryId: 'cat-c-futbol',

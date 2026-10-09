@@ -491,6 +491,27 @@
       "updatedAt": "2026-10-08T16:00:00Z"
     },
     {
+      "id": "j1-vol-c-03",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 1,
+      "jornadaName": "Jornada 1 · Festival Deportivo",
+      "categoryId": "cat-c-voleibol",
+      "sport": "voleibol",
+      "date": "2026-10-08",
+      "time": "16:45",
+      "venue": "Arena La Paz",
+      "homeTeamId": "la-paz-tempisque",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 0,
+      "awayScore": 0,
+      "homeSetsWon": 0,
+      "awaySetsWon": 0,
+      "status": "scheduled",
+      "currentPeriod": "Por Iniciar",
+      "notes": "Jornada 1 - Voleibol Femenino Categoría C (4:45 pm) · La Paz Tempisque vs La Paz Cabo Velas",
+      "updatedAt": "2026-10-08T16:45:00Z"
+    },
+    {
       "id": "j1-vol-d-01",
       "tournamentId": "costa-de-oro-2026",
       "jornada": 1,
@@ -498,7 +519,7 @@
       "categoryId": "cat-d-voleibol",
       "sport": "voleibol",
       "date": "2026-10-08",
-      "time": "16:45",
+      "time": "17:30",
       "venue": "Arena La Paz",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "vittorino",
@@ -508,8 +529,8 @@
       "awaySetsWon": 0,
       "status": "scheduled",
       "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 1 - Voleibol Femenino Categoría D (4:45 pm)",
-      "updatedAt": "2026-10-08T16:45:00Z"
+      "notes": "Jornada 1 - Voleibol Femenino Categoría D (5:30 pm)",
+      "updatedAt": "2026-10-08T17:30:00Z"
     },
     {
       "id": "j1-bal-c-01",
