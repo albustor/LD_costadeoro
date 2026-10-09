@@ -583,7 +583,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   {isFestivalActiveDay ? (
                     <label className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all border border-slate-200 shadow-2xs">
                       <Camera className="w-4 h-4 text-amber-600" />
-                      <span>{selectedFile ? 'Cambiar foto o video' : 'Adjuntar foto o video (opcional)'}</span>
+                      <span>{selectedFile ? 'Cambiar foto o video' : 'Adjuntar foto o video corto (hasta 15 s)'}</span>
                       <input
                         type="file"
                         accept="image/*,video/*"
@@ -1216,7 +1216,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                     Adjunta tu foto o video corto y publica
                   </h4>
                   <p className="text-[11px] text-slate-600 leading-snug">
-                    Sube fotos de jugadas o videos cortos (10–30 seg), escribe tu nombre o parentesco y toca <strong>«Publicar mensaje ahora»</strong>.
+                    Sube fotos de jugadas o videos cortos (hasta 15 seg), escribe tu nombre o parentesco y toca <strong>«Publicar mensaje ahora»</strong>.
                   </p>
                 </div>
               </div>
