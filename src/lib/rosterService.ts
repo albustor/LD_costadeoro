@@ -249,6 +249,24 @@ export const rosterService = {
     }).catch((err) => console.error('[rosterService] Error guardando lote de nóminas en servidor:', err));
   },
 
+  // 4b. Eliminar una nómina de equipo por colegio y categoría
+  deleteCategoryRoster(schoolId: string, sport: SportType, categoryId: string): void {
+    if (typeof window === 'undefined') return;
+    const current = this.getAllRosters();
+    const filtered = current.filter(
+      (r) => !(r.schoolId === schoolId && r.sport === sport && r.categoryId === categoryId)
+    );
+
+    localStorage.setItem(ROSTERS_STORAGE_KEY, JSON.stringify(filtered));
+    window.dispatchEvent(new CustomEvent('rosters_sync_updated', { detail: filtered }));
+    window.dispatchEvent(new CustomEvent('roster_updated'));
+
+    // Persistir eliminación en el servidor central
+    fetch(`/api/rosters?schoolId=${encodeURIComponent(schoolId)}&sport=${encodeURIComponent(sport)}&categoryId=${encodeURIComponent(categoryId)}`, {
+      method: 'DELETE',
+    }).catch((err) => console.error('[rosterService] Error eliminando nómina en servidor:', err));
+  },
+
   // 5. Generar archivo Excel (.xls XML Spreadsheet 2003 nativo) multi-hoja por deporte con datos existentes
   generateExcelWorkbook(school?: School): Blob {
     const targetSchoolName = school ? school.name : 'Todas las Instituciones Oficiales';

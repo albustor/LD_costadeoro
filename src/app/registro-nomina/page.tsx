@@ -311,6 +311,32 @@ function RegistroNominaContent() {
     setPlayers(players.filter((_, idx) => idx !== index));
   };
 
+  // Eliminar / Vaciar Nómina de la Categoría
+  const handleDeleteCategoryRoster = () => {
+    if (!selectedSchool) return;
+    const catName = availableCategories.find((c) => c.id === selectedCategoryId)?.name || selectedCategoryId;
+
+    if (
+      typeof window !== 'undefined' &&
+      window.confirm(
+        `¿Estás seguro de que deseas eliminar y vaciar la nómina de ${selectedSchool.shortName} para "${catName}"?\n\nEsta acción borrará a todos los atletas y cuerpo técnico registrados en esta categoría.`
+      )
+    ) {
+      rosterService.deleteCategoryRoster(selectedSchool.id, selectedSport, selectedCategoryId);
+      loadRosters();
+      setCoachName('');
+      setAssistantCoachName('');
+      setPlayers([]);
+      setStatusMessage({
+        type: 'info',
+        text: `Nómina de "${catName}" eliminada de la base de datos oficial.`,
+      });
+      setTimeout(() => {
+        setStatusMessage(null);
+      }, 4000);
+    }
+  };
+
   const availableCategories = CATEGORIES_DATA.filter((c) => c.sport === selectedSport);
 
   return (
@@ -799,7 +825,17 @@ function RegistroNominaContent() {
                       </span>
                     )}
 
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={handleDeleteCategoryRoster}
+                        className="px-3.5 py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
+                        title="Eliminar y vaciar la nómina registrada para esta categoría"
+                      >
+                        <Trash2 className="w-4 h-4 text-rose-600" />
+                        <span>Eliminar Nómina</span>
+                      </button>
+
                       <a
                         href="/colegios"
                         target="_self"
@@ -807,7 +843,7 @@ function RegistroNominaContent() {
                         title="Ver cómo quedó publicada la nómina en la sección oficial de colegios"
                       >
                         <ExternalLink className="w-4 h-4 text-slate-600" />
-                        <span>Ver Nómina en Colegios</span>
+                        <span className="hidden sm:inline">Ver en Colegios</span>
                       </a>
 
                       <button

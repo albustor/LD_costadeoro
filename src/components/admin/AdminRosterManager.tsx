@@ -322,6 +322,64 @@ export function AdminRosterManager() {
     setPlayers(players.filter((_, idx) => idx !== index));
   };
 
+  // Eliminar Nómina de la Categoría Activa
+  const handleDeleteCurrentRoster = () => {
+    const targetSchool = schools.find((s) => s.id === selectedSchoolId);
+    const targetCat = categories.find((c) => c.id === selectedCategoryId);
+    const schoolName = targetSchool?.shortName || selectedSchoolId;
+    const catName = targetCat?.name || selectedCategoryId;
+
+    if (
+      typeof window !== 'undefined' &&
+      window.confirm(
+        `¿Estás seguro de que deseas eliminar el equipo y la nómina de "${schoolName}" en la categoría "${catName}"?\n\nEsta acción borrará a todos los atletas y cuerpo técnico registrados en este equipo.`
+      )
+    ) {
+      rosterService.deleteCategoryRoster(selectedSchoolId, selectedSport, selectedCategoryId);
+      reloadRosters();
+      setCoachName('');
+      setAssistantCoachName('');
+      setPlayers([]);
+      setStatusMessage({
+        type: 'info',
+        text: `Equipo y nómina de "${schoolName}" (${catName}) eliminados exitosamente.`,
+      });
+      setTimeout(() => setStatusMessage(null), 4000);
+    }
+  };
+
+  // Eliminar Nómina Específica del Directorio
+  const handleDeleteSpecificRoster = (r: TeamRoster) => {
+    const targetSchool = schools.find((s) => s.id === r.schoolId);
+    const targetCat = categories.find((c) => c.id === r.categoryId);
+    const schoolName = targetSchool?.shortName || r.schoolId;
+    const catName = targetCat?.name || r.categoryId;
+
+    if (
+      typeof window !== 'undefined' &&
+      window.confirm(
+        `¿Eliminar definitivamente el equipo y la nómina de "${schoolName}" en "${catName}"?\n\nSe eliminarán los ${r.players.length} atletas inscritos.`
+      )
+    ) {
+      rosterService.deleteCategoryRoster(r.schoolId, r.sport, r.categoryId);
+      reloadRosters();
+      if (
+        r.schoolId === selectedSchoolId &&
+        r.sport === selectedSport &&
+        r.categoryId === selectedCategoryId
+      ) {
+        setCoachName('');
+        setAssistantCoachName('');
+        setPlayers([]);
+      }
+      setStatusMessage({
+        type: 'info',
+        text: `Equipo y nómina de "${schoolName}" eliminados del sistema.`,
+      });
+      setTimeout(() => setStatusMessage(null), 4000);
+    }
+  };
+
   // Estadísticas Globales
   const totalPlayersAll = allRosters.reduce((sum, r) => sum + r.players.length, 0);
   const totalCaptains = allRosters.reduce((sum, r) => sum + r.players.filter((p) => p.isCaptain).length, 0);
@@ -791,17 +849,151 @@ export function AdminRosterManager() {
           </div>
         )}
 
-        {/* Botón de Guardado */}
-        <div className="pt-2">
+        {/* Botones de Acción: Guardar y Eliminar */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center gap-2.5">
           <button
             type="button"
             onClick={handleSaveRoster}
-            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-slate-950 font-black text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all"
+            className="flex-1 w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-slate-950 font-black text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all"
           >
             <Save className="w-4 h-4" />
             <span>Guardar Nómina y Sincronizar con Toda la Plataforma</span>
           </button>
+
+          <button
+            type="button"
+            onClick={handleDeleteCurrentRoster}
+            className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-800 hover:text-rose-950 border border-rose-300 font-extrabold text-xs sm:text-sm shadow-2xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+            title="Eliminar la nómina y los atletas de este equipo para la categoría activa"
+          >
+            <Trash2 className="w-4 h-4 text-rose-600" />
+            <span>Eliminar Equipo / Nómina</span>
+          </button>
         </div>
+      </div>
+
+      {/* 📋 DIRECTORIO DE EQUIPOS Y NÓMINAS REGISTRADAS EN LA PLATAFORMA */}
+      <div className="border-t border-slate-200 pt-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="font-black text-slate-900 text-sm sm:text-base flex items-center gap-2">
+              <Users className="w-5 h-5 text-amber-600" />
+              <span>Directorio de Equipos y Nóminas Registradas ({allRosters.length})</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              Vista general de todos los equipos con nómina inscrita en el torneo. Puedes editar o eliminar cualquier equipo directamente.
+            </p>
+          </div>
+
+          <div className="relative w-full sm:w-64">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar por colegio o categoría..."
+              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-900 placeholder:text-slate-400"
+            />
+          </div>
+        </div>
+
+        {allRosters.length === 0 ? (
+          <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-slate-500 text-xs">
+            No hay nóminas registradas actualmente en el sistema.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {allRosters
+              .filter((r) => {
+                if (!searchQuery.trim()) return true;
+                const q = searchQuery.toLowerCase();
+                const s = schools.find((sch) => sch.id === r.schoolId);
+                const c = categories.find((cat) => cat.id === r.categoryId);
+                return (
+                  r.schoolId.toLowerCase().includes(q) ||
+                  (s?.name || '').toLowerCase().includes(q) ||
+                  (s?.shortName || '').toLowerCase().includes(q) ||
+                  (c?.name || '').toLowerCase().includes(q) ||
+                  r.sport.toLowerCase().includes(q) ||
+                  (r.coachName || '').toLowerCase().includes(q)
+                );
+              })
+              .map((r, idx) => {
+                const s = schools.find((sch) => sch.id === r.schoolId);
+                const c = categories.find((cat) => cat.id === r.categoryId);
+                const isCurrentActive =
+                  r.schoolId === selectedSchoolId &&
+                  r.sport === selectedSport &&
+                  r.categoryId === selectedCategoryId;
+
+                return (
+                  <div
+                    key={`${r.schoolId}-${r.sport}-${r.categoryId}-${idx}`}
+                    className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
+                      isCurrentActive
+                        ? 'bg-amber-50/60 border-amber-400 shadow-2xs'
+                        : 'bg-slate-50 hover:bg-white border-slate-200 hover:border-slate-300 shadow-2xs'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <SchoolEmblem schoolId={r.schoolId} size="xs" />
+                        <div className="min-w-0">
+                          <span className="font-extrabold text-xs sm:text-sm text-slate-900 block truncate">
+                            {s?.shortName || r.schoolId}
+                          </span>
+                          <span className="text-[11px] text-slate-500 font-bold block truncate">
+                            {c?.name || r.categoryId}
+                          </span>
+                        </div>
+                      </div>
+
+                      <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[10px] font-mono font-extrabold text-amber-950 shrink-0">
+                        {r.players.length} atletas
+                      </span>
+                    </div>
+
+                    <div className="text-[11px] text-slate-600 space-y-0.5 pt-1 border-t border-slate-200/60">
+                      {r.coachName && (
+                        <div className="truncate">
+                          <strong className="text-slate-700">DT:</strong> {r.coachName}
+                        </div>
+                      )}
+                      <div className="text-[10px] text-slate-400">
+                        Disciplina: <span className="uppercase font-bold text-slate-600">{r.sport}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 pt-2 border-t border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedSchoolId(r.schoolId);
+                          setSelectedSport(r.sport);
+                          setSelectedCategoryId(r.categoryId);
+                          window.scrollTo({ top: 300, behavior: 'smooth' });
+                        }}
+                        className="flex-1 py-1.5 px-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <Edit3 className="w-3 h-3 text-amber-600" />
+                        <span>Editar</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSpecificRoster(r)}
+                        className="py-1.5 px-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-900 border border-rose-200 text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                        title="Eliminar este equipo y su nómina de la plataforma"
+                      >
+                        <Trash2 className="w-3 h-3 text-rose-600" />
+                        <span>Eliminar</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        )}
       </div>
     </div>
   );

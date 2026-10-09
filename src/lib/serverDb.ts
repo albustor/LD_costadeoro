@@ -460,6 +460,23 @@ export async function saveMultipleRostersToDb(rostersToSave: TeamRoster[]): Prom
 }
 
 /**
+ * Elimina una nómina de equipo de la base de datos centralizada
+ */
+export async function deleteRosterFromDb(schoolId: string, sport: string, categoryId: string): Promise<boolean> {
+  const db = await getTournamentDb();
+  const initialLen = (db.rosters || []).length;
+  db.rosters = (db.rosters || []).filter(
+    (r) => !(r.schoolId === schoolId && r.sport === sport && r.categoryId === categoryId)
+  );
+
+  if (db.rosters.length !== initialLen) {
+    await saveTournamentDb(db);
+    return true;
+  }
+  return false;
+}
+
+/**
  * Inicializa el objeto de analítica por defecto
  */
 function getDefaultAnalyticsData(todayDateStr: string): AnalyticsDbData {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllRostersFromDb, saveRosterToDb, saveMultipleRostersToDb } from '@/lib/serverDb';
+import { getAllRostersFromDb, saveRosterToDb, saveMultipleRostersToDb, deleteRosterFromDb } from '@/lib/serverDb';
 import { TeamRoster } from '@/types/tournament';
 import { sendRosterNotificationToAdmins } from '@/lib/evolutionApi';
 
@@ -113,6 +113,57 @@ export async function POST(req: NextRequest) {
       {
         success: false,
         error: 'Error al persistir la nómina en la base de datos central.',
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * DELETE /api/rosters
+ * Elimina la nómina de un equipo específico en una categoría y disciplina
+ */
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    let schoolId = searchParams.get('schoolId');
+    let sport = searchParams.get('sport');
+    let categoryId = searchParams.get('categoryId');
+
+    if (!schoolId || !sport || !categoryId) {
+      try {
+        const body = await req.json();
+        schoolId = schoolId || body.schoolId;
+        sport = sport || body.sport;
+        categoryId = categoryId || body.categoryId;
+      } catch {}
+    }
+
+    if (!schoolId || !sport || !categoryId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Parámetros incompletos: schoolId, sport y categoryId son requeridos para eliminar.',
+        },
+        { status: 400 }
+      );
+    }
+
+    const deleted = await deleteRosterFromDb(schoolId, sport, categoryId);
+
+    return NextResponse.json({
+      success: true,
+      deleted,
+      message: deleted
+        ? 'Nómina del equipo eliminada exitosamente de la base de datos central.'
+        : 'No se encontró la nómina especificada para eliminar.',
+    });
+  } catch (error) {
+    console.error('[API Rosters DELETE Error]:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Error interno al eliminar la nómina del servidor.',
       },
       { status: 500 }
     );
