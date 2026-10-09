@@ -25,3 +25,7 @@
 ## 5. Simplicidad Radical y Validación Local
 - Probar todo en `http://localhost:3014` antes de despliegues.
 - Cero código muerto, interfaces directas y de alta velocidad en smartphones.
+
+## 6. Reasignación y Ajustes de Equipos en Caliente
+- Ajustes de Horario (`/admin` Pestaña 3) y Marcador en Vivo (`LiveDeskScorer.tsx`): habilitados selectores de equipo local/visitante, inversión rápida de delegaciones (`⇄`) y reprogramación de horas/sedes con persistencia atómica.
+

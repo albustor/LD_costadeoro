@@ -38,7 +38,7 @@ import {
 } from 'lucide-react';
 
 export function LiveDeskScorer() {
-  const { matches, updateMatch, getSchoolById, getCategoryById } = useTournament();
+  const { matches, updateMatch, schools, getSchoolById, getCategoryById } = useTournament();
   
   const [selectedMatchId, setSelectedMatchId] = useState<string>(matches[0]?.id || '');
   const [showOfficialSheet, setShowOfficialSheet] = useState<boolean>(false);
@@ -111,6 +111,40 @@ export function LiveDeskScorer() {
         setAwayDelegate(target.officialReport.awayDelegate || '');
       }
     }
+  };
+
+  // Intercambiar equipos asignados en caliente
+  const handleSwapActiveTeams = () => {
+    if (!currentMatch) return;
+    const prevHome = currentMatch.homeTeamId;
+    const prevAway = currentMatch.awayTeamId;
+    const prevHomeScore = homeScore;
+    const prevAwayScore = awayScore;
+
+    setHomeScore(prevAwayScore);
+    setAwayScore(prevHomeScore);
+
+    const updated: Match = {
+      ...currentMatch,
+      homeTeamId: prevAway,
+      awayTeamId: prevHome,
+      homeScore: prevAwayScore,
+      awayScore: prevHomeScore,
+      updatedAt: new Date().toISOString(),
+    };
+    updateMatch(updated);
+  };
+
+  // Reasignar equipo individualmente
+  const handleChangeActiveTeam = (side: 'home' | 'away', newSchoolId: string) => {
+    if (!currentMatch) return;
+    const updated: Match = {
+      ...currentMatch,
+      homeTeamId: side === 'home' ? newSchoolId : currentMatch.homeTeamId,
+      awayTeamId: side === 'away' ? newSchoolId : currentMatch.awayTeamId,
+      updatedAt: new Date().toISOString(),
+    };
+    updateMatch(updated);
   };
 
   // Resolución por No Presentación / Incomparecencia (W.O. - Walkover)
@@ -673,14 +707,28 @@ export function LiveDeskScorer() {
           {/* Marcador Central Interactivo */}
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
             
-            {/* Equipo Local (Control de Puntuación) */}
+            {/* Equipo Local (Control de Puntuación y Reasignación) */}
             <div className="md:col-span-3 p-4 sm:p-5 bg-gradient-to-br from-slate-50 to-amber-50/40 rounded-3xl border border-slate-200 flex flex-col items-center text-center gap-3">
               <SchoolEmblem schoolId={home?.id || ''} size="lg" />
-              <div>
+              <div className="w-full space-y-1">
                 <span className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight block">
                   {home?.name}
                 </span>
-                <span className="text-[11px] text-slate-500 font-semibold">(Local)</span>
+                <div className="flex items-center justify-center gap-1.5">
+                  <span className="text-[11px] text-slate-500 font-semibold">(Local)</span>
+                  <select
+                    value={currentMatch.homeTeamId}
+                    onChange={(e) => handleChangeActiveTeam('home', e.target.value)}
+                    className="text-[11px] font-bold bg-white border border-slate-300 rounded-lg px-2 py-0.5 text-slate-800 focus:ring-1 focus:ring-amber-500 cursor-pointer"
+                    title="Cambiar equipo local asignado"
+                  >
+                    {schools.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.shortName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Número de Marcador */}
@@ -735,8 +783,18 @@ export function LiveDeskScorer() {
               </button>
             </div>
 
-            {/* Centro: Periodo y Tiempo */}
+            {/* Centro: Periodo, Tiempo y Botón Intercambio */}
             <div className="md:col-span-1 flex flex-col items-center text-center gap-3 py-2">
+              <button
+                type="button"
+                onClick={handleSwapActiveTeams}
+                className="px-2.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 text-xs font-black shadow-2xs transition flex items-center gap-1 cursor-pointer"
+                title="Intercambiar Local y Visitante"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>⇄ Invertir</span>
+              </button>
+
               <div className="space-y-1">
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                   Periodo Actual
@@ -839,14 +897,28 @@ export function LiveDeskScorer() {
               </div>
             </div>
 
-            {/* Equipo Visitante (Control de Puntuación) */}
+            {/* Equipo Visitante (Control de Puntuación y Reasignación) */}
             <div className="md:col-span-3 p-4 sm:p-5 bg-gradient-to-br from-slate-50 to-sky-50/40 rounded-3xl border border-slate-200 flex flex-col items-center text-center gap-3">
               <SchoolEmblem schoolId={away?.id || ''} size="lg" />
-              <div>
+              <div className="w-full space-y-1">
                 <span className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight block">
                   {away?.name}
                 </span>
-                <span className="text-[11px] text-slate-500 font-semibold">(Visitante)</span>
+                <div className="flex items-center justify-center gap-1.5">
+                  <span className="text-[11px] text-slate-500 font-semibold">(Visitante)</span>
+                  <select
+                    value={currentMatch.awayTeamId}
+                    onChange={(e) => handleChangeActiveTeam('away', e.target.value)}
+                    className="text-[11px] font-bold bg-white border border-slate-300 rounded-lg px-2 py-0.5 text-slate-800 focus:ring-1 focus:ring-amber-500 cursor-pointer"
+                    title="Cambiar equipo visitante asignado"
+                  >
+                    {schools.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.shortName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Número de Marcador */}

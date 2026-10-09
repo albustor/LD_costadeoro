@@ -240,3 +240,13 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
    - Navegación móvil concentrada en 3 vistas esenciales (Partidos, Fotos, Sedes/Reglamento).
    - Eliminar dependencias innecesarias de IA multicapa; si se requiere búsqueda, priorizar indexación directa o una sola consulta a Gemini Flash.
 4. **Guardián de la Simplicidad:** Jim supervisará que cualquier módulo nuevo respete la premisa de ser ligero, rápido de abrir en celulares bajo el sol y fácil de operar para la directiva deportiva.
+
+---
+
+## 17. Reasignación Manual de Equipos y Ajustes en Caliente
+
+1. **Flexibilidad Operativa para la Mesa Técnica:**
+   - Tanto en el panel de **Ajustes de Horario** (`AdminControlPanel.tsx` - Pestaña 3) como en la **Consola de Marcador en Vivo** (`LiveDeskScorer.tsx` - Pestaña 1), la mesa técnica cuenta con selectores directos de equipo local y visitante y botón de inversión rápida (`⇄ Invertir / Intercambiar`).
+2. **Persistencia Inmediata:**
+   - Todo cambio de equipos, horarios (+15m, +30m), sedes o categorías se persiste de inmediato en el estado global (`TournamentContext`) y se sincroniza con el servidor (`/api/matches` y `tournament_db.json`).
+

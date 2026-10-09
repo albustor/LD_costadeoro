@@ -630,6 +630,18 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
 
 ---
 
+## ADR-045: Reasignación Manual de Equipos y Ajustes de Horario en Caliente
+- **Fecha**: 2026-10-09
+- **Contexto**: Durante el transcurso del Festival Deportivo, los delegados y la mesa técnica de Don Alejandro requerían la capacidad de realizar ajustes manuales en los equipos asignados a los partidos (local y visitante), intercambiar roles de localía, reprogramar fechas, horas y canchas sin tener que reiniciar datos ni entrar a la base de datos manualmente.
+- **Decisión**:
+  1. En `src/components/admin/AdminControlPanel.tsx` (Pestaña 3 - Ajustes de Horario): Se implementó interfaz interactiva completa que permite seleccionar el colegio local y visitante con selectores independientes, botón de intercambio rápido `⇄`, edición de fecha, hora, categoría y sede, con guardado atómico en servidor.
+  2. En `src/components/admin/LiveDeskScorer.tsx` (Pestaña 1 - Consola de Marcador en Vivo): Se habilitaron selectores rápidos de equipo local/visitante y botón `⇄ Invertir` en la tarjeta activa de la mesa de control.
+  3. En `AGENTS.md` y `GEMINI.md`: Se formalizó la regla 17 y 6 de reasignación en caliente y se eliminó el archivo redundante `agent.md`.
+- **Estado**: ✅ Implementado, auditado, verificado con `npm run build` (0 errores) y publicado en `origin main`.
+
+---
+
 ## ADR: Adopción de Simplicidad Radical (Octubre 2026)
 - **Decisión:** Priorizar la usabilidad directa del Festival Deportivo, eliminando la sobrecarga de dependencias y simplificando la navegación para los usuarios móviles de los colegios participantes.
 - **Acción:** Depurar prototipos obsoletos y concentrar la UI en partidos, marcadores y fotos de alta velocidad.
+
