@@ -41,7 +41,9 @@ import {
   MessageSquare,
   Phone,
   Activity,
-  Heart
+  Heart,
+  Search,
+  Filter
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -323,6 +325,50 @@ export function AdminControlPanel() {
   const [editSchedCategoryId, setEditSchedCategoryId] = useState<string>('');
   const [editSchedPeriod, setEditSchedPeriod] = useState<string>('');
   const [editSchedSavedSuccess, setEditSchedSavedSuccess] = useState<string | null>(null);
+
+  // Estados para filtros y búsqueda en Pestaña 3 (Ajustes de Horarios)
+  const [schedFilterSport, setSchedFilterSport] = useState<string>('all');
+  const [schedFilterDay, setSchedFilterDay] = useState<string>('all');
+  const [schedFilterCategory, setSchedFilterCategory] = useState<string>('all');
+  const [schedSearchQuery, setSchedSearchQuery] = useState<string>('');
+
+  const formatScheduleDayLabel = (dateStr: string) => {
+    if (!dateStr) return 'Fecha sin definir';
+    if (!dateStr.includes('-')) return dateStr;
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    const [year, month, day] = parts.map(Number);
+    const dateObj = new Date(year, month - 1, day);
+    const dayNames = ['Dom', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sáb'];
+    const monthNames = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const dayName = dayNames[dateObj.getDay()] || '';
+    const monthName = monthNames[month] || 'Oct';
+    return `${dayName} ${day} ${monthName}`;
+  };
+
+  const uniqueScheduleDates = Array.from(new Set(matches.map((m) => m.date).filter(Boolean))).sort();
+
+  const filteredScheduleMatches = matches.filter((m) => {
+    if (schedFilterSport !== 'all' && m.sport !== schedFilterSport) return false;
+    if (schedFilterDay !== 'all' && m.date !== schedFilterDay) return false;
+    if (schedFilterCategory !== 'all' && m.categoryId !== schedFilterCategory) return false;
+    if (schedSearchQuery.trim()) {
+      const q = schedSearchQuery.toLowerCase();
+      const h = getSchoolById(m.homeTeamId);
+      const a = getSchoolById(m.awayTeamId);
+      const cat = getCategoryById(m.categoryId);
+      const matchText = `${h?.name || ''} ${h?.shortName || ''} ${a?.name || ''} ${a?.shortName || ''} ${cat?.name || ''} ${m.venue || ''} ${m.jornadaName || ''} ${m.date || ''}`.toLowerCase();
+      if (!matchText.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const handleResetScheduleFilters = () => {
+    setSchedFilterSport('all');
+    setSchedFilterDay('all');
+    setSchedFilterCategory('all');
+    setSchedSearchQuery('');
+  };
 
   const handleStartEditScheduleMatch = (m: Match) => {
     setEditingScheduleMatchId(m.id);
@@ -829,6 +875,7 @@ export function AdminControlPanel() {
       {/* 📅 PESTAÑA 3: GESTIÓN RÁPIDA DE HORARIOS, RETRASOS Y REASIGNACIÓN DE EQUIPOS */}
       {activeTab === 'schedule' && (
         <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-5">
+          {/* Encabezado con Contadores */}
           <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -839,247 +886,373 @@ export function AdminControlPanel() {
                 Modifica los equipos asignados a cada partido, ajusta horas de inicio por retrasos (+15m/+30m) o cambia la sede y categoría en caliente.
               </p>
             </div>
-            <div className="text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl self-start sm:self-auto">
-              {matches.length} partidos programados
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200 px-3 py-1.5 rounded-xl">
+                {filteredScheduleMatches.length} de {matches.length} partidos
+              </span>
             </div>
           </div>
 
-          <div className="space-y-4">
-            {matches.map((m) => {
-              const h = getSchoolById(m.homeTeamId);
-              const a = getSchoolById(m.awayTeamId);
-              const cat = getCategoryById(m.categoryId);
-              const isEditing = editingScheduleMatchId === m.id;
-              const isJustSaved = editSchedSavedSuccess === m.id;
-
-              return (
-                <div
-                  key={m.id}
-                  className={`p-4 rounded-2xl border transition-all ${
-                    isEditing
-                      ? 'bg-amber-50/50 border-amber-300 ring-2 ring-amber-400/30 shadow-md'
-                      : isJustSaved
-                      ? 'bg-emerald-50 border-emerald-300'
-                      : 'bg-slate-50 hover:bg-slate-100/70 border-slate-200'
+          {/* 🔍 BARRA DE FILTROS: POR DEPORTE, POR DÍA, POR CATEGORÍA Y BÚSQUEDA */}
+          <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3.5">
+            {/* 1. Chips de Deporte */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs font-bold text-slate-500 flex items-center gap-1 mr-1">
+                <Trophy className="w-3.5 h-3.5 text-amber-600" />
+                <span>Deporte:</span>
+              </span>
+              {[
+                { id: 'all', label: 'Todos los Deportes', icon: '🏅' },
+                { id: 'futbol', label: 'Fútbol', icon: '⚽' },
+                { id: 'voleibol', label: 'Voleibol', icon: '🏐' },
+                { id: 'baloncesto', label: 'Baloncesto', icon: '🏀' },
+              ].map((sp) => (
+                <button
+                  key={sp.id}
+                  type="button"
+                  onClick={() => setSchedFilterSport(sp.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                    schedFilterSport === sp.id
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-white hover:bg-slate-200/80 text-slate-700 border border-slate-200'
                   }`}
                 >
-                  {/* Vista Modo Edición */}
-                  {isEditing ? (
-                    <div className="space-y-4 animate-fade-in">
-                      <div className="flex items-center justify-between border-b border-amber-200 pb-2">
-                        <div className="flex items-center gap-2">
-                          <Edit3 className="w-4 h-4 text-amber-700" />
-                          <span className="font-extrabold text-xs sm:text-sm text-amber-950">
-                            Editando Partido: {m.id}
+                  <span>{sp.icon}</span>
+                  <span>{sp.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* 2. Filtros Desplegables: Día, Categoría y Buscador */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+              {/* Filtro por Día */}
+              <div>
+                <label className="text-[11px] font-bold text-slate-600 block mb-1 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Por Día / Fecha:</span>
+                </label>
+                <select
+                  value={schedFilterDay}
+                  onChange={(e) => setSchedFilterDay(e.target.value)}
+                  className="w-full text-xs font-bold bg-white border border-slate-300 rounded-xl p-2 text-slate-900 focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                >
+                  <option value="all">📅 Todos los Días ({matches.length})</option>
+                  {uniqueScheduleDates.map((d) => (
+                    <option key={d} value={d}>
+                      {formatScheduleDayLabel(d)} ({d})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Filtro por Categoría */}
+              <div>
+                <label className="text-[11px] font-bold text-slate-600 block mb-1 flex items-center gap-1">
+                  <Award className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Por Categoría:</span>
+                </label>
+                <select
+                  value={schedFilterCategory}
+                  onChange={(e) => setSchedFilterCategory(e.target.value)}
+                  className="w-full text-xs font-bold bg-white border border-slate-300 rounded-xl p-2 text-slate-900 focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                >
+                  <option value="all">🏆 Todas las Categorías</option>
+                  {categories
+                    .filter((c) => schedFilterSport === 'all' || c.sport === schedFilterSport)
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} ({c.gender} - {c.sport.toUpperCase()})
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              {/* Buscador de Texto */}
+              <div>
+                <label className="text-[11px] font-bold text-slate-600 block mb-1 flex items-center gap-1">
+                  <Search className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Buscar Colegio o Cancha:</span>
+                </label>
+                <input
+                  type="text"
+                  value={schedSearchQuery}
+                  onChange={(e) => setSchedSearchQuery(e.target.value)}
+                  placeholder="Ej. Cabo Velas, Garita..."
+                  className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-semibold focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+
+              {/* Botón de Limpiar Filtros */}
+              <div className="flex items-end">
+                <button
+                  type="button"
+                  onClick={handleResetScheduleFilters}
+                  disabled={schedFilterSport === 'all' && schedFilterDay === 'all' && schedFilterCategory === 'all' && !schedSearchQuery}
+                  className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-white text-slate-700 font-bold text-xs border border-slate-300 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Limpiar Filtros</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Lista de Partidos Filtrados */}
+          <div className="space-y-4">
+            {filteredScheduleMatches.length === 0 ? (
+              <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-3xl space-y-3">
+                <Clock className="w-10 h-10 text-slate-400 mx-auto" />
+                <h3 className="text-sm font-bold text-slate-800">
+                  No hay partidos que coincidan con los filtros seleccionados
+                </h3>
+                <p className="text-xs text-slate-500 max-w-md mx-auto">
+                  Prueba seleccionando otro deporte, día o categoría, o haz clic en restablecer filtros para ver todos los encuentros.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleResetScheduleFilters}
+                  className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs cursor-pointer"
+                >
+                  Ver Todos los Partidos
+                </button>
+              </div>
+            ) : (
+              filteredScheduleMatches.map((m) => {
+                const h = getSchoolById(m.homeTeamId);
+                const a = getSchoolById(m.awayTeamId);
+                const cat = getCategoryById(m.categoryId);
+                const isEditing = editingScheduleMatchId === m.id;
+                const isJustSaved = editSchedSavedSuccess === m.id;
+
+                return (
+                  <div
+                    key={m.id}
+                    className={`p-4 rounded-2xl border transition-all ${
+                      isEditing
+                        ? 'bg-amber-50/50 border-amber-300 ring-2 ring-amber-400/30 shadow-md'
+                        : isJustSaved
+                        ? 'bg-emerald-50 border-emerald-300'
+                        : 'bg-slate-50 hover:bg-slate-100/70 border-slate-200'
+                    }`}
+                  >
+                    {/* Vista Modo Edición */}
+                    {isEditing ? (
+                      <div className="space-y-4 animate-fade-in">
+                        <div className="flex items-center justify-between border-b border-amber-200 pb-2">
+                          <div className="flex items-center gap-2">
+                            <Edit3 className="w-4 h-4 text-amber-700" />
+                            <span className="font-extrabold text-xs sm:text-sm text-amber-950">
+                              Editando Partido: {m.id}
+                            </span>
+                          </div>
+                          <span className="text-[11px] font-mono text-slate-500 bg-white px-2 py-0.5 rounded-lg border border-amber-200">
+                            {m.sport.toUpperCase()} · {m.jornadaName}
                           </span>
                         </div>
-                        <span className="text-[11px] font-mono text-slate-500 bg-white px-2 py-0.5 rounded-lg border border-amber-200">
-                          {m.sport.toUpperCase()} · {m.jornadaName}
-                        </span>
-                      </div>
 
-                      {/* Reasignación de Equipos */}
-                      <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 bg-white p-3 rounded-xl border border-amber-200">
-                        <div>
-                          <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                            🔵 Equipo Local:
-                          </label>
-                          <select
-                            value={editSchedHomeTeamId}
-                            onChange={(e) => setEditSchedHomeTeamId(e.target.value)}
-                            className="w-full text-xs font-bold bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:ring-2 focus:ring-amber-500"
-                          >
-                            {schools.map((s) => (
-                              <option key={s.id} value={s.id}>
-                                {s.name} ({s.shortName})
-                              </option>
-                            ))}
-                          </select>
+                        {/* Reasignación de Equipos */}
+                        <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 bg-white p-3 rounded-xl border border-amber-200">
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                              🔵 Equipo Local:
+                            </label>
+                            <select
+                              value={editSchedHomeTeamId}
+                              onChange={(e) => setEditSchedHomeTeamId(e.target.value)}
+                              className="w-full text-xs font-bold bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:ring-2 focus:ring-amber-500"
+                            >
+                              {schools.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                  {s.name} ({s.shortName})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="flex justify-center pt-2 sm:pt-4">
+                            <button
+                              type="button"
+                              onClick={handleSwapScheduleTeams}
+                              className="p-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-black shadow-xs transition flex items-center gap-1 cursor-pointer"
+                              title="Intercambiar Local y Visitante"
+                            >
+                              <RefreshCw className="w-3.5 h-3.5" />
+                              <span className="text-[10px]">⇄</span>
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
+                              🔴 Equipo Visitante:
+                            </label>
+                            <select
+                              value={editSchedAwayTeamId}
+                              onChange={(e) => setEditSchedAwayTeamId(e.target.value)}
+                              className="w-full text-xs font-bold bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:ring-2 focus:ring-amber-500"
+                            >
+                              {schools.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                  {s.name} ({s.shortName})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
 
-                        <div className="flex justify-center pt-2 sm:pt-4">
+                        {/* Parámetros: Fecha, Hora, Sede, Categoría */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
+                              Fecha:
+                            </label>
+                            <input
+                              type="text"
+                              value={editSchedDate}
+                              onChange={(e) => setEditSchedDate(e.target.value)}
+                              className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-semibold"
+                              placeholder="Ej. Lunes 13 Octubre"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
+                              Hora (24h):
+                            </label>
+                            <input
+                              type="time"
+                              value={editSchedTime}
+                              onChange={(e) => setEditSchedTime(e.target.value)}
+                              className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-mono font-bold"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
+                              Categoría:
+                            </label>
+                            <select
+                              value={editSchedCategoryId}
+                              onChange={(e) => setEditSchedCategoryId(e.target.value)}
+                              className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-medium"
+                            >
+                              {categories.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                  {c.name} ({c.gender} - {c.sport.toUpperCase()})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
+                              Sede / Cancha:
+                            </label>
+                            <input
+                              type="text"
+                              value={editSchedVenue}
+                              onChange={(e) => setEditSchedVenue(e.target.value)}
+                              className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-medium"
+                              placeholder="Cancha Principal..."
+                            />
+                          </div>
+                        </div>
+
+                        {/* Botones de Acción */}
+                        <div className="flex items-center justify-end gap-2 pt-2">
                           <button
                             type="button"
-                            onClick={handleSwapScheduleTeams}
-                            className="p-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-black shadow-xs transition flex items-center gap-1 cursor-pointer"
-                            title="Intercambiar Local y Visitante"
+                            onClick={() => setEditingScheduleMatchId(null)}
+                            className="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                           >
-                            <RefreshCw className="w-3.5 h-3.5" />
-                            <span className="text-[10px]">⇄</span>
+                            <X className="w-3.5 h-3.5" />
+                            <span>Cancelar</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleSaveScheduleMatch(m.id)}
+                            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-md transition flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <Save className="w-3.5 h-3.5" />
+                            <span>Guardar Cambios</span>
                           </button>
                         </div>
-
-                        <div>
-                          <label className="text-[10.5px] font-bold text-slate-700 block mb-1">
-                            🔴 Equipo Visitante:
-                          </label>
-                          <select
-                            value={editSchedAwayTeamId}
-                            onChange={(e) => setEditSchedAwayTeamId(e.target.value)}
-                            className="w-full text-xs font-bold bg-slate-50 border border-slate-300 rounded-xl p-2 text-slate-900 focus:ring-2 focus:ring-amber-500"
-                          >
-                            {schools.map((s) => (
-                              <option key={s.id} value={s.id}>
-                                {s.name} ({s.shortName})
-                              </option>
-                            ))}
-                          </select>
-                        </div>
                       </div>
+                    ) : (
+                      /* Vista Normal */
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="font-mono font-bold text-xs sm:text-sm bg-white px-2.5 py-1.5 rounded-xl border border-slate-200 text-slate-900 shadow-2xs shrink-0">
+                            {formatTime12h(m.time)}
+                          </span>
 
-                      {/* Parámetros: Fecha, Hora, Sede, Categoría */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-                        <div>
-                          <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
-                            Fecha:
-                          </label>
-                          <input
-                            type="text"
-                            value={editSchedDate}
-                            onChange={(e) => setEditSchedDate(e.target.value)}
-                            className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-semibold"
-                            placeholder="Ej. Lunes 13 Octubre"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
-                            Hora (24h):
-                          </label>
-                          <input
-                            type="time"
-                            value={editSchedTime}
-                            onChange={(e) => setEditSchedTime(e.target.value)}
-                            className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-mono font-bold"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
-                            Categoría:
-                          </label>
-                          <select
-                            value={editSchedCategoryId}
-                            onChange={(e) => setEditSchedCategoryId(e.target.value)}
-                            className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-medium"
-                          >
-                            {categories.map((c) => (
-                              <option key={c.id} value={c.id}>
-                                {c.name} ({c.gender} - {c.sport.toUpperCase()})
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="text-[10.5px] font-bold text-slate-600 block mb-1">
-                            Sede / Cancha:
-                          </label>
-                          <input
-                            type="text"
-                            value={editSchedVenue}
-                            onChange={(e) => setEditSchedVenue(e.target.value)}
-                            className="w-full text-xs bg-white border border-slate-300 rounded-xl p-2 text-slate-900 font-medium"
-                            placeholder="Cancha Principal..."
-                          />
-                        </div>
-                      </div>
-
-                      {/* Botones de Acción */}
-                      <div className="flex items-center justify-end gap-2 pt-2">
-                        <button
-                          type="button"
-                          onClick={() => setEditingScheduleMatchId(null)}
-                          className="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                          <span>Cancelar</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleSaveScheduleMatch(m.id)}
-                          className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-md transition flex items-center gap-1.5 cursor-pointer"
-                        >
-                          <Save className="w-3.5 h-3.5" />
-                          <span>Guardar Cambios</span>
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    /* Vista Normal */
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className="font-mono font-bold text-xs sm:text-sm bg-white px-2.5 py-1.5 rounded-xl border border-slate-200 text-slate-900 shadow-2xs shrink-0">
-                          {formatTime12h(m.time)}
-                        </span>
-
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-black text-xs sm:text-sm text-slate-900">
-                              {h?.shortName || m.homeTeamId} <span className="text-slate-400 font-normal">vs</span> {a?.shortName || m.awayTeamId}
-                            </span>
-                            <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
-                              {m.sport} · {cat?.gender || 'General'}
-                            </span>
-                            {m.status === 'completed' && (
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                ✓ Finalizado ({m.homeScore}-{m.awayScore})
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-black text-xs sm:text-sm text-slate-900">
+                                {h?.shortName || m.homeTeamId} <span className="text-slate-400 font-normal">vs</span> {a?.shortName || m.awayTeamId}
                               </span>
-                            )}
-                            {m.status === 'live' && (
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-100 text-red-800 border border-red-200 animate-pulse">
-                                🔴 En vivo
+                              <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
+                                {m.sport} · {cat?.gender || 'General'}
                               </span>
-                            )}
+                              {m.status === 'completed' && (
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                  ✓ Finalizado ({m.homeScore}-{m.awayScore})
+                                </span>
+                              )}
+                              {m.status === 'live' && (
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-100 text-red-800 border border-red-200 animate-pulse">
+                                  🔴 En vivo
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                              <span>📅 {formatScheduleDayLabel(m.date)} ({m.date})</span>
+                              <span>•</span>
+                              <span>📍 {m.venue}</span>
+                            </div>
                           </div>
-                          <div className="text-[11px] text-slate-500 flex items-center gap-2">
-                            <span>📅 {m.date}</span>
-                            <span>•</span>
-                            <span>📍 {m.venue}</span>
+                        </div>
+
+                        {/* Botones Rápidos de Ajuste */}
+                        <div className="flex items-center gap-1.5 self-end md:self-auto flex-wrap">
+                          <button
+                            onClick={() => handleStartEditScheduleMatch(m)}
+                            className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black transition flex items-center gap-1 cursor-pointer shadow-2xs"
+                            title="Cambiar equipos, sede, fecha u hora"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Ajustar Partido / Equipos</span>
+                          </button>
+
+                          <div className="flex items-center gap-1 pl-1 border-l border-slate-200">
+                            <button
+                              onClick={() => handleShiftMatchTime(m.id, -15)}
+                              className="px-2 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 cursor-pointer"
+                              title="Adelantar 15 min"
+                            >
+                              -15m
+                            </button>
+                            <button
+                              onClick={() => handleShiftMatchTime(m.id, 15)}
+                              className="px-2 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold border border-amber-200 cursor-pointer"
+                              title="Retrasar 15 min"
+                            >
+                              +15m
+                            </button>
+                            <button
+                              onClick={() => handleShiftMatchTime(m.id, 30)}
+                              className="px-2 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold border border-amber-300 cursor-pointer"
+                              title="Retrasar 30 min"
+                            >
+                              +30m
+                            </button>
                           </div>
                         </div>
                       </div>
-
-                      {/* Botones Rápidos de Ajuste */}
-                      <div className="flex items-center gap-1.5 self-end md:self-auto flex-wrap">
-                        <button
-                          onClick={() => handleStartEditScheduleMatch(m)}
-                          className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black transition flex items-center gap-1 cursor-pointer shadow-2xs"
-                          title="Cambiar equipos, sede, fecha u hora"
-                        >
-                          <Edit3 className="w-3.5 h-3.5" />
-                          <span>Ajustar Partido / Equipos</span>
-                        </button>
-
-                        <div className="flex items-center gap-1 pl-1 border-l border-slate-200">
-                          <button
-                            onClick={() => handleShiftMatchTime(m.id, -15)}
-                            className="px-2 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 cursor-pointer"
-                            title="Adelantar 15 min"
-                          >
-                            -15m
-                          </button>
-                          <button
-                            onClick={() => handleShiftMatchTime(m.id, 15)}
-                            className="px-2 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold border border-amber-200 cursor-pointer"
-                            title="Retrasar 15 min"
-                          >
-                            +15m
-                          </button>
-                          <button
-                            onClick={() => handleShiftMatchTime(m.id, 30)}
-                            className="px-2 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold border border-amber-300 cursor-pointer"
-                            title="Retrasar 30 min"
-                          >
-                            +30m
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       )}
