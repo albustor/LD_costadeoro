@@ -259,4 +259,40 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 2. **Botón de Borrado In-Situ:**
    - En cada tarjeta de mensaje del muro familiar se activa el botón `🗑️ Borrar`, permitiendo eliminar publicaciones directamente con confirmación nativa y sincronización atómica con el servidor central (`DELETE /api/posts/[id]`).
 
+---
+
+## 19. Eliminación de Nóminas y Equipos por Categoría
+
+1. **Persistencia y Endpoint `DELETE /api/rosters`:**
+   - Para eliminar o vaciar la nómina de un equipo en una disciplina y categoría específica, se invoca `deleteCategoryRoster` que despacha la sincronización local y realiza la petición HTTP `DELETE /api/rosters?schoolId=...&sport=...&categoryId=...`.
+2. **Acciones en UI de Administración y Acreditación:**
+   - En `AdminRosterManager.tsx` (Panel de Administración) y `registro-nomina/page.tsx` (Portal Institucional) se dispone del botón `🗑️ Eliminar Equipo / Nómina` con modal de confirmación obligatoria.
+   - En el panel de administración se incluye el Directorio General de Equipos con botones directos de edición y eliminación in-situ.
+
+---
+
+## 20. Estandarización de Tarjetas de Partidos Reprogramados en Marcadores
+
+1. **Uso de `isRescheduledMatch(m)`:**
+   - En todas las vistas públicas (`/marcadores`, `/colegios`, `/calendario`), todo partido con estado `postponed` o periodo `Por reprogramar` debe renderizar la insignia oficial **`⚠️ Por reprogramar`** (`bg-amber-100 text-amber-950 border-amber-300`).
+2. **Marcador Neutral y Banner Explicativo:**
+   - El marcador central debe desplegar **`0 : 0`** (con estilo destacado o neutral) y presentar el aviso contextual: **`ℹ️ Partido por reprogramar (sin asignación de puntos a ningún equipo)`**.
+   - PROHIBIDO mostrar la insignia genérica *"Programado"* o el marcador *"Finalizado"* en partidos que están pendientes de reprogramación.
+
+---
+
+## 21. Catálogo Exclusivo de 6 Instituciones Participantes
+
+1. **Instituciones Oficiales Únicas:**
+   - La plataforma opera de forma estricta y exclusiva con las 6 instituciones oficiales hermanadas:
+     1. **La Paz Community School Cabo Velas** (`la-paz-cabo-velas` · PIN `1001`)
+     2. **La Paz Community School Tempisque** (`la-paz-tempisque` · PIN `1002`)
+     3. **Costa Rica International Academy** (`cria` · PIN `2001`)
+     4. **The Journey School** (`journey-school` · PIN `3001`)
+     5. **Centro Educativo Católico Monseñor Vittorino Girardi Stellin** (`vittorino` · PIN `4001`)
+     6. **Educarte Bilingual High School** (`educarte` · PIN `5001`)
+2. **Prohibición de Delegaciones de Prueba:**
+   - Prohibido agregar o mantener entidades ficticias o de prueba (como *"Equipo Invitado"* o *"Escazú"*).
+
+
 

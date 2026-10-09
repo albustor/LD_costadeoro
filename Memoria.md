@@ -665,4 +665,56 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
   4. En `LiveDeskScorer.tsx`, `MatchCard.tsx`, `MatchDetailModal.tsx` y `tournament_db.json`: Se integró la función universal `isRescheduledMatch(match)` para presentar de forma destacada el badge ámbar `⚠️ Por reprogramar` y la leyenda oficial *«Partido reprogramado · Sin asignación de puntos a ningún equipo»* (0 PJ y 0 pts).
 - **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y publicado en `origin main`.
 
+---
+
+## ADR-048: Integración Oficial de La Paz Tempisque en Voleibol C y Límite de 15s en Videos
+- **Fecha**: 2026-10-09
+- **Contexto**: Se solicitó integrar a **La Paz Community School Tempisque** como el tercer equipo oficial de Voleibol Categoría C, incorporándolo en el calendario de partidos, nóminas y en la tabla de posiciones oficial. Asimismo, se estableció el límite de videos cortos en el Muro Familiar a 15 segundos máximos.
+- **Decisión**:
+  1. En `initialData.ts` y `tournament_db.json`: Se agregaron los partidos oficiales de Voleibol C: `j1-vol-c-03` (La Paz Tempisque vs. La Paz Cabo Velas) y `j1-vol-c-04` (La Paz Tempisque vs. Educarte).
+  2. En `sportsEngine.ts`: El cálculo automático de tabla de posiciones (`calculateStandings`) indexa nativamente a La Paz Tempisque al contar con partidos en la categoría.
+  3. En `rosterService.ts` y `FamilyCheerWall.tsx`: Se incluyó la plantilla base de Voleibol C para La Paz Tempisque y se fijó el límite de duración de video a 15 segundos.
+- **Estado**: ✅ Implementado, verificado y en producción.
+
+---
+
+## ADR-049: Eliminación Atómica de Nóminas y Equipos en Administración y Portal Institucional
+- **Fecha**: 2026-10-09
+- **Contexto**: La directiva y mesa técnica requerían la capacidad de eliminar o vaciar nóminas y equipos por categoría/disciplina cuando fuesen inscritos por error o cambiaran su participación.
+- **Decisión**:
+  1. En `src/lib/serverDb.ts`: Creación de `deleteRosterFromDb(schoolId, sport, categoryId)`.
+  2. En `src/app/api/rosters/route.ts`: Creación del manejador HTTP `DELETE /api/rosters` para remoción atómica en el servidor y sincronización en tiempo real.
+  3. En `src/lib/rosterService.ts`: Creación del método `deleteCategoryRoster`.
+  4. En `src/components/admin/AdminRosterManager.tsx`: Botón `🗑️ Eliminar Equipo / Nómina` en formulario activo y Directorio General de Equipos con acciones directas de `✏️ Editar` y `🗑️ Eliminar`.
+  5. En `src/app/registro-nomina/page.tsx`: Botón `🗑️ Eliminar Nómina` disponible para coordinadores deportivos.
+- **Estado**: ✅ Implementado, auditado y en producción.
+
+---
+
+## ADR-050: Supresión Definitiva de Delegación Invitada y Exclusividad de las 6 Instituciones Oficiales
+- **Fecha**: 2026-10-09
+- **Contexto**: El equipo temporal de prueba denominado *«Equipo Invitado / Escazú» (`colegio-invitado` · PIN `6001`)* no correspondía a las instituciones reales del torneo y debía ser purgado de toda la plataforma web.
+- **Decisión**:
+  1. En `src/config/tournamentConfig.ts`: Purgado de `colegio-invitado` del arreglo maestro `SCHOOLS_DATA`, restringiendo la liga a las 6 instituciones oficiales:
+     - 🌊 La Paz Community School Cabo Velas
+     - 🌿 La Paz Community School Tempisque
+     - 🦅 Costa Rica International Academy (CRIA)
+     - 🧭 The Journey School
+     - 🛡️ Centro Educativo Católico Monseñor Vittorino Girardi Stellin
+     - ☀️ Educarte Bilingual High School
+  2. En `src/lib/rosterService.ts` y `AdminRosterManager.tsx`: Eliminado el PIN `6001` y la tarjeta de despacho de enlace.
+  3. En `src/components/sports/SchoolEmblem.tsx`: Removida la entrada de catálogo y eliminado el archivo SVG temporal.
+- **Estado**: ✅ Implementado, auditado y verificado en producción con `False` en comprobación de presencia.
+
+---
+
+## ADR-051: Estandarización Universal de Tarjetas de Partidos Reprogramados en `/marcadores`
+- **Fecha**: 2026-10-09
+- **Contexto**: En la vista de marcadores públicos (`/marcadores`), los encuentros con estado `postponed` o periodo `Por reprogramar` (ej. La Paz Tempisque vs. Monseñor Vittorino en Fútbol Masculino D) se presentaban visualmente con la insignia genérica `Programado`, omitiendo el aviso de reprogramación y la regla de no asignación de puntos.
+- **Decisión**:
+  1. En `src/app/marcadores/page.tsx`: Se importó `isRescheduledMatch(m)` desde `sportsEngine.ts`.
+  2. Se configuró la insignia ámbar oficial **`⚠️ Por reprogramar`** (`bg-amber-100 text-amber-950 border-amber-300`).
+  3. En el marcador central se estableció el formato neutral **`0 : 0`** y se desplegó el banner contextual: **`ℹ️ Partido por reprogramar (sin asignación de puntos a ningún equipo)`**.
+- **Estado**: ✅ Implementado, verificado y activo en la web.
+
 

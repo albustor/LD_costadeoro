@@ -8,16 +8,17 @@ import { StandingsTable } from '@/components/sports/StandingsTable';
 import { SchoolEmblem } from '@/components/sports/SchoolEmblem';
 import { MatchDetailModal } from '@/components/sports/MatchDetailModal';
 import { formatTime12h, formatFullDateCostaRica } from '@/lib/utils';
-import { getActiveCompetitionDayInfo } from '@/lib/sportsEngine';
+import { getActiveCompetitionDayInfo, isRescheduledMatch } from '@/lib/sportsEngine';
 import { 
   Trophy, 
   Calendar, 
   Clock, 
   MapPin, 
   CheckCircle2, 
-  ChevronRight,
-  Flame,
-  Award
+  ChevronRight, 
+  Flame, 
+  Award,
+  AlertCircle
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -172,20 +173,17 @@ export default function MarcadoresPage() {
                 const homeSchool = getSchoolById(m.homeTeamId);
                 const awaySchool = getSchoolById(m.awayTeamId);
 
+                const isRescheduled = isRescheduledMatch(m);
                 const isLive = m.status === 'live';
-                const isCompleted = m.status === 'completed';
-
-                // Detección de no presentación
-                const isWalkover =
-                  m.walkover === 'home_forfeit' ||
-                  m.walkover === 'away_forfeit' ||
-                  m.notes?.toLowerCase().includes('no se presentó');
+                const isCompleted = m.status === 'completed' && !isRescheduled;
 
                 return (
                   <div
                     key={m.id}
                     onClick={() => setSelectedMatch(m)}
-                    className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-sm hover:border-amber-300 transition-all space-y-3 cursor-pointer"
+                    className={`p-4 sm:p-5 rounded-3xl bg-white border shadow-2xs hover:shadow-sm transition-all space-y-3 cursor-pointer ${
+                      isRescheduled ? 'border-amber-300/80 bg-amber-50/15' : 'border-slate-200/90 hover:border-amber-300'
+                    }`}
                   >
                     {/* Encabezado del Partido */}
                     <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
@@ -193,6 +191,13 @@ export default function MarcadoresPage() {
                         <Clock className="w-3.5 h-3.5 text-amber-600" />
                         <span>{formatTime12h(m.time)}</span>
                       </div>
+
+                      {isRescheduled && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-950 font-extrabold text-[10px] border border-amber-300 shadow-2xs">
+                          <AlertCircle className="w-3 h-3 text-amber-700" />
+                          Por reprogramar
+                        </span>
+                      )}
 
                       {isLive && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-extrabold text-[10px] animate-pulse">
@@ -208,7 +213,7 @@ export default function MarcadoresPage() {
                         </span>
                       )}
 
-                      {!isLive && !isCompleted && (
+                      {!isLive && !isCompleted && !isRescheduled && (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold text-[10px]">
                           Programado
                         </span>
@@ -226,8 +231,12 @@ export default function MarcadoresPage() {
                       </div>
 
                       {/* Marcador Central */}
-                      <div className="px-3 sm:px-4 py-1.5 rounded-xl bg-slate-950 text-amber-300 font-black text-sm sm:text-base tracking-wider shrink-0 shadow-inner text-center">
-                        {isCompleted || isLive ? `${m.homeScore} : ${m.awayScore}` : 'VS'}
+                      <div className={`px-3 sm:px-4 py-1.5 rounded-xl font-black text-sm sm:text-base tracking-wider shrink-0 shadow-inner text-center ${
+                        isRescheduled
+                          ? 'bg-slate-900 text-amber-400 border border-amber-500/40'
+                          : 'bg-slate-950 text-amber-300'
+                      }`}>
+                        {isRescheduled ? '0 : 0' : isCompleted || isLive ? `${m.homeScore} : ${m.awayScore}` : 'VS'}
                       </div>
 
                       {/* Visitante */}
@@ -239,10 +248,11 @@ export default function MarcadoresPage() {
                       </div>
                     </div>
 
-                    {/* Detalle o Nota de No Presentación (Redacción Amigable) */}
-                    {isWalkover && m.notes && (
-                      <div className="p-2 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 font-medium">
-                        ℹ️ {m.notes}
+                    {/* Detalle o Nota Oficial de Reprogramación (Redacción Amigable y Sin Puntos) */}
+                    {isRescheduled && (
+                      <div className="p-2.5 rounded-2xl bg-amber-50/90 border border-amber-300/80 text-[11px] text-amber-950 font-semibold flex items-start gap-2 shadow-2xs">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
+                        <span>{m.notes || 'Partido por reprogramar (sin asignación de puntos a ningún equipo)'}</span>
                       </div>
                     )}
 
