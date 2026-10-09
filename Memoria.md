@@ -641,7 +641,19 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
 
 ---
 
+## ADR-046: Moderación y Borrado Directo de Publicaciones en el Muro Familiar
+- **Fecha**: 2026-10-09
+- **Contexto**: El usuario solicitó que cuando un administrador esté autenticado, se le permita eliminar publicaciones directamente desde la vista del muro familiar (`/mural`), sin tener que desplazarse obligatoriamente a la pestaña de moderación del panel de control.
+- **Decisión**:
+  1. En `src/components/family/FamilyCheerWall.tsx`: Se implementó la detección reactiva de credenciales de administrador (`costa_de_oro_admin_auth`), activando la barra de estado de moderación y el botón `🗑️ Borrar` en cada tarjeta de mensaje.
+  2. En `src/components/admin/AdminControlPanel.tsx`: Se sincronizó la sesión de administración en `localStorage` y `sessionStorage` para asegurar la persistencia entre pestañas.
+  3. Al confirmar el borrado, se invoca `deleteFamilyPost` que despacha el evento local y sincroniza atómicamente con `DELETE /api/posts/[id]`.
+- **Estado**: ✅ Implementado, auditado, verificado con `npm run build` (0 errores) y publicado en `origin main`.
+
+---
+
 ## ADR: Adopción de Simplicidad Radical (Octubre 2026)
 - **Decisión:** Priorizar la usabilidad directa del Festival Deportivo, eliminando la sobrecarga de dependencias y simplificando la navegación para los usuarios móviles de los colegios participantes.
 - **Acción:** Depurar prototipos obsoletos y concentrar la UI en partidos, marcadores y fotos de alta velocidad.
+
 

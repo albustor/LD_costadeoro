@@ -250,3 +250,13 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 2. **Persistencia Inmediata:**
    - Todo cambio de equipos, horarios (+15m, +30m), sedes o categorías se persiste de inmediato en el estado global (`TournamentContext`) y se sincroniza con el servidor (`/api/matches` y `tournament_db.json`).
 
+---
+
+## 18. Moderación y Borrado Directo en el Muro Comunitario
+
+1. **Detección Automática de Sesión:**
+   - Cuando un usuario administrador inicia sesión en `/admin` o mediante el acceso de moderador en `/mural`, se sincroniza la credencial (`costa_de_oro_admin_auth`).
+2. **Botón de Borrado In-Situ:**
+   - En cada tarjeta de mensaje del muro familiar se activa el botón `🗑️ Borrar`, permitiendo eliminar publicaciones directamente con confirmación nativa y sincronización atómica con el servidor central (`DELETE /api/posts/[id]`).
+
+

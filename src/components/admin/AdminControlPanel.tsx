@@ -97,6 +97,7 @@ export function AdminControlPanel() {
       setAuthError('');
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('costa_de_oro_admin_auth', 'true');
+        localStorage.setItem('costa_de_oro_admin_auth', 'true');
       }
     } else {
       setAuthError('Clave de administración incorrecta. Por favor verifica e intenta de nuevo.');
@@ -107,6 +108,7 @@ export function AdminControlPanel() {
     setIsAuthenticated(false);
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('costa_de_oro_admin_auth');
+      localStorage.removeItem('costa_de_oro_admin_auth');
     }
   };
 
