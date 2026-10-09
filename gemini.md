@@ -9,12 +9,13 @@
 - **Empate**: **1 punto**
 - **Derrota**: **0 puntos**
 
-## 3. Regla Oficial de No Presentación / Ausencia (Reprogramación)
-- Cuando un equipo no se presenta a un encuentro (caso Monseñor Vittorino):
-  - El partido pasa a estado `Por reprogramar`.
-  - **NO se le otorga puntos a ninguno de los dos equipos** (0 puntos para ambos).
+## 3. Regla Oficial Universal de No Presentación / Ausencia (Reprogramación en Todos los Deportes)
+- Cuando un equipo no se presenta a un encuentro (en Fútbol, Voleibol o Baloncesto):
+  - El partido pasa obligatoriamente a estado `status: 'postponed'`, `currentPeriod: 'Por reprogramar'`.
+  - **NO se le otorgan puntos a ninguno de los dos equipos** (0 puntos para ambos).
   - Ninguno de los dos equipos suma partidos jugados en cancha (`played += 0`).
-  - **Mensaje Oficial en Tarjetas**: `«[Equipo] no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)»`.
+  - Marcador neutro **0 – 0** sin afectación de sets ni canastas.
+  - **Mensaje Oficial en Tarjetas y Actas**: `«[Equipo] no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)»`. Prohibido usar tecnicismos como W.O. o incomparecencia.
 
 ## 4. Estado Oficial de la Tabla de Fútbol Femenino (Día Lunes)
 - 🥇 **1.º La Paz Community School Cabo Velas**: 1 PG (3 pts) + 1 PE (1 pt) = **4 Puntos (1.er Lugar)**.

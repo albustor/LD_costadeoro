@@ -404,7 +404,7 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
     return { label, speechTime };
   };
 
-  // 🔊 Narrador de Voz con Síntesis Neuronal (DUA)
+  // 🔊 Narrador de Voz con Síntesis Neuronal Latina (Acento Costa Rica / América Latina)
   const handleSpeakPost = (post: FamilyPost, schoolName: string, speechTime: string) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
 
@@ -422,18 +422,50 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
     const utterance = new SpeechSynthesisUtterance(textToRead);
     utterance.lang = 'es-CR';
-    utterance.rate = 0.96;
-    utterance.pitch = 1.08;
+    utterance.rate = 0.95;
+    utterance.pitch = 1.10;
 
-    const availableVoices = window.speechSynthesis.getVoices();
-    const bestVoice = availableVoices.find(
-      (v) =>
-        v.lang.startsWith('es') &&
-        /natural|neural|online|google|salome|dalia|paulina|sabina|camila|sofia|lupe/i.test(v.name)
-    ) || availableVoices.find((v) => v.lang.startsWith('es'));
+    const allVoices = window.speechSynthesis.getVoices();
+    if (allVoices && allVoices.length > 0) {
+      // Sistema de puntuación ponderada para voz femenina latina / costarricense
+      const rankVoice = (v: SpeechSynthesisVoice): number => {
+        let score = 0;
+        const name = v.name.toLowerCase();
+        const vLang = v.lang.toLowerCase();
 
-    if (bestVoice) {
-      utterance.voice = bestVoice;
+        // 1. Descartar tajantemente voces no españolas o masculinas
+        if (!vLang.startsWith('es')) return -3000;
+        if (/male|hombre|jorge|diego|carlos|enrique|raul|raúl|pablo|alvaro|álvaro|miguel|manuel|david|guy|george/i.test(name)) {
+          return -2000;
+        }
+
+        // 2. Descartar o penalizar fuertemente acento de España (castellano peninsular con ceceo)
+        if (vLang === 'es-es' || vLang.includes('es_es') || /spain|españa|castilian/i.test(name)) {
+          score -= 500;
+        }
+
+        // 3. Máxima prioridad: Acento de Costa Rica o América Latina (es-CR, es-419, es-MX, es-CO)
+        if (vLang.includes('es-cr') || vLang.includes('es_cr')) score += 200;
+        else if (vLang.includes('es-419') || vLang.includes('es-mx') || vLang.includes('es-co') || vLang.includes('es-us')) score += 100;
+
+        // 4. Voces neuronales de alta definición (Natural / Neural / Online / Enhanced)
+        if (/natural|neural|online|enhanced|premium|highquality|hd/i.test(name)) score += 80;
+        if (/google/i.test(name)) score += 60;
+        if (/siri/i.test(name)) score += 50;
+
+        // 5. Nombres de voces femeninas latinas de máxima calidez
+        if (/salome|salomé|dalia|paulina|sabina|camila|mia|mía|sofia|sofía|monica|mónica|lupe|paloma|rosa|lucia|lucía|valeria/i.test(name)) {
+          score += 70;
+        }
+
+        return score;
+      };
+
+      const sortedVoices = [...allVoices].sort((a, b) => rankVoice(b) - rankVoice(a));
+      const optimalVoice = sortedVoices[0];
+      if (optimalVoice && rankVoice(optimalVoice) > -1000) {
+        utterance.voice = optimalVoice;
+      }
     }
 
     utterance.onend = () => setSpeakingPostId(null);

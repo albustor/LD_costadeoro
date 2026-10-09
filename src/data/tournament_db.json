@@ -654,7 +654,7 @@
     }
   ],
   "analytics": {
-    "totalViews": 260,
+    "totalViews": 261,
     "uniqueSessions": [
       "usr_s_oct1_01",
       "usr_s_oct1_02",
@@ -730,14 +730,14 @@
       "/calendario": 57,
       "/colegios": 39,
       "/deportes": 27,
-      "/mural": 23,
+      "/mural": 24,
       "/registro-nomina": 12,
       "/marcadores": 2
     },
     "deviceDistribution": {
       "mobile_ios": 134,
       "mobile_android": 85,
-      "desktop": 33,
+      "desktop": 34,
       "tablet": 8
     },
     "dailyHistory": {
@@ -834,17 +834,25 @@
         ]
       },
       "2026-10-09": {
-        "views": 2,
+        "views": 3,
         "uniqueSessions": [
           "v_1791587662431_l49ktke"
         ]
       }
     },
     "hourlyToday": {
-      "17:00": 2
+      "17:00": 3
     },
     "todayDateStr": "2026-10-09",
     "recentEvents": [
+      {
+        "path": "/mural",
+        "device": "desktop",
+        "timestamp": "2026-10-09T23:29:31.288Z",
+        "referrer": "http://localhost:3014/mural",
+        "city": "Localhost (Entorno Local)",
+        "country": "CR"
+      },
       {
         "path": "/mural",
         "device": "desktop",
@@ -970,8 +978,8 @@
     "geoDistribution": {
       "Santa Cruz (G), CR": 6,
       "Tempate (G), CR": 1,
-      "Localhost (Entorno Local), CR": 2
+      "Localhost (Entorno Local), CR": 3
     }
   },
-  "updatedAt": "2026-10-09T23:15:14.869Z"
+  "updatedAt": "2026-10-09T23:29:31.288Z"
 }
