@@ -558,791 +558,645 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
         </div>
       )}
 
-      {/* ✍️ FORMULARIO DE APOYO CON ALTA FUERZA VISUAL EN 3 PASOS Y NORMAS DE CONVIVENCIA */}
+      {/* ✍️ LAYOUT DE 2 COLUMNAS: FORMULARIO A LA IZQUIERDA Y FEED DE SALUDOS A LA DERECHA */}
       {!featuredOnly && (
-        <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-5">
-          {/* Encabezado del Muro */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-                  Muro de familias y mensajes de apoyo
-                </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* 👈 COLUMNA IZQUIERDA: FORMULARIO DE APOYO Y NORMAS */}
+          <div className="lg:col-span-5 xl:col-span-5 space-y-5 lg:sticky lg:top-20">
+            <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+              {/* Encabezado del Formulario */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
+                    <h3 className="text-base font-extrabold text-slate-900 tracking-tight">
+                      Enviar mensaje de apoyo
+                    </h3>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Publica tus saludos, fotos y videos cortos a las delegaciones.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => setShowGuideModal(true)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold transition-colors cursor-pointer border border-amber-200"
+                  >
+                    <Sparkles className="w-3 h-3 text-amber-600" />
+                    <span>Guía</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowTermsModal(true)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors cursor-pointer"
+                  >
+                    <FileText className="w-3 h-3 text-slate-500" />
+                    <span>Normas</span>
+                  </button>
+                </div>
               </div>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Envía tus saludos, felicitaciones, fotos y videos cortos a los atletas de todas las delegaciones.
-              </p>
-            </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-              <button
-                type="button"
-                onClick={() => setShowGuideModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition-colors cursor-pointer border border-amber-200 shadow-2xs"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>¿Cómo publicar?</span>
-              </button>
+              {/* 🤝 AVISO OFICIAL SOBRE EL CORRECTO Y RESPETUOSO USO DEL ESPACIO */}
+              <div className="p-3 bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-emerald-500/10 rounded-2xl border border-amber-300/70 flex items-start gap-2.5">
+                <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="text-[11px] space-y-0.5">
+                  <span className="font-extrabold text-slate-900 block">
+                    Convivencia y respeto deportivo
+                  </span>
+                  <p className="text-slate-600 leading-relaxed font-medium">
+                    Espacio familiar para compartir aliento con respeto mutuo y compañerismo hacia todos los estudiantes.
+                  </p>
+                </div>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setShowTermsModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
-              >
-                <FileText className="w-3.5 h-3.5 text-slate-500" />
-                <span>Normas de publicación</span>
-              </button>
+              <form onSubmit={handleSubmitPost} className="space-y-4">
+                {/* 🏷️ PASO 1: SELECCIONA TU COLEGIO / EQUIPO */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-slate-950 text-amber-300 font-black text-[11px] inline-flex items-center justify-center shadow-2xs">
+                      1
+                    </span>
+                    <label className="text-xs font-extrabold text-slate-900">
+                      Selecciona a tu delegación:
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {schools.map((school) => {
+                      const isSelected = selectedSchoolId === school.id;
+                      return (
+                        <button
+                          key={school.id}
+                          type="button"
+                          onClick={() => setSelectedSchoolId(school.id)}
+                          className={`p-2.5 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                            isSelected
+                              ? 'bg-amber-500/15 border-2 border-amber-500 ring-2 ring-amber-400/30 text-slate-950 font-black shadow-xs scale-[1.02]'
+                              : 'bg-slate-50/70 hover:bg-white border-slate-200 text-slate-700 font-bold'
+                          }`}
+                        >
+                          <SchoolEmblem schoolId={school.id} size="sm" />
+                          <span className="text-[10.5px] leading-tight truncate w-full">
+                            {school.shortName}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 💬 PASO 2: MENSAJE Y SALUDOS RÁPIDOS */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-slate-950 text-amber-300 font-black text-[11px] inline-flex items-center justify-center shadow-2xs">
+                        2
+                      </span>
+                      <label className="text-xs font-extrabold text-slate-900">
+                        Escribe tu mensaje o saludo:
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Botones de Saludos Rápidos */}
+                  <div className="flex flex-wrap gap-1">
+                    {[
+                      '¡Con todo equipo! 👏',
+                      '¡Orgullo total! 💙',
+                      '¡Vamos con garra! 🔥',
+                      '¡Gran partido chicos! ⚽',
+                      '¡Juego limpio y pasión! ✨'
+                    ].map((chip) => (
+                      <button
+                        key={chip}
+                        type="button"
+                        onClick={() => setMessage((prev) => (prev ? `${prev} ${chip}` : chip))}
+                        className="px-2 py-0.5 rounded-full bg-slate-100 hover:bg-amber-100 text-slate-700 text-[11px] font-semibold transition-all cursor-pointer border border-slate-200/70"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Área de Texto */}
+                  <textarea
+                    rows={3}
+                    placeholder="Escribe tu mensaje de apoyo para los chicos y familias..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300/80 rounded-2xl text-xs sm:text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:bg-white transition-all shadow-inner"
+                  />
+
+                  {/* Adjuntar Foto / Video */}
+                  <div className="flex items-center justify-between gap-2 pt-0.5">
+                    <div className="flex items-center gap-2">
+                      {isFestivalActiveDay ? (
+                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all border border-slate-200 shadow-2xs">
+                          <Camera className="w-3.5 h-3.5 text-amber-600" />
+                          <span>{selectedFile ? 'Cambiar archivo' : 'Adjuntar foto / video'}</span>
+                          <input
+                            type="file"
+                            accept="image/*,video/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                      ) : (
+                        <div
+                          title="La carga de fotos y videos se activa exclusivamente en días oficiales de festival."
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed border border-slate-200"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Multimedia en pausa</span>
+                        </div>
+                      )}
+
+                      {selectedFile && (
+                        <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 truncate max-w-[140px]">
+                          ✓ {selectedFile.name}
+                        </span>
+                      )}
+                    </div>
+
+                    {mediaPreview && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMediaPreview(null);
+                          setSelectedFile(null);
+                          setMediaType('none');
+                        }}
+                        className="text-[11px] text-rose-600 hover:text-rose-800 font-bold underline cursor-pointer"
+                      >
+                        Quitar
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Vista previa de foto o video */}
+                  {mediaPreview && (
+                    <div className="relative rounded-2xl overflow-hidden aspect-video max-h-40 bg-slate-900 border border-slate-200 shadow-xs">
+                      {mediaType === 'photo' ? (
+                        <img
+                          src={mediaPreview}
+                          alt="Vista previa"
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (
+                        <video src={mediaPreview} className="w-full h-full object-contain" controls />
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* 👤 PASO 3: IDENTIFÍCATE Y PUBLICA */}
+                <div className="space-y-2.5 pt-2 border-t border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-slate-950 text-amber-300 font-black text-[11px] inline-flex items-center justify-center shadow-2xs">
+                      3
+                    </span>
+                    <label className="text-xs font-extrabold text-slate-900">
+                      Identifícate y publica:
+                    </label>
+                  </div>
+
+                  <div className="space-y-2">
+                    {/* Datos del Autor */}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="Tu nombre o familia (ej. Familia Soto)"
+                        value={authorName}
+                        onChange={(e) => setAuthorName(e.target.value)}
+                        className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs flex-1 focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-medium"
+                      />
+                      <select
+                        value={authorRelation}
+                        onChange={(e) => setAuthorRelation(e.target.value as FamilyPost['authorRelation'])}
+                        className="px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-hidden font-semibold cursor-pointer"
+                      >
+                        <option value="Familia">Familia</option>
+                        <option value="Mamá">Mamá</option>
+                        <option value="Papá">Papá</option>
+                        <option value="Abuelo/a">Abuelo/a</option>
+                        <option value="Hermano/a">Hermano/a</option>
+                        <option value="Compañero/a">Compañero/a</option>
+                        <option value="Entrenador">Entrenador</option>
+                      </select>
+                    </div>
+
+                    {/* Botón de Publicar Destacado */}
+                    <button
+                      type="submit"
+                      disabled={isPosting || (!message.trim() && !mediaPreview)}
+                      className="w-full py-2.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs sm:text-sm font-black shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>{isPosting ? 'Publicando en el muro...' : 'Publicar mensaje ahora'}</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
 
-          {/* 🤝 AVISO OFICIAL SOBRE EL CORRECTO Y RESPETUOSO USO DEL ESPACIO */}
-          <div className="p-3.5 bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-emerald-500/10 rounded-2xl border border-amber-300/70 flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            <div className="text-xs space-y-0.5">
-              <span className="font-extrabold text-slate-900 block">
-                Espacio comunitario de convivencia y respeto deportivo
-              </span>
-              <p className="text-slate-600 leading-relaxed font-medium">
-                Este mural es un punto de encuentro familiar abierto a toda la comunidad. Comparte tus saludos, fotos, videos cortos y mensajes de apoyo siempre bajo principios de respeto mutuo, juego limpio y compañerismo hacia todos los estudiantes e instituciones.
-              </p>
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmitPost} className="space-y-5">
-            {/* 🏷️ PASO 1: SELECCIONA TU COLEGIO / EQUIPO */}
-            <div className="space-y-2.5">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shadow-2xs">
-                  1
-                </span>
-                <label className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  Selecciona a tu colegio o delegación:
-                </label>
+          {/* 👉 COLUMNA DERECHA: FEED DE SALUDOS Y PUBLICACIONES EN VIVO */}
+          <div className="lg:col-span-7 xl:col-span-7 space-y-4">
+            {/* 🌟 BANNER DE CONFIRMACIÓN DE PUBLICACIÓN EXITOSA */}
+            {showSuccessBadge && (
+              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 shadow-sm animate-fade-in">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div>
+                    <p className="text-xs font-black text-emerald-900">
+                      ¡Tu mensaje ha sido publicado con éxito en el muro!
+                    </p>
+                    <p className="text-[10.5px] text-emerald-800 font-medium">
+                      Visible inmediatamente para todas las familias.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSchoolFilter('all')}
+                  className="px-2.5 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold shrink-0 transition-colors cursor-pointer"
+                >
+                  Ver todos
+                </button>
               </div>
+            )}
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-2.5">
-                {schools.map((school) => {
-                  const isSelected = selectedSchoolId === school.id;
+            {/* 🛡️ BARRA DE ESTADO DE MODERACIÓN / ADMINISTRADOR */}
+            {isAdmin ? (
+              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-amber-950 font-bold shadow-2xs animate-fade-in">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shrink-0">
+                    🛡️
+                  </span>
+                  <span className="text-[11px]">
+                    <strong>Modo Moderador:</strong> Puedes borrar publicaciones con el botón <strong>🗑️ Borrar</strong>.
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAdminLogout}
+                  className="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 text-[10.5px] font-bold border border-slate-200 shrink-0 transition cursor-pointer"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowAdminLoginModal(true)}
+                  className="text-[11px] text-slate-400 hover:text-slate-600 font-semibold flex items-center gap-1 transition cursor-pointer"
+                  title="Acceso para moderadores del comité"
+                >
+                  <Lock className="w-3 h-3 text-slate-400" />
+                  <span>Acceso Moderador</span>
+                </button>
+              </div>
+            )}
+
+            {/* Toast de confirmación de borrado */}
+            {deletedSuccessToast && (
+              <div className="p-3 bg-rose-50 border border-rose-300 text-rose-950 rounded-2xl flex items-center gap-2 text-xs font-bold shadow-sm animate-fade-in">
+                <Trash2 className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{deletedSuccessToast}</span>
+              </div>
+            )}
+
+            {/* 🔍 SELECTOR RÁPIDO DE DELEGACIÓN */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 flex-1">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSchoolFilter('all')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                    selectedSchoolFilter === 'all'
+                      ? 'bg-amber-500 text-slate-950 shadow-xs font-black'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  <span>Todos</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                    selectedSchoolFilter === 'all' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-600'
+                  }`}>
+                    {posts.length}
+                  </span>
+                </button>
+
+                {schools.map((s) => {
+                  const isSelected = selectedSchoolFilter === s.id;
+                  const countForSchool = posts.filter((p) => p.schoolId === s.id).length;
                   return (
                     <button
-                      key={school.id}
+                      key={s.id}
                       type="button"
-                      onClick={() => setSelectedSchoolId(school.id)}
-                      className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 cursor-pointer ${
+                      onClick={() => setSelectedSchoolFilter(s.id)}
+                      className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                         isSelected
-                          ? 'bg-amber-500/15 border-2 border-amber-500 ring-2 ring-amber-400/30 text-slate-950 font-black shadow-xs scale-[1.02]'
-                          : 'bg-slate-50/70 hover:bg-white border-slate-200 text-slate-700 font-bold'
+                          ? 'bg-amber-500 text-slate-950 shadow-xs font-black ring-2 ring-amber-400/40'
+                          : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
                       }`}
                     >
-                      <SchoolEmblem schoolId={school.id} size="md" />
-                      <span className="text-[11px] leading-tight truncate w-full">
-                        {school.shortName}
+                      <SchoolEmblem schoolId={s.id} size="xs" />
+                      <span className="truncate max-w-[90px]">{s.shortName}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                        isSelected ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-600'
+                      }`}>
+                        {countForSchool}
                       </span>
                     </button>
                   );
                 })}
               </div>
-            </div>
 
-            {/* 💬 PASO 2: MENSAJE Y SALUDOS RÁPIDOS */}
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shadow-2xs">
-                    2
-                  </span>
-                  <label className="text-xs sm:text-sm font-extrabold text-slate-900">
-                    Escribe tu mensaje de apoyo o saludo:
-                  </label>
-                </div>
-                <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">
-                  Toca un saludo o escribe tu propio texto
-                </span>
-              </div>
-
-              {/* Botones de Saludos Rápidos */}
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  '¡Con todo equipo! 👏',
-                  '¡Orgullo total! 💙',
-                  '¡Vamos con garra! 🔥',
-                  '¡Gran partido chicos! ⚽',
-                  '¡A darlo todo en la cancha! 🏆',
-                  '¡Juego limpio y pasión! ✨'
-                ].map((chip) => (
-                  <button
-                    key={chip}
-                    type="button"
-                    onClick={() => setMessage((prev) => (prev ? `${prev} ${chip}` : chip))}
-                    className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-amber-100/70 hover:text-amber-900 text-slate-700 text-xs font-semibold transition-all cursor-pointer border border-slate-200/70"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
-
-              {/* Área de Texto */}
-              <textarea
-                rows={2}
-                placeholder="Escribe tu mensaje de apoyo para los chicos y familias..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-300/80 rounded-2xl text-xs sm:text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:bg-white transition-all shadow-inner"
-              />
-
-              {/* Adjuntar Foto / Video */}
-              <div className="flex items-center justify-between gap-2 pt-0.5">
-                <div className="flex items-center gap-2">
-                  {isFestivalActiveDay ? (
-                    <label className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-all border border-slate-200 shadow-2xs">
-                      <Camera className="w-4 h-4 text-amber-600" />
-                      <span>{selectedFile ? 'Cambiar foto o video' : 'Adjuntar foto o video corto (hasta 15 s)'}</span>
-                      <input
-                        type="file"
-                        accept="image/*,video/*"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                    </label>
-                  ) : (
-                    <div
-                      title="La carga de fotos y videos se activa exclusivamente en días oficiales de festival."
-                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 text-slate-400 text-xs font-semibold cursor-not-allowed border border-slate-200"
-                    >
-                      <Lock className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Multimedia en pausa</span>
-                    </div>
-                  )}
-
-                  {selectedFile && (
-                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 truncate max-w-[200px]">
-                      ✓ {selectedFile.name}
-                    </span>
-                  )}
-                </div>
-
-                {mediaPreview && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMediaPreview(null);
-                      setSelectedFile(null);
-                      setMediaType('none');
-                    }}
-                    className="text-xs text-rose-600 hover:text-rose-800 font-bold underline cursor-pointer"
-                  >
-                    Quitar archivo
-                  </button>
-                )}
-              </div>
-
-              {/* Vista previa de foto o video */}
-              {mediaPreview && (
-                <div className="relative rounded-2xl overflow-hidden aspect-video max-h-48 bg-slate-900 border border-slate-200 shadow-xs">
-                  {mediaType === 'photo' ? (
-                    <img
-                      src={mediaPreview}
-                      alt="Vista previa"
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <video src={mediaPreview} className="w-full h-full object-contain" controls />
-                  )}
-                </div>
+              {selectedSchoolFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedSchoolFilter('all')}
+                  className="text-[11px] font-bold text-amber-700 hover:text-amber-800 underline shrink-0 cursor-pointer"
+                >
+                  Ver todos
+                </button>
               )}
             </div>
 
-            {/* 👤 PASO 3: IDENTIFÍCATE Y PUBLICA */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-slate-950 text-amber-300 font-black text-xs inline-flex items-center justify-center shadow-2xs">
-                  3
-                </span>
-                <label className="text-xs sm:text-sm font-extrabold text-slate-900">
-                  Identifícate y publica en el muro:
-                </label>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                {/* Datos del Autor */}
-                <div className="flex items-center gap-2 flex-1 max-w-md">
-                  <input
-                    type="text"
-                    placeholder="Tu nombre o familia (ej. Familia Soto)"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs flex-1 focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-medium"
-                  />
-                  <select
-                    value={authorRelation}
-                    onChange={(e) => setAuthorRelation(e.target.value as FamilyPost['authorRelation'])}
-                    className="px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-hidden font-semibold cursor-pointer"
-                  >
-                    <option value="Familia">Familia</option>
-                    <option value="Mamá">Mamá</option>
-                    <option value="Papá">Papá</option>
-                    <option value="Abuelo/a">Abuelo/a</option>
-                    <option value="Hermano/a">Hermano/a</option>
-                    <option value="Compañero/a">Compañero/a</option>
-                    <option value="Entrenador">Entrenador</option>
-                  </select>
+            {/* Tarjetas de Mensajes Completas (Desplegadas de Serie) */}
+            {filteredPosts.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 text-center space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+                  <Heart className="w-6 h-6 text-amber-500 fill-amber-500" />
                 </div>
-
-                {/* Botón de Publicar Destacado */}
-                <button
-                  type="submit"
-                  disabled={isPosting || (!message.trim() && !mediaPreview)}
-                  className="px-7 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs sm:text-sm font-black shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>{isPosting ? 'Publicando en el muro...' : 'Publicar mensaje ahora'}</span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* 💬 FEED DE SALUDOS Y MENSAJES DE LAS FAMILIAS CON COMENTARIOS */}
-      {!featuredOnly && (
-        <div className="space-y-4">
-          {/* 🌟 BANNER DE CONFIRMACIÓN DE PUBLICACIÓN EXITOSA */}
-          {showSuccessBadge && (
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm animate-fade-in">
-              <div className="flex items-center gap-2.5">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                <div>
-                  <p className="text-xs sm:text-sm font-black text-emerald-900">
-                    ¡Tu mensaje de apoyo ha sido publicado con éxito en el muro!
-                  </p>
-                  <p className="text-[11px] text-emerald-800 font-medium">
-                    Visible inmediatamente para todas las familias y sincronizado en tiempo real.
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-sm sm:text-base text-slate-900">
+                    Aún no hay mensajes de apoyo registrados para esta delegación
+                  </h4>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                    {selectedSchoolFilter !== 'all'
+                      ? `¡Sé la primera familia en enviar un mensaje de aliento a los atletas de ${schools.find((s) => s.id === selectedSchoolFilter)?.shortName || 'este colegio'}!`
+                      : 'Sé el primero en enviar apoyo a los deportistas.'}
                   </p>
                 </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedSchoolFilter('all')}
-                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0 transition-colors cursor-pointer"
-              >
-                Ver todos los mensajes
-              </button>
-            </div>
-          )}
-
-          {/* 🛡️ BARRA DE ESTADO DE MODERACIÓN / ADMINISTRADOR */}
-          {isAdmin ? (
-            <div className="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs text-amber-950 font-bold shadow-2xs animate-fade-in">
-              <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shrink-0">
-                  🛡️
-                </span>
-                <span>
-                  <strong>Modo Administrador Activo:</strong> Tienes permisos de moderación para eliminar cualquier publicación directamente en el botón <strong>🗑️ Borrar</strong> de cada tarjeta.
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={handleAdminLogout}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold border border-slate-200 shrink-0 transition cursor-pointer"
-              >
-                Cerrar sesión moderador
-              </button>
-            </div>
-          ) : (
-            <div className="flex justify-end pt-1">
-              <button
-                type="button"
-                onClick={() => setShowAdminLoginModal(true)}
-                className="text-[11px] text-slate-400 hover:text-slate-600 font-semibold flex items-center gap-1 transition cursor-pointer"
-                title="Acceso para moderadores del comité"
-              >
-                <Lock className="w-3 h-3 text-slate-400" />
-                <span>Acceso Moderador</span>
-              </button>
-            </div>
-          )}
-
-          {/* Toast de confirmación de borrado */}
-          {deletedSuccessToast && (
-            <div className="p-3.5 bg-rose-50 border border-rose-300 text-rose-950 rounded-2xl flex items-center gap-2 text-xs font-bold shadow-sm animate-fade-in">
-              <Trash2 className="w-4 h-4 text-rose-600 shrink-0" />
-              <span>{deletedSuccessToast}</span>
-            </div>
-          )}
-
-          {/* 🔍 SELECTOR RÁPIDO DE DELEGACIÓN (MINIMALISTA Y ÁGIL) */}
-          <div className="flex items-center justify-between gap-2 pt-1">
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 flex-1">
-              <button
-                type="button"
-                onClick={() => setSelectedSchoolFilter('all')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                  selectedSchoolFilter === 'all'
-                    ? 'bg-amber-500 text-slate-950 shadow-xs font-black'
-                    : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
-                }`}
-              >
-                <span>Todos</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-                  selectedSchoolFilter === 'all' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-600'
-                }`}>
-                  {posts.length}
-                </span>
-              </button>
-
-              {schools.map((s) => {
-                const isSelected = selectedSchoolFilter === s.id;
-                const countForSchool = posts.filter((p) => p.schoolId === s.id).length;
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => setSelectedSchoolFilter(s.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
-                      isSelected
-                        ? 'bg-amber-500 text-slate-950 shadow-xs font-black ring-2 ring-amber-400/40'
-                        : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
-                    }`}
-                  >
-                    <SchoolEmblem schoolId={s.id} size="xs" />
-                    <span>{s.shortName}</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
-                      isSelected ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {countForSchool}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {selectedSchoolFilter !== 'all' && (
-              <button
-                type="button"
-                onClick={() => setSelectedSchoolFilter('all')}
-                className="text-[11px] font-bold text-amber-700 hover:text-amber-800 underline shrink-0 cursor-pointer"
-              >
-                Ver todos
-              </button>
-            )}
-          </div>
-
-          {/* Tarjetas de Mensajes o Estado Vacío */}
-          {filteredPosts.length === 0 ? (
-            <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-                <Heart className="w-6 h-6 text-amber-500 fill-amber-500" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-sm sm:text-base text-slate-900">
-                  Aún no hay mensajes de apoyo registrados para esta delegación
-                </h4>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  {selectedSchoolFilter !== 'all'
-                    ? `¡Sé la primera familia en enviar un mensaje de aliento a los atletas de ${schools.find((s) => s.id === selectedSchoolFilter)?.shortName || 'este colegio'}!`
-                    : 'Sé el primero en enviar apoyo a los deportistas.'}
-                </p>
-              </div>
-              <div className="flex items-center justify-center gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (selectedSchoolFilter !== 'all') {
-                      setSelectedSchoolId(selectedSchoolFilter);
-                    }
-                    window.scrollTo({ top: 400, behavior: 'smooth' });
-                  }}
-                  className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black shadow-xs transition-all cursor-pointer"
-                >
-                  Escribir mensaje de apoyo
-                </button>
-                {selectedSchoolFilter !== 'all' && (
+                <div className="flex items-center justify-center gap-2 pt-2">
                   <button
                     type="button"
-                    onClick={() => setSelectedSchoolFilter('all')}
-                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                    onClick={() => {
+                      if (selectedSchoolFilter !== 'all') {
+                        setSelectedSchoolId(selectedSchoolFilter);
+                      }
+                      window.scrollTo({ top: 100, behavior: 'smooth' });
+                    }}
+                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black shadow-xs transition-all cursor-pointer"
                   >
-                    Ver otros colegios
+                    Escribir mensaje de apoyo
                   </button>
-                )}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="space-y-3.5">
-            {filteredPosts.map((post, index) => {
-              const school = schools.find((s) => s.id === post.schoolId) || schools[0];
-              const isCommentsOpen = openCommentsPostId === post.id;
-              const postComments = post.comments || [];
-              const dateInfo = formatPostDateInfo(post.createdAt, post.createdAtIso);
+            ) : (
+              <div className="space-y-3.5">
+                {filteredPosts.map((post, index) => {
+                  const school = schools.find((s) => s.id === post.schoolId) || schools[0];
+                  const isCommentsOpen = openCommentsPostId === post.id;
+                  const postComments = post.comments || [];
+                  const dateInfo = formatPostDateInfo(post.createdAt, post.createdAtIso);
 
-              // La primera publicación (index === 0) aparece expandida por defecto.
-              // Las publicaciones posteriores (index > 0) aparecen acopladas, salvo que el usuario las expanda.
-              const isExpanded = manuallyToggled[post.id] !== undefined 
-                ? manuallyToggled[post.id] 
-                : index === 0;
+                  return (
+                    <div
+                      key={post.id}
+                      className={`bg-white rounded-3xl border p-4 sm:p-5 shadow-sm space-y-3 transition-all animate-fade-in ${
+                        index === 0 ? 'border-2 border-amber-400/80 ring-2 ring-amber-400/20' : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
+                      {/* Badge distintivo en la primera publicación más reciente */}
+                      {index === 0 && (
+                        <div className="flex items-center justify-between pb-1 border-b border-amber-100/60 text-xs">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                            <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
+                            <span>Publicación más reciente · En vivo</span>
+                          </span>
+                        </div>
+                      )}
 
-              const toggleExpand = () => {
-                setManuallyToggled((prev) => ({
-                  ...prev,
-                  [post.id]: !isExpanded,
-                }));
-              };
-
-              if (!isExpanded) {
-                return (
-                  <div
-                    key={post.id}
-                    onClick={toggleExpand}
-                    className="bg-white rounded-2xl border border-slate-200 hover:border-amber-400 p-3.5 sm:p-4 shadow-2xs hover:shadow-md transition-all cursor-pointer group space-y-2 border-l-4 border-l-amber-400 animate-fade-in"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <SchoolEmblem schoolId={school.id} size="xs" />
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-extrabold text-xs text-slate-900 truncate">{post.authorName}</span>
-                            {post.authorName.includes('Comité') && (
-                              <span className="px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-black text-[8.5px] uppercase shadow-2xs">
-                                Oficial
-                              </span>
-                            )}
-                            <span className="text-[10.5px] text-amber-800 font-bold truncate">· {school.shortName}</span>
+                      {/* Encabezado: Escudo + Autor + Fecha/Hora + Audio DUA */}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                          <SchoolEmblem schoolId={school.id} size="sm" />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-baseline justify-between gap-2">
+                              <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug flex items-center gap-1.5 flex-wrap">
+                                <span>{post.authorName}</span>
+                                {post.authorName.includes('Comité') && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider shadow-2xs">
+                                    Oficial
+                                  </span>
+                                )}
+                              </h4>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <span className="text-[10px] text-slate-600 font-mono flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200">
+                                  <Clock className="w-3 h-3 text-amber-600" />
+                                  <span>{dateInfo.label}</span>
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleSpeakPost(post, school.shortName, dateInfo.speechTime)}
+                                  className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                                    speakingPostId === post.id
+                                      ? 'bg-amber-500 text-slate-950 border-amber-600 animate-pulse'
+                                      : 'bg-slate-50 hover:bg-amber-100 text-slate-600 hover:text-amber-900 border-slate-200'
+                                  }`}
+                                  title="Escuchar publicación por voz (DUA - Acento Latina)"
+                                >
+                                  {speakingPostId === post.id ? <VolumeX className="w-3.5 h-3.5 text-slate-950" /> : <Volume2 className="w-3.5 h-3.5" />}
+                                </button>
+                                {isAdmin && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeletePost(post.id, post.authorName)}
+                                    className="px-2 py-0.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10.5px] font-black border border-rose-300 transition-all flex items-center gap-1 cursor-pointer shadow-2xs active:scale-95"
+                                    title="Eliminar esta publicación del muro"
+                                  >
+                                    <Trash2 className="w-3 h-3 text-rose-600" />
+                                    <span>Borrar</span>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                            <p className="text-[11px] text-amber-800 font-bold leading-tight mt-0.5">
+                              {post.authorName.includes('Comité') ? 'Comité Organizador' : post.authorRelation} · {school.name}
+                            </p>
                           </div>
+                        </div>
+
+                        {/* Badges de Valor e IA */}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {post.isFeatured && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-200 shadow-2xs">
+                              <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                              <span>{post.authorName.includes('Comité') ? 'Bienvenida Oficial' : 'Destacado'}</span>
+                            </span>
+                          )}
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9.5px] font-bold border border-emerald-200 shadow-2xs">
+                            <Sparkles className="w-3 h-3 text-emerald-600" />
+                            <span>Valor Humano IA</span>
+                          </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] text-slate-600 font-mono flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200">
-                          <Clock className="w-3 h-3 text-amber-600" />
-                          <span>{dateInfo.label}</span>
-                        </span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSpeakPost(post, school.shortName, dateInfo.speechTime);
-                          }}
-                          className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                            speakingPostId === post.id
-                              ? 'bg-amber-500 text-slate-950 border-amber-600 animate-pulse'
-                              : 'bg-slate-50 hover:bg-amber-100 text-slate-600 hover:text-amber-900 border-slate-200'
-                          }`}
-                          title="Escuchar publicación por voz (DUA)"
-                        >
-                          {speakingPostId === post.id ? <VolumeX className="w-3.5 h-3.5 text-slate-950" /> : <Volume2 className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                    </div>
+                      {/* Foto o Video Adjunto (Tamaño Compacto y Proporcionado) */}
+                      {post.mediaUrl && (
+                        <div className="relative group rounded-2xl overflow-hidden bg-slate-900 border border-slate-100 max-h-56 sm:max-h-64 w-full flex items-center justify-center">
+                          {post.mediaType === 'photo' ? (
+                            <>
+                              <img
+                                src={post.mediaUrl}
+                                alt="Foto del partido"
+                                className="w-full h-full max-h-56 sm:max-h-64 object-cover"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`)}
+                                className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-xs transition-all cursor-pointer shadow-sm active:scale-95"
+                                title="Descargar fotografía en formato JPG"
+                              >
+                                <Download className="w-3.5 h-3.5 text-amber-300" />
+                                <span>Descargar JPG</span>
+                              </button>
+                            </>
+                          ) : (
+                            <video src={post.mediaUrl} className="w-full h-full max-h-56 sm:max-h-64 object-contain" controls />
+                          )}
+                        </div>
+                      )}
 
-                    {/* Mensaje resumido / Extracto */}
-                    <p className="text-xs text-slate-700 line-clamp-1 italic font-medium pl-1">
-                      "{post.message}"
-                    </p>
+                      {/* Mensaje de Apoyo */}
+                      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">
+                        {post.message}
+                      </p>
 
-                    {/* Pie de tarjeta acoplada: Reacciones + Botón Desplegar con micro-animación */}
-                    <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500 border-t border-slate-100">
-                      <div className="flex items-center gap-2.5">
-                        <span className="flex items-center gap-1 font-bold text-slate-600">
-                          <Heart className="w-3 h-3 text-rose-500 fill-rose-500" />
-                          {post.likesCount}
-                        </span>
-                        <span className="flex items-center gap-1 font-bold text-slate-600">
-                          👏 {post.applauseCount}
-                        </span>
-                        {postComments.length > 0 && (
-                          <span className="flex items-center gap-1 text-slate-500 font-medium">
-                            <MessageSquare className="w-3 h-3 text-slate-400" />
-                            {postComments.length}
-                          </span>
-                        )}
-                        {post.mediaUrl && (
-                          <span className="inline-flex items-center gap-1 text-[9.5px] px-1.5 py-0.2 rounded-md bg-amber-50 text-amber-900 font-bold border border-amber-200">
-                            {post.mediaType === 'photo' ? '📷 Foto' : '🎥 Video'}
-                          </span>
-                        )}
-                      </div>
+                      {/* Barra de Reacciones, Votos y Comentarios */}
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleReaction(post.id, 'like')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 transition-all cursor-pointer"
+                            title="Enviar corazón de apoyo"
+                          >
+                            <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                            <span className="font-bold">{post.likesCount}</span>
+                          </button>
 
-                      <div className="flex items-center gap-1.5">
-                        {isAdmin && (
+                          <button
+                            onClick={() => handleReaction(post.id, 'applause')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 transition-all cursor-pointer"
+                            title="Aplausos al juego limpio"
+                          >
+                            <span className="text-xs">👏</span>
+                            <span className="font-bold">{post.applauseCount}</span>
+                          </button>
+
+                          <button
+                            onClick={() => setOpenCommentsPostId(isCommentsOpen ? null : post.id)}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+                              isCommentsOpen 
+                                ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold' 
+                                : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
+                            }`}
+                            title="Comentar esta publicación"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
+                            <span>{postComments.length > 0 ? postComments.length : 'Comentar'}</span>
+                          </button>
+                        </div>
+
+                        <div className="flex items-center gap-1.5">
                           <button
                             type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeletePost(post.id, post.authorName);
-                            }}
-                            className="px-2 py-0.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10px] font-black border border-rose-300"
+                            onClick={() => handleSharePost(post, school.shortName)}
+                            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-200 transition-all cursor-pointer shadow-2xs active:scale-95"
+                            title="Compartir mensaje de apoyo en WhatsApp"
                           >
-                            Borrar
+                            <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span className="hidden sm:inline">Compartir</span>
                           </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleExpand();
-                          }}
-                          className="px-2.5 py-1 rounded-xl bg-amber-100 group-hover:bg-amber-400 group-hover:text-slate-950 text-amber-950 text-[11px] font-black flex items-center gap-1 shadow-2xs transition-all cursor-pointer"
-                        >
-                          <span>Desplegar</span>
-                          <ChevronDown className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />
-                        </button>
+
+                          <button
+                            onClick={() => handleReaction(post.id, 'feature')}
+                            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-200 transition-all cursor-pointer"
+                          >
+                            <Star className="w-3 h-3 fill-amber-500 text-amber-600" />
+                            <span>Votar ({post.featuredVotes})</span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              }
 
-              return (
-                <div
-                  key={post.id}
-                  className={`bg-white rounded-3xl border p-4 sm:p-5 shadow-sm space-y-3 transition-all animate-fade-in ${
-                    index === 0 ? 'border-2 border-amber-400/80 ring-2 ring-amber-400/20' : 'border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  {/* Badge distintivo de publicación reciente en la primera */}
-                  {index === 0 && (
-                    <div className="flex items-center justify-between pb-1 border-b border-amber-100/60 text-xs">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-2xs">
-                        <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
-                        <span>Publicación más reciente · En vivo</span>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={toggleExpand}
-                        className="text-[11px] font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer"
-                      >
-                        <span>Plegar</span>
-                        <ChevronUp className="w-3 h-3" />
-                      </button>
-                    </div>
-                  )}
+                      {/* Sección Desplegable de Comentarios */}
+                      {isCommentsOpen && (
+                        <div className="pt-3 mt-3 border-t border-slate-100 space-y-2.5 animate-fade-in">
+                          <span className="text-[11px] font-bold text-slate-600 block">
+                            Comentarios Familiares ({postComments.length}):
+                          </span>
 
-                  {/* Encabezado: Escudo + Autor en ancho completo */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <SchoolEmblem schoolId={school.id} size="sm" />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline justify-between gap-2">
-                          <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug flex items-center gap-1.5 flex-wrap">
-                            <span>{post.authorName}</span>
-                            {post.authorName.includes('Comité') && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wider shadow-2xs">
-                                Oficial
-                              </span>
-                            )}
-                          </h4>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-[10px] text-slate-600 font-mono flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-200">
-                              <Clock className="w-3 h-3 text-amber-600" />
-                              <span>{dateInfo.label}</span>
-                            </span>
+                          {postComments.length > 0 ? (
+                            <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                              {postComments.map((comm) => (
+                                <div key={comm.id} className="p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                                  <div className="flex items-center justify-between text-[10px] text-slate-400 mb-0.5">
+                                    <span className="font-bold text-slate-700">{comm.authorName}</span>
+                                    <span>{comm.createdAt}</span>
+                                  </div>
+                                  <p className="text-slate-800 text-[11px]">{comm.text}</p>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-[11px] text-slate-400 italic">
+                              Aún no hay comentarios. ¡Sé el primero en dejar unas palabras de aliento!
+                            </p>
+                          )}
+
+                          <div className="flex items-center gap-1.5 pt-1">
+                            <input
+                              type="text"
+                              placeholder="Tu nombre..."
+                              value={commentAuthor}
+                              onChange={(e) => setCommentAuthor(e.target.value)}
+                              className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] w-28 focus:outline-hidden"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Escribe un comentario..."
+                              value={commentText}
+                              onChange={(e) => setCommentText(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  handleAddComment(post.id);
+                                }
+                              }}
+                              className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] focus:outline-hidden focus:ring-1 focus:ring-amber-500"
+                            />
                             <button
                               type="button"
-                              onClick={() => handleSpeakPost(post, school.shortName, dateInfo.speechTime)}
-                              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                                speakingPostId === post.id
-                                  ? 'bg-amber-500 text-slate-950 border-amber-600 animate-pulse'
-                                  : 'bg-slate-50 hover:bg-amber-100 text-slate-600 hover:text-amber-900 border-slate-200'
-                              }`}
-                              title="Escuchar publicación por voz (DUA)"
+                              onClick={() => handleAddComment(post.id)}
+                              className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[11px] font-bold cursor-pointer"
                             >
-                              {speakingPostId === post.id ? <VolumeX className="w-3.5 h-3.5 text-slate-950" /> : <Volume2 className="w-3.5 h-3.5" />}
+                              Enviar
                             </button>
-                            {index !== 0 && (
-                              <button
-                                type="button"
-                                onClick={toggleExpand}
-                                className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center gap-0.5 cursor-pointer"
-                                title="Contraer publicación"
-                              >
-                                <span>Plegar</span>
-                                <ChevronUp className="w-3 h-3" />
-                              </button>
-                            )}
-                            {isAdmin && (
-                              <button
-                                type="button"
-                                onClick={() => handleDeletePost(post.id, post.authorName)}
-                                className="px-2 py-0.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-700 text-[10.5px] font-black border border-rose-300 transition-all flex items-center gap-1 cursor-pointer shadow-2xs active:scale-95"
-                                title="Eliminar esta publicación del muro"
-                              >
-                                <Trash2 className="w-3 h-3 text-rose-600" />
-                                <span>Borrar</span>
-                              </button>
-                            )}
                           </div>
                         </div>
-                        <p className="text-[11px] text-amber-800 font-bold leading-tight mt-0.5">
-                          {post.authorName.includes('Comité') ? 'Comité Organizador' : post.authorRelation} · {school.name}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Badges de Valor e IA */}
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {post.isFeatured && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-200 shadow-2xs">
-                          <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                          <span>{post.authorName.includes('Comité') ? 'Bienvenida Oficial' : 'Destacado'}</span>
-                        </span>
-                      )}
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[9.5px] font-bold border border-emerald-200 shadow-2xs">
-                        <Sparkles className="w-3 h-3 text-emerald-600" />
-                        <span>Valor Humano IA</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Foto o Video Adjunto */}
-                  {post.mediaUrl && (
-                    <div className="relative group rounded-2xl overflow-hidden aspect-video bg-slate-900 border border-slate-100">
-                      {post.mediaType === 'photo' ? (
-                        <>
-                          <img
-                            src={post.mediaUrl}
-                            alt="Foto del partido"
-                            className="w-full h-full object-cover"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`)}
-                            className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-xs transition-all cursor-pointer shadow-sm active:scale-95"
-                            title="Descargar fotografía en formato JPG"
-                          >
-                            <Download className="w-3.5 h-3.5 text-amber-300" />
-                            <span>Descargar JPG</span>
-                          </button>
-                        </>
-                      ) : (
-                        <video src={post.mediaUrl} className="w-full h-full object-cover" controls />
                       )}
                     </div>
-                  )}
-
-                  {/* Mensaje de Apoyo */}
-                  <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">
-                    {post.message}
-                  </p>
-
-                  {/* Barra de Reacciones, Votos y Comentarios */}
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleReaction(post.id, 'like')}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 transition-all cursor-pointer"
-                        title="Enviar corazón de apoyo"
-                      >
-                        <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
-                        <span className="font-bold">{post.likesCount}</span>
-                      </button>
-
-                      <button
-                        onClick={() => handleReaction(post.id, 'applause')}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 transition-all cursor-pointer"
-                        title="Aplausos al juego limpio"
-                      >
-                        <span className="text-xs">👏</span>
-                        <span className="font-bold">{post.applauseCount}</span>
-                      </button>
-
-                      <button
-                        onClick={() => setOpenCommentsPostId(isCommentsOpen ? null : post.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
-                          isCommentsOpen 
-                            ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold' 
-                            : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
-                        }`}
-                        title="Comentar esta publicación"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
-                        <span>{postComments.length > 0 ? postComments.length : 'Comentar'}</span>
-                      </button>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => handleSharePost(post, school.shortName)}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-200 transition-all cursor-pointer shadow-2xs active:scale-95"
-                        title="Compartir mensaje de apoyo en WhatsApp"
-                      >
-                        <Share2 className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="hidden sm:inline">Compartir</span>
-                      </button>
-
-                      <button
-                        onClick={() => handleReaction(post.id, 'feature')}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-200 transition-all cursor-pointer"
-                      >
-                        <Star className="w-3 h-3 fill-amber-500 text-amber-600" />
-                        <span>Votar Destacado ({post.featuredVotes})</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Sección Desplegable de Comentarios */}
-                  {isCommentsOpen && (
-                    <div className="pt-3 mt-3 border-t border-slate-100 space-y-2.5 animate-fade-in">
-                      <span className="text-[11px] font-bold text-slate-600 block">
-                        Comentarios Familiares ({postComments.length}):
-                      </span>
-
-                      {postComments.length > 0 ? (
-                        <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                          {postComments.map((comm) => (
-                            <div key={comm.id} className="p-2 bg-slate-50 rounded-xl border border-slate-200 text-xs">
-                              <div className="flex items-center justify-between text-[10px] text-slate-400 mb-0.5">
-                                <span className="font-bold text-slate-700">{comm.authorName}</span>
-                                <span>{comm.createdAt}</span>
-                              </div>
-                              <p className="text-slate-800 text-[11px]">{comm.text}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-[11px] text-slate-400 italic">
-                          Aún no hay comentarios. ¡Sé el primero en dejar unas palabras de aliento!
-                        </p>
-                      )}
-
-                      <div className="flex items-center gap-1.5 pt-1">
-                        <input
-                          type="text"
-                          placeholder="Tu nombre..."
-                          value={commentAuthor}
-                          onChange={(e) => setCommentAuthor(e.target.value)}
-                          className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] w-28 focus:outline-hidden"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Escribe un comentario..."
-                          value={commentText}
-                          onChange={(e) => setCommentText(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              handleAddComment(post.id);
-                            }
-                          }}
-                          className="flex-1 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] focus:outline-hidden focus:ring-1 focus:ring-amber-500"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleAddComment(post.id)}
-                          className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[11px] font-bold cursor-pointer"
-                        >
-                          Enviar
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            )}
           </div>
-          )}
         </div>
       )}
 
