@@ -294,5 +294,19 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 2. **Prohibición de Delegaciones de Prueba:**
    - Prohibido agregar o mantener entidades ficticias o de prueba (como *"Equipo Invitado"* o *"Escazú"*).
 
+---
+
+## 22. Arquitectura de Persistencia Bidireccional Servidor-Cliente (Anti-Ceros en Despliegues)
+
+1. **Fuente de Verdad Sincronizada (Zero-Cache Collision):**
+   - En toda plataforma con mesas de control o captura de datos descentralizada, los datos editados en caliente deben sincronizarse de manera bidireccional tanto en la base de datos física del servidor (`tournament_db.json` / API) como en el archivo de datos base inicial (`initialData.ts`).
+   - PROHIBIDO desplegar o compilar código que mantenga partidos concluidos como `scheduled` o con marcadores `0-0` en los archivos iniciales, para evitar que usuarios en modo incógnito, nuevas sesiones o despliegues en Vercel sobreescriban visualmente los marcadores reales.
+2. **Transición Estricta de Estados de Encuentros:**
+   - Todo partido que concluya debe pasar a `status: 'completed'` con su periodo en `Finalizado` para que el motor de posiciones (`sportsEngine.ts`) compute sus puntos, sets y diferencia.
+   - Los partidos aplazados deben marcarse explícitamente como `status: 'postponed'` y `currentPeriod: 'Por reprogramar'` (0 puntos para ambos y 0 PJ).
+3. **Telemetría y Notificación Automática a Canales del Administrador:**
+   - Cada guardado o ajuste en mesa de control debe despachar confirmación en tiempo real por WhatsApp (Evolution API) a **Alberto (`+506 6060-2617`)** y presentar un botón táctil de reenvío con la tarjeta oficial de juego formateada.
+
+
 
 
