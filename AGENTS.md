@@ -190,16 +190,19 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 
 ---
 
-## 13. Regla Oficial de Ausencia / No Presentación y Baremo del Festival
+## 13. Regla Oficial de Ausencia / No Presentación y Baremo del Fútbol
 
-1. **Baremo Oficial del Festival Deportivo:**
-   - Victoria = **2 puntos**, Empate = **1 punto**, Derrota = **0 puntos**.
-2. **Marcador Fijo 0–0 y Cero Goles Artificiales:**
-   - Cuando un equipo no se presenta a un encuentro, el marcador visual y estadístico queda estrictamente en **0 – 0** (no se agregan goles artificiales ni a favor ni en contra de ninguna de las delegaciones).
-3. **Asignación de Puntos al Equipo Presente:**
-   - Al no disputarse el partido en cancha, el equipo presente no acumula un partido jugado ficticio (`played += 0`), pero se le asigna **1 punto reglamentario** por la no presentación del rival.
+1. **Baremo Oficial de Puntuación en Fútbol:**
+   - Victoria = **3 puntos**, Empate = **1 punto**, Derrota = **0 puntos**.
+2. **Regla Oficial de No Presentación / Ausencia (Reprogramación):**
+   - Cuando un equipo no se presenta a un encuentro (ej. Monseñor Vittorino):
+     - El partido queda en estado de **reprogramación pendiente** (`Por reprogramar`).
+     - **NO se asignan puntos a ningún equipo** (0 puntos para ambos).
+     - Ninguno de los dos equipos suma partidos jugados ficticios en cancha (`played += 0`).
+3. **Marcador Fijo 0–0 y Cero Goles Artificiales:**
+   - El marcador estadístico queda en **0 – 0** (no se agregan goles artificiales ni a favor ni en contra).
 4. **Cero Absoluto para el Equipo Ausente:**
-   - La delegación no presentada no acumula partidos jugados ni goles, quedando en **0 absoluto en todas sus estadísticas** (0 PJ, 0 PG, 0 PE, 0 PP, 0 GF, 0 GC, 0 GD, 0 PTS).
+   - La delegación no presentada queda en **0 absoluto** en partidos jugados y puntos hasta que dispute el encuentro reprogramado.
 
 ---
 
@@ -207,11 +210,11 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 
 1. **Supresión Total de Jerga Técnica:**
    - Queda estrictamente PROHIBIDO usar expresiones como *"Finalizado por incomparecencia"* o *"W.O."* en tarjetas de partido, actas públicas o reportes.
-   - Usar redacción clara y resumida: `«[Equipo] no se presentó · Puntos asignados a [Equipo rival]»`.
+   - Usar redacción clara y amigable: `«[Equipo] no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)»`.
 2. **Nomenclatura Institucional Exacta:**
    - Nombre oficial: **Centro Educativo Católico Monseñor Vittorino Girardi Stellin** (Nombre corto: **Monseñor Vittorino**; prohibido usar "Instituto").
 3. **Apertura del Muro Familiar (`/mural`):**
-   - El muro opera **sin PIN** para eliminar fricciones y motivar a las familias a publicar libremente en 3 pasos visuales claros (1. Selecciona delegación, 2. Escribe porra, 3. Firma y publica).
+   - El muro opera **sin PIN** para eliminar fricciones y motivar a las familias a publicar libremente en 3 pasos visuales claros (1. Selecciona delegación, 2. Escribe porra/saludo, 3. Firma y publica).
 
 ---
 

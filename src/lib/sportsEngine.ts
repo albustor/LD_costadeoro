@@ -72,22 +72,16 @@ export function calculateStandings(
       match.notes?.toLowerCase().includes('w.o.') ||
       match.notes?.toLowerCase().includes('no presentación');
 
-    if (isAwayAbsent) {
-      // El ausente queda estrictamente en 0 absoluto (0 PJ, 0 PTS).
-      // El equipo presente recibe 1 punto asignado por la no presentación del rival (sin sumar PJ ficticio en cancha).
-      home.points += 1;
-      home.form.push('W');
-    } else if (isHomeAbsent) {
-      // El ausente queda estrictamente en 0 absoluto (0 PJ, 0 PTS).
-      // El equipo presente recibe 1 punto asignado por la no presentación del rival (sin sumar PJ ficticio en cancha).
-      away.points += 1;
-      away.form.push('W');
+    if (isAwayAbsent || isHomeAbsent) {
+      // Regla Oficial Festival Deportivo Costa de Oro:
+      // Cuando un equipo no se presenta, el partido se reprograma y NO se le asigna puntos a ninguno de los dos equipos.
+      // Ninguno de los dos equipos suma partidos jugados en cancha (0 PJ ficticios).
     } else {
       home.played += 1;
       away.played += 1;
     }
 
-    // Goles / Puntos acumulados: se computa el tanteo registrado (0-0 si es W.O. sin goles)
+    // Goles / Puntos acumulados: se computa el tanteo registrado (0-0 si es partido pendiente de reprogramación)
     const effectiveHomeScore = isAwayAbsent || isHomeAbsent ? 0 : match.homeScore;
     const effectiveAwayScore = isAwayAbsent || isHomeAbsent ? 0 : match.awayScore;
 
@@ -97,12 +91,13 @@ export function calculateStandings(
     away.pointsAgainst += effectiveHomeScore;
 
     if (sport === 'futbol') {
-      // Formato Oficial Festival Deportivo Costa de Oro:
-      // Victoria = 2 Puntos | Empate = 1 Punto | Derrota = 0 Puntos
-      const winPoints = 2;
+      // Formato Oficial Festival Deportivo Costa de Oro (Fútbol):
+      // Victoria = 3 Puntos | Empate = 1 Punto | Derrota = 0 Puntos
+      const winPoints = 3;
+      const drawPoints = 1;
 
       if (isAwayAbsent || isHomeAbsent) {
-        // La asignación de puntos por ausencia ya se computó arriba (1 pt al presente, 0 al ausente)
+        // No se asignan puntos a ningún equipo; partido pendiente de reprogramación
       } else if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += winPoints;
@@ -117,28 +112,16 @@ export function calculateStandings(
         home.form.push('L');
       } else {
         home.drawn += 1;
-        home.points += 1;
+        home.points += drawPoints;
         home.form.push('D');
         away.drawn += 1;
-        away.points += 1;
+        away.points += drawPoints;
         away.form.push('D');
       }
     } else if (sport === 'baloncesto') {
-      // In basketball: Win = 2 pts, Loss = 1 pt (FIBA). Si un equipo no se presenta queda en 0 puntos!
-      if (isAwayAbsent) {
-        home.won += 1;
-        home.points += 2;
-        home.form.push('W');
-        away.lost += 1;
-        away.points += 0;
-        away.form.push('L');
-      } else if (isHomeAbsent) {
-        away.won += 1;
-        away.points += 2;
-        away.form.push('W');
-        home.lost += 1;
-        home.points += 0;
-        home.form.push('L');
+      // En baloncesto (FIBA): Victoria = 2 pts | Derrota = 1 pt.
+      if (isAwayAbsent || isHomeAbsent) {
+        // Reprogramación sin puntos
       } else if (match.homeScore > match.awayScore) {
         home.won += 1;
         home.points += 2;
@@ -155,24 +138,8 @@ export function calculateStandings(
         home.form.push('L');
       }
     } else if (sport === 'voleibol') {
-      if (isAwayAbsent) {
-        home.won += 1;
-        home.points += 2;
-        home.form.push('W');
-        away.lost += 1;
-        away.points += 0;
-        away.form.push('L');
-        if (home.setsWon !== undefined) home.setsWon += 2;
-        if (away.setsLost !== undefined) away.setsLost += 2;
-      } else if (isHomeAbsent) {
-        away.won += 1;
-        away.points += 2;
-        away.form.push('W');
-        home.lost += 1;
-        home.points += 0;
-        home.form.push('L');
-        if (away.setsWon !== undefined) away.setsWon += 2;
-        if (home.setsLost !== undefined) home.setsLost += 2;
+      if (isAwayAbsent || isHomeAbsent) {
+        // Reprogramación sin puntos
       } else {
         const homeSets = match.homeSetsWon ?? 0;
         const awaySets = match.awaySetsWon ?? 0;

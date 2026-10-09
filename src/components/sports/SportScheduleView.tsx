@@ -326,6 +326,13 @@ export function SportScheduleView({
                           </div>
                         </div>
 
+                        {/* Detalle o Nota de No Presentación / Reprogramación */}
+                        {(match.walkover === 'home_forfeit' || match.walkover === 'away_forfeit' || match.notes?.toLowerCase().includes('no se presentó')) && match.notes && (
+                          <div className="mt-2.5 p-2 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 font-medium">
+                            ℹ️ {match.notes}
+                          </div>
+                        )}
+
                         {/* Desglose de Sets para Voleibol */}
                         {isVoleibol && isCompleted && match.setScores && match.setScores.length > 0 && (
                           <div className="mt-2.5 p-1.5 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center gap-2 text-[10.5px] font-mono font-semibold text-sky-800">

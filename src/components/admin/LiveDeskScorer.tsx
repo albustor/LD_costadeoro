@@ -117,21 +117,21 @@ export function LiveDeskScorer() {
   const handleWalkover = (absentSide: 'home' | 'away') => {
     setIsManualOverride(true);
     setStatus('completed');
-    setCurrentPeriod('Final (W.O.)');
+    setCurrentPeriod('Por reprogramar');
 
     if (absentSide === 'home') {
       setWalkover('home_forfeit');
       setHomeScore(0);
-      setAwayScore(2);
+      setAwayScore(0);
       setNotes(
-        `Victoria por no presentación / W.O. (${home?.shortName || 'Local'} no se presentó). Puntaje reglamentario de 2 puntos adjudicado a ${away?.shortName || 'Visitante'}.`
+        `${home?.shortName || 'Equipo Local'} no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo).`
       );
     } else {
       setWalkover('away_forfeit');
-      setHomeScore(2);
+      setHomeScore(0);
       setAwayScore(0);
       setNotes(
-        `Victoria por no presentación / W.O. (${away?.shortName || 'Visitante'} no se presentó). Puntaje reglamentario de 2 puntos adjudicado a ${home?.shortName || 'Local'}.`
+        `${away?.shortName || 'Equipo Visitante'} no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo).`
       );
     }
   };
@@ -729,9 +729,9 @@ export function LiveDeskScorer() {
                     ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
                     : 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700'
                 }`}
-                title="Declarar incomparecencia de este equipo: adjudica 3 puntos reglamentarios al rival"
+                title="Declarar incomparecencia de este equipo: partido por reprogramar (sin asignación de puntos a ningún equipo)"
               >
-                <span>⚠️ No se presentó Local (Gana Visita · 3 pts)</span>
+                <span>⚠️ No se presentó Local (Por reprogramar)</span>
               </button>
             </div>
 
@@ -895,24 +895,24 @@ export function LiveDeskScorer() {
                     ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
                     : 'bg-rose-50 hover:bg-rose-100 border-rose-200 text-rose-700'
                 }`}
-                title="Declarar incomparecencia de este equipo: adjudica 3 puntos reglamentarios al rival"
+                title="Declarar incomparecencia de este equipo: partido por reprogramar (sin asignación de puntos a ningún equipo)"
               >
-                <span>⚠️ No se presentó Visitante (Gana Local · 3 pts)</span>
+                <span>⚠️ No se presentó Visitante (Por reprogramar)</span>
               </button>
             </div>
           </div>
 
-          {/* Banner de Resolución por W.O. si está activo */}
+          {/* Banner de Resolución por No Presentación si está activo */}
           {walkover && walkover !== 'none' && (
             <div className="p-3.5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2">
                 <span className="text-xl">⚠️</span>
                 <div>
                   <span className="font-extrabold text-amber-900 block sm:inline">
-                    Resolución oficial por no presentación (W.O.) activa:
+                    Resolución oficial por no presentación activa:
                   </span>{' '}
                   <span className="text-slate-700 font-medium">
-                    {walkover === 'home_forfeit' ? home?.shortName : away?.shortName} no se presentó. Victoria oficial y 3 puntos reglamentarios en tabla adjudicados al ganador.
+                    {walkover === 'home_forfeit' ? home?.shortName : away?.shortName} no se presentó. Encuentro pendiente de reprogramación (sin asignación de puntos a ningún equipo).
                   </span>
                 </div>
               </div>

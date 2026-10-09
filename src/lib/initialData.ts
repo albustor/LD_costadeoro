@@ -36,9 +36,9 @@ export const INITIAL_MATCHES: Match[] = [
     homeScore: 0,
     awayScore: 0,
     status: 'completed',
-    currentPeriod: 'Finalizado (W.O.)',
+    currentPeriod: 'Por reprogramar',
     walkover: 'away_forfeit',
-    notes: 'Monseñor Vittorino no se presentó · Puntos asignados a La Paz Tempisque',
+    notes: 'Monseñor Vittorino no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)',
     updatedAt: '2026-10-05T16:00:00Z',
   },
   {
@@ -134,9 +134,9 @@ export const INITIAL_MATCHES: Match[] = [
     homeScore: 0,
     awayScore: 0,
     status: 'completed',
-    currentPeriod: 'Finalizado',
+    currentPeriod: 'Por reprogramar',
     walkover: 'home_forfeit',
-    notes: 'Monseñor Vittorino no se presentó · Puntos asignados a CRIA',
+    notes: 'Monseñor Vittorino no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)',
     updatedAt: '2026-10-06T16:30:00Z',
   },
   {

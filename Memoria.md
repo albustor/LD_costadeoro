@@ -618,6 +618,18 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
 
 ---
 
+## ADR-044: Baremo Oficial de Puntuación de Fútbol y Regla de No Presentación (Reprogramación)
+- **Fecha**: 2026-10-09
+- **Contexto**: El Comité Organizador estableció el ajuste reglamentario definitivo para la disciplina de Fútbol: la victoria otorga 3 puntos y el empate 1 punto. Asimismo, ante la ausencia/no presentación de un equipo (caso Monseñor Vittorino), el partido queda en estado de reprogramación pendiente y NO se le adjudican puntos a ningún equipo.
+- **Decisión**:
+  1. En `src/lib/sportsEngine.ts`: Se ajustó el cómputo de fútbol a `winPoints = 3` y `drawPoints = 1`. Cuando `isAwayAbsent` o `isHomeAbsent` es verdadero, no se asignan puntos a ninguna delegación (`points += 0`) ni se computan partidos jugados ficticios (`played += 0`).
+  2. En `src/lib/initialData.ts` y `src/data/tournament_db.json`: Los encuentros de Monseñor Vittorino no presentados se marcaron con el periodo `Por reprogramar` y la nota oficial: `«Monseñor Vittorino no se presentó · Partido por reprogramar (sin asignación de puntos a ningún equipo)»`.
+  3. En `StandingsTable.tsx`: La tabla de fútbol femenino refleja a **La Paz Cabo Velas en 1.er lugar con 4 puntos** (1 PG + 1 PE), CRIA en 2.º lugar con 2 puntos (2 PE) y La Paz Tempisque en 3.er lugar con 1 punto (1 PE).
+  4. En `AGENTS.md`, `agent.md` y `Memoria.md`: Se consolidó la regla en el corpus normativo del asistente.
+- **Estado**: ✅ Implementado, auditado y validado en localhost (puerto 3014).
+
+---
+
 ## ADR: Adopción de Simplicidad Radical (Octubre 2026)
 - **Decisión:** Priorizar la usabilidad directa del Festival Deportivo, eliminando la sobrecarga de dependencias y simplificando la navegación para los usuarios móviles de los colegios participantes.
 - **Acción:** Depurar prototipos obsoletos y concentrar la UI en partidos, marcadores y fotos de alta velocidad.
