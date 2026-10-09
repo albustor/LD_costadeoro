@@ -26,6 +26,7 @@ import { SCHOOLS_DATA, CATEGORIES_DATA } from '@/config/tournamentConfig';
 import { useTournament } from '@/context/TournamentContext';
 import { calculateStandings } from '@/lib/sportsEngine';
 import { tournamentStorage } from '@/lib/storageAdapter';
+import { formatMatchResultNotificationMessage, getWhatsAppDirectUrl } from '@/lib/evolutionApi';
 
 interface QuickMatchScorerProps {
   initialMatches?: Match[];
@@ -188,6 +189,26 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
           },
         };
       }
+    });
+  };
+
+  // 🗓️ APLICACIÓN DE LA REGLA OFICIAL DE REPROGRAMACIÓN (0-0, 0 PUNTOS, ESTADO POSTPONED)
+  const handleReprogramApply = (matchId: string) => {
+    setMatchForms((prev) => {
+      const current = prev[matchId] || { homeScore: 0, awayScore: 0, status: 'scheduled', walkover: 'none' };
+      return {
+        ...prev,
+        [matchId]: {
+          ...current,
+          homeScore: 0,
+          awayScore: 0,
+          homeSetsWon: 0,
+          awaySetsWon: 0,
+          status: 'postponed',
+          walkover: 'none',
+          notes: 'Partido por reprogramar (sin asignación de puntos a ningún equipo)',
+        },
+      };
     });
   };
 
@@ -581,11 +602,11 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-1.5 w-full">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'none')}
-                        className={`py-2.5 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer ${
+                        className={`py-2 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer ${
                           form.walkover === 'none' && form.status === 'completed'
                             ? 'bg-emerald-600 text-white shadow-xs ring-2 ring-emerald-400'
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
@@ -596,8 +617,21 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
 
                       <button
                         type="button"
+                        onClick={() => handleReprogramApply(m.id)}
+                        className={`py-2 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
+                          form.status === 'postponed' || form.notes?.toLowerCase().includes('reprogramar')
+                            ? 'bg-amber-600 text-white shadow-xs ring-2 ring-amber-400 font-black'
+                            : 'bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-300'
+                        }`}
+                        title="Marcar como por reprogramar (0 puntos para ambos equipos)"
+                      >
+                        🗓️ Por Reprogramar
+                      </button>
+
+                      <button
+                        type="button"
                         onClick={() => handleWalkoverApply(m.id, 'home_forfeit')}
-                        className={`py-2.5 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
+                        className={`py-2 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
                           form.walkover === 'home_forfeit'
                             ? 'bg-rose-600 text-white shadow-xs ring-2 ring-rose-400'
                             : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
@@ -610,7 +644,7 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                       <button
                         type="button"
                         onClick={() => handleWalkoverApply(m.id, 'away_forfeit')}
-                        className={`py-2.5 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
+                        className={`py-2 px-1 rounded-xl text-xs font-black text-center transition cursor-pointer truncate ${
                           form.walkover === 'away_forfeit'
                             ? 'bg-rose-600 text-white shadow-xs ring-2 ring-rose-400'
                             : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-200'
@@ -661,6 +695,31 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
                         )}
                       </button>
                     </div>
+
+                    {/* 📲 NOTIFICACIÓN INSTANTÁNEA POR WHATSAPP A ALBERTO */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const matchObj: Match = {
+                          ...m,
+                          homeScore: form.homeScore,
+                          awayScore: form.awayScore,
+                          homeSetsWon: m.sport === 'voleibol' ? form.homeSetsWon : undefined,
+                          awaySetsWon: m.sport === 'voleibol' ? form.awaySetsWon : undefined,
+                          status: form.status,
+                          walkover: form.walkover,
+                          mvpPlayerName: form.mvpPlayerName || undefined,
+                          notes: form.notes || undefined,
+                        };
+                        const textMsg = formatMatchResultNotificationMessage(matchObj);
+                        window.open(getWhatsAppDirectUrl('50660602617', textMsg), '_blank');
+                      }}
+                      className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-emerald-700 hover:bg-emerald-600 active:scale-98 text-white text-xs font-bold transition shadow-xs cursor-pointer w-full mt-1.5"
+                      title="Notificar resultado a Alberto por WhatsApp"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>Notificar a Alberto por WhatsApp (+506 6060-2617)</span>
+                    </button>
                   </div>
 
                   {/* 📝 CAMPOS OPCIONALES COLAPSABLES */}

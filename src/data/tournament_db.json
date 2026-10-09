@@ -422,12 +422,12 @@
       "venue": "CRIA",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-cabo-velas",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 1 - Fútbol Categoría D (3:15 pm)",
-      "updatedAt": "2026-10-07T15:15:00Z"
+      "homeScore": 4,
+      "awayScore": 1,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 1 - Fútbol Categoría D (CRIA 4 - 1 La Paz Cabo Velas)",
+      "updatedAt": "2026-10-07T16:45:00Z"
     },
     {
       "id": "j1-fut-d-02",
@@ -445,7 +445,7 @@
       "awayScore": 0,
       "status": "postponed",
       "currentPeriod": "Por reprogramar",
-      "notes": "Partido por reprogramar (sin asignación de puntos a ningún equipo)",
+      "notes": "Partido por reprogramar para la próxima semana (sin asignación de puntos a ningún equipo)",
       "updatedAt": "2026-10-07T15:15:00Z"
     },
     {
@@ -460,14 +460,14 @@
       "venue": "Arena La Paz",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "homeSetsWon": 0,
+      "homeScore": 50,
+      "awayScore": 43,
+      "homeSetsWon": 2,
       "awaySetsWon": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 1 - Voleibol Femenino Categoría C (3:15 pm)",
-      "updatedAt": "2026-10-08T15:15:00Z"
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 1 - Voleibol C (La Paz Cabo Velas 2-0 Vittorino · 25-20, 25-23)",
+      "updatedAt": "2026-10-08T16:00:00Z"
     },
     {
       "id": "j1-vol-c-02",
@@ -479,16 +479,16 @@
       "date": "2026-10-08",
       "time": "16:00",
       "venue": "Arena La Paz",
-      "homeTeamId": "educarte",
-      "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "homeSetsWon": 0,
+      "homeTeamId": "la-paz-cabo-velas",
+      "awayTeamId": "educarte",
+      "homeScore": 50,
+      "awayScore": 34,
+      "homeSetsWon": 2,
       "awaySetsWon": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 1 - Voleibol Femenino Categoría C (4:00 pm)",
-      "updatedAt": "2026-10-08T16:00:00Z"
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 1 - Voleibol C (La Paz Cabo Velas 2-0 Educarte · 25-13, 25-21)",
+      "updatedAt": "2026-10-08T16:45:00Z"
     },
     {
       "id": "j1-vol-c-03",
@@ -544,14 +544,14 @@
       "venue": "Arena La Paz",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "homeSetsWon": 0,
+      "homeScore": 50,
+      "awayScore": 14,
+      "homeSetsWon": 2,
       "awaySetsWon": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 1 - Voleibol Femenino Categoría D (5:30 pm)",
-      "updatedAt": "2026-10-08T17:30:00Z"
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 1 - Voleibol D (La Paz Cabo Velas 2-0 Vittorino · 25-6, 25-8)",
+      "updatedAt": "2026-10-08T18:15:00Z"
     },
     {
       "id": "j1-bal-c-01",

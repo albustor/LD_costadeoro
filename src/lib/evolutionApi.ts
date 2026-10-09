@@ -710,6 +710,83 @@ export async function sendClarificationUpdateNotification(stats: {
 }
 
 /**
+ * Genera el texto del mensaje oficial de resultado o reprogramación de partido
+ */
+export function formatMatchResultNotificationMessage(match: Match): string {
+  const homeSchool = SCHOOLS_DATA.find((s) => s.id === match.homeTeamId);
+  const awaySchool = SCHOOLS_DATA.find((s) => s.id === match.awayTeamId);
+  const category = CATEGORIES_DATA.find((c) => c.id === match.categoryId);
+  
+  const homeName = homeSchool?.shortName || match.homeTeamId;
+  const awayName = awaySchool?.shortName || match.awayTeamId;
+  const categoryName = category?.name || match.categoryId;
+
+  const sportEmojis: Record<string, string> = {
+    futbol: '⚽ Fútbol',
+    voleibol: '🏐 Voleibol',
+    baloncesto: '🏀 Baloncesto',
+  };
+  const sportStr = sportEmojis[match.sport] || match.sport;
+
+  const isRescheduled = match.status === 'postponed' || match.currentPeriod === 'Por reprogramar' || (match.notes && match.notes.toLowerCase().includes('reprogramar'));
+
+  if (isRescheduled) {
+    return `⚠️ *LIGA COSTA DE ORO 2026 · ENCUENTRO POR REPROGRAMAR*
+━━━━━━━━━━━━━━━━━━━━
+🏆 *Disciplina:* ${sportStr} (${categoryName})
+📅 *Fecha:* ${match.date} · ⏰ ${match.time}
+📍 *Sede:* ${match.venue || 'Sede Oficial'}
+
+👥 *Encuentro:* ${homeName} vs. ${awayName}
+📊 *Estado:* ⚠️ Partido por reprogramar (sin asignación de puntos a ningún equipo)
+📝 *Detalle:* ${match.notes || 'Encuentro pendiente de disputa'}
+
+🔗 *Marcadores Oficiales en Vivo:*
+https://costadeoro.curiol.studio/marcadores
+
+_Curiol Studio · Mesa de Control Oficial_`;
+  }
+
+  const isVolley = match.sport === 'voleibol';
+  const setsDetail = isVolley && match.homeSetsWon !== undefined && match.awaySetsWon !== undefined
+    ? ` (${match.homeSetsWon} - ${match.awaySetsWon} sets)`
+    : '';
+
+  const mvpStr = match.mvpPlayerName ? `\n⭐ *Destacado / MVP:* ${match.mvpPlayerName}` : '';
+  const notesStr = match.notes ? `\n📝 *Observaciones:* ${match.notes}` : '';
+
+  return `🏆 *LIGA COSTA DE ORO 2026 · RESULTADO DE MESA*
+━━━━━━━━━━━━━━━━━━━━
+🏆 *Disciplina:* ${sportStr} (${categoryName})
+📅 *Fecha:* ${match.date} · ⏰ ${match.time}
+📍 *Sede:* ${match.venue || 'Sede Oficial'}
+
+🔥 *Marcador Oficial:*
+🔵 *${homeName}* ${match.homeScore} — ${match.awayScore} *${awayName}* 🔴${setsDetail}${mvpStr}${notesStr}
+
+🔗 *Ver tabla de posiciones y estadísticas:*
+https://costadeoro.curiol.studio/marcadores
+
+_Curiol Studio · Fotografía, Tecnología, Legado_`;
+}
+
+/**
+ * Despacha la notificación oficial del partido directamente a Alberto (+506 6060-2617)
+ */
+export async function sendMatchNotificationToAlberto(match: Match) {
+  const message = formatMatchResultNotificationMessage(match);
+  const albertoPhone = '50660602617';
+  const res = await sendWhatsAppMessageViaEvolutionApi(albertoPhone, message);
+  return {
+    ...res,
+    message,
+    recipient: 'Alberto · Curiol Studio Admin',
+    phone: albertoPhone,
+    directUrl: getWhatsAppDirectUrl(albertoPhone, message),
+  };
+}
+
+/**
  * Genera la URL universal de WhatsApp Web con el mensaje pre-cargado
  */
 export function getWhatsAppDirectUrl(phoneNumber: string, message: string): string {

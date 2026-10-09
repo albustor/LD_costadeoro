@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllMatchesFromDb, updateMatchInDb } from '@/lib/serverDb';
 import { Match } from '@/types/tournament';
+import { sendMatchNotificationToAlberto } from '@/lib/evolutionApi';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -56,11 +57,23 @@ export async function POST(req: NextRequest) {
     }
 
     const updatedMatches = await updateMatchInDb(match as Match);
+
+    // Despacho de alerta por WhatsApp a Alberto (+506 6060-2617) si el partido está concluido o reprogramado
+    let notificationResult = null;
+    if (match.status === 'completed' || match.status === 'postponed' || match.currentPeriod === 'Por reprogramar') {
+      try {
+        notificationResult = await sendMatchNotificationToAlberto(match as Match);
+      } catch (notifyErr) {
+        console.warn('[API Matches Notify Alberto Warning]:', notifyErr);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Partido actualizado exitosamente en el servidor.',
       match,
       totalMatches: updatedMatches.length,
+      notification: notificationResult,
     });
   } catch (error) {
     console.error('[API Matches POST Error]:', error);

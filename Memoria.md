@@ -717,4 +717,25 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
   3. En el marcador central se estableció el formato neutral **`0 : 0`** y se desplegó el banner contextual: **`ℹ️ Partido por reprogramar (sin asignación de puntos a ningún equipo)`**.
 - **Estado**: ✅ Implementado, verificado y activo en la web.
 
+---
+
+## ADR-052: Actualización Oficial de Resultados (Fútbol D, Voleibol C y D), Botón de Reprogramación y Alerta WhatsApp
+- **Fecha**: 2026-10-09
+- **Contexto**: Se requería registrar los marcadores oficiales de la jornada de Fútbol Categoría D (CRIA 4 – 1 La Paz Cabo Velas, y reprogramación de La Paz Tempisque vs. Monseñor Vittorino) y de Voleibol Femenino Categorías C y D (La Paz Cabo Velas 2-0 Educarte, La Paz Cabo Velas 2-0 Monseñor Vittorino C y La Paz Cabo Velas 2-0 Monseñor Vittorino D), además de habilitar en la mesa de control de Don Alejandro (`/mesa-control`) la opción directa de marcar partidos por reprogramar y el despacho instantáneo de notificaciones por WhatsApp a Alberto (`+506 6060-2617`).
+- **Decisión**:
+  1. En `src/lib/initialData.ts` y `src/data/tournament_db.json`:
+     - `j1-fut-d-01` (CRIA 4 – 1 La Paz Cabo Velas) ➔ `status: 'completed'`, `currentPeriod: 'Finalizado'`.
+     - `j1-fut-d-02` (La Paz Tempisque vs. Vittorino) ➔ `status: 'postponed'`, `currentPeriod: 'Por reprogramar'`.
+     - `j1-vol-c-01` (La Paz Cabo Velas 2 – 0 Vittorino · 25-20, 25-23 / 50-43) ➔ `status: 'completed'`.
+     - `j1-vol-c-02` (La Paz Cabo Velas 2 – 0 Educarte · 25-13, 25-21 / 50-34) ➔ `status: 'completed'`.
+     - `j1-vol-d-01` (La Paz Cabo Velas 2 – 0 Vittorino · 25-6, 25-8 / 50-14) ➔ `status: 'completed'`.
+  2. En `src/components/admin/QuickMatchScorer.tsx`:
+     - Agregado el botón **`🗓️ Por Reprogramar`** en la cuadrícula táctil que activa `handleReprogramApply` (0-0, `postponed`, 0 puntos a ambos).
+     - Agregado el botón **`📲 Notificar a Alberto por WhatsApp (+506 6060-2617)`** que genera y despacha la tarjeta de juego formateada.
+  3. En `src/lib/evolutionApi.ts` y `src/app/api/matches/route.ts`:
+     - Implementado `formatMatchResultNotificationMessage(match)` y `sendMatchNotificationToAlberto(match)`.
+     - Automatizado el despacho por Evolution API en `POST /api/matches` al guardar o actualizar cualquier encuentro.
+- **Estado**: ✅ Implementado, verificado con `npm run build` (0 errores) y desplegado en producción.
+
+
 
