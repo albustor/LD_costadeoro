@@ -65,8 +65,8 @@ const schoolLogoFiles: Record<string, { src: string; fallbackSrc?: string; alt: 
     name: 'Educarte',
   },
   'colegio-invitado': {
-    src: '/logos/curiol_logo_oficial_transparente_hd.png',
-    fallbackSrc: '/logos/curiol_logo_oficial_transparente_hd.png',
+    src: '/logos/colegios/colegio_invitado.svg',
+    fallbackSrc: '/logos/colegios/colegio_invitado.svg',
     alt: 'Logo Delegación Invitada / Escazú (Ciudad Colón)',
     name: 'Delegación Invitada / Escazú (Ciudad Colón)',
   },
