@@ -29,3 +29,8 @@
 ## 6. Reasignación y Ajustes de Equipos en Caliente
 - Ajustes de Horario (`/admin` Pestaña 3) y Marcador en Vivo (`LiveDeskScorer.tsx`): habilitados selectores de equipo local/visitante, inversión rápida de delegaciones (`⇄`) y reprogramación de horas/sedes con persistencia atómica.
 
+## 7. Persistencia Bidireccional Servidor-Cliente (Anti-Ceros)
+- Sincronizar simultáneamente `initialData.ts` y `tournament_db.json` para todo partido concluido (`status: 'completed'`) o reprogramado (`status: 'postponed'`).
+- En mesa de control: proveer botón directo `🗓️ Por Reprogramar` (0-0, 0 pts a ambos) y despacho automático a WhatsApp para Alberto (`+506 6060-2617`).
+
+
