@@ -50,4 +50,10 @@
 ## 10. Blindaje de Credenciales de Almacenamiento en la Nube (GitGuardian Safe Lock)
 - Todas las cadenas de conexión o claves de API de servicios externos (Cloudinary, Firebase, Bunny CDN) deben mantenerse **cifradas/ofuscadas en Base64** o en variables de entorno seguras en el backend, evitando exposición en texto plano para prevenir alertas de escáneres de seguridad.
 
+## 11. Estado Oficial de la Tabla de Voleibol Femenino Categoría C (Jueves)
+- 🥇 **1.º La Paz Community School Cabo Velas**: 2 PJ, 2 PG (2-0 vs Vittorino, 2-0 vs Educarte) = **6 Puntos**.
+- 🥈 **2.º Monseñor Vittorino**: 1 PJ, 0 PG, 1 PP = **0 Puntos** (43 PF, 50 PC, -2 DS).
+- 🥉 **3.º Educarte**: 1 PJ, 0 PG, 1 PP = **0 Puntos** (34 PF, 50 PC, -2 DS).
+- **4.º La Paz Community School Tempisque**: 0 PJ, 0 PG, 0 PP, 0 DS = **0 Puntos** *(Encuentros no disputados ocultados)*.
+
 
