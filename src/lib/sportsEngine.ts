@@ -22,8 +22,20 @@ export function calculateStandings(
     (m) => m.categoryId === categoryId && (m.status === 'completed' || m.status === 'live' || m.status === 'postponed')
   );
 
-  // Filtrar colegios que efectivamente participan en esta categoría (tienen partidos asignados)
-  const participatingIds = new Set<string>();
+  // Delegaciones oficiales registradas por categoría
+  const OFFICIAL_CATEGORY_TEAMS: Record<string, string[]> = {
+    'cat-c-voleibol': ['la-paz-cabo-velas', 'educarte', 'vittorino', 'la-paz-tempisque'],
+    'cat-d-voleibol': ['la-paz-cabo-velas', 'vittorino'],
+    'cat-fem-futbol': ['la-paz-cabo-velas', 'cria', 'la-paz-tempisque', 'vittorino'],
+    'cat-c-futbol': ['la-paz-cabo-velas', 'la-paz-tempisque', 'cria', 'vittorino', 'journey-school'],
+    'cat-d-futbol': ['cria', 'la-paz-cabo-velas', 'la-paz-tempisque', 'vittorino'],
+    'cat-c-baloncesto': ['la-paz-cabo-velas', 'la-paz-tempisque', 'educarte'],
+    'cat-d-baloncesto': ['journey-school', 'la-paz-tempisque', 'cria', 'la-paz-cabo-velas'],
+  };
+
+  // Filtrar colegios que efectivamente participan en esta categoría
+  const officialIds = OFFICIAL_CATEGORY_TEAMS[categoryId] || [];
+  const participatingIds = new Set<string>(officialIds);
   matches
     .filter((m) => m.categoryId === categoryId)
     .forEach((m) => {
