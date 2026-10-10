@@ -41,6 +41,7 @@ import { useTournament } from '@/context/TournamentContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 import { tournamentStorage } from '@/lib/storageAdapter';
+import { TouchPhotoViewerModal, PhotoViewerItem } from '@/components/ui/TouchPhotoViewerModal';
 
 
 // Días oficiales registrados para los festivales
@@ -109,6 +110,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
   // 📦 Estado de Acoplamiento y Expansión de Publicaciones (La 1.ª expandida, posteriores acopladas)
   const [manuallyToggled, setManuallyToggled] = useState<Record<string, boolean>>({});
   const [speakingPostId, setSpeakingPostId] = useState<string | null>(null);
+
+  // 🖼️ Estado de Visor Fotográfico Táctil a Pantalla Completa (Pinch-to-zoom & Swipe)
+  const [viewerOpen, setViewerOpen] = useState<boolean>(false);
+  const [viewerIndex, setViewerIndex] = useState<number>(0);
 
   // Cargar estado inicial desde localStorage y Live Polling cada 20 segundos
   useEffect(() => {
@@ -484,6 +489,56 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
   const featuredPosts = posts.filter((p) => p.isFeatured);
 
+  // Pool de fotografías para el Visor Táctil a Pantalla Completa (Pinch-to-zoom & Swipe)
+  const currentPhotoPool = featuredOnly ? featuredPosts : filteredPosts;
+  const postsWithPhotos: PhotoViewerItem[] = currentPhotoPool
+    .filter((p) => p.mediaUrl && p.mediaType === 'photo')
+    .map((p) => {
+      const sc = schools.find((s) => s.id === p.schoolId) || schools[0];
+      const dInfo = formatPostDateInfo(p.createdAt, p.createdAtIso);
+      return {
+        id: p.id,
+        url: p.mediaUrl!,
+        authorName: p.authorName,
+        authorRelation: p.authorRelation,
+        schoolId: p.schoolId,
+        message: p.message,
+        dateLabel: dInfo.label,
+        likesCount: p.likesCount,
+      };
+    });
+
+  const openPhotoInViewer = (postId: string) => {
+    const idx = postsWithPhotos.findIndex((p) => p.id === postId);
+    if (idx !== -1) {
+      setViewerIndex(idx);
+      setViewerOpen(true);
+    } else {
+      // Búsqueda en todo el catálogo de posts
+      const allPhotos = posts
+        .filter((p) => p.mediaUrl && p.mediaType === 'photo')
+        .map((p) => {
+          const sc = schools.find((s) => s.id === p.schoolId) || schools[0];
+          const dInfo = formatPostDateInfo(p.createdAt, p.createdAtIso);
+          return {
+            id: p.id,
+            url: p.mediaUrl!,
+            authorName: p.authorName,
+            authorRelation: p.authorRelation,
+            schoolId: p.schoolId,
+            message: p.message,
+            dateLabel: dInfo.label,
+            likesCount: p.likesCount,
+          };
+        });
+      const allIdx = allPhotos.findIndex((p) => p.id === postId);
+      if (allIdx !== -1) {
+        setViewerIndex(allIdx);
+        setViewerOpen(true);
+      }
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* 🌟 SECCIÓN PORTAL GENERAL: MOMENTOS DESTACADOS DEL TORNEO */}
@@ -519,23 +574,35 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                   </div>
 
                   {post.mediaUrl && (
-                    <div className="relative group rounded-xl overflow-hidden aspect-video bg-slate-100 border border-slate-100">
+                    <div 
+                      onClick={() => post.mediaType === 'photo' && openPhotoInViewer(post.id)}
+                      className={`relative group rounded-xl overflow-hidden aspect-video bg-slate-100 border border-slate-100 ${
+                        post.mediaType === 'photo' ? 'cursor-pointer' : ''
+                      }`}
+                    >
                       {post.mediaType === 'photo' ? (
                         <>
                           <img
                             src={post.mediaUrl}
                             alt="Foto del evento"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300"
                           />
                           <button
                             type="button"
-                            onClick={() => downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`)}
-                            className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-black text-white text-[10.5px] font-bold flex items-center gap-1 backdrop-blur-xs transition-all cursor-pointer shadow-xs active:scale-95"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`);
+                            }}
+                            className="absolute bottom-2 right-2 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-black text-white text-[10.5px] font-bold flex items-center gap-1 backdrop-blur-xs transition-all cursor-pointer shadow-xs active:scale-95 z-10"
                             title="Descargar fotografía en formato JPG"
                           >
                             <Download className="w-3 h-3 text-amber-300" />
                             <span>Descargar JPG</span>
                           </button>
+                          <div className="absolute top-2 left-2 px-2 py-0.8 rounded-md bg-black/60 text-white text-[9.5px] font-bold flex items-center gap-1 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Sparkles className="w-3 h-3 text-amber-300" />
+                            <span>Toca para ampliar</span>
+                          </div>
                         </>
                       ) : (
                         <video src={post.mediaUrl} className="w-full h-full object-cover" controls />
@@ -1020,26 +1087,38 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
 
                       {/* Foto o Video Adjunto (Tamaño Proporcionado) */}
                       {post.mediaUrl && (
-                        <div className="relative group rounded-2xl overflow-hidden bg-slate-900 border border-slate-100 max-h-56 sm:max-h-64 w-full flex items-center justify-center">
+                        <div 
+                          onClick={() => post.mediaType === 'photo' && openPhotoInViewer(post.id)}
+                          className={`relative group rounded-2xl overflow-hidden bg-slate-900 border border-slate-100 max-h-60 sm:max-h-72 w-full flex items-center justify-center ${
+                            post.mediaType === 'photo' ? 'cursor-pointer' : ''
+                          }`}
+                        >
                           {post.mediaType === 'photo' ? (
                             <>
                               <img
                                 src={post.mediaUrl}
                                 alt="Foto del partido"
-                                className="w-full h-full max-h-56 sm:max-h-64 object-cover"
+                                className="w-full h-full max-h-60 sm:max-h-72 object-cover object-top hover:scale-[1.02] transition-transform duration-300"
                               />
                               <button
                                 type="button"
-                                onClick={() => downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`)}
-                                className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-xs transition-all cursor-pointer shadow-sm active:scale-95"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  downloadImageAsJpg(post.mediaUrl!, `CostaDeOro_${school.shortName}_${post.id}`);
+                                }}
+                                className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-xs transition-all cursor-pointer shadow-sm active:scale-95 z-10"
                                 title="Descargar fotografía en formato JPG"
                               >
                                 <Download className="w-3.5 h-3.5 text-amber-300" />
                                 <span>Descargar JPG</span>
                               </button>
+                              <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-xl bg-black/60 text-white text-[10.5px] font-bold flex items-center gap-1.5 backdrop-blur-xs shadow-xs">
+                                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                                <span>Toca para ampliar</span>
+                              </div>
                             </>
                           ) : (
-                            <video src={post.mediaUrl} className="w-full h-full max-h-56 sm:max-h-64 object-contain" controls />
+                            <video src={post.mediaUrl} className="w-full h-full max-h-60 sm:max-h-72 object-contain" controls />
                           )}
                         </div>
                       )}
@@ -1396,6 +1475,16 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
           </div>
         </div>
       )}
+
+      {/* 🖼️ VISOR FOTOGRÁFICO TÁCTIL A PANTALLA COMPLETA (PINCH-TO-ZOOM, SWIPE & DESCARGA) */}
+      <TouchPhotoViewerModal
+        isOpen={viewerOpen}
+        photos={postsWithPhotos}
+        currentIndex={viewerIndex}
+        schools={schools}
+        onClose={() => setViewerOpen(false)}
+        onNavigate={(newIdx) => setViewerIndex(newIdx)}
+      />
     </div>
   );
 }
