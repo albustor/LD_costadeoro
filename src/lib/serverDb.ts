@@ -122,50 +122,77 @@ export async function getAllPosts(): Promise<FamilyPost[]> {
   try {
     const firestore = getFirestoreDb();
     if (firestore) {
+      // 1. Obtener publicaciones guardadas en Firestore
       const snap = await firestore.collection('costa_de_oro_posts').get();
-      if (!snap.empty) {
-        const cloudPosts: FamilyPost[] = snap.docs.map((doc: any) => {
-          const d = doc.data();
-          return {
-            id: doc.id,
-            schoolId: d.schoolId || 'la-paz-cabo-velas',
-            authorName: d.authorName || 'Familia Acompañante',
-            authorRelation: d.authorRelation || 'Familia',
-            message: d.message || '',
-            mediaType: d.mediaType || 'none',
-            mediaUrl: d.mediaUrl || undefined,
-            sportId: d.sportId || 'futbol',
-            isFeatured: !!d.isFeatured,
-            likesCount: typeof d.likesCount === 'number' ? d.likesCount : 0,
-            applauseCount: typeof d.applauseCount === 'number' ? d.applauseCount : 0,
-            featuredVotes: typeof d.featuredVotes === 'number' ? d.featuredVotes : 0,
-            createdAt: d.createdAt || 'Hace un momento',
-            createdAtIso: d.createdAtIso || new Date().toISOString(),
-            comments: Array.isArray(d.comments) ? d.comments : [],
-          };
+      const cloudPostsMap = new Map<string, FamilyPost>();
+
+      snap.docs.forEach((doc: any) => {
+        const d = doc.data();
+        cloudPostsMap.set(doc.id, {
+          id: doc.id,
+          schoolId: d.schoolId || 'la-paz-cabo-velas',
+          authorName: d.authorName || 'Familia Acompañante',
+          authorRelation: d.authorRelation || 'Familia',
+          message: d.message || '',
+          mediaType: d.mediaType || 'none',
+          mediaUrl: d.mediaUrl || undefined,
+          sportId: d.sportId || 'futbol',
+          isFeatured: !!d.isFeatured,
+          likesCount: typeof d.likesCount === 'number' ? d.likesCount : 0,
+          applauseCount: typeof d.applauseCount === 'number' ? d.applauseCount : 0,
+          featuredVotes: typeof d.featuredVotes === 'number' ? d.featuredVotes : 0,
+          createdAt: d.createdAt || 'Hace un momento',
+          createdAtIso: d.createdAtIso || new Date().toISOString(),
+          comments: Array.isArray(d.comments) ? d.comments : [],
         });
+      });
 
-        // Ordenar cronológicamente descendente
-        cloudPosts.sort((a, b) => {
-          const timeA = new Date(a.createdAtIso || a.createdAt).getTime() || 0;
-          const timeB = new Date(b.createdAtIso || b.createdAt).getTime() || 0;
-          return timeB - timeA;
-        });
-
-        // Sincronizar espejo local en segundo plano
-        const localDb = await getTournamentDb();
-        localDb.posts = cloudPosts;
-        saveTournamentDb(localDb).catch(() => {});
-
-        return cloudPosts;
+      // 2. Obtener IDs borrados explícitamente para no restaurarlos
+      const deletedSnap = await firestore.collection('costa_de_oro_deleted_posts').get().catch(() => null);
+      const deletedIds = new Set<string>();
+      if (deletedSnap && !deletedSnap.empty) {
+        deletedSnap.docs.forEach((d: any) => deletedIds.add(d.id));
       }
+
+      // 3. Integrar y sembrar los posts oficiales iniciales (bienvenidas y porras de los 6 colegios)
+      const combinedPosts: FamilyPost[] = Array.from(cloudPostsMap.values());
+      const existingIds = new Set(combinedPosts.map((p) => p.id));
+
+      for (const basePost of INITIAL_FAMILY_POSTS) {
+        if (!existingIds.has(basePost.id) && !deletedIds.has(basePost.id)) {
+          combinedPosts.push(basePost);
+          // Sembrar en Firestore en background para persistencia
+          firestore.collection('costa_de_oro_posts').doc(basePost.id).set({
+            ...basePost,
+            createdAtServer: FieldValue.serverTimestamp(),
+          }).catch(() => {});
+        }
+      }
+
+      // 4. Ordenar cronológicamente descendente asegurando que los mensajes más recientes aparezcan arriba
+      combinedPosts.sort((a, b) => {
+        const timeA = new Date(a.createdAtIso || a.createdAt).getTime() || 0;
+        const timeB = new Date(b.createdAtIso || b.createdAt).getTime() || 0;
+        return timeB - timeA;
+      });
+
+      // 5. Sincronizar espejo local en segundo plano
+      const localDb = await getTournamentDb();
+      localDb.posts = combinedPosts;
+      saveTournamentDb(localDb).catch(() => {});
+
+      return combinedPosts;
     }
   } catch (fsErr) {
     console.warn('[Firestore Posts Read Fallback]:', fsErr);
   }
 
   const db = await getTournamentDb();
-  return db.posts || [];
+  if (!db.posts || db.posts.length === 0) {
+    db.posts = INITIAL_FAMILY_POSTS;
+    await saveTournamentDb(db);
+  }
+  return db.posts || INITIAL_FAMILY_POSTS;
 }
 
 /**
@@ -322,6 +349,9 @@ export async function deletePost(postId: string): Promise<boolean> {
     const firestore = getFirestoreDb();
     if (firestore) {
       await firestore.collection('costa_de_oro_posts').doc(postId).delete();
+      await firestore.collection('costa_de_oro_deleted_posts').doc(postId).set({
+        deletedAt: FieldValue.serverTimestamp(),
+      }).catch(() => {});
     }
   } catch (fsErr) {
     console.warn('[Firestore Delete Post Error]:', fsErr);

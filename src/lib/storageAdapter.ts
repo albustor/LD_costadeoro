@@ -11,7 +11,7 @@ const KEYS = {
   VIDEOS: 'costa_de_oro_videos',
   PHOTOS: 'costa_de_oro_photos',
   VOTES: 'costa_de_oro_mvp_votes',
-  FAMILY_POSTS: 'costa_de_oro_family_posts',
+  FAMILY_POSTS: 'costa_de_oro_family_posts_v3',
 };
 
 function safeGet<T>(key: string, fallback: T): T {
