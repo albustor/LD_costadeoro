@@ -811,3 +811,13 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
   2. Queda estandarizada la política de cero credenciales en texto plano en ningún archivo del cliente ni del servidor.
 - **Estado**: ✅ Implementado, blindado y desplegado en producción.
 
+---
+
+## ADR-059: Preservación y Siembra Automática de Publicaciones Oficiales Base en Firestore
+- **Fecha**: 2026-10-09
+- **Contexto**: Al consultar Firestore en la nube, si la colección `costa_de_oro_posts` contenía únicamente posts de prueba de usuarios, las 12 publicaciones base oficiales (los 6 mensajes de bienvenida del Comité Organizador y las 6 porras de los colegios) no se presentaban.
+- **Decisión**:
+  1. En `src/lib/serverDb.ts` (`getAllPosts`): Se implementó la integración y siembra automática de las 12 publicaciones base de `INITIAL_FAMILY_POSTS` en Firestore, verificando contra la colección de eliminados (`costa_de_oro_deleted_posts`).
+  2. En `src/lib/storageAdapter.ts`: Se actualizó la clave de caché a `costa_de_oro_family_posts_v3`.
+- **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
+
