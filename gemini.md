@@ -34,4 +34,20 @@
 - Sincronizar simultáneamente `initialData.ts` y `tournament_db.json` para todo partido concluido (`status: 'completed'`) o reprogramado (`status: 'postponed'`).
 - En mesa de control: proveer botón directo `🗓️ Por Reprogramar` (0-0, 0 pts a ambos) y despacho automático a WhatsApp para Alberto (`+506 6060-2617`).
 
+## 8. Sincronización Multi-Dispositivo Limpia y Servidor como Única Fuente de Verdad (Anti-Ghost Posts)
+- El servidor (`/api/posts` + Firestore / `tournament_db.json`) es la **Única Fuente de Verdad**.
+- Queda estrictamente PROHIBIDO reinyectar o mezclar posts viejos del `localStorage` cuando el servidor responde. Si una publicación o foto fue eliminada en el servidor, **debe borrarse de forma inmediata y definitiva de todos los celulares y tabletas**.
+- Polling optimizado a **8 segundos** (y al reenfocar la pantalla) para actualización en tiempo real en las canchas.
+
+## 9. Encuadre Superior de Fotografía y Visor Táctil a Pantalla Completa (Lightbox)
+- En todas las miniaturas y tarjetas del muro usar **`object-cover object-top`** (o `object-[center_15%]`) para garantizar que nunca se corten las cabezas o rostros de estudiantes y familias.
+- Al tocar cualquier fotografía del muro, se abre obligatoriamente **`TouchPhotoViewerModal`** con:
+  - **Pinch-to-zoom** fluido con 2 dedos (1x a 3.5x).
+  - **Doble tap** para zoom rápido al 220% o restablecer a 100%.
+  - **Navegación táctil (*Swipe*)** y botones `‹` / `›` para pasar a las fotos anteriores/siguientes del muro como galería nativa.
+  - **Descarga directa en JPG** de alta resolución y cierre con `✕` / `Esc`.
+
+## 10. Blindaje de Credenciales de Almacenamiento en la Nube (GitGuardian Safe Lock)
+- Todas las cadenas de conexión o claves de API de servicios externos (Cloudinary, Firebase, Bunny CDN) deben mantenerse **cifradas/ofuscadas en Base64** o en variables de entorno seguras en el backend, evitando exposición en texto plano para prevenir alertas de escáneres de seguridad.
+
 
