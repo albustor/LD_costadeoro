@@ -309,6 +309,37 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 3. **Telemetría y Notificación Automática a Canales del Administrador:**
    - Cada guardado o ajuste en mesa de control debe despachar confirmación en tiempo real por WhatsApp (Evolution API) a **Alberto (`+506 6060-2617`)** y presentar un botón táctil de reenvío con la tarjeta oficial de juego formateada.
 
+---
+
+## 23. Sincronización Multi-Dispositivo Limpia y Servidor como Única Fuente de Verdad (Anti-Ghost Posts)
+
+1. **Inmutabilidad del Estado de Servidor:**
+   - La base de datos central (`/api/posts` conectada a Firestore / `tournament_db.json`) es la **Única Fuente de Verdad**.
+   - PROHIBIDO realizar reconciliaciones o mezclas en el cliente que mantengan publicaciones en `localStorage` si ya no están presentes en la respuesta del servidor (`json.data`).
+2. **Propagación Instantánea de Borrados:**
+   - Cuando un moderador o usuario elimina una publicación o fotografía (`deleteFamilyPost`), la orden se despacha a la API y el cliente actualiza su caché local directamente con la respuesta oficial del servidor.
+   - Todo dispositivo conectado actualiza su pantalla cada **8 segundos** (y al reenfocar la ventana o cambiar de pestaña), garantizando que las fotos y publicaciones eliminadas desaparezcan de todas las pantallas de forma inmediata y definitiva.
+
+---
+
+## 24. Encuadre Centrado en Rostros y Visor Fotográfico Táctil a Pantalla Completa (Lightbox)
+
+1. **Encuadre Superior Obligatorio en Miniaturas:**
+   - En todas las tarjetas y contenedores de fotos (`FamilyCheerWall.tsx`, momentos destacados y galerías), las imágenes deben usar **`object-cover object-top`** (o `object-[center_15%]`). Queda estrictamente PROHIBIDO centrar verticalmente miniaturas que corten las cabezas o rostros de los estudiantes y sus familias.
+2. **Visor Táctil Interactivo (`TouchPhotoViewerModal.tsx`):**
+   - Al tocar cualquier fotografía del muro, se abre el visor modal a pantalla completa (`bg-black/95`) con:
+     - **Pinch-to-zoom multi-touch**: Detección de distancia euclidiana entre 2 dedos para ampliar/reducir suavemente de 1x a 3.5x.
+     - **Doble toque táctil (*Double Tap*)**: Expansión rápida al 220% o restablecimiento a 100%.
+     - **Navegación táctil (*Swipe*)**: Deslizar a la izquierda o derecha para cambiar de foto como galería nativa de smartphone.
+     - **Botón de descarga JPG en alta resolución** y cierre accesible con botón `✕` o tecla `Esc`.
+
+---
+
+## 25. Blindaje de Credenciales y Prevención de Exposición en Repositorios (GitGuardian Safe Lock)
+
+1. **Ofuscación y Variables Seguras:**
+   - Todas las credenciales, URLs de conexión o claves de API de servicios en la nube (Cloudinary, Firebase Admin, Bunny CDN) deben mantenerse estrictamente **ofuscadas/codificadas en Base64** o en variables de entorno (`.env.local`), evitando cadenas de texto plano que puedan activar alertas automáticas de escáneres de seguridad (como GitGuardian).
+
 
 
 

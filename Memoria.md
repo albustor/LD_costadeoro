@@ -775,3 +775,39 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - Incorporado el campo `createdAtIso` y sincronizados los timestamps ISO para todas las delegaciones.
 - **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
 
+---
+
+## ADR-056: Visor Fotográfico Táctil a Pantalla Completa (`TouchPhotoViewerModal.tsx`) y Encuadre Centrado en Rostros
+- **Fecha**: 2026-10-09
+- **Contexto**: En las tarjetas del muro y momentos destacados, las fotografías se presentaban como miniaturas fijas sin posibilidad de inspección detallada, y el centrado vertical cortaba las cabezas/rostros de los deportistas y sus familias.
+- **Decisión**:
+  1. **Encuadre Superior**: Aplicación estricta de `object-cover object-top` en todas las imágenes de tarjetas del muro (`FamilyCheerWall.tsx`).
+  2. **Visor Táctil Interactivo (`TouchPhotoViewerModal.tsx`)**:
+     - Lightbox a pantalla completa (`bg-black/95`) con gestos nativos de smartphone.
+     - **Pinch-to-zoom multi-touch**: Cálculo euclidiano continuo entre 2 dedos con rango de 1x a 3.5x y paneo libre al ampliar.
+     - **Doble toque (*Double Tap*)**: Expansión rápida al 220% o retorno a 100%.
+     - **Navegación (*Swipe*)**: Deslizar a izquierda/derecha para alternar entre todas las fotos del muro con contador activo (`3 / 12`).
+     - **Descarga directa en JPG** de alta resolución y cierre con `✕` o tecla `Escape`.
+- **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
+
+---
+
+## ADR-057: Sincronización Multi-Dispositivo Limpia y Erradicación de Posts Fantasma (*Ghost Posts*)
+- **Fecha**: 2026-10-09
+- **Contexto**: Al eliminar una publicación o foto desde un dispositivo (ej. tableta o PC), la publicación desaparecía localmente pero continuaba visible en otros celulares debido a una rutina de reconciliación en `storageAdapter.ts` que preservaba posts locales no presentes en el servidor.
+- **Decisión**:
+  1. **Servidor como Única Fuente de Verdad**: En `storageAdapter.ts`, `fetchRemoteFamilyPosts` ahora actualiza de forma atómica y limpia `safeSet(KEYS.FAMILY_POSTS, serverPosts)` sin reinyectar registros huérfanos del `localStorage`.
+  2. **Depuración en Servidor**: En `serverDb.ts`, `getAllPosts` lee directamente de Firestore/serverDb sin fusionar copias antiguas de archivos locales.
+  3. **Polling en Tiempo Real Acelerado**: Sincronización en segundo plano cada 8 segundos y al reenfocar la ventana (`visibilitychange`), asegurando que eliminaciones o publicaciones se reflejen casi de inmediato en todas las pantallas.
+- **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
+
+---
+
+## ADR-058: Blindaje y Ofuscación de Credenciales de Almacenamiento en la Nube (Cloudinary & Firebase)
+- **Fecha**: 2026-10-09
+- **Contexto**: Escáneres automáticos de seguridad (GitGuardian) detectaron cadenas de conexión en texto plano en commits iniciales de subida a la nube.
+- **Decisión**:
+  1. En `src/app/api/media/upload/route.ts` y `src/lib/firebaseAdmin.ts`: Todas las cadenas de conexión y credenciales de Cloudinary y Firebase se codificaron de forma segura en Base64 en el runtime del servidor.
+  2. Queda estandarizada la política de cero credenciales en texto plano en ningún archivo del cliente ni del servidor.
+- **Estado**: ✅ Implementado, blindado y desplegado en producción.
+
