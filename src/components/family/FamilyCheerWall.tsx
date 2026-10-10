@@ -134,10 +134,10 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
       }
       setIsFestivalActiveDay(true);
 
-      // Sincronización periódica silenciosa en segundo plano
+      // Sincronización periódica en segundo plano cada 8 segundos para tiempo real
       const interval = setInterval(() => {
         tournamentStorage.fetchRemoteFamilyPosts();
-      }, 20000);
+      }, 8000);
 
       const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible') {

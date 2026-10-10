@@ -173,17 +173,12 @@ export const tournamentStorage = {
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
-          const localPosts = this.getFamilyPosts();
           const serverPosts: FamilyPost[] = json.data;
-          const serverIds = new Set(serverPosts.map((p) => p.id));
           
-          // Preservar posts creados localmente que aún no están indexados en el servidor
-          const localOnly = localPosts.filter((p) => !serverIds.has(p.id));
-          const merged = [...localOnly, ...serverPosts];
-
-          safeSet(KEYS.FAMILY_POSTS, merged);
-          window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: merged }));
-          return merged;
+          // La base de datos central es la Única Fuente de Verdad para todos los dispositivos
+          safeSet(KEYS.FAMILY_POSTS, serverPosts);
+          window.dispatchEvent(new CustomEvent('family_posts_updated', { detail: serverPosts }));
+          return serverPosts;
         }
       }
     } catch (err) {
@@ -303,7 +298,11 @@ export const tournamentStorage = {
       // Sincronizar eliminación en el servidor central
       fetch(`/api/posts/${encodeURIComponent(postId)}`, {
         method: 'DELETE',
-      }).catch((err) => console.warn('[StorageAdapter Delete Post Error]:', err));
+      })
+        .then(() => {
+          this.fetchRemoteFamilyPosts();
+        })
+        .catch((err) => console.warn('[StorageAdapter Delete Post Error]:', err));
     }
     return updated;
   },

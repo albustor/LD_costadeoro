@@ -145,13 +145,19 @@ export async function getAllPosts(): Promise<FamilyPost[]> {
           };
         });
 
-        // Ordenar cronológicamente descendente asegurando que los posts oficiales y nuevos no se pierdan
-        const localDb = await getTournamentDb();
-        const existingIds = new Set(cloudPosts.map((p) => p.id));
-        const missingLocal = (localDb.posts || []).filter((p) => !existingIds.has(p.id));
+        // Ordenar cronológicamente descendente
+        cloudPosts.sort((a, b) => {
+          const timeA = new Date(a.createdAtIso || a.createdAt).getTime() || 0;
+          const timeB = new Date(b.createdAtIso || b.createdAt).getTime() || 0;
+          return timeB - timeA;
+        });
 
-        const merged = [...cloudPosts, ...missingLocal];
-        return merged;
+        // Sincronizar espejo local en segundo plano
+        const localDb = await getTournamentDb();
+        localDb.posts = cloudPosts;
+        saveTournamentDb(localDb).catch(() => {});
+
+        return cloudPosts;
       }
     }
   } catch (fsErr) {
@@ -322,14 +328,9 @@ export async function deletePost(postId: string): Promise<boolean> {
   }
 
   const db = await getTournamentDb();
-  const initialLen = (db.posts || []).length;
   db.posts = (db.posts || []).filter((p) => p.id !== postId);
-
-  if (db.posts.length !== initialLen) {
-    await saveTournamentDb(db);
-    return true;
-  }
-  return false;
+  await saveTournamentDb(db);
+  return true;
 }
 
 /**
