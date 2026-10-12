@@ -885,4 +885,21 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - Servidor de desarrollo Next.js reiniciado y compilación estricta (`npm run build`) validada con 0 errores de tipado.
 - **Estado**: ✅ Implementado, verificado en API (`GET /api/matches` y `GET /api/standings` con código 200) y blindado para producción.
 
+---
+
+## ADR-064: Latido de Sincronización Reactiva Multi-dispositivo y Blindaje Preventivo
+- **Fecha**: 2026-10-11
+- **Contexto**: Tras una auditoría holística del sistema para prevenir fallas futuras, se detectó que los clientes espectadores en `/marcadores` y `/deportes` no poseían un latido de sincronización recurrente para partidos y clasificaciones. Si la mesa técnica actualizaba un resultado, el espectador no recibía el cambio hasta presionar F5. Adicionalmente, `LiveDeskScorer` utilizaba etiquetas residuales de fútbol en baloncesto y voleibol.
+- **Decisión**:
+  1. **Latido Reactivo en Vivo (8 Segundos)**:
+     - En `TournamentContext.tsx`, se implementó un intervalo recurrente de **8 segundos** que sincroniza partidos (`fetchRemoteMatches()`) y tablas canónicas (`fetchLiveCanonicalStandings()`), garantizando propagación automática a todos los teléfonos móviles sin recargar la página.
+  2. **Re-sincronización Inmediata por Enfoque (0ms)**:
+     - Se añadieron listeners de `visibilitychange` y `window.onfocus` para refrescar instantáneamente cuando un usuario regresa a la app tras usar WhatsApp u otra aplicación móvil.
+  3. **Sincronización Inter-Pestañas**:
+     - Se integró el listener nativo `window.addEventListener('storage')` para propagación simultánea entre pestañas abiertas en el mismo dispositivo.
+  4. **Periodo Contextual por Disciplina Deportiva**:
+     - En `LiveDeskScorer.tsx`, se configuró la asignación inteligente de periodo inicial según el deporte: `Q1` en Baloncesto, `Set 1` en Voleibol, `1.er Tiempo` en Fútbol y `Finalizado` para partidos concluidos.
+- **Estado**: ✅ Implementado, validado con `npm run build` y probado en runtime.
+
+
 

@@ -68,15 +68,19 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
     setPhotos(tournamentStorage.getPhotos());
     setFamilyPosts(tournamentStorage.getFamilyPosts());
 
-    // Sincronizar partidos oficiales desde la base de datos centralizada
-    tournamentStorage.fetchRemoteMatches().then((remoteMatches) => {
-      if (remoteMatches && remoteMatches.length > 0) {
-        setMatches(remoteMatches);
-      }
-    });
+    const refreshServerData = () => {
+      // Sincronizar partidos oficiales desde la base de datos centralizada
+      tournamentStorage.fetchRemoteMatches().then((remoteMatches) => {
+        if (remoteMatches && remoteMatches.length > 0) {
+          setMatches(remoteMatches);
+        }
+      });
+      // Sincronizar clasificaciones canónicas desde el servidor
+      fetchLiveCanonicalStandings();
+    };
 
-    // Sincronizar clasificaciones canónicas desde el servidor
-    fetchLiveCanonicalStandings();
+    // 1. Carga inicial inmediata
+    refreshServerData();
 
     // Sincronizar con la base de datos centralizada del servidor
     tournamentStorage.fetchRemoteFamilyPosts().then((posts) => {
@@ -84,6 +88,21 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
         setFamilyPosts(posts);
       }
     });
+
+    // 2. Latido de sincronización reactiva en vivo cada 8 segundos (Reglas 8 y 23)
+    const syncInterval = setInterval(() => {
+      refreshServerData();
+    }, 8000);
+
+    // 3. Re-sincronización instantánea al reenfocar ventana o volver de otra app (0ms latencia percibida)
+    const handleVisibilityOrFocus = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        refreshServerData();
+        tournamentStorage.fetchRemoteFamilyPosts().then((posts) => {
+          if (posts && posts.length > 0) setFamilyPosts(posts);
+        });
+      }
+    };
 
     const handleMatchesUpdate = (e: Event) => {
       const custom = e as CustomEvent<Match[]>;
@@ -108,16 +127,29 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
       if (custom.detail) setFamilyPosts(custom.detail);
     };
 
+    const handleStorageEvent = (e: StorageEvent) => {
+      if (e.key === 'costa_de_oro_matches') {
+        refreshServerData();
+      }
+    };
+
     window.addEventListener('matches_updated', handleMatchesUpdate);
     window.addEventListener('videos_updated', handleVideosUpdate);
     window.addEventListener('photos_updated', handlePhotosUpdate);
     window.addEventListener('family_posts_updated', handleFamilyPostsUpdate);
+    window.addEventListener('storage', handleStorageEvent);
+    window.addEventListener('focus', handleVisibilityOrFocus);
+    document.addEventListener('visibilitychange', handleVisibilityOrFocus);
 
     return () => {
+      clearInterval(syncInterval);
       window.removeEventListener('matches_updated', handleMatchesUpdate);
       window.removeEventListener('videos_updated', handleVideosUpdate);
       window.removeEventListener('photos_updated', handlePhotosUpdate);
       window.removeEventListener('family_posts_updated', handleFamilyPostsUpdate);
+      window.removeEventListener('storage', handleStorageEvent);
+      window.removeEventListener('focus', handleVisibilityOrFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityOrFocus);
     };
   }, []);
 

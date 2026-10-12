@@ -61,7 +61,16 @@ export function LiveDeskScorer() {
     getMatchDefaultDuration(currentMatch?.sport || 'futbol', currentMatch?.estimatedDurationMinutes)
   );
 
-  const [currentPeriod, setCurrentPeriod] = useState<string>(currentMatch?.currentPeriod ?? '1.er Tiempo');
+  const defaultInitialPeriod =
+    currentMatch?.currentPeriod ??
+    (currentMatch?.status === 'completed'
+      ? 'Finalizado'
+      : currentMatch?.sport === 'baloncesto'
+      ? 'Q1'
+      : currentMatch?.sport === 'voleibol'
+      ? 'Set 1'
+      : '1.er Tiempo');
+  const [currentPeriod, setCurrentPeriod] = useState<string>(defaultInitialPeriod);
   const [minute, setMinute] = useState<number>(currentMatch?.minute ?? 0);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const [mvpPlayerName, setMvpPlayerName] = useState<string>(currentMatch?.mvpPlayerName ?? '');
@@ -98,8 +107,15 @@ export function LiveDeskScorer() {
       setStatus(target.status);
       setIsManualOverride(target.isManualOverride ?? false);
       setCustomEndTime(target.customEndTime ?? '');
-      setDurationMinutes(getMatchDefaultDuration(target.sport, target.estimatedDurationMinutes));
-      setCurrentPeriod(target.currentPeriod || '1.er Tiempo');
+      const defaultSportPeriod =
+        target.status === 'completed'
+          ? 'Finalizado'
+          : target.sport === 'baloncesto'
+          ? 'Q1'
+          : target.sport === 'voleibol'
+          ? 'Set 1'
+          : '1.er Tiempo';
+      setCurrentPeriod(target.currentPeriod || defaultSportPeriod);
       setMinute(target.minute || 0);
       setMvpPlayerName(target.mvpPlayerName || '');
       setNotes(target.notes || '');
