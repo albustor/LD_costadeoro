@@ -582,14 +582,15 @@
       "date": "2026-10-09",
       "time": "16:15",
       "venue": "CRIA",
-      "homeTeamId": "journey-school",
-      "awayTeamId": "la-paz-tempisque",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
+      "homeTeamId": "la-paz-tempisque",
+      "awayTeamId": "journey-school",
+      "homeScore": 23,
+      "awayScore": 100,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
       "notes": "Jornada 1 - Baloncesto Categoría D (4:15 pm)",
-      "updatedAt": "2026-10-09T16:15:00Z"
+      "updatedAt": "2026-10-12T02:41:33.827Z",
+      "isManualOverride": true
     },
     {
       "id": "j1-bal-d-02",
@@ -603,12 +604,13 @@
       "venue": "CRIA",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-cabo-velas",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
+      "homeScore": 61,
+      "awayScore": 15,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
       "notes": "Jornada 1 - Baloncesto Categoría D (5:15 pm)",
-      "updatedAt": "2026-10-09T17:15:00Z"
+      "updatedAt": "2026-10-12T02:41:02.750Z",
+      "isManualOverride": true
     }
   ],
   "analytics": {
@@ -939,5 +941,5 @@
       "Localhost (Entorno Local), CR": 3
     }
   },
-  "updatedAt": "2026-10-09T23:29:31.288Z"
+  "updatedAt": "2026-10-12T02:41:33.827Z"
 }
