@@ -851,3 +851,22 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - **Fase 3: VALIDAR**: Ejecución de la suite de pruebas unitarias (`python tests/test_scoring_rules.py`) y compilación estricta de producción (`npm run build`).
      - **Fase 4: PUBLICAR**: Commit atómico y `git push origin main` hacia GitHub y Vercel, entregando el reporte final de despliegue.
 - **Estado**: ✅ Estandarizado y activo en `GEMINI.md`, `AGENTS.md` y `Memoria.md`.
+
+---
+
+## ADR-062: Blindaje de Persistencia Atómica, Inmutabilidad de Partidos Registrados y Sanitización de Firestore
+- **Fecha**: 2026-10-11
+- **Contexto**: En la mesa de control (`LiveDeskScorer.tsx`), al intentar guardar resultados en caliente, los marcadores se reflejaban transitoriamente en memoria pero volvían a ceros al sincronizar con el servidor. El diagnóstico identificó cuatro causas raíz: (1) Reemplazo destructivo de objetos en `updateMatchInDb` que eliminaba propiedades clave (`sport`, `homeTeamId`, `awayTeamId`), (2) Excepciones fatales en Firestore por presencia de valores `undefined`, (3) Cancelación prematura de peticiones `fetch` por falta de `keepalive: true` al navegar o cerrar la vista, y (4) Forzado de `0 : 0` en visualizadores públicos por etiquetas residuales de `isRescheduledMatch`.
+- **Decisión**:
+  1. **Inmutabilidad Absoluta de Datos Históricos**:
+     - Se respaldó la base de datos oficial en `src/data/tournament_db.backup.json`.
+     - Todos los encuentros previos ya registrados de Fútbol y Voleibol son sagrados y quedan blindados contra cualquier sobreescritura accidental.
+  2. **Merge Defensivo en Servidor (`src/lib/serverDb.ts`)**:
+     - `updateMatchInDb` implementa combinación no destructiva (`{ ...(existing || {}), ...updatedMatch }`), preservando fecha, hora, sede y delegaciones sin importar si el cliente envía solo un subconjunto de propiedades.
+  3. **Sanitización para Firestore**:
+     - Toda propiedad con valor `undefined` se purga automáticamente antes de interactuar con `DocumentReference.set()`, erradicando el error `cannot be called with an undefined property`.
+  4. **Persistencia Resiliente (`src/lib/storageAdapter.ts` y `LiveDeskScorer.tsx`)**:
+     - Se añadió `keepalive: true` en el despacho de red a `/api/matches`.
+     - Al finalizar un encuentro con marcador jugado, se limpian banderas de reprogramación para que `isRescheduledMatch` no bloquee el resultado y se persisten los sets ganados en voleibol.
+- **Estado**: ✅ Implementado, verificado con respaldo en disco y validado para producción.
+

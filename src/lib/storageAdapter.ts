@@ -82,11 +82,12 @@ export const tournamentStorage = {
     safeSet(KEYS.MATCHES, newMatches);
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('matches_updated', { detail: newMatches }));
-      // Persistir al servidor centralizado
+      // Persistir al servidor centralizado con keepalive para prevenir cancelaciones de red al navegar
       fetch('/api/matches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ match: updatedMatch }),
+        keepalive: true,
       }).catch((e) => console.warn('[storageAdapter] Error guardando partido en servidor:', e));
     }
     return newMatches;

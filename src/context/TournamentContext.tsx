@@ -5,6 +5,7 @@ import { Category, FamilyPost, Match, PhotoItem, PostComment, School, ShortVideo
 import { CATEGORIES_DATA, SCHOOLS_DATA, TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { calculateStandings } from '@/lib/sportsEngine';
+import { INITIAL_MATCHES } from '@/lib/initialData';
 import canonicalStandingsData from '@/data/canonical_standings.json';
 
 interface TournamentContextType {
@@ -36,7 +37,7 @@ interface TournamentContextType {
 const TournamentContext = createContext<TournamentContextType | undefined>(undefined);
 
 export function TournamentProvider({ children }: { children: React.ReactNode }) {
-  const [matches, setMatches] = useState<Match[]>([]);
+  const [matches, setMatches] = useState<Match[]>(INITIAL_MATCHES);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [videos, setVideos] = useState<ShortVideo[]>([]);
   const [photos, setPhotos] = useState<PhotoItem[]>([]);

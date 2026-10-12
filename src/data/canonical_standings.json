@@ -1,6 +1,6 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-10-12T01:26:19.233673+00:00",
+  "last_updated": "2026-10-12T02:32:18.093727+00:00",
   "version": "1.0.0",
   "matches_processed": 16,
   "computed_standing_points": {
@@ -321,17 +321,17 @@
         "position": 1
       },
       {
-        "teamId": "vittorino",
+        "teamId": "la-paz-tempisque",
         "school": {
-          "id": "vittorino",
-          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
-          "shortName": "Monseñor Vittorino",
-          "acronym": "VIT",
-          "logo": "🛡️",
-          "primaryColor": "#0284c7",
-          "secondaryColor": "#0369a1",
-          "location": "Huacas",
-          "city": "Santa Cruz, Guanacaste"
+          "id": "la-paz-tempisque",
+          "name": "La Paz Community School Tempisque",
+          "shortName": "La Paz Tempisque",
+          "acronym": "LPTP",
+          "logo": "🌿",
+          "primaryColor": "#059669",
+          "secondaryColor": "#047857",
+          "location": "Comunidad, Carrillo",
+          "city": "Guanacaste"
         },
         "played": 0,
         "won": 0,
@@ -350,17 +350,17 @@
         "position": 2
       },
       {
-        "teamId": "la-paz-tempisque",
+        "teamId": "vittorino",
         "school": {
-          "id": "la-paz-tempisque",
-          "name": "La Paz Community School Tempisque",
-          "shortName": "La Paz Tempisque",
-          "acronym": "LPTP",
-          "logo": "🌿",
-          "primaryColor": "#059669",
-          "secondaryColor": "#047857",
-          "location": "Comunidad, Carrillo",
-          "city": "Guanacaste"
+          "id": "vittorino",
+          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
+          "shortName": "Monseñor Vittorino",
+          "acronym": "VIT",
+          "logo": "🛡️",
+          "primaryColor": "#0284c7",
+          "secondaryColor": "#0369a1",
+          "location": "Huacas",
+          "city": "Santa Cruz, Guanacaste"
         },
         "played": 0,
         "won": 0,
@@ -444,16 +444,16 @@
         "position": 1
       },
       {
-        "teamId": "vittorino",
+        "teamId": "educarte",
         "school": {
-          "id": "vittorino",
-          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
-          "shortName": "Monseñor Vittorino",
-          "acronym": "VIT",
-          "logo": "🛡️",
-          "primaryColor": "#0284c7",
-          "secondaryColor": "#0369a1",
-          "location": "Huacas",
+          "id": "educarte",
+          "name": "Educarte Bilingual High School",
+          "shortName": "Educarte",
+          "acronym": "EDU",
+          "logo": "☀️",
+          "primaryColor": "#e11d48",
+          "secondaryColor": "#be123c",
+          "location": "Tamarindo",
           "city": "Santa Cruz, Guanacaste"
         },
         "played": 1,
@@ -475,16 +475,16 @@
         "position": 2
       },
       {
-        "teamId": "educarte",
+        "teamId": "vittorino",
         "school": {
-          "id": "educarte",
-          "name": "Educarte Bilingual High School",
-          "shortName": "Educarte",
-          "acronym": "EDU",
-          "logo": "☀️",
-          "primaryColor": "#e11d48",
-          "secondaryColor": "#be123c",
-          "location": "Tamarindo",
+          "id": "vittorino",
+          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
+          "shortName": "Monseñor Vittorino",
+          "acronym": "VIT",
+          "logo": "🛡️",
+          "primaryColor": "#0284c7",
+          "secondaryColor": "#0369a1",
+          "location": "Huacas",
           "city": "Santa Cruz, Guanacaste"
         },
         "played": 1,
@@ -601,17 +601,17 @@
     ],
     "cat-c-baloncesto": [
       {
-        "teamId": "educarte",
+        "teamId": "la-paz-tempisque",
         "school": {
-          "id": "educarte",
-          "name": "Educarte Bilingual High School",
-          "shortName": "Educarte",
-          "acronym": "EDU",
-          "logo": "☀️",
-          "primaryColor": "#e11d48",
-          "secondaryColor": "#be123c",
-          "location": "Tamarindo",
-          "city": "Santa Cruz, Guanacaste"
+          "id": "la-paz-tempisque",
+          "name": "La Paz Community School Tempisque",
+          "shortName": "La Paz Tempisque",
+          "acronym": "LPTP",
+          "logo": "🌿",
+          "primaryColor": "#059669",
+          "secondaryColor": "#047857",
+          "location": "Comunidad, Carrillo",
+          "city": "Guanacaste"
         },
         "played": 0,
         "won": 0,
@@ -659,6 +659,37 @@
         "position": 2
       },
       {
+        "teamId": "educarte",
+        "school": {
+          "id": "educarte",
+          "name": "Educarte Bilingual High School",
+          "shortName": "Educarte",
+          "acronym": "EDU",
+          "logo": "☀️",
+          "primaryColor": "#e11d48",
+          "secondaryColor": "#be123c",
+          "location": "Tamarindo",
+          "city": "Santa Cruz, Guanacaste"
+        },
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "pointsFor": 0,
+        "pointsAgainst": 0,
+        "diff": 0,
+        "points": 0,
+        "setsWon": null,
+        "setsLost": null,
+        "setsDiff": null,
+        "setsRatio": null,
+        "pointsRatio": 0.0,
+        "form": [],
+        "position": 3
+      }
+    ],
+    "cat-d-baloncesto": [
+      {
         "teamId": "la-paz-tempisque",
         "school": {
           "id": "la-paz-tempisque",
@@ -685,10 +716,37 @@
         "setsRatio": null,
         "pointsRatio": 0.0,
         "form": [],
-        "position": 3
-      }
-    ],
-    "cat-d-baloncesto": [
+        "position": 1
+      },
+      {
+        "teamId": "la-paz-cabo-velas",
+        "school": {
+          "id": "la-paz-cabo-velas",
+          "name": "La Paz Community School Cabo Velas",
+          "shortName": "La Paz Cabo Velas",
+          "acronym": "LPCV",
+          "logo": "🌊",
+          "primaryColor": "#0284c7",
+          "secondaryColor": "#0369a1",
+          "location": "Brasilito, Cabo Velas",
+          "city": "Santa Cruz, Guanacaste"
+        },
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "pointsFor": 0,
+        "pointsAgainst": 0,
+        "diff": 0,
+        "points": 0,
+        "setsWon": null,
+        "setsLost": null,
+        "setsDiff": null,
+        "setsRatio": null,
+        "pointsRatio": 0.0,
+        "form": [],
+        "position": 2
+      },
       {
         "teamId": "cria",
         "school": {
@@ -716,7 +774,7 @@
         "setsRatio": null,
         "pointsRatio": 0.0,
         "form": [],
-        "position": 1
+        "position": 3
       },
       {
         "teamId": "journey-school",
@@ -729,64 +787,6 @@
           "primaryColor": "#d97706",
           "secondaryColor": "#b45309",
           "location": "Tamarindo",
-          "city": "Santa Cruz, Guanacaste"
-        },
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "pointsFor": 0,
-        "pointsAgainst": 0,
-        "diff": 0,
-        "points": 0,
-        "setsWon": null,
-        "setsLost": null,
-        "setsDiff": null,
-        "setsRatio": null,
-        "pointsRatio": 0.0,
-        "form": [],
-        "position": 2
-      },
-      {
-        "teamId": "la-paz-tempisque",
-        "school": {
-          "id": "la-paz-tempisque",
-          "name": "La Paz Community School Tempisque",
-          "shortName": "La Paz Tempisque",
-          "acronym": "LPTP",
-          "logo": "🌿",
-          "primaryColor": "#059669",
-          "secondaryColor": "#047857",
-          "location": "Comunidad, Carrillo",
-          "city": "Guanacaste"
-        },
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "pointsFor": 0,
-        "pointsAgainst": 0,
-        "diff": 0,
-        "points": 0,
-        "setsWon": null,
-        "setsLost": null,
-        "setsDiff": null,
-        "setsRatio": null,
-        "pointsRatio": 0.0,
-        "form": [],
-        "position": 3
-      },
-      {
-        "teamId": "la-paz-cabo-velas",
-        "school": {
-          "id": "la-paz-cabo-velas",
-          "name": "La Paz Community School Cabo Velas",
-          "shortName": "La Paz Cabo Velas",
-          "acronym": "LPCV",
-          "logo": "🌊",
-          "primaryColor": "#0284c7",
-          "secondaryColor": "#0369a1",
-          "location": "Brasilito, Cabo Velas",
           "city": "Santa Cruz, Guanacaste"
         },
         "played": 0,

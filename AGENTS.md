@@ -377,6 +377,19 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
    - **Fase 3: VALIDAR:** Ejecución de pruebas unitarias (`python tests/test_scoring_rules.py`) y compilación estricta de producción (`npm run build`).
    - **Fase 4: PUBLICAR:** Creación de commit atómico en Git y despacho inmediato con `git push origin main` hacia GitHub y Vercel, entregando el reporte de confirmación final.
 
+---
+
+## 29. Protocolo Anti-Pérdida de Resultados Históricos y Merge Defensivo
+
+1. **Inmutabilidad Absoluta de Resultados Concluidos:**
+   - Los marcadores, sets, goles y notas de los partidos ya jugados en Fútbol y Voleibol son sagrados y permanecen respaldados en `tournament_db.json` y `tournament_db.backup.json`. Ningún parche o script puede resetear o alterar encuentros históricos.
+2. **Merge Defensivo en Endpoints de Servidor:**
+   - Todo handler de actualización (`updateMatchInDb`) debe combinar las propiedades entrantes con el registro previo (`{ ...(existing || {}), ...updatedMatch }`), asegurando que jamás se amputen propiedades como `sport`, `date`, `time`, `venue` o los colegios asignados.
+3. **Blindaje de Peticiones Asíncronas y Sanitización:**
+   - Utilizar obligatoriamente `keepalive: true` en las peticiones cliente a `/api/matches` para evitar pérdidas por descarga de página.
+   - Filtrar valores `undefined` previo al despacho a Firestore para erradicar excepciones del SDK en tiempo de ejecución.
+
+
 
 
 

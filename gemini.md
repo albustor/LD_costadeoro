@@ -63,3 +63,9 @@
   2. **AUTOCURAR:** Corrección quirúrgica inmediata de cualquier error de sintaxis, tipos, rutas o etiquetas rotas sin bloquear el flujo.
   3. **VALIDAR:** Ejecución de pruebas unitarias (`python tests/test_scoring_rules.py`) y compilación estricta (`npm run build`).
   4. **PUBLICAR:** Commit de Git estructurado y `git push origin main` hacia GitHub y Vercel, entregando el reporte final de despliegue.
+
+## 14. Inmutabilidad de Partidos Registrados, Persistencia Atómica y Sanitización Firestore
+- **Inmutabilidad Sagrada de Datos Históricos:** Los resultados de encuentros oficiales ya disputados y registrados (Fútbol y Voleibol de jornadas concluidas) son inalterables. Queda estrictamente prohibido sobreescribir o reiniciar dichos encuentros.
+- **Merge Defensivo Obligatorio:** En `updateMatchInDb`, toda actualización debe combinar (`{ ...existing, ...updatedMatch }`) para preservar de forma intacta deporte, fecha, hora, sede y colegios asignados.
+- **Sanitización Estricta para Firestore:** Previo a cualquier transacción en Firestore (`costa_de_oro_matches`), toda clave con valor `undefined` debe ser purgada (`Object.fromEntries(Object.entries(payload).filter(([_, v]) => v !== undefined))`) para prevenir excepciones del SDK.
+- **Resiliencia de Red en Cliente (`keepalive: true`):** Toda petición de guardado desde el navegador debe incorporar la cabecera `keepalive: true` para impedir cancelaciones prematuras al navegar o recargar.

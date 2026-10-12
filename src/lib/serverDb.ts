@@ -840,8 +840,11 @@ export async function updateMatchInDb(updatedMatch: Match): Promise<Match[]> {
   const db = await getTournamentDb();
   const current = db.matches || INITIAL_MATCHES;
   const index = current.findIndex((m) => m.id === updatedMatch.id);
+  const existing = index >= 0 ? current[index] : null;
 
+  // Merge defensivo: preserva inmutables deporte, fecha, sede y equipos históricos
   const finalMatch: Match = {
+    ...(existing || {}),
     ...updatedMatch,
     updatedAt: new Date().toISOString(),
   };
@@ -860,9 +863,13 @@ export async function updateMatchInDb(updatedMatch: Match): Promise<Match[]> {
     const firestore = getFirestoreDb();
     if (firestore) {
       const matchDocRef = firestore.collection('costa_de_oro_matches').doc(finalMatch.id);
+      // Sanitizar propiedades undefined para evitar errores fatales en DocumentReference.set()
+      const firestorePayload = Object.fromEntries(
+        Object.entries(finalMatch).filter(([_, v]) => v !== undefined)
+      );
       await firestore.runTransaction(async (transaction: any) => {
         transaction.set(matchDocRef, {
-          ...finalMatch,
+          ...firestorePayload,
           updatedAtServer: FieldValue.serverTimestamp(),
         }, { merge: true });
       });

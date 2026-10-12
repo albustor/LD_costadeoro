@@ -244,8 +244,14 @@ export function LiveDeskScorer() {
   const away = getSchoolById(currentMatch?.awayTeamId);
   const category = getCategoryById(currentMatch?.categoryId);
 
-  // Quick Score adjust
+  // Quick Score adjust con auto-bloqueo manual y transición inteligente
   const adjustScore = (side: 'home' | 'away', delta: number) => {
+    setIsManualOverride(true);
+    if (status === 'scheduled') {
+      setStatus('completed');
+      setCurrentPeriod('Finalizado');
+      setWalkover('none');
+    }
     if (side === 'home') {
       setHomeScore((prev) => Math.max(0, prev + delta));
     } else {
@@ -257,6 +263,12 @@ export function LiveDeskScorer() {
   const handleStatusChangeManual = (newStatus: MatchStatus) => {
     setStatus(newStatus);
     setIsManualOverride(true);
+    if (newStatus === 'completed') {
+      if (currentPeriod === 'Por reprogramar' || walkover !== 'none') {
+        setCurrentPeriod('Finalizado');
+        setWalkover('none');
+      }
+    }
   };
 
   // Añadir minutos de prórroga al cierre
@@ -305,19 +317,24 @@ export function LiveDeskScorer() {
         ? 0
         : awayScore;
 
+    const isCompletedClean = status === 'completed' && walkover === 'none';
+    const resolvedPeriod = isCompletedClean && currentPeriod === 'Por reprogramar' ? 'Finalizado' : currentPeriod;
+
     const updated: Match = {
       ...currentMatch,
       homeScore: finalHomeScore,
       awayScore: finalAwayScore,
+      homeSetsWon: currentMatch.sport === 'voleibol' ? Number(finalHomeScore) : undefined,
+      awaySetsWon: currentMatch.sport === 'voleibol' ? Number(finalAwayScore) : undefined,
       status,
       estimatedDurationMinutes: durationMinutes,
       customEndTime: customEndTime || undefined,
       isManualOverride,
       autoLifecycleEnabled: !isManualOverride,
-      currentPeriod,
+      currentPeriod: resolvedPeriod,
       minute,
-      mvpPlayerName,
-      notes,
+      mvpPlayerName: mvpPlayerName.trim() || undefined,
+      notes: notes.trim() || undefined,
       walkover,
       setScores: currentMatch.sport === 'voleibol' ? sets : undefined,
       quarterScores: currentMatch.sport === 'baloncesto' ? quarters : undefined,
