@@ -317,8 +317,15 @@ export function LiveDeskScorer() {
         ? 0
         : awayScore;
 
-    const isCompletedClean = status === 'completed' && walkover === 'none';
-    const resolvedPeriod = isCompletedClean && currentPeriod === 'Por reprogramar' ? 'Finalizado' : currentPeriod;
+    // Auto-promoción inteligente: Si tiene puntos anotados o status es completed, asegurar estado y periodo
+    const hasScores = finalHomeScore > 0 || finalAwayScore > 0;
+    const effectiveStatus: MatchStatus =
+      status === 'completed' || (hasScores && status === 'scheduled') ? 'completed' : status;
+    const effectivePeriod =
+      effectiveStatus === 'completed' && (currentPeriod === 'Por Iniciar' || currentPeriod === 'Por reprogramar' || currentPeriod === 'Programado' || currentPeriod === '1.er Tiempo')
+        ? 'Finalizado'
+        : currentPeriod;
+    const effectiveOverride = hasScores || effectiveStatus === 'completed' ? true : isManualOverride;
 
     const updated: Match = {
       ...currentMatch,
@@ -326,12 +333,12 @@ export function LiveDeskScorer() {
       awayScore: finalAwayScore,
       homeSetsWon: currentMatch.sport === 'voleibol' ? Number(finalHomeScore) : undefined,
       awaySetsWon: currentMatch.sport === 'voleibol' ? Number(finalAwayScore) : undefined,
-      status,
+      status: effectiveStatus,
       estimatedDurationMinutes: durationMinutes,
       customEndTime: customEndTime || undefined,
-      isManualOverride,
-      autoLifecycleEnabled: !isManualOverride,
-      currentPeriod: resolvedPeriod,
+      isManualOverride: effectiveOverride,
+      autoLifecycleEnabled: !effectiveOverride,
+      currentPeriod: effectivePeriod,
       minute,
       mvpPlayerName: mvpPlayerName.trim() || undefined,
       notes: notes.trim() || undefined,

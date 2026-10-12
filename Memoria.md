@@ -870,3 +870,19 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - Al finalizar un encuentro con marcador jugado, se limpian banderas de reprogramación para que `isRescheduledMatch` no bloquee el resultado y se persisten los sets ganados en voleibol.
 - **Estado**: ✅ Implementado, verificado con respaldo en disco y validado para producción.
 
+---
+
+## ADR-063: Auto-Promoción Inteligente de Marcadores y Sincronización Canónica de Baloncesto C
+- **Fecha**: 2026-10-11
+- **Contexto**: Al ingresar resultados en los paneles de administración (`LiveDeskScorer`, `QuickMatchScorer`, `AdminControlPanel`), si un partido venía como `'scheduled'`, el envío de marcadores mayores a cero no conmutaba automáticamente el estado a `'completed'`, lo que provocaba que la tarjeta pública mostrara la chapa `VS` y que el motor de Python ignorara el encuentro dejando la tabla en ceros. Paralelamente, una desincronización de Webpack en el servidor de desarrollo devolvía error 500 impidiendo que las mutaciones alcanzaran `tournament_db.json`.
+- **Decisión**:
+  1. **Regla de Auto-Promoción Inteligente**:
+     - En `LiveDeskScorer.tsx`, `QuickMatchScorer.tsx`, `AdminControlPanel.tsx` y `serverDb.ts`, todo encuentro que reciba puntos mayores a cero (`homeScore > 0 || awayScore > 0`) o cuyo estado sea `'completed'` se auto-promueve de forma irrevocable a `status = 'completed'`, `currentPeriod = 'Finalizado'` y `isManualOverride = true`.
+  2. **Persistencia Bidireccional y Sincronización de Baloncesto C**:
+     - Se registró el marcador oficial de Jornada 1 Baloncesto Categoría C: **La Paz Tempisque (11) vs La Paz Cabo Velas (31)** en `tournament_db.json` e `initialData.ts`.
+     - Se regeneró `canonical_standings.json` determinísticamente: Cabo Velas (1 PJ, 2 PTS, Dif +20), Tempisque (1 PJ, 1 PT, Dif -20), Educarte (0 PJ, 0 PTS).
+  3. **Estabilidad de Runtime**:
+     - Servidor de desarrollo Next.js reiniciado y compilación estricta (`npm run build`) validada con 0 errores de tipado.
+- **Estado**: ✅ Implementado, verificado en API (`GET /api/matches` y `GET /api/standings` con código 200) y blindado para producción.
+
+

@@ -1,6 +1,6 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-10-12T02:42:50.275604+00:00",
+  "last_updated": "2026-10-12T03:22:31.470423+00:00",
   "version": "1.0.0",
   "matches_processed": 16,
   "computed_standing_points": {
@@ -601,35 +601,6 @@
     ],
     "cat-c-baloncesto": [
       {
-        "teamId": "educarte",
-        "school": {
-          "id": "educarte",
-          "name": "Educarte Bilingual High School",
-          "shortName": "Educarte",
-          "acronym": "EDU",
-          "logo": "☀️",
-          "primaryColor": "#e11d48",
-          "secondaryColor": "#be123c",
-          "location": "Tamarindo",
-          "city": "Santa Cruz, Guanacaste"
-        },
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "pointsFor": 0,
-        "pointsAgainst": 0,
-        "diff": 0,
-        "points": 0,
-        "setsWon": null,
-        "setsLost": null,
-        "setsDiff": null,
-        "setsRatio": null,
-        "pointsRatio": 0.0,
-        "form": [],
-        "position": 1
-      },
-      {
         "teamId": "la-paz-cabo-velas",
         "school": {
           "id": "la-paz-cabo-velas",
@@ -642,21 +613,23 @@
           "location": "Brasilito, Cabo Velas",
           "city": "Santa Cruz, Guanacaste"
         },
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "pointsFor": 0,
-        "pointsAgainst": 0,
-        "diff": 0,
-        "points": 0,
+        "pointsFor": 31,
+        "pointsAgainst": 11,
+        "diff": 20,
+        "points": 2,
         "setsWon": null,
         "setsLost": null,
         "setsDiff": null,
         "setsRatio": null,
-        "pointsRatio": 0.0,
-        "form": [],
-        "position": 2
+        "pointsRatio": 2.8182,
+        "form": [
+          "W"
+        ],
+        "position": 1
       },
       {
         "teamId": "la-paz-tempisque",
@@ -670,6 +643,37 @@
           "secondaryColor": "#047857",
           "location": "Comunidad, Carrillo",
           "city": "Guanacaste"
+        },
+        "played": 1,
+        "won": 0,
+        "drawn": 0,
+        "lost": 1,
+        "pointsFor": 11,
+        "pointsAgainst": 31,
+        "diff": -20,
+        "points": 1,
+        "setsWon": null,
+        "setsLost": null,
+        "setsDiff": null,
+        "setsRatio": null,
+        "pointsRatio": 0.3548,
+        "form": [
+          "L"
+        ],
+        "position": 2
+      },
+      {
+        "teamId": "educarte",
+        "school": {
+          "id": "educarte",
+          "name": "Educarte Bilingual High School",
+          "shortName": "Educarte",
+          "acronym": "EDU",
+          "logo": "☀️",
+          "primaryColor": "#e11d48",
+          "secondaryColor": "#be123c",
+          "location": "Tamarindo",
+          "city": "Santa Cruz, Guanacaste"
         },
         "played": 0,
         "won": 0,

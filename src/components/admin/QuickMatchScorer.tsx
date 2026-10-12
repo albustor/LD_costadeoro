@@ -21,7 +21,7 @@ import {
   Activity,
   BarChart2
 } from 'lucide-react';
-import { Match, Standing } from '@/types/tournament';
+import { Match, Standing, MatchStatus } from '@/types/tournament';
 import { SCHOOLS_DATA, CATEGORIES_DATA } from '@/config/tournamentConfig';
 import { useTournament } from '@/context/TournamentContext';
 import { calculateStandings } from '@/lib/sportsEngine';
@@ -221,13 +221,21 @@ export function QuickMatchScorer({ initialMatches }: QuickMatchScorerProps) {
     setSavingMatchId(matchId);
     setSavedSuccessId(null);
 
+    const hasScores = form.homeScore > 0 || form.awayScore > 0;
+    const effectiveStatus: MatchStatus =
+      form.status === 'completed' || (hasScores && form.status === 'scheduled') ? 'completed' : form.status;
+    const effectivePeriod =
+      effectiveStatus === 'completed' ? 'Finalizado' : originalMatch.currentPeriod;
+
     const updatedMatch: Match = {
       ...originalMatch,
       homeScore: form.homeScore,
       awayScore: form.awayScore,
       homeSetsWon: originalMatch.sport === 'voleibol' ? form.homeSetsWon : undefined,
       awaySetsWon: originalMatch.sport === 'voleibol' ? form.awaySetsWon : undefined,
-      status: form.status,
+      status: effectiveStatus,
+      currentPeriod: effectivePeriod,
+      isManualOverride: hasScores || effectiveStatus === 'completed' ? true : originalMatch.isManualOverride,
       walkover: form.walkover,
       mvpPlayerName: form.mvpPlayerName || undefined,
       notes: form.notes || undefined,

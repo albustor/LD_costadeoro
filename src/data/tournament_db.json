@@ -563,14 +563,15 @@
       "date": "2026-10-09",
       "time": "15:15",
       "venue": "CRIA",
-      "homeTeamId": "la-paz-cabo-velas",
-      "awayTeamId": "la-paz-tempisque",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Por Iniciar",
-      "notes": "Jornada 1 - Baloncesto Categoría C (3:15 pm) · Descansa: Educarte",
-      "updatedAt": "2026-10-09T15:15:00Z"
+      "homeTeamId": "la-paz-tempisque",
+      "awayTeamId": "la-paz-cabo-velas",
+      "homeScore": 11,
+      "awayScore": 31,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 1 - Baloncesto Categoría C (3:15 pm) · Tempisque 11 vs Cabo Velas 31",
+      "updatedAt": "2026-10-12T03:21:21.870Z",
+      "isManualOverride": true
     },
     {
       "id": "j1-bal-d-01",

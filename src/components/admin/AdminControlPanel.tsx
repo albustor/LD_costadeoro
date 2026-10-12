@@ -247,14 +247,25 @@ export function AdminControlPanel() {
     e.preventDefault();
     if (!selectedMatch) return;
 
+    const numHome = Number(homeScore);
+    const numAway = Number(awayScore);
+    const hasScores = numHome > 0 || numAway > 0;
+    const effectiveStatus: MatchStatus =
+      status === 'completed' || (hasScores && status === 'scheduled') ? 'completed' : status;
+    const effectivePeriod =
+      effectiveStatus === 'completed' && (currentPeriod === 'Por Iniciar' || currentPeriod === 'Programado' || currentPeriod === '1.er Tiempo')
+        ? 'Finalizado'
+        : currentPeriod;
+
     const updated: Match = {
       ...selectedMatch,
-      homeScore: Number(homeScore),
-      awayScore: Number(awayScore),
+      homeScore: numHome,
+      awayScore: numAway,
       homeSetsWon: selectedMatch.sport === 'voleibol' ? Number(homeSetsWon) : undefined,
       awaySetsWon: selectedMatch.sport === 'voleibol' ? Number(awaySetsWon) : undefined,
-      status,
-      currentPeriod,
+      status: effectiveStatus,
+      currentPeriod: effectivePeriod,
+      isManualOverride: hasScores || effectiveStatus === 'completed' ? true : selectedMatch.isManualOverride,
       minute: Number(minute),
       mvpPlayerName: mvpPlayerName.trim() || undefined,
       updatedAt: new Date().toISOString(),

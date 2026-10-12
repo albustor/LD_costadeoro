@@ -849,6 +849,16 @@ export async function updateMatchInDb(updatedMatch: Match): Promise<Match[]> {
     updatedAt: new Date().toISOString(),
   };
 
+  // Auto-promoción inteligente en servidor: Evita que partidos con marcador queden en scheduled
+  if ((finalMatch.homeScore > 0 || finalMatch.awayScore > 0) && finalMatch.status === 'scheduled') {
+    finalMatch.status = 'completed';
+    finalMatch.currentPeriod = 'Finalizado';
+    finalMatch.isManualOverride = true;
+  }
+  if (finalMatch.status === 'completed' && (finalMatch.currentPeriod === 'Por Iniciar' || finalMatch.currentPeriod === 'Programado')) {
+    finalMatch.currentPeriod = 'Finalizado';
+  }
+
   if (index >= 0) {
     current[index] = finalMatch;
   } else {
