@@ -849,6 +849,19 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 )}
               </div>
 
+              {/* ⚖️ Declaración Visible de Consentimiento Previo y Retención Finita (Ley 8968) */}
+              <div className="p-3.5 bg-amber-50/70 border border-amber-200/90 rounded-2xl flex items-start gap-2.5 text-[11px] text-slate-700 leading-snug">
+                <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p>
+                    <strong>Consentimiento y autorización de imagen:</strong> Al publicar fotos o videos, declaras expresamente que cuentas con la autorización previa de las personas que figuran en ellos (o de sus padres/tutores en el caso de menores de edad) para su divulgación comunitaria e institucional.
+                  </p>
+                  <p className="text-[10px] text-slate-500">
+                    *En apego a la <strong>Ley N.° 8968</strong> de Protección de la Persona frente al tratamiento de sus datos personales, las imágenes se tratan exclusivamente con fines deportivos formativos y cuentan con una política de <strong>retención finita a 6 meses</strong> (eliminación y purga automática post-evento).
+                  </p>
+                </div>
+              </div>
+
               {/* Identificación del Autor y Botón de Publicar */}
               <div className="space-y-3 pt-2 border-t border-slate-100">
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -1306,6 +1319,15 @@ export function FamilyCheerWall({ schools, featuredOnly = false }: FamilyCheerWa
                 </h5>
                 <p className="text-[11px] text-slate-600">
                   Cada familiar es responsable del contenido transmitido desde su dispositivo, manteniendo siempre el respeto, el compañerismo y la convivencia deportiva.
+                </p>
+              </div>
+
+              <div className="p-3 bg-blue-50/80 border border-blue-200 rounded-2xl">
+                <h5 className="font-bold text-blue-950 flex items-center gap-1.5 mb-1">
+                  <span>5. Autorización previa y eliminación de datos personales (Ley N.° 8968)</span>
+                </h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Toda persona que cargue imágenes o videos garantiza que cuenta con la <strong>autorización previa y expresa</strong> de quienes aparecen (o de sus representantes legales). En cumplimiento de la normativa de protección de datos de Costa Rica, todo el material audiovisual tiene una ventana de <strong>retención finita de 6 meses</strong> tras la cual se procede a la purga de datos personales y rostros de menores de edad.
                 </p>
               </div>
             </div>

@@ -33,7 +33,22 @@ export function DevViewportBar() {
     }
   }, []);
 
-  // Solo visible en entorno local de desarrollo (localhost / 127.0.0.1)
+  // Activación en local o mediante parámetro secreto ?preview=1 / ?dev=1 en producción (Solo para el administrador)
+  const [isSecretPreviewEnabled, setIsSecretPreviewEnabled] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('preview') === '1' || params.get('dev') === '1') {
+        sessionStorage.setItem('curiol_preview_toolbar', 'true');
+        setIsSecretPreviewEnabled(true);
+      } else if (sessionStorage.getItem('curiol_preview_toolbar') === 'true') {
+        setIsSecretPreviewEnabled(true);
+      }
+    }
+  }, []);
+
+  // Solo visible en entorno local de desarrollo (localhost / 127.0.0.1) o con token secreto en producción
   const isLocalHost =
     typeof window !== 'undefined' &&
     (window.location.hostname === 'localhost' ||
@@ -41,7 +56,7 @@ export function DevViewportBar() {
       window.location.hostname.startsWith('192.168.') ||
       window.location.hostname.startsWith('10.'));
 
-  if (process.env.NODE_ENV === 'production' && !isLocalHost) {
+  if (process.env.NODE_ENV === 'production' && !isLocalHost && !isSecretPreviewEnabled) {
     return null;
   }
 

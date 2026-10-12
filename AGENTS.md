@@ -340,6 +340,46 @@ Solo se escribirán con mayúscula inicial los sustantivos y adjetivos que forme
 1. **Ofuscación y Variables Seguras:**
    - Todas las credenciales, URLs de conexión o claves de API de servicios en la nube (Cloudinary, Firebase Admin, Bunny CDN) deben mantenerse estrictamente **ofuscadas/codificadas en Base64** o en variables de entorno (`.env.local`), evitando cadenas de texto plano que puedan activar alertas automáticas de escáneres de seguridad (como GitGuardian).
 
+---
+
+## 26. Motor Determinista en Python (MEP-ICODER 2026) y Barrera Aritmética para Antigravity
+
+1. **Desacoplamiento Aritmético Total:**
+   - La verdad matemática y las clasificaciones se calculan exclusivamente mediante el motor estático en Python (`src/scripts/scoring_rules_jde2026.py` y `generate_canonical_standings.py`).
+   - El resultado se compila en el bloque canónico inmutable `src/data/canonical_standings.json` y se expone a través del endpoint `GET /api/standings`.
+2. **Invariante Sagrada de No Presentación / Reprogramación:**
+   - Ante la no presentación de un equipo, queda prohibido declarar Walkover (W.O.) o victorias por defecto (20-0 o 3-0).
+   - Se mantiene: $PJ += 0$ y $PTS += 0$ para ambas instituciones hasta su disputa efectiva en cancha.
+3. **Barrera Mandatoria para Antigravity:**
+   - **PROHIBICIÓN ARITMÉTICA:** Antigravity no realiza sumas, promedios ni cómputos de tablas de posiciones. Todo reporte o crónica debe consumir exclusivamente el bloque canónico precalculado `computed_standing_points`.
+
+---
+
+## 27. Consentimiento Previo Expreso, Publicidad Comunitaria y Eliminación de Datos Personales (Ley N.° 8968)
+
+1. **Autorización Previa Mandatoria para Publicación:**
+   - Toda persona (padre, madre, familiar o estudiante) que cargue o divulgue una fotografía o video en el muro comunitario o la plataforma declara y asume expresamente que **cuenta con la autorización previa de las personas que figuran en el medio** (o de sus padres/tutores legales en el caso de menores de edad) para su difusión comunitaria e institucional en el festival.
+2. **Marco Legal Costarricense (Ley N.° 8968):**
+   - En estricto apego a la Ley de Protección de la Persona frente al tratamiento de sus datos personales, la plataforma opera bajo el principio de finalidad y minimización: las imágenes se procesan con fines exclusivamente formativos, culturales y deportivos.
+3. **Política de Retención Finita y Purga Automática (6 Meses):**
+   - Toda fotografía o video alojado se etiqueta con el campo `expires_at` (180 días / 6 meses post-evento).
+   - Vencido este ciclo de gracia, los datos personales e imágenes de menores de edad son purgados del almacenamiento en la nube, garantizando el derecho a la eliminación y desindexación de datos personales.
+
+---
+
+## 28. Protocolo Maestro «BLINDAR» (Auditar ➔ Autocurar ➔ Validar ➔ Publicar)
+
+1. **Activador Operativo:**
+   - La orden única **`BLINDAR`** (o *«Jim, blinda esto»*) activa de forma secuencial y sin interrupciones el ciclo completo de cuatro fases.
+2. **Fases del Pipeline:**
+   - **Fase 1: AUDITAR:** Inspección de consistencia de datos, seguridad, normativas deportivas MEP 2026, protección de datos y compatibilidad de endpoints.
+   - **Fase 2: AUTOCURAR:** Detección activa de incidencias y corrección quirúrgica inmediata (parche autónomo) sin detenerse a consultar errores triviales.
+   - **Fase 3: VALIDAR:** Ejecución de pruebas unitarias (`python tests/test_scoring_rules.py`) y compilación estricta de producción (`npm run build`).
+   - **Fase 4: PUBLICAR:** Creación de commit atómico en Git y despacho inmediato con `git push origin main` hacia GitHub y Vercel, entregando el reporte de confirmación final.
+
+
+
+
 
 
 

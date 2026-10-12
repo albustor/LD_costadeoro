@@ -813,11 +813,41 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
 
 ---
 
-## ADR-059: Preservación y Siembra Automática de Publicaciones Oficiales Base en Firestore
-- **Fecha**: 2026-10-09
-- **Contexto**: Al consultar Firestore en la nube, si la colección `costa_de_oro_posts` contenía únicamente posts de prueba de usuarios, las 12 publicaciones base oficiales (los 6 mensajes de bienvenida del Comité Organizador y las 6 porras de los colegios) no se presentaban.
+## ADR-060: Motor Determinista en Python (MEP-ICODER 2026), Desacoplamiento Aritmético Total y Barrera de Contención para Antigravity
+- **Fecha**: 2026-10-11
+- **Contexto**: El cómputo en caliente de tablas de posiciones en frontend o por parte de modelos LLM presentaba riesgo de divergencias aritméticas ante desincronizaciones de red o alucinaciones de puntos. Se requería desacoplar por completo la aritmética deportiva hacia un motor determinista inmutable y formalizar las reglas MEP-ICODER 2026.
 - **Decisión**:
-  1. En `src/lib/serverDb.ts` (`getAllPosts`): Se implementó la integración y siembra automática de las 12 publicaciones base de `INITIAL_FAMILY_POSTS` en Firestore, verificando contra la colección de eliminados (`costa_de_oro_deleted_posts`).
-  2. En `src/lib/storageAdapter.ts`: Se actualizó la clave de caché a `costa_de_oro_family_posts_v3`.
-- **Estado**: ✅ Implementado, verificado con `npm run build` y desplegado en producción.
+  1. **Motor Determinista en Python (`scoring_rules_jde2026.py`)**:
+     - Módulo canónico estático con clases `StandingRow`, `MatchRecord` y `CostaDeOroCalculator`.
+     - Implementa normativa oficial MEP-ICODER 2026: Fútbol (3-1-0), Baloncesto (2-1) y Voleibol a 2 de 3 sets (2-0 = 3 pts / 0 pts; 2-1 = 2 pts / 1 pt; 1-2 = 1 pt / 2 pts; 0-2 = 0 pts / 3 pts).
+     - Ratios oficiales de desempate federativo: cociente de puntos (PF/PC) y cociente de sets (SG/SP) con protección de 0 PJ.
+  2. **Invariante Sagrada de No Presentación / Reprogramación**:
+     - Queda estrictamente prohibido el Walkover (W.O.) o la asignación de victorias por defecto (20-0 o 3-0).
+     - Los partidos con condición de incomparecencia o reprogramación mantienen:
+       $$\text{Partidos Jugados} (PJ) += 0 \quad \land \quad \text{Puntos} (PTS) += 0$$
+     - Cero alteración en la tabla de posiciones hasta que el encuentro sea disputado en cancha.
+  3. **Persistencia y Endpoint Canónico**:
+     - El generador `generate_canonical_standings.py` compila `src/data/canonical_standings.json`.
+     - Endpoint `GET /api/standings` sirve el bloque canónico precalculado a 0ms sin cálculo en runtime.
+     - En `serverDb.ts`, `updateMatchInDb` ejecuta mutaciones en Firestore con `runTransaction` y dispara la regeneración canónica asíncrona.
+  4. **Ventana de Caducidad de Medios (Bunny.net / Cloudinary)**:
+     - Se incorporó en el esquema de subidas el campo `expires_at` (180 días / 6 meses) para dar cumplimiento a la retención finita y privacidad de menores (*Privacy by Design*).
+  5. **BARRERA DE CONTENCIÓN MANDATORIA PARA ANTIGRAVITY**:
+     > **PROHIBICIÓN ARITMÉTICA:** Antigravity no realiza sumas, promedios ni cómputos de tablas de posiciones. Todo reporte, resumen o crónica debe consumir exclusivamente el bloque canónico precalculado `computed_standing_points` generado por el script determinista.
+- **Estado**: ✅ Implementado, validado con suite unitaria (`tests/test_scoring_rules.py`) y compilado con éxito en `npm run build`.
 
+
+
+
+---
+
+## ADR-061: Estandarización del Comando Maestro «BLINDAR» (Auditar ➔ Autocurar ➔ Validar ➔ Publicar)
+- **Fecha**: 2026-10-11
+- **Contexto**: Para optimizar los tiempos de respuesta y evitar fricción de aprobaciones intermedias en tareas rutinarias de despliegue, la dirección técnica requirió unificar las 4 fases de control en una sola instrucción ejecutiva.
+- **Decisión**:
+  1. Se adopta el comando oficial **`BLINDAR`** (o *«Jim, blinda esto»*) que ejecuta en secuencia continua:
+     - **Fase 1: AUDITAR**: Inspección de consistencia de datos, seguridad, normativas deportivas MEP 2026 y Ley N.° 8968.
+     - **Fase 2: AUTOCURAR**: Detección activa de inconsistencias y aplicación autónoma de parches quirúrgicos sin detenerse a consultar errores de sintaxis o rutas.
+     - **Fase 3: VALIDAR**: Ejecución de la suite de pruebas unitarias (`python tests/test_scoring_rules.py`) y compilación estricta de producción (`npm run build`).
+     - **Fase 4: PUBLICAR**: Commit atómico y `git push origin main` hacia GitHub y Vercel, entregando el reporte final de despliegue.
+- **Estado**: ✅ Estandarizado y activo en `GEMINI.md`, `AGENTS.md` y `Memoria.md`.

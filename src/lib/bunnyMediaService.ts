@@ -20,6 +20,7 @@ export interface BunnyUploadResult {
   thumbnailUrl?: string;
   embedUrl?: string;
   provider: 'bunny_stream' | 'bunny_storage' | 'local_storage' | 'local';
+  expires_at?: string; // Ventana de caducidad a 6 meses (Privacy by Design)
   error?: string;
 }
 

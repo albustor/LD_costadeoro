@@ -854,5 +854,36 @@ export async function updateMatchInDb(updatedMatch: Match): Promise<Match[]> {
 
   db.matches = current;
   await saveTournamentDb(db);
+
+  // 1. Persistencia atómica en Firestore con runTransaction para prevenir colisiones concurrentes
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const matchDocRef = firestore.collection('costa_de_oro_matches').doc(finalMatch.id);
+      await firestore.runTransaction(async (transaction: any) => {
+        transaction.set(matchDocRef, {
+          ...finalMatch,
+          updatedAtServer: FieldValue.serverTimestamp(),
+        }, { merge: true });
+      });
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Match Transaction Warning]:', fsErr);
+  }
+
+  // 2. Disparar regeneración determinista de clasificaciones canónicas con Python
+  try {
+    const { exec } = await import('child_process');
+    const scriptPath = path.join(process.cwd(), 'src', 'scripts', 'generate_canonical_standings.py');
+    exec(`python "${scriptPath}"`, (err, stdout) => {
+      if (!err && stdout) {
+        console.log('[Canonical Standings Updated]:', stdout.split('\n')[0]);
+      }
+    });
+  } catch (pyErr) {
+    console.warn('[Python Standings Trigger Warning]:', pyErr);
+  }
+
   return current;
 }
+

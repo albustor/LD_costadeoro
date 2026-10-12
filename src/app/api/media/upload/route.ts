@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
         if (cloudinaryRes.ok) {
           const cData = await cloudinaryRes.json();
           const secureUrl = cData.secure_url || cData.url;
+          const expiresAt = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
           return NextResponse.json({
             success: true,
             url: secureUrl,
@@ -67,6 +68,7 @@ export async function POST(req: NextRequest) {
             bytes: cData.bytes || file.size,
             resourceType: isVideo ? 'video' : 'image',
             provider: 'cloudinary_cdn',
+            expires_at: expiresAt,
           });
         } else {
           const errBody = await cloudinaryRes.text();
@@ -95,6 +97,7 @@ export async function POST(req: NextRequest) {
       await writeFile(filePath, buffer);
 
       const accessibleUrl = `/uploads/${targetSubdir}/${fileName}`;
+      const expiresAt = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
 
       return NextResponse.json({
         success: true,
@@ -106,6 +109,7 @@ export async function POST(req: NextRequest) {
         bytes: file.size,
         resourceType: isVideo ? 'video' : 'image',
         provider: 'local_storage',
+        expires_at: expiresAt,
       });
     } catch (fsErr: any) {
       console.warn('[Local Filesystem Fallback Warning (esperado en Vercel)]: ', fsErr?.message);
@@ -116,6 +120,7 @@ export async function POST(req: NextRequest) {
     const base64 = Buffer.from(arrayBuf).toString('base64');
     const mimeType = file.type || (isVideo ? 'video/mp4' : 'image/webp');
     const dataUri = `data:${mimeType};base64,${base64}`;
+    const expiresAt = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
 
     return NextResponse.json({
       success: true,
@@ -127,6 +132,7 @@ export async function POST(req: NextRequest) {
       bytes: file.size,
       resourceType: isVideo ? 'video' : 'image',
       provider: 'inline_data_uri',
+      expires_at: expiresAt,
     });
   } catch (error: any) {
     console.error('Error crítico en /api/media/upload:', error);

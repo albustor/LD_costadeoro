@@ -5,6 +5,7 @@ import { Category, FamilyPost, Match, PhotoItem, PostComment, School, ShortVideo
 import { CATEGORIES_DATA, SCHOOLS_DATA, TOURNAMENT_CONFIG } from '@/config/tournamentConfig';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { calculateStandings } from '@/lib/sportsEngine';
+import canonicalStandingsData from '@/data/canonical_standings.json';
 
 interface TournamentContextType {
   tournament: typeof TOURNAMENT_CONFIG;
@@ -41,6 +42,23 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [familyPosts, setFamilyPosts] = useState<FamilyPost[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(CATEGORIES_DATA[0].id);
+  const [liveCanonicalMap, setLiveCanonicalMap] = useState<Record<string, Standing[]> | null>(
+    (canonicalStandingsData as any)?.computed_standing_points || null
+  );
+
+  const fetchLiveCanonicalStandings = async () => {
+    try {
+      const res = await fetch('/api/standings');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.computed_standing_points) {
+          setLiveCanonicalMap(json.computed_standing_points);
+        }
+      }
+    } catch {
+      // fallback silencioso
+    }
+  };
 
   useEffect(() => {
     setMatches(tournamentStorage.getMatches());
@@ -56,6 +74,9 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
       }
     });
 
+    // Sincronizar clasificaciones canónicas desde el servidor
+    fetchLiveCanonicalStandings();
+
     // Sincronizar con la base de datos centralizada del servidor
     tournamentStorage.fetchRemoteFamilyPosts().then((posts) => {
       if (posts && posts.length > 0) {
@@ -65,7 +86,10 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
 
     const handleMatchesUpdate = (e: Event) => {
       const custom = e as CustomEvent<Match[]>;
-      if (custom.detail) setMatches(custom.detail);
+      if (custom.detail) {
+        setMatches(custom.detail);
+        fetchLiveCanonicalStandings();
+      }
     };
 
     const handleVideosUpdate = (e: Event) => {
@@ -150,6 +174,11 @@ export function TournamentProvider({ children }: { children: React.ReactNode }) 
   };
 
   const getStandingsForCategory = (categoryId: string): Standing[] => {
+    // 1. Prioridad determinista: Consumir bloque canónico precalculado por el motor Python (0ms, sincronizado en vivo)
+    if (liveCanonicalMap && liveCanonicalMap[categoryId] && liveCanonicalMap[categoryId].length > 0) {
+      return liveCanonicalMap[categoryId];
+    }
+    // 2. Fallback resiliente en runtime con paridad matemática exacta
     const category = CATEGORIES_DATA.find((c) => c.id === categoryId);
     if (!category) return [];
     return calculateStandings(categoryId, category.sport, matches, SCHOOLS_DATA);
