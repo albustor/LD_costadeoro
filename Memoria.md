@@ -901,5 +901,20 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - En `LiveDeskScorer.tsx`, se configuró la asignación inteligente de periodo inicial según el deporte: `Q1` en Baloncesto, `Set 1` en Voleibol, `1.er Tiempo` en Fútbol y `Finalizado` para partidos concluidos.
 - **Estado**: ✅ Implementado, validado con `npm run build` y probado en runtime.
 
+---
+
+## ADR-065: Invitación Oficial en Portada para Seguimiento de Tablas y Recuerdos de la 1.ª Fecha
+- **Fecha**: 2026-10-16
+- **Contexto**: Concluida la 1.ª jornada del Festival Deportivo y rumbo a la 2.ª jornada (2 al 6 de noviembre), se requirió invitar activamente a la comunidad en la página oficial para dar seguimiento a las tablas de posiciones y compartir fotografías y videos de la primera fecha ya efectuada.
+- **Decisión**:
+  1. **Tarjetas Interactivas en Portada (`src/app/page.tsx`)**:
+     - Tarjeta destacada de resultados oficiales invitando a consultar cómo marcha cada colegio en las tablas de posiciones (`/marcadores`).
+     - Tarjeta comunitaria invitando a las familias a subir sus fotografías, videos y porras de la 1.ª fecha en el Muro Familiar abierto sin PIN (`/mural`) y consultar la galería (`/galeria`).
+     - Cintillo informativo destacando la **2.ª jornada (2 al 6 de noviembre · 14 partidos de rotación inter-sedes)** con enlace directo al calendario (`/calendario`).
+  2. **Actualización de Fechas Oficiales (`src/components/home/EventGeneralInfoCards.tsx`)**:
+     - Se marcó la **1.ª jornada (5 al 9 de octubre)** como **`✓ Efectuada`** y la **2.ª jornada (2 al 6 de noviembre)** como **`Próxima cita`**, integrando accesos directos a tablas de posiciones y carga de fotos/videos.
+- **Estado**: ✅ Implementado, compilado con 0 errores y desplegado en GitHub y Vercel.
+
+
 
 

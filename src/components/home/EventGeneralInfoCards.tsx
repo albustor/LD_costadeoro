@@ -527,24 +527,70 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
         {openSections.festivals && (
           <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 animate-fade-in space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="p-4 bg-amber-50/70 rounded-2xl border border-amber-200 space-y-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-200/90 text-amber-950 text-xs font-black">
-                  🔹 1.ª jornada
-                </span>
-                <h4 className="font-black text-sm sm:text-base text-slate-900">5 al 9 de octubre</h4>
-                <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                  15 partidos inaugurales en todas las disciplinas.
-                </p>
+              <div className="p-4 bg-amber-50/70 rounded-2xl border border-amber-200 flex flex-col justify-between gap-2.5">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-200/90 text-amber-950 text-xs font-black">
+                      🔹 1.ª jornada
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-extrabold border border-emerald-300">
+                      ✓ Efectuada
+                    </span>
+                  </div>
+                  <h4 className="font-black text-sm sm:text-base text-slate-900">5 al 9 de octubre</h4>
+                  <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                    15 partidos inaugurales disputados. ¡Consulta las tablas de posiciones y comparte tus fotos y videos!
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-amber-200/70 flex flex-col gap-1.5">
+                  <Link
+                    href="/marcadores"
+                    className="inline-flex items-center justify-between text-xs font-extrabold text-slate-900 hover:text-amber-800 transition-colors"
+                  >
+                    <span>🏆 Ver tablas de posiciones</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    href="/mural"
+                    className="inline-flex items-center justify-between text-xs font-extrabold text-amber-900 hover:text-slate-950 transition-colors"
+                  >
+                    <span>📸 Compartir fotos y videos</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
 
-              <div className="p-4 bg-blue-50/70 rounded-2xl border border-blue-200 space-y-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-200/90 text-blue-950 text-xs font-black">
-                  🔹 2.ª jornada
-                </span>
-                <h4 className="font-black text-sm sm:text-base text-slate-900">2 al 6 de noviembre</h4>
-                <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                  14 partidos de rotación inter-sedes.
-                </p>
+              <div className="p-4 bg-blue-50/80 rounded-2xl border-2 border-blue-300 flex flex-col justify-between gap-2.5 shadow-2xs">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full bg-blue-200/90 text-blue-950 text-xs font-black">
+                      🔹 2.ª jornada
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-extrabold">
+                      Próxima cita
+                    </span>
+                  </div>
+                  <h4 className="font-black text-sm sm:text-base text-slate-900">2 al 6 de noviembre</h4>
+                  <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                    14 partidos de rotación inter-sedes. ¡Sigue de cerca las tablas de posiciones y apoya a tu colegio!
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-blue-200/70 flex flex-col gap-1.5">
+                  <Link
+                    href="/marcadores"
+                    className="inline-flex items-center justify-between text-xs font-extrabold text-blue-950 hover:text-blue-700 transition-colors"
+                  >
+                    <span>📊 Dar seguimiento a tablas</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    href="/mural"
+                    className="inline-flex items-center justify-between text-xs font-extrabold text-blue-800 hover:text-blue-950 transition-colors"
+                  >
+                    <span>🎥 Subir fotos de la 1.ª fecha</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
 
               <div className="p-4 bg-purple-50/70 rounded-2xl border border-purple-200 space-y-1.5">
