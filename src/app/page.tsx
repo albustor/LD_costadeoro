@@ -15,7 +15,8 @@ import {
   Calendar,
   ChevronRight,
   CheckCircle2,
-  Sparkles
+  Sparkles,
+  Share2
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -106,7 +107,7 @@ export default function HomePage() {
                   ¡Comparte tus fotografías y videos de la 1.ª fecha!
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  Invitamos a todas las familias, estudiantes y docentes a subir sus mejores fotos, videos y mensajes de apoyo de los encuentros ya efectuados en nuestra primera fecha.
+                  Invitamos a todas las familias, estudiantes y docentes a inaugurar nuestro álbum comunitario subiendo sus mejores fotos, videos y porras de la primera fecha.
                 </p>
               </div>
               <div className="pt-1 flex flex-wrap items-center gap-2.5">
@@ -115,37 +116,34 @@ export default function HomePage() {
                   className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-extrabold text-xs sm:text-sm transition-all shadow-sm cursor-pointer"
                 >
                   <Camera className="w-4 h-4 text-amber-400" />
-                  <span>Subir fotos y porras en el muro</span>
+                  <span>Subir fotos, videos y porras en el muro</span>
                   <ChevronRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/galeria"
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs sm:text-sm border border-slate-300 transition-all cursor-pointer"
-                >
-                  <span>Ver galería</span>
                 </Link>
               </div>
             </div>
           </div>
 
-          {/* Cintillo informativo de la 2.ª jornada */}
+          {/* Cintillo informativo de la 2.ª jornada y botón de difusión por WhatsApp */}
           <div className="p-3.5 sm:px-5 sm:py-3.5 rounded-2xl bg-blue-50/90 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-start sm:items-center gap-3">
               <span className="px-2.5 py-1 rounded-full bg-blue-200/90 text-blue-950 text-xs font-black shrink-0">
                 🔹 2.ª jornada
               </span>
               <p className="text-xs sm:text-sm text-slate-800 font-medium">
-                <strong className="font-black text-slate-950">Próxima cita: 2 al 6 de noviembre</strong> · 14 partidos de rotación inter-sedes en todas las categorías.
+                <strong className="font-black text-slate-950">Próxima cita: 2 al 6 de noviembre</strong> · Fechas y programación de encuentros por definir.
               </p>
             </div>
-            <Link
-              href="/calendario"
-              className="inline-flex items-center gap-1.5 text-xs font-extrabold text-blue-900 hover:text-blue-950 underline underline-offset-4 shrink-0 self-start sm:self-auto"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Ver calendario oficial</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <a
+                href="https://wa.me/?text=%C2%A1Hola%20familias!%20%F0%9F%8F%86%20Les%20invitamos%20a%20seguir%20las%20tablas%20de%20posiciones%20oficiales%20de%20la%20Liga%20Costa%20de%20Oro%202026%20y%20a%20compartir%20sus%20fotos%20y%20videos%20de%20la%201.%C2%AA%20fecha%20en%20nuestro%20portal%20oficial:%20https://costadeoro.curiol.studio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>Compartir portal en WhatsApp</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

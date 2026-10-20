@@ -915,6 +915,21 @@ Cada vez que se inicie o retome una sesión de trabajo en este repositorio, el m
      - Se marcó la **1.ª jornada (5 al 9 de octubre)** como **`✓ Efectuada`** y la **2.ª jornada (2 al 6 de noviembre)** como **`Próxima cita`**, integrando accesos directos a tablas de posiciones y carga de fotos/videos.
 - **Estado**: ✅ Implementado, compilado con 0 errores y desplegado en GitHub y Vercel.
 
+---
+
+## ADR-066: Vista de Calendario en «Próximamente las nuevas fechas» y Difusión Oficial en `costadeoro.curiol.studio`
+- **Fecha**: 2026-10-20
+- **Contexto**: Concluida la 1.ª jornada de octubre, la página `/calendario` aún desplegaba los encuentros finalizados del 5 al 9 de octubre. Asimismo, la galería fotográfica se encontraba en 0 fotografías y se requirió estandarizar el dominio oficial `https://costadeoro.curiol.studio` junto con una propuesta ejecutiva para Don Alejandro.
+- **Decisión**:
+  1. **Calendario en Espera de Programación (`src/app/calendario/page.tsx`)**:
+     - Se sustituyó la grilla de partidos pasados de octubre por una tarjeta institucional centrada con el mensaje **«Próximamente las nuevas fechas · Fechas por definir»**, dirigiendo a los visitantes hacia las tablas de posiciones (`/marcadores`) y el muro familiar (`/mural`).
+  2. **Estado Vacío Amigable en Galería (`src/components/media/PhotoGalleryGrid.tsx`)**:
+     - Se implementó el bloque interactivo para cuando existen 0 fotografías registradas, invitando a inaugurar la galería.
+  3. **Difusión por WhatsApp con Dominio Oficial (`src/app/page.tsx`)**:
+     - Se integró el botón de compartir directo por WhatsApp apuntando a `https://costadeoro.curiol.studio`.
+- **Estado**: ✅ Implementado, compilado con `npm run build` y publicado en producción.
+
+
 
 
 

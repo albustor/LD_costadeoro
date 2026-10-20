@@ -186,58 +186,84 @@ export function PhotoGalleryGrid() {
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredPhotos.map((photo) => (
-          <div
-            key={photo.id}
-            onClick={() => setActivePhoto(photo)}
-            className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-amber-500 hover:shadow-md transition-all cursor-pointer shadow-xs flex flex-col justify-between"
-          >
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-              <img
-                src={photo.imageUrl}
-                alt={photo.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
-              
-              <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-lg border border-slate-200 text-[10px] text-slate-900 font-bold shadow-xs">
-                {photo.momentLabel ? photo.momentLabel.split(' ')[1] || 'Momento' : 'Momento'}
-              </div>
-
-              <div className="absolute bottom-2 right-2 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-[11px] bg-slate-950/80 px-2 py-0.5 rounded shadow">
-                <Eye className="w-3.5 h-3.5" />
-                <span>{t('gallery.viewHd')}</span>
-              </div>
-            </div>
-
-            <div className="p-3.5 flex items-center justify-between gap-2 border-t border-slate-100">
-              <div>
-                <h4 className="text-xs font-bold text-slate-900 line-clamp-1 group-hover:text-amber-700 transition-colors">
-                  {photo.title}
-                </h4>
-                <span className="text-[10px] text-slate-500 block mt-0.5">
-                  {t('gallery.by')} {photo.photographer}
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const cleanTitle = photo.title.toLowerCase().replace(/[^a-z0-9]/g, '_');
-                  downloadImageAsJpg(photo.imageUrl, `costa_de_oro_${cleanTitle}`);
-                }}
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition-all cursor-pointer"
-                title={t('gallery.download')}
-              >
-                <Download className="w-4 h-4" />
-              </button>
-            </div>
+      {/* Grid o Estado Vacío (Empty State) */}
+      {filteredPhotos.length === 0 ? (
+        <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center max-w-xl mx-auto space-y-4 shadow-2xs">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto shadow-2xs">
+            <Camera className="w-8 h-8" />
           </div>
-        ))}
-      </div>
+          <div className="space-y-1.5">
+            <h4 className="text-lg sm:text-xl font-black text-slate-900">
+              Aún no hay fotografías registradas
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
+              ¡Sé el primero en inaugurar la galería oficial compartiendo tus mejores fotografías de la 1.ª jornada del Festival Deportivo!
+            </p>
+          </div>
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsUploadModalOpen(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-extrabold text-xs sm:text-sm transition-all shadow-xs cursor-pointer"
+            >
+              <UploadCloud className="w-4 h-4 text-amber-400" />
+              <span>Subir primera fotografía</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {filteredPhotos.map((photo) => (
+            <div
+              key={photo.id}
+              onClick={() => setActivePhoto(photo)}
+              className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-amber-500 hover:shadow-md transition-all cursor-pointer shadow-xs flex flex-col justify-between"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                <img
+                  src={photo.imageUrl}
+                  alt={photo.title}
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+                
+                <div className="absolute top-2 left-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-lg border border-slate-200 text-[10px] text-slate-900 font-bold shadow-xs">
+                  {photo.momentLabel ? photo.momentLabel.split(' ')[1] || 'Momento' : 'Momento'}
+                </div>
+
+                <div className="absolute bottom-2 right-2 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-[11px] bg-slate-950/80 px-2 py-0.5 rounded shadow">
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>{t('gallery.viewHd')}</span>
+                </div>
+              </div>
+
+              <div className="p-3.5 flex items-center justify-between gap-2 border-t border-slate-100">
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 line-clamp-1 group-hover:text-amber-700 transition-colors">
+                    {photo.title}
+                  </h4>
+                  <span className="text-[10px] text-slate-500 block mt-0.5">
+                    {t('gallery.by')} {photo.photographer}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const cleanTitle = photo.title.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                    downloadImageAsJpg(photo.imageUrl, `costa_de_oro_${cleanTitle}`);
+                  }}
+                  className="p-1.5 rounded-lg bg-slate-100 hover:bg-amber-500 hover:text-slate-950 text-slate-700 transition-all cursor-pointer"
+                  title={t('gallery.download')}
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* High-Definition Pinch-to-Zoom Lightbox Modal */}
       {activePhoto && (
