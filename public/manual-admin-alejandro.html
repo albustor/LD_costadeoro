@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual Simplificado para Don Alejandro · Inscripciones | Liga Costa de Oro 2026</title>
+  <title>Manual Administrativo para Don Alejandro · Inscripciones y Nóminas | Liga Costa de Oro 2026</title>
   <style>
     /* ══════════════════════════════════════════════════════════════════
        ESTÁNDAR EDITORIAL Y DE IMPRESIÓN LIMPIO (CURIOL STUDIO)
@@ -28,7 +28,7 @@
       padding-bottom: 60px;
     }
 
-    /* PANTALLA DE BLOQUEO POR PIN */
+    /* PANTALLA DE BLOQUEO POR CLAVE */
     #lockScreen {
       position: fixed;
       top: 0;
@@ -92,10 +92,10 @@
       padding: 14px 16px;
       border-radius: 12px;
       border: 2px solid #cbd5e1;
-      font-size: 22px;
+      font-size: 20px;
       font-family: ui-monospace, monospace;
       font-weight: 900;
-      letter-spacing: 6px;
+      letter-spacing: 2px;
       text-align: center;
       color: #28375E;
       background: #FAF6F0;
@@ -238,6 +238,46 @@
       padding: 0 20px;
     }
 
+    /* PESTAÑAS PRINCIPALES DEL MANUAL */
+    .manual-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 6px;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .manual-tab-btn {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      background: transparent;
+      color: #64748b;
+    }
+
+    .manual-tab-btn.active {
+      background: #28375E;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(40, 55, 94, 0.2);
+    }
+
+    .manual-tab-btn:hover:not(.active) {
+      background: #FAF6F0;
+      color: #0f172a;
+    }
+
     /* TARJETA BASE */
     .card {
       background: #ffffff;
@@ -282,12 +322,6 @@
       border: 1px solid #cbd5e1;
     }
 
-    .tag-green {
-      background: #ECFDF5;
-      color: #065f46;
-      border: 1px solid #a7f3d0;
-    }
-
     .tag-red {
       background: #FEF2F2;
       color: #991b1b;
@@ -295,7 +329,7 @@
     }
 
     h1 {
-      font-size: 25px;
+      font-size: 24px;
       font-weight: 900;
       color: #0f172a;
       letter-spacing: -0.4px;
@@ -304,7 +338,7 @@
     }
 
     .subtitle {
-      font-size: 14px;
+      font-size: 13.5px;
       color: #475569;
       line-height: 1.5;
     }
@@ -384,7 +418,7 @@
       color: #94a3b8;
     }
 
-    /* SECCIÓN DE PASOS (1, 2, 3) */
+    /* SECCIÓN DE PASOS */
     .step-header {
       display: flex;
       align-items: center;
@@ -416,7 +450,6 @@
       margin-bottom: 16px;
     }
 
-    /* NOTAS DESTACADAS DENTRO DE LOS PASOS */
     .tip-box {
       background: #ECFDF5;
       border-left: 4px solid #10B981;
@@ -426,10 +459,6 @@
       font-size: 12.5px;
       color: #065F46;
       line-height: 1.5;
-    }
-
-    .tip-box strong {
-      color: #047857;
     }
 
     .info-box {
@@ -443,7 +472,7 @@
       line-height: 1.5;
     }
 
-    /* CUADRÍCULA ÚNICA Y CONSOLIDADA DE COLEGIOS (PASO 2) */
+    /* LISTA DE COLEGIOS (PESTAÑA 1) */
     .school-list {
       display: flex;
       flex-direction: column;
@@ -585,75 +614,63 @@
       color: #9A6B38;
     }
 
-    /* PREVISUALIZADOR DEL MENSAJE */
-    .preview-collapsible {
+    /* GENERADOR DE PDF OFICIAL DE NÓMINA (PESTAÑA 2) */
+    .pdf-preview-card {
+      background: #ffffff;
+      border: 2px solid #28375E;
+      border-radius: 14px;
+      padding: 24px;
       margin-top: 18px;
-      background: #FAF6F0;
-      border: 1px solid #e5dccf;
-      border-radius: 12px;
-      padding: 14px 18px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
     }
 
-    .preview-collapsible-title {
-      font-size: 12px;
-      font-weight: 800;
-      color: #9A6B38;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+    .pdf-header-official {
       display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sim-wa-bubble {
-      background: #DCF8C6;
-      color: #111827;
-      padding: 14px 16px;
-      border-radius: 10px;
-      font-size: 12.5px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
-      border: 1px solid #b7e4a1;
-    }
-
-    /* PREGUNTAS FRECUENTES Y CONTINGENCIAS */
-    .faq-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #28375E;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
       gap: 14px;
-      margin-top: 14px;
     }
 
-    .faq-card {
-      background: #FAF6F0;
-      border: 1px solid #e5dccf;
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
-
-    .faq-card h4 {
-      font-size: 13px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 6px;
-    }
-
-    .faq-card p {
+    .pdf-table {
+      width: 100%;
+      border-collapse: collapse;
       font-size: 12px;
-      color: #475569;
-      line-height: 1.45;
+      margin: 14px 0;
     }
 
-    /* PIE DE PÁGINA */
-    footer {
+    .pdf-table th {
+      background: #F0F4FA;
+      color: #28375E;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 800;
+      border: 1px solid #cbd5e1;
+    }
+
+    .pdf-table td {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+    }
+
+    .pdf-signatures {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      margin-top: 36px;
+      padding-top: 14px;
+    }
+
+    .pdf-sig-box {
+      flex: 1;
       text-align: center;
+      border-top: 1px solid #94a3b8;
+      padding-top: 6px;
       font-size: 11px;
-      color: #64748b;
-      margin-top: 30px;
-      padding-top: 16px;
-      border-top: 1px solid #e2e8f0;
+      color: #475569;
     }
 
     /* IMPRESIÓN */
@@ -663,20 +680,20 @@
         color: #000000 !important;
         padding-bottom: 0 !important;
       }
-      #lockScreen, .top-bar {
+      #lockScreen, .top-bar, .manual-tabs, .btn-wa-send, .btn-copy-mini, .btn-preview-link, .btn-print-action {
         display: none !important;
       }
       .container {
         max-width: 100% !important;
         margin: 0 !important;
-        padding: 10mm 12mm !important;
+        padding: 8mm 10mm !important;
       }
       .card {
         border: 1px solid #cccccc !important;
         box-shadow: none !important;
         page-break-inside: avoid;
         margin-bottom: 14px !important;
-        padding: 16px 20px !important;
+        padding: 14px 18px !important;
       }
       .access-banner {
         background: #28375E !important;
@@ -684,8 +701,10 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .btn-wa-send, .btn-copy-mini {
-        display: none !important;
+      .pdf-preview-card {
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
       }
     }
   </style>
@@ -698,7 +717,7 @@
       <div class="lock-icon-wrap">🛡️</div>
       <h2 class="lock-title">Acceso protegido · Don Alejandro</h2>
       <p class="lock-desc">
-        Ingrese su clave maestra de administrador (<strong>2026ControlAdmin</strong>) para acceder a esta guía oficial simplificada.
+        Ingrese su clave maestra de administrador (<strong>2026ControlAdmin</strong>) para acceder a esta guía oficial.
       </p>
 
       <form onsubmit="handleUnlock(event)">
@@ -735,7 +754,7 @@
   <div class="top-bar">
     <div class="top-bar-left">
       <span class="top-bar-title">Liga Costa de Oro 2026 · Curiol Studio</span>
-      <span class="top-bar-badge">Guía Rápida para Alejandro</span>
+      <span class="top-bar-badge">Manual Operativo para Alejandro</span>
     </div>
     <div class="top-bar-actions">
       <span class="print-hint">Desmarque «Encabezados y pies de página» al imprimir</span>
@@ -756,13 +775,13 @@
     <!-- CABECERA PRINCIPAL -->
     <div class="card header-card">
       <div class="tag-row">
-        <span class="tag tag-gold">Guía rápida de 3 pasos</span>
+        <span class="tag tag-gold">Guía de procedimientos oficiales</span>
         <span class="tag tag-blue">Comité organizador MEP 2026</span>
         <span class="tag tag-red">Uso exclusivo de Don Alejandro</span>
       </div>
-      <h1>¿Cómo funciona el proceso de inscripciones de las escuelas?</h1>
+      <h1>Manual operativo: Despacho e inscripción de nóminas</h1>
       <p class="subtitle">
-        Esta guía explica en <strong>3 pasos sencillos</strong> cómo enviar la invitación de inscripción por WhatsApp a cada coordinador escolar y cómo supervisar sus nóminas en la mesa central sin complicaciones técnicas.
+        Herramienta de dos vías para Don Alejandro: <strong>1. Despacho por WhatsApp</strong> para que las escuelas se auto-inscriban, y <strong>2. Registro en mesa técnica</strong> cuando Don Alejandro deba ingresar o corregir atletas directamente y generar su PDF oficial.
       </p>
 
       <div class="meta-box">
@@ -773,7 +792,7 @@
       <div class="security-notice">
         <span>🔒</span>
         <div>
-          <strong>CONFIDENCIALIDAD:</strong> Esta guía y las claves de administración son para uso exclusivo de Don Alejandro y Alberto. <strong>No comparta este manual con los colegios</strong>; a cada colegio únicamente se le envía su mensaje particular de WhatsApp indicado en el Paso 2.
+          <strong>CONFIDENCIALIDAD:</strong> Esta guía y las claves maestras son para uso exclusivo de Don Alejandro y Alberto. <strong>No comparta este manual con los colegios</strong>; a cada institución únicamente se le envía su mensaje particular de WhatsApp o la ficha en PDF de su equipo.
         </div>
       </div>
     </div>
@@ -802,303 +821,438 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         PASO 1: INGRESAR A LA MESA CENTRAL DE ADMINISTRACIÓN
-         ═══════════════════════════════════════════════════════════════ -->
-    <div class="card">
-      <div class="step-header">
-        <span class="step-badge">Paso 1</span>
-        <h2 class="step-heading">Ingresar a la mesa de administración</h2>
-      </div>
-      <p class="step-lead">
-        Don Alejandro ingresa a <a href="https://costadeoro.curiol.studio/admin" target="_blank" style="color: #28375E; font-weight: 800;">costadeoro.curiol.studio/admin</a> desde su teléfono o computadora.
-      </p>
-
-      <!-- TARJETA DESTACADA DE LA CLAVE MAESTRA -->
-      <div style="background: #FAF6F0; border: 2px solid #D9C16C; border-radius: 12px; padding: 14px 18px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-        <div>
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #9A6B38; display: block;">Clave Oficial Maestra de Administración</span>
-          <strong style="font-family: ui-monospace, monospace; font-size: 19px; color: #28375E; letter-spacing: 0.5px;">2026ControlAdmin</strong>
-          <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">Use esta contraseña en la pantalla de bienvenida (o la alternativa corta: <strong>8421</strong>).</span>
-        </div>
-        <button onclick="navigator.clipboard.writeText('2026ControlAdmin'); alert('¡Clave 2026ControlAdmin copiada al portapapeles!');" class="btn-copy-mini" style="background: #9A6B38; color: #ffffff; border: none; padding: 8px 14px; font-weight: 800;">
-          📋 Copiar clave
-        </button>
-      </div>
-
-      <div class="info-box">
-        📍 <strong>Ubicación de las inscripciones:</strong> Una vez adentro, en la barra superior del panel administrativo, hacer clic en la pestaña <strong>«6. Nóminas Oficiales e Inscripciones»</strong>. Allí verá la consola central donde se reciben y supervisan los atletas de todos los colegios.
-      </div>
+    <!-- PESTAÑAS PRINCIPALES DEL MANUAL -->
+    <div class="manual-tabs">
+      <button id="btnTab1" class="manual-tab-btn active" onclick="switchManualTab('tab1')">
+        <span>📨 1. Despacho por WhatsApp a Colegios</span>
+      </button>
+      <button id="btnTab2" class="manual-tab-btn" onclick="switchManualTab('tab2')">
+        <span>👥 2. Registro de Atletas en Mesa & PDF Oficial (Don Alejandro)</span>
+      </button>
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════
-         PASO 2: ENVIAR EL MENSAJE POR WHATSAPP A CADA COLEGIO
+         PESTAÑA 1: DESPACHO POR WHATSAPP A COLEGIOS
          ═══════════════════════════════════════════════════════════════ -->
-    <div class="card">
-      <div class="step-header">
-        <span class="step-badge">Paso 2</span>
-        <h2 class="step-heading">Despachar la invitación por WhatsApp a cada coordinador</h2>
-      </div>
-      <p class="step-lead">
-        En la lista de abajo, Don Alejandro solo debe pulsar el botón verde <strong>«📲 Enviar WhatsApp»</strong> del colegio correspondiente. Esto le abrirá WhatsApp con el mensaje ya redactado y el enlace personalizado de ese colegio listo para enviar.
-      </p>
+    <div id="paneTab1">
 
-      <!-- EXPLICACIÓN CLAVE DE INGRESO DIRECTO VS PIN -->
-      <div class="tip-box">
-        💡 <strong>¿Cómo funciona el enlace para el coordinador?</strong><br>
-        1. <strong>Entrada directa y automática:</strong> Cuando el profesor de la escuela toca el enlace en su WhatsApp, <strong>entra directamente al formulario</strong> sin tener que escribir nada, porque su PIN ya va incorporado en el enlace.<br>
-        2. <strong>El PIN del mensaje es solo de respaldo:</strong> El PIN de 4 dígitos que aparece en el texto sirve por si más adelante el profesor abre el enlace desde otra computadora y el sistema le solicita confirmarlo.
-      </div>
+      <!-- PASO 1: ACCESO -->
+      <div class="card">
+        <div class="step-header">
+          <span class="step-badge">Paso 1</span>
+          <h2 class="step-heading">Ingresar a la mesa de administración</h2>
+        </div>
+        <p class="step-lead">
+          Don Alejandro ingresa a <a href="https://costadeoro.curiol.studio/admin" target="_blank" style="color: #28375E; font-weight: 800;">costadeoro.curiol.studio/admin</a> desde su teléfono o computadora.
+        </p>
 
-      <!-- LISTA ÚNICA Y DEFINITIVA DE COLEGIOS -->
-      <div class="school-list">
-
-        <!-- La Paz Cabo Velas -->
-        <div class="school-row">
-          <div class="school-info">
-            <div class="school-emoji">🌊</div>
-            <div>
-              <div class="school-title">La Paz Community School Cabo Velas</div>
-              <div class="school-sub">Brasilito, Cabo Velas</div>
-            </div>
+        <!-- TARJETA DESTACADA CLAVE MAESTRA -->
+        <div style="background: #FAF6F0; border: 2px solid #D9C16C; border-radius: 12px; padding: 14px 18px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div>
+            <span style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #9A6B38; display: block;">Clave Oficial Maestra de Administración</span>
+            <strong style="font-family: ui-monospace, monospace; font-size: 19px; color: #28375E; letter-spacing: 0.5px;">2026ControlAdmin</strong>
+            <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">Use esta contraseña en la pantalla de bienvenida (o la alternativa corta: <strong>8421</strong>).</span>
           </div>
-          <div class="school-pin-col">
-            <span class="pin-label-small">PIN Respaldo</span>
-            <span class="pin-number">1001</span>
-          </div>
-          <div class="school-buttons">
-            <button class="btn-wa-send" onclick="sendWhatsApp('la-paz-cabo-velas')">
-              📲 Enviar WhatsApp
-            </button>
-            <button class="btn-copy-mini" onclick="copyMessage('la-paz-cabo-velas')">
-              📋 Copiar
-            </button>
-            <a href="https://costadeoro.curiol.studio/registro-nomina?school=la-paz-cabo-velas&pin=1001" target="_blank" class="btn-preview-link">
-              Ver formulario ↗
-            </a>
-          </div>
+          <button onclick="navigator.clipboard.writeText('2026ControlAdmin'); alert('¡Clave 2026ControlAdmin copiada al portapapeles!');" class="btn-copy-mini" style="background: #9A6B38; color: #ffffff; border: none; padding: 8px 14px; font-weight: 800;">
+            📋 Copiar clave
+          </button>
         </div>
 
-        <!-- La Paz Tempisque -->
-        <div class="school-row">
-          <div class="school-info">
-            <div class="school-emoji">🌿</div>
-            <div>
-              <div class="school-title">La Paz Community School Tempisque</div>
-              <div class="school-sub">Comunidad, Carrillo</div>
-            </div>
-          </div>
-          <div class="school-pin-col">
-            <span class="pin-label-small">PIN Respaldo</span>
-            <span class="pin-number">1002</span>
-          </div>
-          <div class="school-buttons">
-            <button class="btn-wa-send" onclick="sendWhatsApp('la-paz-tempisque')">
-              📲 Enviar WhatsApp
-            </button>
-            <button class="btn-copy-mini" onclick="copyMessage('la-paz-tempisque')">
-              📋 Copiar
-            </button>
-            <a href="https://costadeoro.curiol.studio/registro-nomina?school=la-paz-tempisque&pin=1002" target="_blank" class="btn-preview-link">
-              Ver formulario ↗
-            </a>
-          </div>
+        <div class="info-box">
+          📍 <strong>Ubicación de las inscripciones:</strong> En la barra superior del panel administrativo, hacer clic en la pestaña <strong>«6. Nóminas Oficiales e Inscripciones»</strong> para abrir la consola.
         </div>
-
-        <!-- CRIA -->
-        <div class="school-row">
-          <div class="school-info">
-            <div class="school-emoji">🦅</div>
-            <div>
-              <div class="school-title">Costa Rica International Academy (CRIA)</div>
-              <div class="school-sub">Playa Flamingo, Santa Cruz</div>
-            </div>
-          </div>
-          <div class="school-pin-col">
-            <span class="pin-label-small">PIN Respaldo</span>
-            <span class="pin-number">2001</span>
-          </div>
-          <div class="school-buttons">
-            <button class="btn-wa-send" onclick="sendWhatsApp('cria')">
-              📲 Enviar WhatsApp
-            </button>
-            <button class="btn-copy-mini" onclick="copyMessage('cria')">
-              📋 Copiar
-            </button>
-            <a href="https://costadeoro.curiol.studio/registro-nomina?school=cria&pin=2001" target="_blank" class="btn-preview-link">
-              Ver formulario ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Journey School -->
-        <div class="school-row">
-          <div class="school-info">
-            <div class="school-emoji">🧭</div>
-            <div>
-              <div class="school-title">The Journey School</div>
-              <div class="school-sub">Tamarindo, Santa Cruz</div>
-            </div>
-          </div>
-          <div class="school-pin-col">
-            <span class="pin-label-small">PIN Respaldo</span>
-            <span class="pin-number">3001</span>
-          </div>
-          <div class="school-buttons">
-            <button class="btn-wa-send" onclick="sendWhatsApp('journey-school')">
-              📲 Enviar WhatsApp
-            </button>
-            <button class="btn-copy-mini" onclick="copyMessage('journey-school')">
-              📋 Copiar
-            </button>
-            <a href="https://costadeoro.curiol.studio/registro-nomina?school=journey-school&pin=3001" target="_blank" class="btn-preview-link">
-              Ver formulario ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Monseñor Vittorino -->
-        <div class="school-row">
-          <div class="school-info">
-            <div class="school-emoji">🛡️</div>
-            <div>
-              <div class="school-title">Monseñor Vittorino Girardi Stellin</div>
-              <div class="school-sub">Huacas, Santa Cruz</div>
-            </div>
-          </div>
-          <div class="school-pin-col">
-            <span class="pin-label-small">PIN Respaldo</span>
-            <span class="pin-number">4001</span>
-          </div>
-          <div class="school-buttons">
-            <button class="btn-wa-send" onclick="sendWhatsApp('vittorino')">
-              📲 Enviar WhatsApp
-            </button>
-            <button class="btn-copy-mini" onclick="copyMessage('vittorino')">
-              📋 Copiar
-            </button>
-            <a href="https://costadeoro.curiol.studio/registro-nomina?school=vittorino&pin=4001" target="_blank" class="btn-preview-link">
-              Ver formulario ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Educarte -->
-        <div class="school-row">
-          <div class="school-info">
-            <div class="school-emoji">🎓</div>
-            <div>
-              <div class="school-title">Educarte Bilingual High School</div>
-              <div class="school-sub">Tamarindo / Villarreal</div>
-            </div>
-          </div>
-          <div class="school-pin-col">
-            <span class="pin-label-small">PIN Respaldo</span>
-            <span class="pin-number">5001</span>
-          </div>
-          <div class="school-buttons">
-            <button class="btn-wa-send" onclick="sendWhatsApp('educarte')">
-              📲 Enviar WhatsApp
-            </button>
-            <button class="btn-copy-mini" onclick="copyMessage('educarte')">
-              📋 Copiar
-            </button>
-            <a href="https://costadeoro.curiol.studio/registro-nomina?school=educarte&pin=5001" target="_blank" class="btn-preview-link">
-              Ver formulario ↗
-            </a>
-          </div>
-        </div>
-
       </div>
 
-      <!-- PREVISUALIZADOR DEL MENSAJE DE WHATSAPP -->
-      <div class="preview-collapsible">
-        <div class="preview-collapsible-title">
-          <span>👁️ Así se ve el mensaje que recibe el colegio por WhatsApp:</span>
+      <!-- PASO 2: DESPACHO WHATSAPP -->
+      <div class="card">
+        <div class="step-header">
+          <span class="step-badge">Paso 2</span>
+          <h2 class="step-heading">Despachar la invitación por WhatsApp a cada coordinador</h2>
         </div>
-        <div class="sim-wa-bubble">🏆 *FESTIVAL DEPORTIVO LIGA COSTA DE ORO 2026*
-📋 *Acreditación oficial de atletas y nóminas institucionales*
+        <p class="step-lead">
+          En la lista de abajo, Don Alejandro solo debe pulsar el botón verde <strong>«📲 Enviar WhatsApp»</strong> del colegio correspondiente para abrir WhatsApp con el mensaje y enlace listos.
+        </p>
 
-Estimado/a coordinador/a deportivo de *Costa Rica International Academy (CRIA)*:
+        <div class="tip-box">
+          💡 <strong>Regla técnica importante:</strong><br>
+          1. <strong>Entrada directa y automática:</strong> El profesor toca el enlace en WhatsApp y <strong>entra directamente al formulario</strong> sin digitar ningún código.<br>
+          2. <strong>El PIN del mensaje es solo de respaldo:</strong> Sirve únicamente por si abren luego en otra computadora y requieren confirmarlo.
+        </div>
 
-Le compartimos el enlace oficial para el registro e inscripción de atletas de su institución:
+        <!-- LISTA CONSOLIDADA DE COLEGIOS -->
+        <div class="school-list">
 
-🔗 *Enlace directo:* https://costadeoro.curiol.studio/registro-nomina?school=cria&pin=2001
-🔑 *PIN institucional de acceso (respaldo):* 2001
-_(Al abrir el enlace en su teléfono o computadora, el formulario se activa y desbloquea automáticamente sin tener que digitar el PIN)_
+          <div class="school-row">
+            <div class="school-info">
+              <div class="school-emoji">🌊</div>
+              <div>
+                <div class="school-title">La Paz Community School Cabo Velas</div>
+                <div class="school-sub">Brasilito, Cabo Velas</div>
+              </div>
+            </div>
+            <div class="school-pin-col">
+              <span class="pin-label-small">PIN Respaldo</span>
+              <span class="pin-number">1001</span>
+            </div>
+            <div class="school-buttons">
+              <button class="btn-wa-send" onclick="sendWhatsApp('la-paz-cabo-velas')">
+                📲 Enviar WhatsApp
+              </button>
+              <button class="btn-copy-mini" onclick="copyMessage('la-paz-cabo-velas')">
+                📋 Copiar
+              </button>
+              <a href="https://costadeoro.curiol.studio/registro-nomina?school=la-paz-cabo-velas&pin=1001" target="_blank" class="btn-preview-link">
+                Ver formulario ↗
+              </a>
+            </div>
+          </div>
 
-📋 *Instrucciones para completar la inscripción:*
-1️⃣ Ingrese al enlace directo.
-2️⃣ Inscriba a sus atletas en línea por disciplina (fútbol, voleibol y baloncesto) con sus dos apellidos o descargue la *Plantilla oficial de Excel (.xls)*, llénela y cárguela en el mismo portal.
-3️⃣ Toda la información registrada alimenta de forma inmediata las actas de juego del torneo.
+          <div class="school-row">
+            <div class="school-info">
+              <div class="school-emoji">🌿</div>
+              <div>
+                <div class="school-title">La Paz Community School Tempisque</div>
+                <div class="school-sub">Comunidad, Carrillo</div>
+              </div>
+            </div>
+            <div class="school-pin-col">
+              <span class="pin-label-small">PIN Respaldo</span>
+              <span class="pin-number">1002</span>
+            </div>
+            <div class="school-buttons">
+              <button class="btn-wa-send" onclick="sendWhatsApp('la-paz-tempisque')">
+                📲 Enviar WhatsApp
+              </button>
+              <button class="btn-copy-mini" onclick="copyMessage('la-paz-tempisque')">
+                📋 Copiar
+              </button>
+              <a href="https://costadeoro.curiol.studio/registro-nomina?school=la-paz-tempisque&pin=1002" target="_blank" class="btn-preview-link">
+                Ver formulario ↗
+              </a>
+            </div>
+          </div>
 
-¡Muchos éxitos a toda la delegación en la competencia!
-_Comité Organizador · Liga Costa de Oro 2026_</div>
+          <div class="school-row">
+            <div class="school-info">
+              <div class="school-emoji">🦅</div>
+              <div>
+                <div class="school-title">Costa Rica International Academy (CRIA)</div>
+                <div class="school-sub">Playa Flamingo, Santa Cruz</div>
+              </div>
+            </div>
+            <div class="school-pin-col">
+              <span class="pin-label-small">PIN Respaldo</span>
+              <span class="pin-number">2001</span>
+            </div>
+            <div class="school-buttons">
+              <button class="btn-wa-send" onclick="sendWhatsApp('cria')">
+                📲 Enviar WhatsApp
+              </button>
+              <button class="btn-copy-mini" onclick="copyMessage('cria')">
+                📋 Copiar
+              </button>
+              <a href="https://costadeoro.curiol.studio/registro-nomina?school=cria&pin=2001" target="_blank" class="btn-preview-link">
+                Ver formulario ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="school-row">
+            <div class="school-info">
+              <div class="school-emoji">🧭</div>
+              <div>
+                <div class="school-title">The Journey School</div>
+                <div class="school-sub">Tamarindo, Santa Cruz</div>
+              </div>
+            </div>
+            <div class="school-pin-col">
+              <span class="pin-label-small">PIN Respaldo</span>
+              <span class="pin-number">3001</span>
+            </div>
+            <div class="school-buttons">
+              <button class="btn-wa-send" onclick="sendWhatsApp('journey-school')">
+                📲 Enviar WhatsApp
+              </button>
+              <button class="btn-copy-mini" onclick="copyMessage('journey-school')">
+                📋 Copiar
+              </button>
+              <a href="https://costadeoro.curiol.studio/registro-nomina?school=journey-school&pin=3001" target="_blank" class="btn-preview-link">
+                Ver formulario ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="school-row">
+            <div class="school-info">
+              <div class="school-emoji">🛡️</div>
+              <div>
+                <div class="school-title">Monseñor Vittorino Girardi Stellin</div>
+                <div class="school-sub">Huacas, Santa Cruz</div>
+              </div>
+            </div>
+            <div class="school-pin-col">
+              <span class="pin-label-small">PIN Respaldo</span>
+              <span class="pin-number">4001</span>
+            </div>
+            <div class="school-buttons">
+              <button class="btn-wa-send" onclick="sendWhatsApp('vittorino')">
+                📲 Enviar WhatsApp
+              </button>
+              <button class="btn-copy-mini" onclick="copyMessage('vittorino')">
+                📋 Copiar
+              </button>
+              <a href="https://costadeoro.curiol.studio/registro-nomina?school=vittorino&pin=4001" target="_blank" class="btn-preview-link">
+                Ver formulario ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="school-row">
+            <div class="school-info">
+              <div class="school-emoji">🎓</div>
+              <div>
+                <div class="school-title">Educarte Bilingual High School</div>
+                <div class="school-sub">Tamarindo / Villarreal</div>
+              </div>
+            </div>
+            <div class="school-pin-col">
+              <span class="pin-label-small">PIN Respaldo</span>
+              <span class="pin-number">5001</span>
+            </div>
+            <div class="school-buttons">
+              <button class="btn-wa-send" onclick="sendWhatsApp('educarte')">
+                📲 Enviar WhatsApp
+              </button>
+              <button class="btn-copy-mini" onclick="copyMessage('educarte')">
+                📋 Copiar
+              </button>
+              <a href="https://costadeoro.curiol.studio/registro-nomina?school=educarte&pin=5001" target="_blank" class="btn-preview-link">
+                Ver formulario ↗
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PASO 3: SUPERVISIÓN -->
+      <div class="card">
+        <div class="step-header">
+          <span class="step-badge">Paso 3</span>
+          <h2 class="step-heading">El colegio inscribe y Don Alejandro supervisa en la mesa</h2>
+        </div>
+        <p class="step-lead">
+          Una vez enviado el enlace, el colegio completa la nómina y los datos se actualizan en vivo en la pantalla de Don Alejandro:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <div style="background: #FAF6F0; border: 1px solid #e5dccf; border-radius: 14px; padding: 18px;">
+            <h3 style="font-size: 14px; font-weight: 800; color: #28375E; margin-bottom: 8px;">
+              A. Lo que hace el profesor del colegio:
+            </h3>
+            <ul style="font-size: 12.5px; color: #334155; line-height: 1.6; padding-left: 18px;">
+              <li>Abre el enlace en su celular o PC (entra de una vez sin clave).</li>
+              <li>Agrega a sus atletas escribiendo su <strong>nombre con dos apellidos</strong>, dorsal, año y posición.</li>
+              <li>Si tiene muchos alumnos, puede subir la plantilla de Excel (.xls) con un clic.</li>
+              <li>Presiona <strong>«Guardar Nómina Oficial»</strong>.</li>
+            </ul>
+          </div>
+
+          <div style="background: #F0F4FA; border: 1px solid #cbd5e1; border-radius: 14px; padding: 18px;">
+            <h3 style="font-size: 14px; font-weight: 800; color: #047857; margin-bottom: 8px;">
+              B. Lo que ve Don Alejandro en la Mesa:
+            </h3>
+            <ul style="font-size: 12.5px; color: #334155; line-height: 1.6; padding-left: 18px;">
+              <li>En la pestaña 6 del panel admin, ve reflejados los atletas en tiempo real.</li>
+              <li>Puede revisar capitanes, edades y corregir detalles si el profesor lo solicita.</li>
+              <li>Presiona <strong>«Exportar Todo en Excel (.xls)»</strong> para entregar las actas a los árbitros.</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════
-         PASO 3: LO QUE HACE EL COLEGIO Y LO QUE RECIBE LA MESA
+         PESTAÑA 2: REGISTRO DE ATLETAS EN MESA & GENERADOR DE PDF
          ═══════════════════════════════════════════════════════════════ -->
-    <div class="card">
-      <div class="step-header">
-        <span class="step-badge">Paso 3</span>
-        <h2 class="step-heading">El colegio inscribe y Don Alejandro supervisa en la mesa</h2>
-      </div>
-      <p class="step-lead">
-        Una vez enviado el mensaje, el proceso queda en manos del coordinador deportivo y Don Alejandro solo monitorea los avances:
-      </p>
+    <div id="paneTab2" style="display: none;">
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
-        
-        <div style="background: #FAF6F0; border: 1px solid #e5dccf; border-radius: 14px; padding: 18px;">
-          <h3 style="font-size: 14px; font-weight: 800; color: #28375E; margin-bottom: 8px;">
-            A. Lo que hace el profesor del colegio:
-          </h3>
-          <ul style="font-size: 12.5px; color: #334155; line-height: 1.6; padding-left: 18px;">
-            <li>Abre el enlace desde su teléfono o computadora (entra de una vez sin clave).</li>
-            <li>Agrega a sus atletas escribiendo su <strong>nombre con dos apellidos</strong>, dorsal, año y posición.</li>
-            <li>Si ya tiene una lista grande, puede descargar la plantilla de Excel, rellenarla y subirla con un solo clic.</li>
-            <li>Presiona <strong>«Guardar Nómina Oficial»</strong>.</li>
-          </ul>
+      <!-- GUÍA PRÁCTICA PARA DON ALEJANDRO -->
+      <div class="card">
+        <div class="step-header">
+          <span class="step-badge" style="background: #28375E;">Mesa Central</span>
+          <h2 class="step-heading">¿Cómo inscribe Don Alejandro a los estudiantes directamente?</h2>
+        </div>
+        <p class="step-lead">
+          Si un profesor le envía los atletas por WhatsApp, por correo o le dicta la lista en persona, Don Alejandro puede ingresarlos directamente en el sistema siguiendo estos pasos:
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+
+          <div style="background: #FAF6F0; border-left: 4px solid #9A6B38; padding: 14px 18px; border-radius: 0 12px 12px 0;">
+            <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 4px;">
+              1. En el panel admin (`/admin`), ir a la pestaña 6 y elegir el equipo:
+            </strong>
+            <p style="font-size: 12.5px; color: #475569;">
+              En los selectores superiores de la pestaña 6, seleccione la <strong>Institución</strong> (ej. <em>CRIA</em>), el <strong>Deporte</strong> (ej. <em>Fútbol</em>) y la <strong>Categoría</strong> (ej. <em>Cat C Masculino</em>). El sistema mostrará la nómina de ese equipo.
+            </p>
+          </div>
+
+          <div style="background: #FAF6F0; border-left: 4px solid #9A6B38; padding: 14px 18px; border-radius: 0 12px 12px 0;">
+            <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 4px;">
+              2. Completar los campos obligatorios del estudiante:
+            </strong>
+            <ul style="font-size: 12.5px; color: #475569; padding-left: 18px; line-height: 1.6;">
+              <li><strong>Nombre y dos apellidos obligatorios:</strong> Ej: <em>Mateo Johnson Cordero</em>. (El sistema exige los dos apellidos para cumplir con la normativa de arbitraje MEP).</li>
+              <li><strong>Número de camiseta / dorsal:</strong> Número único para el jugador en ese equipo.</li>
+              <li><strong>Año de nacimiento:</strong> Ej: <em>2011</em> o <em>2012</em> para Categoría C.</li>
+              <li><strong>Posición:</strong> Portero/a, Defensa, Mediocampo, Delantero/a, etc.</li>
+              <li><strong>Capitán:</strong> Marque la casilla si es el capitán de cancha.</li>
+              <li>Presione el botón <strong>«+ Agregar Jugador»</strong>.</li>
+            </ul>
+          </div>
+
+          <div style="background: #FAF6F0; border-left: 4px solid #9A6B38; padding: 14px 18px; border-radius: 0 12px 12px 0;">
+            <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 4px;">
+              3. Guardar la nómina en la base de datos:
+            </strong>
+            <p style="font-size: 12.5px; color: #475569;">
+              Al terminar de ingresar a los atletas (o de subir el archivo Excel si se lo pasaron en digital), pulse el botón verde <strong>«💾 Guardar Nómina Oficial»</strong>. Los datos quedan persistidos al instante en la nube.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- GENERADOR DE FICHA OFICIAL EN PDF Y MENSAJE DE CONFIRMACIÓN -->
+      <div class="card">
+        <div class="step-header">
+          <span class="step-badge" style="background: #047857;">Exportar PDF</span>
+          <h2 class="step-heading">Generar Ficha Oficial en PDF y enviar por WhatsApp</h2>
+        </div>
+        <p class="step-lead">
+          Utilice esta herramienta para generar la <strong>Ficha Oficial Imprimible de Nómina en PDF</strong> de cualquier colegio para enviársela como comprobante al coordinador por WhatsApp o tenerla en la mesa técnica:
+        </p>
+
+        <!-- SELECTOR DE COLEGIO PARA PDF -->
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 800; color: #28375E; display: block; margin-bottom: 4px;">Colegio:</label>
+            <select id="pdfSchoolSelect" onchange="updatePdfPreview()" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 700; background: #ffffff;">
+              <option value="cria">Costa Rica International Academy (CRIA)</option>
+              <option value="la-paz-cabo-velas">La Paz Cabo Velas</option>
+              <option value="la-paz-tempisque">La Paz Tempisque</option>
+              <option value="journey-school">The Journey School</option>
+              <option value="vittorino">Monseñor Vittorino</option>
+              <option value="educarte">Educarte Bilingual High School</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 12px; font-weight: 800; color: #28375E; display: block; margin-bottom: 4px;">Deporte / Categoría:</label>
+            <select id="pdfSportSelect" onchange="updatePdfPreview()" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 700; background: #ffffff;">
+              <option value="Fútbol · Categoría C Masculino">Fútbol · Categoría C Masculino</option>
+              <option value="Fútbol · Categoría Femenina">Fútbol · Categoría Femenina</option>
+              <option value="Voleibol · Categoría C">Voleibol · Categoría C</option>
+              <option value="Baloncesto · Categoría C">Baloncesto · Categoría C</option>
+            </select>
+          </div>
+
+          <div style="align-self: flex-end;">
+            <button onclick="printPdfFicha()" class="btn-print-action" style="background: #28375E; color: #ffffff; border: none; padding: 9px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              📄 Imprimir o guardar Ficha en PDF
+            </button>
+          </div>
         </div>
 
-        <div style="background: #F0F4FA; border: 1px solid #cbd5e1; border-radius: 14px; padding: 18px;">
-          <h3 style="font-size: 14px; font-weight: 800; color: #047857; margin-bottom: 8px;">
-            B. Lo que ve Don Alejandro en la Mesa Central:
-          </h3>
-          <ul style="font-size: 12.5px; color: #334155; line-height: 1.6; padding-left: 18px;">
-            <li>En la pestaña 6 del panel admin, Don Alejandro ve cómo cada colegio va sumando sus atletas en tiempo real.</li>
-            <li>Puede revisar capitanes, verificar edades y corregir cualquier detalle si el profesor se lo pide.</li>
-            <li>Puede descargar el Excel maestro de todas las nóminas para entregarlo a los árbitros y anotadores en las canchas.</li>
-          </ul>
+        <!-- VISTA PREVIA DE LA FICHA OFICIAL IMPRIMIBLE -->
+        <div id="pdfFichaArea" class="pdf-preview-card">
+          <div class="pdf-header-official">
+            <div>
+              <span style="font-size: 10px; font-weight: 800; color: #9A6B38; text-transform: uppercase; letter-spacing: 0.5px;">Comité Organizador · Liga Costa de Oro 2026</span>
+              <h2 id="pdfFichaSchoolName" style="font-size: 18px; font-weight: 900; color: #0f172a; margin: 2px 0;">Costa Rica International Academy (CRIA)</h2>
+              <p id="pdfFichaSport" style="font-size: 12px; color: #475569; font-weight: 700;">Nómina Oficial · Fútbol · Categoría C Masculino</p>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 11px; font-weight: 800; color: #047857; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 2px 8px; border-radius: 6px; display: inline-block;">✓ Acreditación Oficial</span>
+              <div style="font-size: 10px; color: #64748b; margin-top: 4px;">Edición 2026 · Guanacaste</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 12px; font-size: 11.5px; color: #334155; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div><strong>Cuerpo Técnico:</strong> Entrenador Principal: <em>Registrado en Mesa</em></div>
+            <div><strong>Sede Oficial:</strong> Campus Brasilito / Tempisque</div>
+          </div>
+
+          <table class="pdf-table">
+            <thead>
+              <tr>
+                <th style="width: 45px; text-align: center;">N.°</th>
+                <th style="width: 55px; text-align: center;">Dorsal</th>
+                <th>Nombre Completo del Atleta (Dos Apellidos)</th>
+                <th style="width: 75px; text-align: center;">Año Nac.</th>
+                <th>Posición Táctica</th>
+                <th style="width: 75px; text-align: center;">Capitán</th>
+              </tr>
+            </thead>
+            <tbody id="pdfTableBody">
+              <!-- Filas dinámicas -->
+            </tbody>
+          </table>
+
+          <div class="pdf-signatures">
+            <div class="pdf-sig-box">
+              <strong>Firma Coordinador Deportivo</strong><br>
+              Institución Educativa
+            </div>
+            <div class="pdf-sig-box">
+              <strong>Firma Mesa Técnica / Don Alejandro</strong><br>
+              Comité Organizador Costa de Oro 2026
+            </div>
+          </div>
+        </div>
+
+        <!-- GENERADOR DE MENSAJE DE CONFIRMACIÓN POR WHATSAPP -->
+        <div style="background: #F0F4FA; border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px; margin-top: 18px;">
+          <strong style="font-size: 13px; color: #28375E; display: block; margin-bottom: 6px;">
+            📲 Mensaje para confirmar la nómina al profesor por WhatsApp:
+          </strong>
+          <div id="pdfWhatsAppText" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.55; white-space: pre-wrap; color: #1e293b; margin-bottom: 10px;"></div>
+          
+          <button onclick="copyPdfWhatsAppMessage()" class="btn-copy-mini" style="background: #9A6B38; color: #ffffff; border: none; padding: 8px 14px; font-weight: 800;">
+            📋 Copiar texto para WhatsApp
+          </button>
+          <button onclick="sendPdfWhatsAppDirect()" class="btn-wa-send" style="padding: 8px 14px; font-size: 11px; margin-left: 8px;">
+            📲 Abrir WhatsApp con esta confirmación
+          </button>
         </div>
 
       </div>
+
     </div>
 
-    <!-- PREGUNTAS FRECUENTES Y CONTINGENCIAS -->
+    <!-- PREGUNTAS FRECUENTES Y CONTINGENCIAS (COMÚN A AMBAS PESTAÑAS) -->
     <div class="card">
       <div class="step-header">
         <span class="step-badge" style="background: #28375E;">Ayuda</span>
-        <h2 class="step-heading">Respuestas rápidas para emergencias</h2>
+        <h2 class="step-heading">Respuestas rápidas para emergencias en mesa</h2>
       </div>
 
-      <div class="faq-grid">
-        <div class="faq-card">
-          <h4>¿Qué pasa si un profesor no tiene internet?</h4>
-          <p>Don Alejandro puede inscribir a los jugadores directamente desde la pestaña 6 del panel admin, o abrir el formulario del colegio con el <strong>PIN Maestro 9999</strong>.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+        <div style="background: #FAF6F0; border: 1px solid #e5dccf; border-radius: 12px; padding: 14px 16px;">
+          <h4 style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">¿Qué pasa si un profesor no tiene internet?</h4>
+          <p style="font-size: 12px; color: #475569; line-height: 1.45;">Don Alejandro puede inscribir a los jugadores directamente desde la pestaña 6 del panel admin, o abrir el formulario del colegio con el <strong>PIN Maestro 9999</strong>.</p>
         </div>
 
-        <div class="faq-card">
-          <h4>¿Un colegio puede cambiar un jugador lesionado?</h4>
-          <p>Sí. El coordinador vuelve a tocar su mismo enlace de WhatsApp en cualquier momento, cambia el nombre del alumno y guarda. Se actualiza de inmediato.</p>
+        <div style="background: #FAF6F0; border: 1px solid #e5dccf; border-radius: 12px; padding: 14px 16px;">
+          <h4 style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">¿Un colegio puede cambiar un jugador lesionado?</h4>
+          <p style="font-size: 12px; color: #475569; line-height: 1.45;">Sí. El coordinador vuelve a tocar su mismo enlace de WhatsApp en cualquier momento, cambia el nombre del alumno y guarda. Se actualiza de inmediato.</p>
         </div>
 
-        <div class="faq-card">
-          <h4>¿Los padres de familia ven estas contraseñas?</h4>
-          <p>No. Esta información está totalmente protegida por el PIN de este manual y la clave del panel admin. El público general solo ve partidos y resultados.</p>
+        <div style="background: #FAF6F0; border: 1px solid #e5dccf; border-radius: 12px; padding: 14px 16px;">
+          <h4 style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">¿Los padres de familia ven estas contraseñas?</h4>
+          <p style="font-size: 12px; color: #475569; line-height: 1.45;">No. Esta información está totalmente protegida por la clave <strong>2026ControlAdmin</strong>. El público general solo ve partidos y marcadores.</p>
         </div>
       </div>
     </div>
@@ -1111,8 +1265,10 @@ _Comité Organizador · Liga Costa de Oro 2026_</div>
 
   </div>
 
-  <!-- SCRIPT DE DESPACHO Y SEGURIDAD -->
+  <!-- SCRIPT DE DESPACHO, PESTAÑAS Y GENERACIÓN DE PDF -->
   <script>
+    const VALID_KEYS = ['2026controladmin', '8421'];
+
     function isValidKey(val) {
       if (!val) return false;
       const clean = val.trim().toLowerCase();
@@ -1157,42 +1313,101 @@ _Comité Organizador · Liga Costa de Oro 2026_</div>
       input.focus();
     }
 
+    // GESTIÓN DE PESTAÑAS DEL MANUAL
+    function switchManualTab(tab) {
+      const btn1 = document.getElementById('btnTab1');
+      const btn2 = document.getElementById('btnTab2');
+      const pane1 = document.getElementById('paneTab1');
+      const pane2 = document.getElementById('paneTab2');
+
+      if (tab === 'tab1') {
+        btn1.classList.add('active');
+        btn2.classList.remove('active');
+        pane1.style.display = 'block';
+        pane2.style.display = 'none';
+      } else {
+        btn2.classList.add('active');
+        btn1.classList.remove('active');
+        pane2.style.display = 'block';
+        pane1.style.display = 'none';
+        updatePdfPreview();
+      }
+    }
+
     const SCHOOLS_DATA = {
       'la-paz-cabo-velas': {
         name: 'La Paz Community School Cabo Velas',
         short: 'La Paz Cabo Velas',
         pin: '1001',
-        url: 'https://costadeoro.curiol.studio/registro-nomina?school=la-paz-cabo-velas&pin=1001'
+        url: 'https://costadeoro.curiol.studio/registro-nomina?school=la-paz-cabo-velas&pin=1001',
+        samplePlayers: [
+          { dorsal: 1, name: 'Sebastián Mora Quirós', year: 2011, pos: 'Portero / Titular', cap: false },
+          { dorsal: 4, name: 'Felipe Cordero Brenes', year: 2011, pos: 'Defensa / Campo', cap: false },
+          { dorsal: 10, name: 'Nicolás Vargas Arroyo', year: 2011, pos: 'Mediocampo / Armador', cap: true },
+          { dorsal: 7, name: 'Ignacio Rojas Monge', year: 2012, pos: 'Delantero / Extremo', cap: false },
+          { dorsal: 9, name: 'Emilio Salazar Fonseca', year: 2011, pos: 'Delantero Centro', cap: false }
+        ]
       },
       'la-paz-tempisque': {
         name: 'La Paz Community School Tempisque',
         short: 'La Paz Tempisque',
         pin: '1002',
-        url: 'https://costadeoro.curiol.studio/registro-nomina?school=la-paz-tempisque&pin=1002'
+        url: 'https://costadeoro.curiol.studio/registro-nomina?school=la-paz-tempisque&pin=1002',
+        samplePlayers: [
+          { dorsal: 1, name: 'Camila Navarro Salas', year: 2012, pos: 'Portera', cap: false },
+          { dorsal: 7, name: 'Lucía Monge Solís', year: 2012, pos: 'Delantera / Capitana', cap: true },
+          { dorsal: 5, name: 'Mariana Zúñiga Castillo', year: 2012, pos: 'Defensa', cap: false },
+          { dorsal: 8, name: 'Valentina Soto Miranda', year: 2012, pos: 'Mediocampo', cap: false }
+        ]
       },
       'cria': {
         name: 'Costa Rica International Academy',
         short: 'CRIA',
         pin: '2001',
-        url: 'https://costadeoro.curiol.studio/registro-nomina?school=cria&pin=2001'
+        url: 'https://costadeoro.curiol.studio/registro-nomina?school=cria&pin=2001',
+        samplePlayers: [
+          { dorsal: 1, name: 'Alexander David Smith Mora', year: 2011, pos: 'Portero Titular', cap: false },
+          { dorsal: 4, name: 'Santiago Miller Gutiérrez', year: 2011, pos: 'Defensa Central', cap: false },
+          { dorsal: 8, name: 'Lucas Taylor Céspedes', year: 2012, pos: 'Volante Mixto', cap: false },
+          { dorsal: 9, name: 'Mateo Johnson Cordero', year: 2011, pos: 'Delantero / Capitán', cap: true },
+          { dorsal: 11, name: 'Oliver Wilson Carvajal', year: 2011, pos: 'Extremo Izquierdo', cap: false }
+        ]
       },
       'journey-school': {
         name: 'The Journey School',
         short: 'Journey School',
         pin: '3001',
-        url: 'https://costadeoro.curiol.studio/registro-nomina?school=journey-school&pin=3001'
+        url: 'https://costadeoro.curiol.studio/registro-nomina?school=journey-school&pin=3001',
+        samplePlayers: [
+          { dorsal: 1, name: 'Emma Rodríguez Villalobos', year: 2012, pos: 'Portera', cap: false },
+          { dorsal: 4, name: 'Daniela Arias Umaña', year: 2012, pos: 'Defensa', cap: false },
+          { dorsal: 10, name: 'Paula Jiménez Méndez', year: 2012, pos: 'Mediocampo', cap: false },
+          { dorsal: 11, name: 'Sofía Davis Esquivel', year: 2012, pos: 'Delantera / Capitana', cap: true }
+        ]
       },
       'vittorino': {
         name: 'Centro Educativo Católico Monseñor Vittorino Girardi Stellin',
         short: 'Monseñor Vittorino',
         pin: '4001',
-        url: 'https://costadeoro.curiol.studio/registro-nomina?school=vittorino&pin=4001'
+        url: 'https://costadeoro.curiol.studio/registro-nomina?school=vittorino&pin=4001',
+        samplePlayers: [
+          { dorsal: 4, name: 'Andrés Quesada Chinchilla', year: 2011, pos: 'Armador / Base', cap: true },
+          { dorsal: 8, name: 'Gabriel Segura Pizarro', year: 2011, pos: 'Escolta', cap: false },
+          { dorsal: 12, name: 'Esteban Vega Gutiérrez', year: 2011, pos: 'Pívot / Poste', cap: false },
+          { dorsal: 15, name: 'Mauricio Cordero Campos', year: 2012, pos: 'Ala-Pívot', cap: false }
+        ]
       },
       'educarte': {
         name: 'Educarte Bilingual High School',
         short: 'Educarte',
         pin: '5001',
-        url: 'https://costadeoro.curiol.studio/registro-nomina?school=educarte&pin=5001'
+        url: 'https://costadeoro.curiol.studio/registro-nomina?school=educarte&pin=5001',
+        samplePlayers: [
+          { dorsal: 3, name: 'Elena Castro Alvarado', year: 2012, pos: 'Armadora / Colocadora', cap: true },
+          { dorsal: 6, name: 'Valeria Porras Solano', year: 2012, pos: 'Central / Bloqueo', cap: false },
+          { dorsal: 8, name: 'Daniela Chaves Pizarro', year: 2012, pos: 'Rematadora / Opuesta', cap: false },
+          { dorsal: 10, name: 'Ximena Valverde Gómez', year: 2012, pos: 'Líbero / Defensora', cap: false }
+        ]
       }
     };
 
@@ -1233,8 +1448,70 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
       }
     }
 
+    // LOGICA DE PESTAÑA 2: VISTA PREVIA PDF Y MENSAJE DE CONFIRMACION
+    function updatePdfPreview() {
+      const schoolKey = document.getElementById('pdfSchoolSelect').value;
+      const sportName = document.getElementById('pdfSportSelect').value;
+      const school = SCHOOLS_DATA[schoolKey] || SCHOOLS_DATA['cria'];
+
+      document.getElementById('pdfFichaSchoolName').textContent = school.name;
+      document.getElementById('pdfFichaSport').textContent = `Nómina Oficial · ${sportName}`;
+
+      const tbody = document.getElementById('pdfTableBody');
+      tbody.innerHTML = '';
+
+      school.samplePlayers.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="text-align: center; color: #64748b;">${idx + 1}</td>
+          <td style="text-align: center; font-family: monospace; font-weight: 900; color: #28375E; font-size: 13px;">${p.dorsal}</td>
+          <td><strong>${p.name}</strong></td>
+          <td style="text-align: center;">${p.year}</td>
+          <td>${p.pos}</td>
+          <td style="text-align: center;">${p.cap ? '<strong style="color: #d97706;">★ SÍ</strong>' : 'No'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Actualizar mensaje de WhatsApp de confirmación
+      let playersList = school.samplePlayers.map((p) => `• Dorsal ${p.dorsal}: ${p.name} (${p.pos})${p.cap ? ' [CAPITÁN]' : ''}`).join('\n');
+      const waText = `🏆 *LIGA COSTA DE ORO 2026 · CONSTANCIA OFICIAL DE NÓMINA*
+Estimado/a coordinador/a de *${school.name}*:
+
+Le confirmamos que su nómina para *${sportName}* ha sido registrada y validada oficialmente por la Mesa Técnica:
+
+📋 *Atletas acreditados:*
+${playersList}
+
+📄 _La Ficha Oficial en PDF ha sido incorporada a las actas de arbitraje de las canchas._
+¡Muchos éxitos a su delegación!
+_Don Alejandro Rodríguez & Comité Organizador · Liga Costa de Oro 2026_`;
+
+      document.getElementById('pdfWhatsAppText').textContent = waText;
+    }
+
+    function printPdfFicha() {
+      window.print();
+    }
+
+    function copyPdfWhatsAppMessage() {
+      const text = document.getElementById('pdfWhatsAppText').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('¡Constancia oficial copiada al portapapeles lista para enviar al profesor por WhatsApp!');
+        });
+      }
+    }
+
+    function sendPdfWhatsAppDirect() {
+      const text = document.getElementById('pdfWhatsAppText').textContent;
+      const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       checkAuth();
+      updatePdfPreview();
     });
   </script>
 </body>
