@@ -351,7 +351,7 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
               </div>
             </section>
 
-            {/* PASO 1: ACCESO Y CLAVE ADMINISTRATIVA */}
+            {/* PASO 1: ACCESO AL PANEL DE ADMINISTRACIÓN Y PESTAÑA 6 */}
             <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-sm shrink-0">
@@ -359,22 +359,30 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
                 </div>
                 <div>
                   <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                    Ingreso seguro al panel de administración
+                    Ingreso a la mesa de administración (Pestaña 6: Nóminas)
                   </h2>
-                  <p className="text-xs text-slate-500">Autenticación requerida para acceder a las herramientas de control</p>
+                  <p className="text-xs text-slate-500">Acceso seguro con contraseña y consola central de control</p>
                 </div>
               </div>
 
               <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
                 <p>
-                  1. Abre el navegador en cualquier teléfono, tableta o computadora e ingresa a la dirección oficial:
-                  <br />
-                  <strong className="text-slate-950 font-mono text-xs sm:text-sm bg-slate-100 px-2 py-1 rounded-md mt-1 inline-block">
-                    https://costadeoro.curiol.studio/admin
-                  </strong>
+                  1. Abre el navegador en cualquier teléfono o computadora e ingresa a:
+                  <a 
+                    href="https://costadeoro.curiol.studio/admin" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-bold text-[#28375E] underline ml-1.5"
+                  >
+                    <span>costadeoro.curiol.studio/admin</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </p>
                 <p>
-                  2. En la pantalla de bienvenida, digita cualquiera de las claves administrativas válidas asignadas al comité:
+                  2. En la pantalla de bienvenida, digita la clave <code>2026ControlAdmin</code> (o la corta <code>8421</code>) y presiona <strong>«Desbloquear Acceso»</strong>.
+                </p>
+                <p>
+                  3. En la barra superior de pestañas, haz clic en <strong>«6. Nóminas Oficiales e Inscripciones»</strong> para entrar al gestor central.
                 </p>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
@@ -383,100 +391,30 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
                     <strong className="font-mono text-xs sm:text-sm text-slate-900">2026ControlAdmin</strong>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Alternativa 1</span>
-                    <strong className="font-mono text-xs sm:text-sm text-slate-900">admin2026</strong>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Alternativa 2</span>
-                    <strong className="font-mono text-xs sm:text-sm text-slate-900">ORO2026</strong>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">PIN numérico rápido</span>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Clave corta</span>
                     <strong className="font-mono text-xs sm:text-sm text-slate-900">8421</strong>
                   </div>
-                </div>
-              </div>
-
-              {/* SIMULADOR INTERACTIVO DE CLAVE */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#FCFBF9] border border-amber-200/90 space-y-3">
-                <div className="flex items-center gap-2 text-xs font-black text-[#9A6B38] uppercase">
-                  <Sparkles className="w-4 h-4" />
-                  <span>Simulador de prueba: valida tu clave aquí</span>
-                </div>
-                <form onSubmit={handleTestPassword} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                  <input
-                    type="text"
-                    value={testPasswordInput}
-                    onChange={(e) => {
-                      setTestPasswordInput(e.target.value);
-                      setTestPasswordResult(null);
-                    }}
-                    placeholder="Escribe una clave (ej: 2026ControlAdmin o 8421)..."
-                    className="flex-1 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-[#9A6B38]"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-xl bg-[#28375E] hover:bg-[#1E293B] text-white font-extrabold text-xs transition-colors cursor-pointer"
-                  >
-                    Verificar clave
-                  </button>
-                </form>
-
-                {testPasswordResult === true && (
-                  <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>¡Clave válida! El panel administrativo se desbloquea inmediatamente.</span>
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">PIN este manual</span>
+                    <strong className="font-mono text-xs sm:text-sm text-blue-900">26172918</strong>
                   </div>
-                )}
-                {testPasswordResult === false && (
-                  <div className="flex items-center gap-2 text-xs font-bold text-rose-800 bg-rose-50 border border-rose-200 p-2.5 rounded-xl">
-                    <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                    <span>Clave incorrecta. Por favor utiliza una de las claves maestras indicadas arriba.</span>
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-center">
+                    <span className="text-[10px] text-slate-500 font-bold uppercase block">PIN maestro mesa</span>
+                    <strong className="font-mono text-xs sm:text-sm text-emerald-800">9999</strong>
                   </div>
-                )}
+                </div>
               </div>
             </section>
 
-            {/* PASO 2: UBICACIÓN DE LA SECCIÓN DE NÓMINAS */}
-            <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-4">
+            {/* PASO 2: DESPACHO POR WHATSAPP Y PIN INSTITUCIONAL */}
+            <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-sm shrink-0">
                   PASO 2
                 </div>
                 <div>
                   <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                    Navegación a la pestaña «6. Nóminas y Atletas»
-                  </h2>
-                  <p className="text-xs text-slate-500">Sección exclusiva para la administración y despacho de listas</p>
-                </div>
-              </div>
-
-              <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
-                <p>
-                  Una vez autenticado en el panel administrativo, localiza la barra horizontal de pestañas y presiona:
-                </p>
-                <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-600 text-white font-extrabold text-xs shadow-xs">
-                  <Users className="w-4 h-4" />
-                  <span>6. Nóminas y Atletas</span>
-                </div>
-                <p>
-                  En esta vista verás inmediatamente el bloque oscuro destacado con el título:
-                  <strong className="text-slate-900 block font-extrabold mt-1">
-                    «Autogestión para Instituciones · Despacho de Enlaces Directos de Inscripción (WhatsApp & Correo)»
-                  </strong>
-                </p>
-              </div>
-            </section>
-
-            {/* PASO 3: DESPACHO POR WHATSAPP Y PIN INSTITUCIONAL */}
-            <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-sm shrink-0">
-                  PASO 3
-                </div>
-                <div>
-                  <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                    Envío del mensaje oficial de WhatsApp a cada institución
+                    Despachar la invitación por WhatsApp a cada colegio
                   </h2>
                   <p className="text-xs text-slate-500">Un toque abre WhatsApp con el mensaje estructurado listo para despacho</p>
                 </div>
@@ -610,104 +548,44 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
               </div>
             </section>
 
-            {/* PASO 4: QUÉ VE EL COORDINADOR AL RECIBIR EL ENLACE */}
+            {/* PASO 3: EL COLEGIO INSCRIBE Y DON ALEJANDRO SUPERVISA */}
             <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-sm shrink-0">
-                  PASO 4
+                  PASO 3
                 </div>
                 <div>
                   <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                    Experiencia del coordinador deportivo al abrir el enlace
+                    El colegio inscribe y Don Alejandro supervisa en la mesa central
                   </h2>
-                  <p className="text-xs text-slate-500">¿Cómo interactúa la institución y cómo sube a sus atletas?</p>
+                  <p className="text-xs text-slate-500">Todo el proceso se actualiza en tiempo real sin recargar la pantalla</p>
                 </div>
               </div>
 
-              <div className="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-900 block font-bold">1. Ingreso sin tecleo de PIN (Auto-desbloqueo):</strong>
-                    <span>
-                      Al hacer clic en el enlace, el sistema lee los parámetros seguros de la URL, valida la credencial y muestra directamente el escudo, nombre y categorías disponibles de su institución.
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-                  <FileSpreadsheet className="w-5 h-5 text-[#9A6B38] shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-900 block font-bold">2. Dos modalidades para registrar atletas:</strong>
-                    <ul className="list-disc list-inside mt-1 space-y-1 text-slate-600">
-                      <li>
-                        <strong>Modalidad A (Formulario en línea):</strong> Digitación directa en el navegador. Ideal para nóminas cortas o delegaciones con 5 a 15 atletas.
-                      </li>
-                      <li>
-                        <strong>Modalidad B (Plantilla Excel oficial):</strong> Descarga del archivo <code>.xls</code> multi-hoja oficial, llenado en computadora y carga masiva en 1 solo paso.
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-amber-950 block font-bold">3. Requisito obligatorio: Nombre y dos apellidos completos:</strong>
-                    <span className="text-amber-900">
-                      El sistema cuenta con un validador en tiempo real que alerta si solo se escribe el primer nombre (ej: <em>«Carlos»</em>). Para la emisión correcta de actas de arbitraje y certificados oficiales con código QR, se requiere el nombre y ambos apellidos (ej: <em>«Carlos Santana Solano»</em>).
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* PASO 5: CONTROL Y RECEPCIÓN EN MESA CENTRAL */}
-            <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-sm shrink-0">
-                  PASO 5
-                </div>
-                <div>
-                  <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                    Monitoreo en tiempo real y exportación para arbitraje
-                  </h2>
-                  <p className="text-xs text-slate-500">Supervisión centralizada por parte de Don Alejandro y el comité</p>
-                </div>
-              </div>
-
-              <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
-                <p>
-                  A medida que los colegios completan o actualizan su nómina, los contadores en la parte superior del gestor de nóminas se actualizan automáticamente:
-                </p>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Total atletas inscritos</span>
-                    <strong className="text-base text-slate-900 font-mono">Suma global</strong>
-                  </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Equipos registrados</span>
-                    <strong className="text-base text-slate-900 font-mono">Categorías activas</strong>
-                  </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Capitanes designados</span>
-                    <strong className="text-base text-slate-900 font-mono">Líderes de cancha</strong>
-                  </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase block">Instituciones</span>
-                    <strong className="text-base text-slate-900 font-mono">6 colegios</strong>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 mt-2">
-                  <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
-                    <Download className="w-4 h-4 text-emerald-600" />
-                    <span>Exportación maestra para mesas técnicas de cancha:</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-5 rounded-2xl bg-[#FCFBF9] border border-slate-200 space-y-2.5">
+                  <h3 className="font-extrabold text-sm text-[#28375E] flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-[#28375E] text-white text-xs font-black flex items-center justify-center">A</span>
+                    <span>Lo que hace el profesor del colegio:</span>
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Al pulsar el botón verde <strong>«Exportar Todo en Excel (.xls)»</strong> en la cabecera del gestor, el sistema compila un libro consolidado con todas las instituciones y categorías, listo para imprimir las listas de cotejo de los árbitros antes de cada partido.
-                  </p>
+                  <ul className="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+                    <li>Abre el enlace de WhatsApp (ingresa de inmediato sin digitar el PIN).</li>
+                    <li>Registra a sus atletas en línea con <strong>dos apellidos obligatorios</strong>, dorsal, año de nacimiento y posición.</li>
+                    <li>Opcionalmente, puede descargar la plantilla oficial en Excel, llenarla y subirla en 1 solo paso.</li>
+                    <li>Pulsa <strong>«Guardar Nómina Oficial»</strong> para consolidar su equipo.</li>
+                  </ul>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-[#F0F4FA] border border-blue-200 space-y-2.5">
+                  <h3 className="font-extrabold text-sm text-emerald-800 flex items-center gap-2">
+                    <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-black flex items-center justify-center">B</span>
+                    <span>Lo que ve Don Alejandro en la Mesa Central:</span>
+                  </h3>
+                  <ul className="text-xs text-slate-700 space-y-2 list-disc list-inside leading-relaxed">
+                    <li>En la pestaña 6 del panel admin, ve reflejados los atletas de cada colegio al instante.</li>
+                    <li>Puede verificar capitanes, corroborar edades y realizar cambios de emergencia si el profesor se lo pide.</li>
+                    <li>Pulsando <strong>«Exportar Todo en Excel (.xls)»</strong> descarga el listado consolidado para los árbitros y anotadores en cancha.</li>
+                  </ul>
                 </div>
               </div>
             </section>
