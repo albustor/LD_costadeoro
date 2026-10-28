@@ -33,19 +33,31 @@ def generate_canonical_standings():
 
     calc = CostaDeOroCalculator()
     standings_by_category = calc.calculate_all(matches)
+    computed_statistics = calc.calculate_statistics(matches, standings_by_category)
 
     payload = {
         "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
         "last_updated": datetime.now(timezone.utc).isoformat(),
-        "version": "1.0.0",
+        "version": "1.1.0",
         "matches_processed": len(matches),
         "computed_standing_points": standings_by_category,
+        "computed_statistics": computed_statistics,
     }
 
     with open(CANONICAL_OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
 
     print(f"✅ Archivo canónico generado con éxito en: {CANONICAL_OUTPUT_PATH}")
+
+    g_sum = computed_statistics.get("global_summary", {})
+    print(
+        f"📈 Estadísticas Globales: {g_sum.get('completed_matches', 0)} jugados | "
+        f"{g_sum.get('scheduled_matches', 0)} programados | "
+        f"{g_sum.get('postponed_matches', 0)} por reprogramar | "
+        f"Goles Fútbol: {g_sum.get('total_goals_futbol', 0)} | "
+        f"Sets Voleibol: {g_sum.get('total_sets_voleibol', 0)} | "
+        f"Puntos Baloncesto: {g_sum.get('total_points_baloncesto', 0)}"
+    )
 
     # Imprimir resumen de posiciones oficiales
     print("\n" + "=" * 60)

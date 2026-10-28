@@ -6,6 +6,14 @@ export function isRescheduledMatch(match: Match): boolean {
   if (match.status === 'postponed') return true;
   if (match.currentPeriod === 'Por reprogramar' || match.currentPeriod === 'Reprogramado') return true;
   if (match.walkover && match.walkover !== 'none') return true;
+  const hasPlayedScore =
+    (match.homeScore || 0) > 0 ||
+    (match.awayScore || 0) > 0 ||
+    (match.homeSetsWon || 0) > 0 ||
+    (match.awaySetsWon || 0) > 0;
+  if (match.status === 'completed' && match.currentPeriod === 'Finalizado' && hasPlayedScore) {
+    return false;
+  }
   const notes = (match.notes || '').toLowerCase();
   if (notes.includes('reprogram') || notes.includes('no se presentó') || notes.includes('incomparecencia') || notes.includes('ausencia')) return true;
   return false;

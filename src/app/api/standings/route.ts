@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
 
     if (categoryId) {
       const categoryStandings = data.computed_standing_points?.[categoryId] || [];
+      const categoryMetrics = data.computed_statistics?.category_metrics?.[categoryId] || null;
       return NextResponse.json(
         {
           success: true,
@@ -36,6 +37,7 @@ export async function GET(req: NextRequest) {
           categoryId,
           last_updated: data.last_updated,
           standings: categoryStandings,
+          category_metrics: categoryMetrics,
         },
         {
           headers: {
@@ -54,6 +56,7 @@ export async function GET(req: NextRequest) {
         version: data.version,
         matches_processed: data.matches_processed,
         computed_standing_points: data.computed_standing_points,
+        computed_statistics: data.computed_statistics || null,
       },
       {
         headers: {

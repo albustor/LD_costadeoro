@@ -163,5 +163,154 @@ class TestScoringRulesMEP2026(unittest.TestCase):
         self.assertEqual(by_id["la-paz-tempisque"]["points"], 1)
         self.assertEqual(by_id["la-paz-tempisque"]["lost"], 1)
 
+    def test_replayed_rescheduled_match_counts_points(self):
+        """Valida que un partido reprogramado que luego se juega y finaliza con marcador real sume puntos y PJ."""
+        match_played = {
+            "id": "j3-bal-d-01",
+            "categoryId": "cat-d-baloncesto",
+            "sport": "baloncesto",
+            "jornada": 3,
+            "homeTeamId": "cria",
+            "awayTeamId": "la-paz-tempisque",
+            "homeScore": 52,
+            "awayScore": 44,
+            "status": "completed",
+            "currentPeriod": "Finalizado",
+            "walkover": "none",
+            "notes": "Partido reprogramado de la Jornada 3 finalmente disputado",
+        }
+        self.assertFalse(is_rescheduled_match(match_played))
+        standings = self.calc.calculate_category_standings("cat-d-baloncesto", "baloncesto", [match_played])
+        by_id = {r["teamId"]: r for r in standings}
+        self.assertEqual(by_id["cria"]["played"], 1)
+        self.assertEqual(by_id["cria"]["points"], 2)
+        self.assertEqual(by_id["la-paz-tempisque"]["played"], 1)
+        self.assertEqual(by_id["la-paz-tempisque"]["points"], 1)
+
+    def test_multi_jornada_head_to_head_tiebreaker(self):
+        """Valida el desempate directo acumulado entre dos equipos a través de múltiples jornadas."""
+        matches = [
+            # CRIA y Cabo Velas empatan 1-1 en J1, pero en J2 Cabo Velas gana 2-1 a CRIA,
+            # mientras CRIA compensa diferencia contra un tercer equipo para empatar en PTS, PG, DG y GF generales
+            {
+                "id": "m1",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "cria",
+                "awayTeamId": "la-paz-cabo-velas",
+                "homeScore": 1,
+                "awayScore": 1,
+                "status": "completed",
+            },
+            {
+                "id": "m2",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "la-paz-cabo-velas",
+                "awayTeamId": "cria",
+                "homeScore": 2,
+                "awayScore": 1,
+                "status": "completed",
+            },
+            {
+                "id": "m3",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "cria",
+                "awayTeamId": "la-paz-tempisque",
+                "homeScore": 2,
+                "awayScore": 0,
+                "status": "completed",
+            },
+            {
+                "id": "m4",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "la-paz-cabo-velas",
+                "awayTeamId": "la-paz-tempisque",
+                "homeScore": 1,
+                "awayScore": 1,
+                "status": "completed",
+            },
+        ]
+        # Ambos (CRIA y Cabo Velas) tienen: 3 PJ, 1 PG, 1 PE, 1 PP -> Wait: Cabo Velas tiene 1 PG, 2 PE = 5 pts;
+        # Probemos empate exacto de puntos (3 pts c/u) con victoria directa de Cabo Velas sobre CRIA:
+        matches_exact_tie = [
+            {
+                "id": "t1",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "cria",
+                "awayTeamId": "la-paz-tempisque",
+                "homeScore": 2,
+                "awayScore": 1,
+                "status": "completed",
+            },
+            {
+                "id": "t2",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "la-paz-cabo-velas",
+                "awayTeamId": "cria",
+                "homeScore": 2,
+                "awayScore": 1,
+                "status": "completed",
+            },
+            {
+                "id": "t3",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "la-paz-tempisque",
+                "awayTeamId": "la-paz-cabo-velas",
+                "homeScore": 2,
+                "awayScore": 1,
+                "status": "completed",
+            },
+        ]
+        # Entre CRIA y Cabo Velas (ambos 3 pts, 1 PG, DG 0, GF 3), Cabo Velas venció a CRIA 2-1 en el duelo directo
+        standings = self.calc.calculate_category_standings("cat-fem-futbol", "futbol", matches_exact_tie[:2] + [
+            {
+                "id": "t3b",
+                "categoryId": "cat-fem-futbol",
+                "homeTeamId": "vittorino",
+                "awayTeamId": "la-paz-cabo-velas",
+                "homeScore": 2,
+                "awayScore": 1,
+                "status": "completed",
+            }
+        ])
+        by_id = {r["teamId"]: r for r in standings}
+        self.assertLess(by_id["la-paz-cabo-velas"]["position"], by_id["cria"]["position"])
+
+    def test_statistics_summary_calculation(self):
+        """Valida que calculate_statistics compute con exactitud el resumen global, por jornada y categoría."""
+        matches = [
+            {
+                "id": "j1-1",
+                "jornada": 1,
+                "categoryId": "cat-c-futbol",
+                "sport": "futbol",
+                "homeTeamId": "cria",
+                "awayTeamId": "la-paz-cabo-velas",
+                "homeScore": 2,
+                "awayScore": 1,
+                "status": "completed",
+                "currentPeriod": "Finalizado",
+            },
+            {
+                "id": "j2-1",
+                "jornada": 2,
+                "categoryId": "cat-c-futbol",
+                "sport": "futbol",
+                "homeTeamId": "cria",
+                "awayTeamId": "la-paz-tempisque",
+                "homeScore": 0,
+                "awayScore": 0,
+                "status": "scheduled",
+                "currentPeriod": "Programado",
+            },
+        ]
+        stats = self.calc.calculate_statistics(matches)
+        self.assertEqual(stats["global_summary"]["total_matches"], 2)
+        self.assertEqual(stats["global_summary"]["completed_matches"], 1)
+        self.assertEqual(stats["global_summary"]["scheduled_matches"], 1)
+        self.assertEqual(stats["global_summary"]["total_goals_futbol"], 3)
+        self.assertEqual(stats["jornadas_summary"]["jornada_1"]["completed_matches"], 1)
+        self.assertEqual(stats["jornadas_summary"]["jornada_2"]["scheduled_matches"], 1)
+        self.assertEqual(stats["category_metrics"]["cat-c-futbol"]["total_scored"], 3)
+
 if __name__ == "__main__":
     unittest.main()

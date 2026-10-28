@@ -23,6 +23,7 @@ import {
 import Link from 'next/link';
 
 import { SportNavCardsHeader } from '@/components/sports/SportNavCardsHeader';
+import canonicalStandingsData from '@/data/canonical_standings.json';
 
 export default function MarcadoresPage() {
   const { categories, matches, getSchoolById } = useTournament();
@@ -55,6 +56,9 @@ export default function MarcadoresPage() {
     jornadaFilter === 'all'
       ? allCategoryMatches
       : allCategoryMatches.filter((m) => (m.jornada || 1) === jornadaFilter);
+
+  const catMetrics =
+    (canonicalStandingsData as any)?.computed_statistics?.category_metrics?.[currentCategory?.id || ''] || null;
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-fade-in pb-12">
@@ -187,6 +191,38 @@ export default function MarcadoresPage() {
               ))}
             </div>
           </div>
+
+          {/* 📊 CINTILLO DE ESTADÍSTICAS CANÓNICAS PRECALCULADAS POR PYTHON */}
+          {catMetrics && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                <span className="text-[11px] font-bold text-slate-500 block">Partidos disputados</span>
+                <span className="text-base sm:text-lg font-black text-emerald-700 font-mono">
+                  {catMetrics.completed_matches} / {catMetrics.total_matches}
+                </span>
+              </div>
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                <span className="text-[11px] font-bold text-slate-500 block">Próximos / Programados</span>
+                <span className="text-base sm:text-lg font-black text-blue-700 font-mono">
+                  {catMetrics.scheduled_matches}
+                </span>
+              </div>
+              <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                <span className="text-[11px] font-bold text-slate-500 block">
+                  Total de {catMetrics.unit_label}
+                </span>
+                <span className="text-base sm:text-lg font-black text-slate-900 font-mono">
+                  {catMetrics.total_scored} <span className="text-xs font-semibold text-slate-500">({catMetrics.avg_per_match}/p)</span>
+                </span>
+              </div>
+              <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-200/90 shadow-2xs">
+                <span className="text-[11px] font-bold text-amber-900 block">Líder actual</span>
+                <span className="text-xs sm:text-sm font-black text-slate-900 truncate block mt-0.5">
+                  🏆 {catMetrics.leader_school || 'Por definir'}
+                </span>
+              </div>
+            </div>
+          )}
 
           {categoryMatches.length === 0 ? (
             <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-500 text-xs sm:text-sm">

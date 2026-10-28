@@ -808,7 +808,7 @@
       "awayScore": 0,
       "status": "scheduled",
       "currentPeriod": "Programado",
-      "notes": "Jornada 2 · CRIA vs. Pumas (3:00 p. m. | Sede: Brasilito)",
+      "notes": "Jornada 2 · CRIA vs. La Paz Tempisque (3:00 p. m. | Sede: Brasilito)",
       "updatedAt": "2026-10-27T18:00:00Z"
     },
     {
@@ -827,7 +827,7 @@
       "awayScore": 0,
       "status": "scheduled",
       "currentPeriod": "Programado",
-      "notes": "Jornada 2 · Tiburones vs. Journey (3:00 p. m. | Sede: Brasilito)",
+      "notes": "Jornada 2 · La Paz Cabo Velas vs. Journey (3:00 p. m. | Sede: Brasilito)",
       "updatedAt": "2026-10-27T18:00:00Z"
     },
     {
@@ -1610,5 +1610,5 @@
       "Localhost (Entorno Local), CR": 10
     }
   },
-  "updatedAt": "2026-10-27T23:59:46.806Z"
+  "updatedAt": "2026-10-28T01:43:28.623Z"
 }

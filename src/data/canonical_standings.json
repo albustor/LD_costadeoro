@@ -1,7 +1,7 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-10-28T00:13:14.763173+00:00",
-  "version": "1.0.0",
+  "last_updated": "2026-10-28T02:43:27.273057+00:00",
+  "version": "1.1.0",
   "matches_processed": 41,
   "computed_standing_points": {
     "cat-fem-futbol": [
@@ -428,15 +428,15 @@
         "won": 2,
         "drawn": 0,
         "lost": 0,
-        "pointsFor": 4,
-        "pointsAgainst": 0,
-        "diff": 4,
+        "pointsFor": 100,
+        "pointsAgainst": 77,
+        "diff": 23,
         "points": 6,
         "setsWon": 4,
         "setsLost": 0,
         "setsDiff": 4,
         "setsRatio": 4.0,
-        "pointsRatio": 4.0,
+        "pointsRatio": 1.2987,
         "form": [
           "W",
           "W"
@@ -460,15 +460,15 @@
         "won": 0,
         "drawn": 0,
         "lost": 1,
-        "pointsFor": 0,
-        "pointsAgainst": 2,
-        "diff": -2,
+        "pointsFor": 43,
+        "pointsAgainst": 50,
+        "diff": -7,
         "points": 0,
         "setsWon": 0,
         "setsLost": 2,
         "setsDiff": -2,
         "setsRatio": 0.0,
-        "pointsRatio": 0.0,
+        "pointsRatio": 0.86,
         "form": [
           "L"
         ],
@@ -491,15 +491,15 @@
         "won": 0,
         "drawn": 0,
         "lost": 1,
-        "pointsFor": 0,
-        "pointsAgainst": 2,
-        "diff": -2,
+        "pointsFor": 34,
+        "pointsAgainst": 50,
+        "diff": -16,
         "points": 0,
         "setsWon": 0,
         "setsLost": 2,
         "setsDiff": -2,
         "setsRatio": 0.0,
-        "pointsRatio": 0.0,
+        "pointsRatio": 0.68,
         "form": [
           "L"
         ],
@@ -553,15 +553,15 @@
         "won": 1,
         "drawn": 0,
         "lost": 0,
-        "pointsFor": 2,
-        "pointsAgainst": 0,
-        "diff": 2,
+        "pointsFor": 50,
+        "pointsAgainst": 14,
+        "diff": 36,
         "points": 3,
         "setsWon": 2,
         "setsLost": 0,
         "setsDiff": 2,
         "setsRatio": 2.0,
-        "pointsRatio": 2.0,
+        "pointsRatio": 3.5714,
         "form": [
           "W"
         ],
@@ -584,15 +584,15 @@
         "won": 0,
         "drawn": 0,
         "lost": 1,
-        "pointsFor": 0,
-        "pointsAgainst": 2,
-        "diff": -2,
+        "pointsFor": 14,
+        "pointsAgainst": 50,
+        "diff": -36,
         "points": 0,
         "setsWon": 0,
         "setsLost": 2,
         "setsDiff": -2,
         "setsRatio": 0.0,
-        "pointsRatio": 0.0,
+        "pointsRatio": 0.28,
         "form": [
           "L"
         ],
@@ -818,5 +818,136 @@
         "position": 4
       }
     ]
+  },
+  "computed_statistics": {
+    "global_summary": {
+      "total_matches": 41,
+      "completed_matches": 13,
+      "live_matches": 0,
+      "scheduled_matches": 24,
+      "postponed_matches": 4,
+      "total_goals_futbol": 24,
+      "total_sets_voleibol": 6,
+      "total_points_baloncesto": 241
+    },
+    "jornadas_summary": {
+      "jornada_1": {
+        "jornada": 1,
+        "total_matches": 16,
+        "completed_matches": 13,
+        "scheduled_matches": 0,
+        "postponed_matches": 3,
+        "completion_pct": 81.2
+      },
+      "jornada_2": {
+        "jornada": 2,
+        "total_matches": 10,
+        "completed_matches": 0,
+        "scheduled_matches": 10,
+        "postponed_matches": 0,
+        "completion_pct": 0.0
+      },
+      "jornada_3": {
+        "jornada": 3,
+        "total_matches": 15,
+        "completed_matches": 0,
+        "scheduled_matches": 14,
+        "postponed_matches": 1,
+        "completion_pct": 0.0
+      }
+    },
+    "category_metrics": {
+      "cat-fem-futbol": {
+        "categoryId": "cat-fem-futbol",
+        "sport": "futbol",
+        "total_matches": 10,
+        "completed_matches": 3,
+        "scheduled_matches": 6,
+        "postponed_matches": 1,
+        "total_scored": 7,
+        "unit_label": "goles",
+        "avg_per_match": 2.33,
+        "leader_school": "La Paz Cabo Velas",
+        "top_offense_school": "La Paz Cabo Velas"
+      },
+      "cat-c-futbol": {
+        "categoryId": "cat-c-futbol",
+        "sport": "futbol",
+        "total_matches": 11,
+        "completed_matches": 3,
+        "scheduled_matches": 7,
+        "postponed_matches": 1,
+        "total_scored": 12,
+        "unit_label": "goles",
+        "avg_per_match": 4.0,
+        "leader_school": "La Paz Tempisque",
+        "top_offense_school": "La Paz Tempisque"
+      },
+      "cat-d-futbol": {
+        "categoryId": "cat-d-futbol",
+        "sport": "futbol",
+        "total_matches": 4,
+        "completed_matches": 1,
+        "scheduled_matches": 2,
+        "postponed_matches": 1,
+        "total_scored": 5,
+        "unit_label": "goles",
+        "avg_per_match": 5.0,
+        "leader_school": "CRIA",
+        "top_offense_school": "CRIA"
+      },
+      "cat-c-voleibol": {
+        "categoryId": "cat-c-voleibol",
+        "sport": "voleibol",
+        "total_matches": 6,
+        "completed_matches": 2,
+        "scheduled_matches": 4,
+        "postponed_matches": 0,
+        "total_scored": 4,
+        "unit_label": "sets",
+        "avg_per_match": 2.0,
+        "leader_school": "La Paz Cabo Velas",
+        "top_offense_school": "La Paz Cabo Velas"
+      },
+      "cat-d-voleibol": {
+        "categoryId": "cat-d-voleibol",
+        "sport": "voleibol",
+        "total_matches": 1,
+        "completed_matches": 1,
+        "scheduled_matches": 0,
+        "postponed_matches": 0,
+        "total_scored": 2,
+        "unit_label": "sets",
+        "avg_per_match": 2.0,
+        "leader_school": "La Paz Cabo Velas",
+        "top_offense_school": "La Paz Cabo Velas"
+      },
+      "cat-c-baloncesto": {
+        "categoryId": "cat-c-baloncesto",
+        "sport": "baloncesto",
+        "total_matches": 3,
+        "completed_matches": 1,
+        "scheduled_matches": 2,
+        "postponed_matches": 0,
+        "total_scored": 42,
+        "unit_label": "puntos",
+        "avg_per_match": 42.0,
+        "leader_school": "La Paz Cabo Velas",
+        "top_offense_school": "La Paz Cabo Velas"
+      },
+      "cat-d-baloncesto": {
+        "categoryId": "cat-d-baloncesto",
+        "sport": "baloncesto",
+        "total_matches": 6,
+        "completed_matches": 2,
+        "scheduled_matches": 3,
+        "postponed_matches": 1,
+        "total_scored": 199,
+        "unit_label": "puntos",
+        "avg_per_match": 99.5,
+        "leader_school": "Journey School",
+        "top_offense_school": "Journey School"
+      }
+    }
   }
 }

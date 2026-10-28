@@ -123,6 +123,8 @@ def is_rescheduled_match(match: Dict[str, Any]) -> bool:
     """
     Detecta si un partido está en condición de no presentación o reprogramación oficial.
     Regla Sagrada Costa de Oro: Cero puntos a ambos equipos y cero partidos jugados.
+    Si el partido ya fue disputado en cancha (completed + Finalizado + marcador > 0 sin walkover),
+    es un partido válido aunque sus notas históricas mencionen que fue reprogramado.
     """
     if not match:
         return False
@@ -135,6 +137,16 @@ def is_rescheduled_match(match: Dict[str, Any]) -> bool:
     walkover = match.get("walkover")
     if walkover and walkover != "none":
         return True
+
+    home_score = match.get("homeScore", 0) or 0
+    away_score = match.get("awayScore", 0) or 0
+    home_sets = match.get("homeSetsWon", 0) or 0
+    away_sets = match.get("awaySetsWon", 0) or 0
+    if status == "completed" and current_period == "Finalizado" and (
+        home_score > 0 or away_score > 0 or home_sets > 0 or away_sets > 0
+    ):
+        return False
+
     notes = (match.get("notes") or "").lower()
     for kw in ["reprogram", "no se presentó", "incomparecencia", "ausencia"]:
         if kw in notes:
@@ -210,10 +222,27 @@ class CostaDeOroCalculator:
 
             home.played += 1
             away.played += 1
-            home.pointsFor += home_score
-            home.pointsAgainst += away_score
-            away.pointsFor += away_score
-            away.pointsAgainst += home_score
+
+            if sport == "voleibol":
+                # En voleibol: si existe setScores, sumar los puntos reales de cada set para PF/PC y pointsRatio
+                set_scores = match.get("setScores")
+                if isinstance(set_scores, list) and len(set_scores) > 0:
+                    pts_home = sum(int(s.get("home", 0) or 0) for s in set_scores if isinstance(s, dict))
+                    pts_away = sum(int(s.get("away", 0) or 0) for s in set_scores if isinstance(s, dict))
+                    home.pointsFor += pts_home
+                    home.pointsAgainst += pts_away
+                    away.pointsFor += pts_away
+                    away.pointsAgainst += pts_home
+                else:
+                    home.pointsFor += home_score
+                    home.pointsAgainst += away_score
+                    away.pointsFor += away_score
+                    away.pointsAgainst += home_score
+            else:
+                home.pointsFor += home_score
+                home.pointsAgainst += away_score
+                away.pointsFor += away_score
+                away.pointsAgainst += home_score
 
             if sport == "futbol":
                 # Normativa Fútbol MEP: Victoria = 3, Empate = 1, Derrota = 0
@@ -255,8 +284,10 @@ class CostaDeOroCalculator:
                     home.form.append("L")
 
             elif sport == "voleibol":
-                home_sets = match.get("homeSetsWon", 0) or 0
-                away_sets = match.get("awaySetsWon", 0) or 0
+                raw_home_sets = match.get("homeSetsWon")
+                raw_away_sets = match.get("awaySetsWon")
+                home_sets = int(raw_home_sets) if raw_home_sets is not None else int(home_score)
+                away_sets = int(raw_away_sets) if raw_away_sets is not None else int(away_score)
 
                 if home.setsWon is not None:
                     home.setsWon += home_sets
@@ -356,27 +387,42 @@ class CostaDeOroCalculator:
         # Ordenar de mayor a menor
         rows.sort(key=tiebreaker_key, reverse=True)
 
-        # Resolver enfrentamiento particular si hay empate exacto en fútbol o baloncesto
+        # Resolver serie particular acumulada (Head-to-Head multi-jornada) si hay empate en fútbol o baloncesto
         if sport in ("futbol", "baloncesto") and len(rows) > 1:
-            for i in range(len(rows) - 1):
-                a = rows[i]
-                b = rows[i + 1]
-                if a.points == b.points and a.won == b.won and a.diff == b.diff and a.pointsFor == b.pointsFor:
-                    # Buscar enfrentamiento directo
-                    h2h = next(
-                        (
+            for _pass in range(len(rows)):
+                for i in range(len(rows) - 1):
+                    a = rows[i]
+                    b = rows[i + 1]
+                    if a.points == b.points and a.won == b.won and a.diff == b.diff and a.pointsFor == b.pointsFor:
+                        h2h_matches = [
                             m for m in category_matches
-                            if (m.get("homeTeamId") == a.teamId and m.get("awayTeamId") == b.teamId) or
-                               (m.get("homeTeamId") == b.teamId and m.get("awayTeamId") == a.teamId)
-                        ),
-                        None
-                    )
-                    if h2h and not is_rescheduled_match(h2h):
-                        a_score = h2h.get("homeScore", 0) if h2h.get("homeTeamId") == a.teamId else h2h.get("awayScore", 0)
-                        b_score = h2h.get("homeScore", 0) if h2h.get("homeTeamId") == b.teamId else h2h.get("awayScore", 0)
-                        if b_score > a_score:
-                            # Invertir posiciones
-                            rows[i], rows[i + 1] = rows[i + 1], rows[i]
+                            if not is_rescheduled_match(m) and (
+                                (m.get("homeTeamId") == a.teamId and m.get("awayTeamId") == b.teamId) or
+                                (m.get("homeTeamId") == b.teamId and m.get("awayTeamId") == a.teamId)
+                            )
+                        ]
+                        if h2h_matches:
+                            a_h2h_pts, b_h2h_pts = 0, 0
+                            a_h2h_for, b_h2h_for = 0, 0
+                            for hm in h2h_matches:
+                                hs = hm.get("homeScore", 0) or 0
+                                aws = hm.get("awayScore", 0) or 0
+                                a_sc = hs if hm.get("homeTeamId") == a.teamId else aws
+                                b_sc = hs if hm.get("homeTeamId") == b.teamId else aws
+                                a_h2h_for += a_sc
+                                b_h2h_for += b_sc
+                                if a_sc > b_sc:
+                                    a_h2h_pts += 3 if sport == "futbol" else 2
+                                    b_h2h_pts += 0 if sport == "futbol" else 1
+                                elif b_sc > a_sc:
+                                    b_h2h_pts += 3 if sport == "futbol" else 2
+                                    a_h2h_pts += 0 if sport == "futbol" else 1
+                                else:
+                                    a_h2h_pts += 1
+                                    b_h2h_pts += 1
+
+                            if (b_h2h_pts, b_h2h_for - a_h2h_for) > (a_h2h_pts, a_h2h_for - b_h2h_for):
+                                rows[i], rows[i + 1] = rows[i + 1], rows[i]
 
         # Asignar posición 1-indexed
         output: List[Dict[str, Any]] = []
@@ -391,3 +437,120 @@ class CostaDeOroCalculator:
         for cat_id, sport in CATEGORY_SPORTS.items():
             result[cat_id] = self.calculate_category_standings(cat_id, sport, matches)
         return result
+
+    def calculate_statistics(
+        self,
+        matches: List[Dict[str, Any]],
+        standings_by_cat: Optional[Dict[str, List[Dict[str, Any]]]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Calcula de forma 100% determinista las estadísticas globales, por jornada y por categoría.
+        Cero cálculo aritmético en el navegador.
+        """
+        if standings_by_cat is None:
+            standings_by_cat = self.calculate_all(matches)
+
+        total_matches = len(matches)
+        completed_valid = [m for m in matches if m.get("status") == "completed" and not is_rescheduled_match(m)]
+        live_matches = [m for m in matches if m.get("status") == "live"]
+        postponed_matches = [m for m in matches if is_rescheduled_match(m)]
+        scheduled_matches = [
+            m for m in matches
+            if m.get("status") == "scheduled" and not is_rescheduled_match(m)
+        ]
+
+        total_goals_futbol = sum(
+            (m.get("homeScore", 0) or 0) + (m.get("awayScore", 0) or 0)
+            for m in completed_valid if m.get("sport") == "futbol"
+        )
+        total_sets_voleibol = sum(
+            (m.get("homeSetsWon") if m.get("homeSetsWon") is not None else (m.get("homeScore", 0) or 0)) +
+            (m.get("awaySetsWon") if m.get("awaySetsWon") is not None else (m.get("awayScore", 0) or 0))
+            for m in completed_valid if m.get("sport") == "voleibol"
+        )
+        total_points_baloncesto = sum(
+            (m.get("homeScore", 0) or 0) + (m.get("awayScore", 0) or 0)
+            for m in completed_valid if m.get("sport") == "baloncesto"
+        )
+
+        # Resumen por Jornada (Jornadas 1, 2 y 3)
+        jornadas_summary: Dict[str, Dict[str, Any]] = {}
+        for j_num in (1, 2, 3):
+            j_matches = [m for m in matches if int(m.get("jornada", 1) or 1) == j_num]
+            j_comp = [m for m in j_matches if m.get("status") == "completed" and not is_rescheduled_match(m)]
+            j_post = [m for m in j_matches if is_rescheduled_match(m)]
+            j_sched = [m for m in j_matches if m.get("status") == "scheduled" and not is_rescheduled_match(m)]
+            j_total = len(j_matches)
+            pct = round((len(j_comp) / j_total) * 100, 1) if j_total > 0 else 0.0
+            jornadas_summary[f"jornada_{j_num}"] = {
+                "jornada": j_num,
+                "total_matches": j_total,
+                "completed_matches": len(j_comp),
+                "scheduled_matches": len(j_sched),
+                "postponed_matches": len(j_post),
+                "completion_pct": pct,
+            }
+
+        # Métricas por categoría
+        category_metrics: Dict[str, Dict[str, Any]] = {}
+        for cat_id, sport in CATEGORY_SPORTS.items():
+            c_matches = [m for m in matches if m.get("categoryId") == cat_id]
+            c_comp = [m for m in c_matches if m.get("status") == "completed" and not is_rescheduled_match(m)]
+            c_sched = [m for m in c_matches if m.get("status") == "scheduled" and not is_rescheduled_match(m)]
+            c_post = [m for m in c_matches if is_rescheduled_match(m)]
+
+            if sport == "voleibol":
+                total_scored = sum(
+                    (m.get("homeSetsWon") if m.get("homeSetsWon") is not None else (m.get("homeScore", 0) or 0)) +
+                    (m.get("awaySetsWon") if m.get("awaySetsWon") is not None else (m.get("awayScore", 0) or 0))
+                    for m in c_comp
+                )
+                unit_label = "sets"
+            elif sport == "futbol":
+                total_scored = sum((m.get("homeScore", 0) or 0) + (m.get("awayScore", 0) or 0) for m in c_comp)
+                unit_label = "goles"
+            else:
+                total_scored = sum((m.get("homeScore", 0) or 0) + (m.get("awayScore", 0) or 0) for m in c_comp)
+                unit_label = "puntos"
+
+            avg_per_match = round(total_scored / len(c_comp), 2) if len(c_comp) > 0 else 0.0
+
+            rows = standings_by_cat.get(cat_id, [])
+            active_rows = [r for r in rows if (r.get("played", 0) or 0) > 0]
+            leader = rows[0]["school"]["shortName"] if rows else None
+            top_offense = None
+            if active_rows:
+                if sport == "voleibol":
+                    best_off = max(active_rows, key=lambda r: (r.get("setsWon", 0) or 0, r.get("pointsFor", 0) or 0))
+                else:
+                    best_off = max(active_rows, key=lambda r: r.get("pointsFor", 0) or 0)
+                top_offense = best_off["school"]["shortName"]
+
+            category_metrics[cat_id] = {
+                "categoryId": cat_id,
+                "sport": sport,
+                "total_matches": len(c_matches),
+                "completed_matches": len(c_comp),
+                "scheduled_matches": len(c_sched),
+                "postponed_matches": len(c_post),
+                "total_scored": total_scored,
+                "unit_label": unit_label,
+                "avg_per_match": avg_per_match,
+                "leader_school": leader,
+                "top_offense_school": top_offense,
+            }
+
+        return {
+            "global_summary": {
+                "total_matches": total_matches,
+                "completed_matches": len(completed_valid),
+                "live_matches": len(live_matches),
+                "scheduled_matches": len(scheduled_matches),
+                "postponed_matches": len(postponed_matches),
+                "total_goals_futbol": total_goals_futbol,
+                "total_sets_voleibol": total_sets_voleibol,
+                "total_points_baloncesto": total_points_baloncesto,
+            },
+            "jornadas_summary": jornadas_summary,
+            "category_metrics": category_metrics,
+        }

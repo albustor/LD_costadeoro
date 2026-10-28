@@ -417,7 +417,7 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     status: 'scheduled',
     currentPeriod: 'Programado',
-    notes: 'Jornada 2 · CRIA vs. Pumas (3:00 p. m. | Sede: Brasilito)',
+    notes: 'Jornada 2 · CRIA vs. La Paz Tempisque (3:00 p. m. | Sede: Brasilito)',
     updatedAt: '2026-10-27T18:00:00Z',
   },
   {
@@ -436,7 +436,7 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     status: 'scheduled',
     currentPeriod: 'Programado',
-    notes: 'Jornada 2 · Tiburones vs. Journey (3:00 p. m. | Sede: Brasilito)',
+    notes: 'Jornada 2 · La Paz Cabo Velas vs. Journey (3:00 p. m. | Sede: Brasilito)',
     updatedAt: '2026-10-27T18:00:00Z',
   },
 

@@ -80,12 +80,12 @@ const NOVEMBER_SCHEDULE: ScheduleDayBlock[] = [
       {
         matchups: [
           {
-            label: 'CRIA vs. Pumas',
+            label: 'CRIA vs. La Paz Tempisque',
             homeSchoolId: 'cria',
             awaySchoolId: 'la-paz-tempisque',
           },
           {
-            label: 'Tiburones vs. Journey',
+            label: 'La Paz Cabo Velas vs. Journey',
             homeSchoolId: 'la-paz-cabo-velas',
             awaySchoolId: 'journey-school',
           },
