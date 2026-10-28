@@ -51,11 +51,16 @@ export default function AdminManualPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
-      const paramPin = urlParams.get('pin');
+      const paramPin = urlParams.get('pin') || urlParams.get('key');
       const savedPin = sessionStorage.getItem('costadeoro_manual_pin');
       const isAdmin = sessionStorage.getItem('costadeoro_admin_auth');
-      if (paramPin === '26172918' || savedPin === '26172918' || isAdmin === 'true') {
-        sessionStorage.setItem('costadeoro_manual_pin', '26172918');
+      const isValid = (val: string | null) => {
+        if (!val) return false;
+        const clean = val.trim().toLowerCase();
+        return clean === '2026controladmin' || clean === '8421';
+      };
+      if (isValid(paramPin) || isValid(savedPin) || isAdmin === 'true') {
+        sessionStorage.setItem('costadeoro_manual_pin', '2026ControlAdmin');
         setIsUnlocked(true);
       }
     }
@@ -63,14 +68,15 @@ export default function AdminManualPage() {
 
   const handleUnlockManual = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput.trim() === '26172918') {
+    const clean = pinInput.trim().toLowerCase();
+    if (clean === '2026controladmin' || clean === '8421') {
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem('costadeoro_manual_pin', '26172918');
+        sessionStorage.setItem('costadeoro_manual_pin', '2026ControlAdmin');
       }
       setIsUnlocked(true);
       setPinError(null);
     } else {
-      setPinError('PIN de seguridad incorrecto. Verifique con el comité organizador.');
+      setPinError('Clave incorrecta. Utilice su clave maestra 2026ControlAdmin (o 8421).');
     }
   };
 
@@ -132,7 +138,7 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
               Manual Administrativo de Inscripciones
             </h1>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Ingrese el PIN de seguridad asignado a Don Alejandro Rodríguez para acceder a las credenciales y procedimientos oficiales.
+              Ingrese su clave maestra de administrador (<strong>2026ControlAdmin</strong>) para acceder a los procedimientos oficiales.
             </p>
           </div>
 
@@ -143,7 +149,7 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
                 placeholder="••••••••"
-                maxLength={12}
+                maxLength={24}
                 autoFocus
                 className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-300 text-center text-xl font-mono font-bold tracking-widest text-[#28375E] bg-[#FAF6F0] focus:border-[#9A6B38] focus:bg-white focus:outline-none transition-all"
               />

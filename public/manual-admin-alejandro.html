@@ -692,13 +692,13 @@
 </head>
 <body>
 
-  <!-- 🔒 PANTALLA DE BLOQUEO POR PIN (26172918) -->
+  <!-- 🔒 PANTALLA DE BLOQUEO POR CLAVE (2026ControlAdmin) -->
   <div id="lockScreen">
     <div class="lock-card">
       <div class="lock-icon-wrap">🛡️</div>
       <h2 class="lock-title">Acceso protegido · Don Alejandro</h2>
       <p class="lock-desc">
-        Ingrese el PIN de seguridad asignado para consultar la guía oficial simplificada de inscripciones.
+        Ingrese su clave maestra de administrador (<strong>2026ControlAdmin</strong>) para acceder a esta guía oficial simplificada.
       </p>
 
       <form onsubmit="handleUnlock(event)">
@@ -708,7 +708,7 @@
             id="pinInput" 
             class="lock-input" 
             placeholder="••••••••" 
-            maxlength="12" 
+            maxlength="24" 
             autocomplete="off" 
             autofocus 
           />
@@ -720,7 +720,7 @@
         </button>
 
         <div id="lockError" class="lock-error">
-          ⚠️ PIN incorrecto. Verifique con el comité organizador.
+          ⚠️ Clave incorrecta. Use 2026ControlAdmin (o 8421).
         </div>
       </form>
 
@@ -791,9 +791,9 @@
         <span class="access-note">Clave corta rápida: <strong>8421</strong></span>
       </div>
       <div class="access-item">
-        <span class="access-label">PIN de este manual</span>
-        <span class="access-value" style="color: #93c5fd;">26172918</span>
-        <span class="access-note">Su clave personal para abrir esta guía</span>
+        <span class="access-label">Clave de este manual</span>
+        <span class="access-value" style="color: #93c5fd;">2026ControlAdmin</span>
+        <span class="access-note">Misma clave del panel administrativo</span>
       </div>
       <div class="access-item">
         <span class="access-label">PIN maestro de emergencia</span>
@@ -1113,15 +1113,20 @@ _Comité Organizador · Liga Costa de Oro 2026_</div>
 
   <!-- SCRIPT DE DESPACHO Y SEGURIDAD -->
   <script>
-    const VALID_MANUAL_PIN = '26172918';
+    function isValidKey(val) {
+      if (!val) return false;
+      const clean = val.trim().toLowerCase();
+      return clean === '2026controladmin' || clean === '8421';
+    }
 
     function checkAuth() {
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('pin') === VALID_MANUAL_PIN) {
-        sessionStorage.setItem('costadeoro_manual_pin', VALID_MANUAL_PIN);
+      const param = urlParams.get('pin') || urlParams.get('key') || urlParams.get('pass');
+      if (isValidKey(param)) {
+        sessionStorage.setItem('costadeoro_manual_pin', '2026ControlAdmin');
       }
 
-      if (sessionStorage.getItem('costadeoro_manual_pin') === VALID_MANUAL_PIN) {
+      if (isValidKey(sessionStorage.getItem('costadeoro_manual_pin'))) {
         document.getElementById('lockScreen').style.display = 'none';
       } else {
         document.getElementById('lockScreen').style.display = 'flex';
@@ -1133,8 +1138,8 @@ _Comité Organizador · Liga Costa de Oro 2026_</div>
       const input = document.getElementById('pinInput');
       const err = document.getElementById('lockError');
 
-      if (input.value.trim() === VALID_MANUAL_PIN) {
-        sessionStorage.setItem('costadeoro_manual_pin', VALID_MANUAL_PIN);
+      if (isValidKey(input.value)) {
+        sessionStorage.setItem('costadeoro_manual_pin', '2026ControlAdmin');
         document.getElementById('lockScreen').style.display = 'none';
         err.style.display = 'none';
       } else {
