@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   BookOpen, 
@@ -39,11 +39,40 @@ const SCHOOL_PINS: Record<string, { pin: string; contactRole: string }> = {
 };
 
 export default function AdminManualPage() {
+  const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
+  const [pinInput, setPinInput] = useState<string>('');
+  const [pinError, setPinError] = useState<string | null>(null);
   const [activeModule, setActiveModule] = useState<'inscripciones' | 'marcadores' | 'mural' | 'calendario'>('inscripciones');
   const [selectedSchoolPreview, setSelectedSchoolPreview] = useState<string>('cria');
   const [testPasswordInput, setTestPasswordInput] = useState<string>('');
   const [testPasswordResult, setTestPasswordResult] = useState<boolean | null>(null);
   const [copiedSimulation, setCopiedSimulation] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramPin = urlParams.get('pin');
+      const savedPin = sessionStorage.getItem('costadeoro_manual_pin');
+      const isAdmin = sessionStorage.getItem('costadeoro_admin_auth');
+      if (paramPin === '26172918' || savedPin === '26172918' || isAdmin === 'true') {
+        sessionStorage.setItem('costadeoro_manual_pin', '26172918');
+        setIsUnlocked(true);
+      }
+    }
+  }, []);
+
+  const handleUnlockManual = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pinInput.trim() === '26172918') {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('costadeoro_manual_pin', '26172918');
+      }
+      setIsUnlocked(true);
+      setPinError(null);
+    } else {
+      setPinError('PIN de seguridad incorrecto. Verifique con el comité organizador.');
+    }
+  };
 
   // Generador de mensaje simulado de WhatsApp
   const selectedSchool = SCHOOLS_DATA.find((s) => s.id === selectedSchoolPreview) || SCHOOLS_DATA[0];
@@ -87,6 +116,62 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
       setTestPasswordResult(false);
     }
   };
+
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-[#1a2540] to-slate-950 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-amber-500/30 text-center space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-[#FDF8E7] border border-[#D9C16C] text-[#9A6B38] flex items-center justify-center mx-auto text-2xl font-bold">
+            <Lock className="w-8 h-8 text-[#9A6B38]" />
+          </div>
+          <div className="space-y-2">
+            <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-black uppercase tracking-wider">
+              Acceso Protegido
+            </span>
+            <h1 className="text-xl font-black text-slate-900">
+              Manual Administrativo de Inscripciones
+            </h1>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Ingrese el PIN de seguridad asignado a Don Alejandro Rodríguez para acceder a las credenciales y procedimientos oficiales.
+            </p>
+          </div>
+
+          <form onSubmit={handleUnlockManual} className="space-y-4">
+            <div>
+              <input
+                type="password"
+                value={pinInput}
+                onChange={(e) => setPinInput(e.target.value)}
+                placeholder="••••••••"
+                maxLength={12}
+                autoFocus
+                className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-300 text-center text-xl font-mono font-bold tracking-widest text-[#28375E] bg-[#FAF6F0] focus:border-[#9A6B38] focus:bg-white focus:outline-none transition-all"
+              />
+            </div>
+
+            {pinError && (
+              <p className="text-xs font-bold text-rose-600">
+                {pinError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-3.5 px-4 rounded-xl bg-[#9A6B38] hover:bg-[#83582A] text-white font-extrabold text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>Desbloquear manual</span>
+              <KeyRound className="w-4 h-4" />
+            </button>
+          </form>
+
+          <div className="pt-4 border-t border-slate-100 text-[11px] text-slate-500">
+            Liga Costa de Oro 2026 · Curiol Studio<br />
+            Información confidencial para la Dirección del Torneo
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF6F0] text-slate-800 pb-20 font-sans print:bg-white print:p-0">
@@ -164,6 +249,13 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl">
             Protocolo oficial de despacho, operación de inscripciones por institución, registro de actas y contingencias deportivas para la Liga Costa de Oro 2026.
           </p>
+
+          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-xs text-rose-900 leading-relaxed">
+            <span className="text-base">🔒</span>
+            <div>
+              <strong>CONFIDENCIALIDAD ESTRICTA:</strong> Este manual, las claves de acceso y los enlaces con PIN son para uso exclusivo de Don Alejandro Rodríguez y Alberto Bustos. <strong>Queda terminantemente prohibido compartir este enlace o las credenciales con terceras personas.</strong> Cada colegio únicamente recibe su mensaje específico de WhatsApp.
+            </div>
+          </div>
         </header>
 
         {/* SELECTOR DE MÓDULOS DE PROCESOS */}
@@ -388,6 +480,19 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
                   </h2>
                   <p className="text-xs text-slate-500">Un toque abre WhatsApp con el mensaje estructurado listo para despacho</p>
                 </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 leading-relaxed space-y-1">
+                <div className="font-black flex items-center gap-1.5 text-emerald-900">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Regla técnica: Ingreso directo vs. PIN de respaldo</span>
+                </div>
+                <p>
+                  Cuando el coordinador deportivo toca el enlace recibido en WhatsApp, <strong>el formulario se activa y desbloquea de forma directa y automática</strong> sin solicitarle digitar el PIN, ya que el parámetro va incluido en la dirección web.
+                </p>
+                <p className="text-emerald-800">
+                  <strong>El PIN de 4 dígitos es un elemento de respaldo</strong> por si el profesor ingresa posteriormente desde otra computadora o requiere reactivar su sesión manualmente.
+                </p>
               </div>
 
               <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">

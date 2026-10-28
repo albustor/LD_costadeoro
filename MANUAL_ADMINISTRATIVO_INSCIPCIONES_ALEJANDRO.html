@@ -28,6 +28,123 @@
       padding-bottom: 60px;
     }
 
+    /* PANTALLA DE BLOQUEO POR PIN */
+    #lockScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #1a2540 0%, #28375E 50%, #0f172a 100%);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lock-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px 32px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 1px solid rgba(217, 193, 108, 0.4);
+    }
+
+    .lock-icon-wrap {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 18px;
+      background: #FDF8E7;
+      border: 2px solid #D9C16C;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #9A6B38;
+    }
+
+    .lock-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .lock-desc {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .lock-input-group {
+      margin-bottom: 18px;
+    }
+
+    .lock-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      font-size: 22px;
+      font-family: ui-monospace, monospace;
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-align: center;
+      color: #28375E;
+      background: #FAF6F0;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .lock-input:focus {
+      border-color: #9A6B38;
+      background: #ffffff;
+    }
+
+    .btn-unlock {
+      width: 100%;
+      background: #9A6B38;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+    }
+
+    .btn-unlock:hover {
+      background: #7f552a;
+    }
+
+    .lock-error {
+      color: #dc2626;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .lock-footer-note {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
     /* BARRA SUPERIOR FIJA */
     .top-bar {
       position: sticky;
@@ -171,6 +288,12 @@
       border: 1px solid #a7f3d0;
     }
 
+    .tag-red {
+      background: #FEF2F2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
     h1 {
       font-size: 26px;
       font-weight: 900;
@@ -204,6 +327,25 @@
       color: #28375E;
     }
 
+    /* ALERTA DE CONFIDENCIALIDAD */
+    .security-notice {
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      font-size: 12px;
+      color: #991b1b;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.4;
+    }
+
+    .security-notice strong {
+      color: #7f1d1d;
+    }
+
     /* RESUMEN DE CLAVES DE ACCESO */
     .access-banner {
       background: #28375E;
@@ -212,7 +354,7 @@
       padding: 18px 22px;
       margin-bottom: 24px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
     }
 
@@ -231,7 +373,7 @@
     }
 
     .access-value {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 900;
       color: #D9C16C;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -240,6 +382,44 @@
     .access-note {
       font-size: 11px;
       color: #94a3b8;
+    }
+
+    /* NOTA IMPORTANTE SOBRE EL PIN DE RESPALDO */
+    .pin-concept-card {
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .pin-concept-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #10B981;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .pin-concept-text h3 {
+      font-size: 14px;
+      font-weight: 900;
+      color: #065F46;
+      margin-bottom: 4px;
+    }
+
+    .pin-concept-text p {
+      font-size: 13px;
+      color: #047857;
+      line-height: 1.5;
     }
 
     /* SECCIÓN DE TÍTULO */
@@ -466,7 +646,7 @@
     }
 
     .sim-preview-box {
-      background: #DCF8C6; /* Color clásico burbuja WhatsApp */
+      background: #DCF8C6;
       color: #111827;
       padding: 16px;
       border-radius: 12px;
@@ -519,6 +699,28 @@
 
     .btn-sim-wa:hover {
       background: #1eb857;
+    }
+
+    /* MENSAJE DIRECTO LISTO PARA ALEJANDRO */
+    .wa-alejandro-box {
+      background: #F0F4FA;
+      border: 1px solid #CBD5E1;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .wa-bubble-staff {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #28375E;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      color: #1e293b;
+      margin-bottom: 12px;
     }
 
     /* TABLA RESUMEN */
@@ -595,6 +797,9 @@
         color: #000000 !important;
         padding-bottom: 0 !important;
       }
+      #lockScreen {
+        display: none !important;
+      }
       .top-bar {
         display: none !important;
       }
@@ -616,10 +821,10 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .btn-wa-action, .btn-copy-action, .btn-sim-copy, .btn-sim-wa {
+      .btn-wa-action, .btn-copy-action, .btn-sim-copy, .btn-sim-wa, .btn-copy-alejandro-wa {
         display: none !important;
       }
-      .sim-preview-box {
+      .sim-preview-box, .wa-bubble-staff {
         background: #f1f5f9 !important;
         border: 1px solid #cbd5e1 !important;
       }
@@ -627,6 +832,45 @@
   </style>
 </head>
 <body>
+
+  <!-- 🔒 PANTALLA DE BLOQUEO POR PIN (26172918) -->
+  <div id="lockScreen">
+    <div class="lock-card">
+      <div class="lock-icon-wrap">🛡️</div>
+      <h2 class="lock-title">Acceso administrativo protegido</h2>
+      <p class="lock-desc">
+        Ingrese el PIN de seguridad asignado a Don Alejandro Rodríguez para acceder al manual oficial de inscripciones y credenciales.
+      </p>
+
+      <form id="lockForm" onsubmit="handleUnlock(event)">
+        <div class="lock-input-group">
+          <input 
+            type="password" 
+            id="pinInput" 
+            class="lock-input" 
+            placeholder="••••••••" 
+            maxlength="12" 
+            autocomplete="off" 
+            autofocus 
+          />
+        </div>
+
+        <button type="submit" class="btn-unlock">
+          <span>Desbloquear manual</span>
+          <span>→</span>
+        </button>
+
+        <div id="lockError" class="lock-error">
+          ⚠️ PIN incorrecto. Verifique con el comité organizador.
+        </div>
+      </form>
+
+      <div class="lock-footer-note">
+        Festival Deportivo Liga Costa de Oro 2026 · Curiol Studio<br>
+        Uso estrictamente confidencial.
+      </div>
+    </div>
+  </div>
 
   <!-- BARRA SUPERIOR DE ASISTENCIA Y ACCIONES -->
   <div class="top-bar">
@@ -642,6 +886,9 @@
       <a href="https://costadeoro.curiol.studio/admin" target="_blank" class="btn-admin">
         ⚙️ Ir al panel admin
       </a>
+      <button onclick="logoutManual()" style="background: none; border: none; font-size: 11px; color: #dc2626; font-weight: 700; cursor: pointer; text-decoration: underline;">
+        Bloquear
+      </button>
     </div>
   </div>
 
@@ -653,6 +900,7 @@
         <span class="tag tag-gold">Guía de procedimientos oficiales</span>
         <span class="tag tag-blue">Comité organizador MEP 2026</span>
         <span class="tag tag-green">Listo para despacho por WhatsApp</span>
+        <span class="tag tag-red">Confidencial · Uso interno</span>
       </div>
       <h1>Manual paso a paso: Despacho de inscripciones y gestión de nóminas</h1>
       <p class="subtitle">
@@ -663,6 +911,13 @@
         <div><strong>Destinatario:</strong> <span class="meta-recipient">Don Alejandro Rodríguez</span> (Administrador General)</div>
         <div><strong>Soporte Técnico:</strong> Alberto Bustos Ortega & Jim (Curiol Studio)</div>
         <div><strong>Edición:</strong> 28 de octubre, 2026</div>
+      </div>
+
+      <div class="security-notice">
+        <span>🔒</span>
+        <div>
+          <strong>CONFIDENCIALIDAD ESTRICTA:</strong> Este manual, el enlace y las claves de administración son de uso exclusivo para la Dirección del Torneo (Don Alejandro y Alberto). <strong>Queda terminantemente prohibido compartir este enlace con terceras personas.</strong> Cada colegio debe recibir exclusivamente su mensaje particular de WhatsApp.
+        </div>
       </div>
     </div>
 
@@ -679,9 +934,71 @@
         <span class="access-note">Clave rápida alternativa: <strong>8421</strong></span>
       </div>
       <div class="access-item">
+        <span class="access-label">PIN de este manual</span>
+        <span class="access-value" style="color: #93c5fd;">26172918</span>
+        <span class="access-note">Seguridad de acceso directo a esta guía</span>
+      </div>
+      <div class="access-item">
         <span class="access-label">PIN maestro de emergencia</span>
         <span class="access-value" style="color: #6ee7b7;">9999</span>
         <span class="access-note">Desbloquea cualquier colegio en mesa técnica</span>
+      </div>
+    </div>
+
+    <!-- TARJETA CLAVE: EXPLICACIÓN DEL FUNCIONAMIENTO DEL PIN PARA COLEGIOS -->
+    <div class="pin-concept-card">
+      <div class="pin-concept-icon">💡</div>
+      <div class="pin-concept-text">
+        <h3>Regla operativa: Ingreso directo de colegios vs. PIN de respaldo</h3>
+        <p>
+          Cuando el coordinador de una escuela toca el enlace que se le envía por WhatsApp, <strong>ingresa directamente al formulario sin tener que escribir nada</strong>, ya que el PIN viaja incorporado en la dirección web (auto-desbloqueo).<br>
+          <strong>El PIN mostrado en el mensaje actúa como un elemento de respaldo</strong>: si el profesor abre el enlace en otra computadora, borra la sesión o necesita reactivarlo manualmente, simplemente escribe su código institucional de 4 dígitos para ingresar.
+        </p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 0: MENSAJE FORMATEADO LISTO PARA ENVIARLE A DON ALEJANDRO -->
+    <div class="card">
+      <div class="section-title">
+        <span>📲 Mensaje oficial para enviar a Don Alejandro por WhatsApp</span>
+      </div>
+      <p class="section-subtitle">
+        Copia este texto y envíaselo directamente a Don Alejandro para que tenga el enlace al manual, su PIN de entrada y las instrucciones claras:
+      </p>
+
+      <div class="wa-alejandro-box">
+        <div id="waAlejandroText" class="wa-bubble-staff">🏆 *LIGA COSTA DE ORO 2026 · PANEL DE ADMINISTRACIÓN E INSCRIPCIONES*
+Hola don Alejandro, un saludo cordial.
+
+Le comparto la *Guía Oficial Paso a Paso* para el proceso de inscripción y despacho de nóminas a los coordinadores deportivos de cada colegio:
+
+🔗 *Acceso directo a su Manual Administrativo:*
+https://costadeoro.curiol.studio/manual-admin-alejandro.html
+🔑 *PIN de entrada al Manual:* 26172918
+_(Página protegida con clave para su uso exclusivo)_
+
+⚙️ *Datos para ingresar a la Mesa de Administración:*
+• *Portal:* https://costadeoro.curiol.studio/admin
+• *Contraseña:* 2026ControlAdmin _(o clave corta: 8421)_
+• *Pestaña:* «6. Nóminas Oficiales e Inscripciones»
+
+📌 *Detalle clave sobre el funcionamiento:*
+1️⃣ En la guía encontrará los botones directos de WhatsApp para cada uno de los 6 colegios con su mensaje listo.
+2️⃣ Al tocar el botón de WhatsApp, el enlace enviado ya tiene el PIN incorporado, por lo que *la escuela entra de forma directa y automática* sin tener que escribirlo.
+3️⃣ El PIN de 4 dígitos que aparece en el mensaje sirve como *elemento de respaldo* por si ellos luego ingresan desde otra computadora y necesitan reactivarlo.
+4️⃣ *PIN Maestro de Emergencia:* 9999 _(para que usted o la mesa técnica puedan abrir y editar cualquier colegio en caso de que alguien no tenga internet)_.
+
+⚠️ *Seguridad:* Este enlace y las claves son estrictamente confidenciales para la Dirección del Torneo. Por favor no compartir el enlace del manual con nadie más; a cada colegio solo se le envía su mensaje particular de WhatsApp.
+
+¡Quedamos a su total disposición para apoyarle en todo momento!
+_Alberto Bustos & Jim · Curiol Studio_</div>
+
+        <button class="btn-sim-copy" onclick="copyAlejandroMessage()">
+          📋 Copiar mensaje para WhatsApp
+        </button>
+        <span id="fbAlejandro" style="font-size: 12px; color: #047857; font-weight: 700; display: none; margin-left: 10px;">
+          ✓ ¡Mensaje copiado listo para pegar en WhatsApp!
+        </span>
       </div>
     </div>
 
@@ -691,7 +1008,7 @@
         <span>📨 1. Matriz de despacho directo por WhatsApp</span>
       </div>
       <p class="section-subtitle">
-        Cada institución cuenta con un enlace único con su PIN pre-activado. Al hacer clic en el botón verde, se abre WhatsApp con el mensaje personalizado y listo para enviar al delegado o coordinador deportivo:
+        Al hacer clic en el botón verde de cada institución, se abre WhatsApp con el mensaje personalizado y listo para enviar al delegado o coordinador deportivo:
       </p>
 
       <div class="schools-grid">
@@ -706,7 +1023,7 @@
             </div>
           </div>
           <div class="pin-badge">
-            <span>PIN de seguridad:</span>
+            <span>PIN de respaldo:</span>
             <span class="pin-code">1001</span>
           </div>
           <div class="school-actions">
@@ -729,7 +1046,7 @@
             </div>
           </div>
           <div class="pin-badge">
-            <span>PIN de seguridad:</span>
+            <span>PIN de respaldo:</span>
             <span class="pin-code">1002</span>
           </div>
           <div class="school-actions">
@@ -752,7 +1069,7 @@
             </div>
           </div>
           <div class="pin-badge">
-            <span>PIN de seguridad:</span>
+            <span>PIN de respaldo:</span>
             <span class="pin-code">2001</span>
           </div>
           <div class="school-actions">
@@ -775,7 +1092,7 @@
             </div>
           </div>
           <div class="pin-badge">
-            <span>PIN de seguridad:</span>
+            <span>PIN de respaldo:</span>
             <span class="pin-code">3001</span>
           </div>
           <div class="school-actions">
@@ -798,7 +1115,7 @@
             </div>
           </div>
           <div class="pin-badge">
-            <span>PIN de seguridad:</span>
+            <span>PIN de respaldo:</span>
             <span class="pin-code">4001</span>
           </div>
           <div class="school-actions">
@@ -821,7 +1138,7 @@
             </div>
           </div>
           <div class="pin-badge">
-            <span>PIN de seguridad:</span>
+            <span>PIN de respaldo:</span>
             <span class="pin-code">5001</span>
           </div>
           <div class="school-actions">
@@ -1049,7 +1366,7 @@
       <div class="faq-item">
         <div class="faq-q">¿Los padres de familia o estudiantes pueden ver estas contraseñas?</div>
         <div class="faq-a">
-          <strong>No.</strong> Toda la información de claves y enlaces con PIN está estrictamente restringida al panel administrativo y a este manual interno. El público general únicamente visualiza los resultados, fotos y partidos del torneo.
+          <strong>No.</strong> Toda la información de claves y enlaces con PIN está estrictamente protegida por el PIN <code>26172918</code> en este manual y por la contraseña administrativa en <code>/admin</code>. El público general únicamente visualiza los resultados, fotos y partidos del torneo.
         </div>
       </div>
 
@@ -1065,6 +1382,51 @@
 
   <!-- LÓGICA INTERACTIVA VANILLA JS -->
   <script>
+    const VALID_MANUAL_PIN = '26172918';
+
+    // Verificación de autenticación al cargar
+    function checkAuth() {
+      // 1. Revisar parámetro de URL (?pin=26172918)
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramPin = urlParams.get('pin');
+      if (paramPin === VALID_MANUAL_PIN) {
+        sessionStorage.setItem('costadeoro_manual_pin', VALID_MANUAL_PIN);
+      }
+
+      // 2. Revisar almacenamiento de sesión
+      const savedPin = sessionStorage.getItem('costadeoro_manual_pin');
+      if (savedPin === VALID_MANUAL_PIN) {
+        document.getElementById('lockScreen').style.display = 'none';
+      } else {
+        document.getElementById('lockScreen').style.display = 'flex';
+      }
+    }
+
+    function handleUnlock(e) {
+      e.preventDefault();
+      const input = document.getElementById('pinInput');
+      const val = input.value.trim();
+      const err = document.getElementById('lockError');
+
+      if (val === VALID_MANUAL_PIN) {
+        sessionStorage.setItem('costadeoro_manual_pin', VALID_MANUAL_PIN);
+        document.getElementById('lockScreen').style.display = 'none';
+        err.style.display = 'none';
+      } else {
+        err.style.display = 'block';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function logoutManual() {
+      sessionStorage.removeItem('costadeoro_manual_pin');
+      document.getElementById('lockScreen').style.display = 'flex';
+      const input = document.getElementById('pinInput');
+      input.value = '';
+      input.focus();
+    }
+
     const SCHOOLS_DATA = {
       'la-paz-cabo-velas': {
         name: 'La Paz Community School Cabo Velas',
@@ -1114,12 +1476,12 @@ Estimado/a coordinador/a deportivo de *${school.name}*:
 Le compartimos el enlace oficial para el registro e inscripción de atletas de su institución:
 
 🔗 *Enlace directo:* ${school.url}
-🔑 *PIN institucional de acceso:* ${school.pin}
-*(Al abrir el enlace, el formulario se activa y desbloquea automáticamente)*
+🔑 *PIN institucional de acceso (respaldo):* ${school.pin}
+*(Al abrir el enlace en su teléfono o computadora, el formulario se activa y desbloquea automáticamente sin tener que digitar el PIN)*
 
 📋 *Instrucciones para completar la inscripción:*
-1️⃣ Ingrese al enlace directo en su teléfono o computadora.
-2️⃣ Inscriba a sus atletas en línea por disciplina (fútbol, voleibol y baloncesto) o descargue la *Plantilla oficial de Excel (.xls)*, llénela y cárguela en el mismo portal.
+1️⃣ Ingrese al enlace directo.
+2️⃣ Inscriba a sus atletas en línea por disciplina (fútbol, voleibol y baloncesto) con sus dos apellidos o descargue la *Plantilla oficial de Excel (.xls)*, llénela y cárguela en el mismo portal.
 3️⃣ Toda la información registrada alimenta de forma inmediata las actas de juego del torneo.
 
 ¡Muchos éxitos a toda la delegación en la competencia!
@@ -1169,12 +1531,26 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
       sendWhatsApp(selector.value);
     }
 
+    function copyAlejandroMessage() {
+      const text = document.getElementById('waAlejandroText').innerText;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          const fb = document.getElementById('fbAlejandro');
+          fb.style.display = 'inline-block';
+          setTimeout(() => {
+            fb.style.display = 'none';
+          }, 3500);
+        });
+      }
+    }
+
     function showToast(msg) {
       alert(msg);
     }
 
-    // Inicializar simulador al cargar
+    // Inicializar al cargar
     document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
       updateSimulatedMessage();
     });
   </script>
