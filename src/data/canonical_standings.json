@@ -1,8 +1,8 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-10-16T20:26:28.790668+00:00",
+  "last_updated": "2026-10-28T00:13:14.763173+00:00",
   "version": "1.0.0",
-  "matches_processed": 16,
+  "matches_processed": 41,
   "computed_standing_points": {
     "cat-fem-futbol": [
       {
@@ -444,16 +444,16 @@
         "position": 1
       },
       {
-        "teamId": "educarte",
+        "teamId": "vittorino",
         "school": {
-          "id": "educarte",
-          "name": "Educarte Bilingual High School",
-          "shortName": "Educarte",
-          "acronym": "EDU",
-          "logo": "☀️",
-          "primaryColor": "#e11d48",
-          "secondaryColor": "#be123c",
-          "location": "Tamarindo",
+          "id": "vittorino",
+          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
+          "shortName": "Monseñor Vittorino",
+          "acronym": "VIT",
+          "logo": "🛡️",
+          "primaryColor": "#0284c7",
+          "secondaryColor": "#0369a1",
+          "location": "Huacas",
           "city": "Santa Cruz, Guanacaste"
         },
         "played": 1,
@@ -475,16 +475,16 @@
         "position": 2
       },
       {
-        "teamId": "vittorino",
+        "teamId": "educarte",
         "school": {
-          "id": "vittorino",
-          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
-          "shortName": "Monseñor Vittorino",
-          "acronym": "VIT",
-          "logo": "🛡️",
-          "primaryColor": "#0284c7",
-          "secondaryColor": "#0369a1",
-          "location": "Huacas",
+          "id": "educarte",
+          "name": "Educarte Bilingual High School",
+          "shortName": "Educarte",
+          "acronym": "EDU",
+          "logo": "☀️",
+          "primaryColor": "#e11d48",
+          "secondaryColor": "#be123c",
+          "location": "Tamarindo",
           "city": "Santa Cruz, Guanacaste"
         },
         "played": 1,

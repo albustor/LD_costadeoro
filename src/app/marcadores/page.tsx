@@ -40,6 +40,7 @@ export default function MarcadoresPage() {
   );
 
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+  const [jornadaFilter, setJornadaFilter] = useState<'all' | 1 | 2 | 3>('all');
 
   // Actualizar categoría al cambiar deporte
   const handleSportSelect = (sport: SportType) => {
@@ -49,7 +50,11 @@ export default function MarcadoresPage() {
   };
 
   const currentCategory = categories.find((c) => c.id === selectedCategoryId) || sportCategories[0];
-  const categoryMatches = matches.filter((m) => m.categoryId === (currentCategory?.id || ''));
+  const allCategoryMatches = matches.filter((m) => m.categoryId === (currentCategory?.id || ''));
+  const categoryMatches =
+    jornadaFilter === 'all'
+      ? allCategoryMatches
+      : allCategoryMatches.filter((m) => (m.jornada || 1) === jornadaFilter);
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-fade-in pb-12">
@@ -146,7 +151,7 @@ export default function MarcadoresPage() {
       {/* ⚽ 3. MARCADORES OFICIALES DE LA CATEGORÍA */}
       {currentCategory && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 font-extrabold text-[11px]">
@@ -155,17 +160,37 @@ export default function MarcadoresPage() {
                 <span className="text-xs text-slate-500 font-semibold">• Rama {currentCategory.gender}</span>
               </div>
               <h2 className="text-base sm:text-lg font-black text-slate-900 mt-1">
-                Marcadores de los Encuentros ({categoryMatches.length})
+                Marcadores y Encuentros ({categoryMatches.length})
               </h2>
             </div>
-            <span className="text-xs text-slate-500">
-              Día de competencia: <strong className="text-slate-800">{currentCategory.dayOfWeek}</strong>
-            </span>
+
+            {/* Selector rápido por Jornada */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {[
+                { id: 'all', label: 'Todas las jornadas' },
+                { id: 1, label: 'Jornada 1 (Oct)' },
+                { id: 2, label: 'Jornada 2 (2-6 Nov)' },
+                { id: 3, label: 'Jornada 3 (16-20 Nov)' },
+              ].map((jTab) => (
+                <button
+                  key={jTab.id}
+                  type="button"
+                  onClick={() => setJornadaFilter(jTab.id as 'all' | 1 | 2 | 3)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer border ${
+                    jornadaFilter === jTab.id
+                      ? 'bg-slate-950 text-amber-300 border-slate-950 shadow-2xs'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                  }`}
+                >
+                  {jTab.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {categoryMatches.length === 0 ? (
             <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-500 text-xs sm:text-sm">
-              No hay partidos registrados aún para esta categoría.
+              No hay partidos registrados en esta jornada para esta categoría.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
@@ -186,10 +211,16 @@ export default function MarcadoresPage() {
                     }`}
                   >
                     {/* Encabezado del Partido */}
-                    <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-100">
-                      <div className="flex items-center gap-1.5 text-slate-500 font-medium">
-                        <Clock className="w-3.5 h-3.5 text-amber-600" />
-                        <span>{formatTime12h(m.time)}</span>
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs pb-2 border-b border-slate-100">
+                      <div className="flex flex-wrap items-center gap-2 text-slate-600 font-semibold">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 font-extrabold text-[10.5px] border border-slate-200">
+                          Jornada {m.jornada || 1}
+                        </span>
+                        <span>{formatFullDateCostaRica(m.date)}</span>
+                        <span className="inline-flex items-center gap-1 text-slate-500">
+                          <Clock className="w-3.5 h-3.5 text-amber-600" />
+                          <span>{formatTime12h(m.time)}</span>
+                        </span>
                       </div>
 
                       {isRescheduled && (

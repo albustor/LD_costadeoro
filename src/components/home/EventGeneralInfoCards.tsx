@@ -567,51 +567,78 @@ export function EventGeneralInfoCards({ schools }: EventGeneralInfoCardsProps) {
                       🔹 2.ª jornada
                     </span>
                     <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-extrabold">
-                      Próxima cita
+                      Próxima cita · Publicada
                     </span>
                   </div>
                   <h4 className="font-black text-sm sm:text-base text-slate-900">2 al 6 de noviembre</h4>
                   <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                    14 partidos de rotación inter-sedes. ¡Sigue de cerca las tablas de posiciones y apoya a tu colegio!
+                    Encuentros actualizados de lunes a viernes (Fútbol, Voleibol y Baloncesto). ¡Consulta horarios y sedes!
                   </p>
                 </div>
                 <div className="pt-2 border-t border-blue-200/70 flex flex-col gap-1.5">
                   <Link
-                    href="/marcadores"
+                    href="/calendario"
                     className="inline-flex items-center justify-between text-xs font-extrabold text-blue-950 hover:text-blue-700 transition-colors"
                   >
-                    <span>📊 Dar seguimiento a tablas</span>
+                    <span>📅 Ver programación 2.ª fecha</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                   <Link
-                    href="/mural"
+                    href="/marcadores"
                     className="inline-flex items-center justify-between text-xs font-extrabold text-blue-800 hover:text-blue-950 transition-colors"
                   >
-                    <span>🎥 Subir fotos de la 1.ª fecha</span>
+                    <span>📊 Dar seguimiento a tablas</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
 
-              <div className="p-4 bg-purple-50/70 rounded-2xl border border-purple-200 space-y-1.5">
-                <span className="px-2.5 py-0.5 rounded-full bg-purple-200/90 text-purple-950 text-xs font-black">
-                  🔹 3.ª jornada
-                </span>
-                <h4 className="font-black text-sm sm:text-base text-slate-900">16 al 20 de noviembre</h4>
-                <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                  14 partidos de definición de grupos y clasificación.
-                </p>
+              <div className="p-4 bg-purple-50/70 rounded-2xl border border-purple-200 flex flex-col justify-between gap-2.5">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-full bg-purple-200/90 text-purple-950 text-xs font-black">
+                      🔹 3.ª jornada
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-purple-700 text-white text-[10px] font-extrabold">
+                      Publicada
+                    </span>
+                  </div>
+                  <h4 className="font-black text-sm sm:text-base text-slate-900">16 al 20 de noviembre</h4>
+                  <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                    Definición de grupos, clasificación y reposición de encuentros de fútbol, voleibol y baloncesto.
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-purple-200/70">
+                  <Link
+                    href="/calendario"
+                    className="inline-flex items-center justify-between w-full text-xs font-extrabold text-purple-950 hover:text-purple-700 transition-colors"
+                  >
+                    <span>📅 Ver programación 3.ª fecha</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
 
-              <div className="p-4 bg-emerald-50/80 rounded-2xl border border-emerald-300 space-y-1.5 ring-1 ring-emerald-400/30">
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-950 text-xs font-black flex items-center gap-1.5 w-fit">
-                  <Award className="w-3.5 h-3.5 text-emerald-800" />
-                  🏆 GRANDES FINALES
-                </span>
-                <h4 className="font-black text-sm sm:text-base text-slate-900">23 al 27 de noviembre</h4>
-                <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
-                  Finales por categoría, tercer puesto y ceremonia de premiación.
-                </p>
+              <div className="p-4 bg-emerald-50/80 rounded-2xl border border-emerald-300 flex flex-col justify-between gap-2.5 ring-1 ring-emerald-400/30">
+                <div className="space-y-1.5">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-950 text-xs font-black flex items-center gap-1.5 w-fit">
+                    <Award className="w-3.5 h-3.5 text-emerald-800" />
+                    🏆 GRANDES FINALES
+                  </span>
+                  <h4 className="font-black text-sm sm:text-base text-slate-900">23 al 27 de noviembre</h4>
+                  <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                    Finales por categoría, tercer puesto y ceremonia de premiación.
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-emerald-200/80">
+                  <Link
+                    href="/calendario"
+                    className="inline-flex items-center justify-between w-full text-xs font-extrabold text-emerald-950 hover:text-emerald-700 transition-colors"
+                  >
+                    <span>🏆 Ver detalles de finales</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

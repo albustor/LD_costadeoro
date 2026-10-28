@@ -123,25 +123,26 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Cintillo informativo de la 2.ª jornada y botón de difusión por WhatsApp */}
-          <div className="p-3.5 sm:px-5 sm:py-3.5 rounded-2xl bg-blue-50/90 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {/* Cintillo informativo de la programación de noviembre y botones de acción */}
+          <div className="p-3.5 sm:px-5 sm:py-3.5 rounded-2xl bg-blue-50/90 border border-blue-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             <div className="flex items-start sm:items-center gap-3">
-              <span className="px-2.5 py-1 rounded-full bg-blue-200/90 text-blue-950 text-xs font-black shrink-0">
-                🔹 2.ª jornada
+              <span className="px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-black shrink-0 shadow-2xs">
+                📅 Noviembre
               </span>
               <p className="text-xs sm:text-sm text-slate-800 font-medium">
-                <strong className="font-black text-slate-950">Próxima cita: 2 al 6 de noviembre</strong> · Fechas y programación de encuentros por definir.
+                <strong className="font-black text-slate-950">¡Programación oficial actualizada!</strong> · Jornada 2 (2 al 6 nov), Jornada 3 (16 al 20 nov) y Finales (23 al 27 nov).
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
               <Link
-                href="/inscripciones"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
+                href="/calendario"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
               >
-                <span>📋 Inscripciones con PIN</span>
+                <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                <span>Ver calendario de noviembre</span>
               </Link>
               <a
-                href="https://wa.me/?text=%C2%A1Hola%20familias!%20%F0%9F%8F%86%20Les%20invitamos%20a%20seguir%20las%20tablas%20de%20posiciones%20oficiales%20de%20la%20Liga%20Costa%20de%20Oro%202026%20y%20a%20compartir%20sus%20fotos%20y%20videos%20de%20la%201.%C2%AA%20fecha%20en%20nuestro%20portal%20oficial:%20https://costadeoro.curiol.studio"
+                href="https://wa.me/?text=%C2%A1Hola%20familias!%20%F0%9F%8F%86%20Ya%20est%C3%A1%20disponible%20la%20programaci%C3%B3n%20oficial%20de%20noviembre%20(Jornada%202,%20Jornada%203%20y%20Finales),%20las%20tablas%20de%20posiciones%20y%20el%20muro%20familiar%20de%20la%20Liga%20Costa%20de%20Oro%202026%20en:%20https://costadeoro.curiol.studio"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition-all shadow-2xs cursor-pointer"

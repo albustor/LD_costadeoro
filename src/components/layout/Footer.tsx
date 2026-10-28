@@ -32,12 +32,6 @@ export function Footer() {
         {/* ENLACES RÁPIDOS INSTITUCIONALES */}
         <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
           <a
-            href="/inscripciones"
-            className="px-3 py-1.5 rounded-xl bg-amber-100/80 hover:bg-amber-200 text-amber-950 font-bold text-xs border border-amber-300 transition-colors shadow-2xs"
-          >
-            📋 Portal de inscripciones
-          </a>
-          <a
             href="/deportes"
             className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 transition-colors shadow-2xs"
           >
