@@ -58,34 +58,41 @@ export default function HomePage() {
         {/* 🏆📸 LLAMADO A LA ACCIÓN: SEGUIMIENTO DE TABLAS Y RECUERDOS DE LA 1.ª FECHA */}
         <div className="pt-4 border-t border-slate-200/80 space-y-3.5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
-            {/* Tarjeta 1: Invitación a seguir las tablas de posiciones */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white border border-amber-500/40 shadow-md flex flex-col justify-between gap-3.5">
-              <div className="space-y-2">
+            {/* Tarjeta 1: Calendario actualizado y tablas de posiciones (resumida) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white border border-amber-500/40 shadow-md flex flex-col justify-between gap-3">
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-extrabold border border-amber-400/30">
-                    <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Resultados oficiales · 1.ª fecha</span>
+                    <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Calendario actualizado</span>
                   </span>
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Actualizado</span>
+                    <span>Noviembre 2026</span>
                   </span>
                 </div>
                 <h2 className="text-base sm:text-lg font-extrabold text-white leading-snug">
-                  ¡Sigue de cerca las tablas de posiciones!
+                  Calendario actualizado y tablas de posiciones
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Consulta los marcadores oficiales y cómo marcha cada institución en fútbol, voleibol y baloncesto tras haberse disputado la primera jornada del Festival Deportivo.
+                  Consulta las nuevas fechas de noviembre (Jornada 2, Jornada 3 y Finales) y las tablas de posiciones oficiales.
                 </p>
               </div>
-              <div className="pt-1 flex flex-wrap items-center gap-2.5">
+              <div className="pt-1 flex flex-wrap items-center gap-2">
+                <Link
+                  href="/calendario"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm transition-all shadow-sm cursor-pointer"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span>Ver calendario actualizado</span>
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
                 <Link
                   href="/marcadores"
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm transition-all shadow-sm cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/15 transition-all cursor-pointer"
                 >
-                  <Trophy className="w-4 h-4" />
-                  <span>Ver tablas de posiciones y marcadores</span>
-                  <ChevronRight className="w-4 h-4" />
+                  <Trophy className="w-4 h-4 text-amber-400" />
+                  <span>Tablas y marcadores</span>
                 </Link>
               </div>
             </div>
