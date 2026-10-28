@@ -227,166 +227,70 @@
       "coachName": "",
       "assistantCoachName": "",
       "players": [],
-      "updatedAt": "2026-10-01T16:14:00.790Z"
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     },
     {
-      "categoryId": "cat-c-futbol",
-      "players": [
-        {
-          "id": "p-lp-1",
-          "fullName": "Sebasti�n Mora Quir�s",
-          "isCaptain": false,
-          "birthYear": 2011,
-          "jerseyNumber": 1,
-          "position": "Portero/a / Titular"
-        },
-        {
-          "id": "p-lp-4",
-          "fullName": "Felipe Cordero Brenes",
-          "isCaptain": false,
-          "birthYear": 2011,
-          "jerseyNumber": 4,
-          "position": "Defensa / Campo"
-        },
-        {
-          "id": "p-lp-10",
-          "fullName": "Nicol�s Vargas Arroyo",
-          "isCaptain": true,
-          "birthYear": 2011,
-          "jerseyNumber": 10,
-          "position": "Mediocampo / Armador"
-        }
-      ],
       "schoolId": "la-paz-cabo-velas",
       "sport": "futbol",
-      "assistantCoachName": "Mario Andr�s Fonseca Castro",
-      "coachName": "Carlos Alberto Santana Solano",
-      "updatedAt": "2026-10-27T23:59:45.280Z"
+      "categoryId": "cat-c-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     },
     {
       "schoolId": "la-paz-tempisque",
-      "players": [
-        {
-          "id": "p-lt-1",
-          "fullName": "Camila Navarro Salas",
-          "isCaptain": false,
-          "birthYear": 2012,
-          "jerseyNumber": 1,
-          "position": "Portero/a / Titular"
-        },
-        {
-          "id": "p-lt-7",
-          "fullName": "Luc�a Monge Sol�s",
-          "isCaptain": true,
-          "birthYear": 2012,
-          "jerseyNumber": 7,
-          "position": "Delantero/a / Alero"
-        }
-      ],
-      "categoryId": "cat-fem-futbol",
       "sport": "futbol",
-      "coachName": "Valeria Jim�nez Ortiz",
-      "updatedAt": "2026-10-27T23:59:45.795Z"
+      "categoryId": "cat-fem-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
+    },
+    {
+      "schoolId": "la-paz-tempisque",
+      "sport": "voleibol",
+      "categoryId": "cat-c-voleibol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     },
     {
       "schoolId": "cria",
-      "players": [
-        {
-          "id": "p-cr-1",
-          "fullName": "Alexander David Smith Mora",
-          "isCaptain": false,
-          "birthYear": 2011,
-          "jerseyNumber": 1,
-          "position": "Portero/a / Titular"
-        },
-        {
-          "id": "p-cr-9",
-          "fullName": "Mateo Johnson Cordero",
-          "isCaptain": true,
-          "birthYear": 2011,
-          "jerseyNumber": 9,
-          "position": "Delantero/a / Alero"
-        }
-      ],
-      "categoryId": "cat-c-futbol",
       "sport": "futbol",
-      "coachName": "Michael Steven Brown Rojas",
-      "updatedAt": "2026-10-27T23:59:46.022Z"
+      "categoryId": "cat-c-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     },
     {
       "schoolId": "journey-school",
-      "players": [
-        {
-          "id": "p-js-1",
-          "fullName": "Emma Rodr�guez Villalobos",
-          "isCaptain": false,
-          "birthYear": 2012,
-          "jerseyNumber": 1,
-          "position": "Portero/a / Titular"
-        },
-        {
-          "id": "p-js-11",
-          "fullName": "Sof�a Davis Esquivel",
-          "isCaptain": true,
-          "birthYear": 2012,
-          "jerseyNumber": 11,
-          "position": "Delantero/a / Alero"
-        }
-      ],
-      "categoryId": "cat-fem-futbol",
       "sport": "futbol",
-      "coachName": "Gabriela Carvajal Uma�a",
-      "updatedAt": "2026-10-27T23:59:46.345Z"
+      "categoryId": "cat-fem-futbol",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     },
     {
       "schoolId": "vittorino",
-      "players": [
-        {
-          "id": "p-mv-4",
-          "fullName": "Andr�s Quesada Chinchilla",
-          "isCaptain": true,
-          "birthYear": 2011,
-          "jerseyNumber": 4,
-          "position": "Armador / Base"
-        },
-        {
-          "id": "p-mv-12",
-          "fullName": "Esteban Vega Guti�rrez",
-          "isCaptain": false,
-          "birthYear": 2011,
-          "jerseyNumber": 12,
-          "position": "P�vot / Poste"
-        }
-      ],
-      "categoryId": "cat-c-basket",
       "sport": "baloncesto",
-      "coachName": "Jos� Manuel Abarca Guill�n",
-      "updatedAt": "2026-10-27T23:59:46.576Z"
+      "categoryId": "cat-c-basket",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     },
     {
       "schoolId": "educarte",
-      "players": [
-        {
-          "id": "p-ed-3",
-          "fullName": "Elena Castro Alvarado",
-          "isCaptain": true,
-          "birthYear": 2012,
-          "jerseyNumber": 3,
-          "position": "Armadora"
-        },
-        {
-          "id": "p-ed-8",
-          "fullName": "Daniela Chaves Pizarro",
-          "isCaptain": false,
-          "birthYear": 2012,
-          "jerseyNumber": 8,
-          "position": "Rematadora / Opuesta"
-        }
-      ],
-      "categoryId": "cat-fem-c-voley",
       "sport": "voleibol",
-      "coachName": "Mariana Barboza C�spedes",
-      "updatedAt": "2026-10-27T23:59:46.806Z"
+      "categoryId": "cat-fem-c-voley",
+      "coachName": "",
+      "assistantCoachName": "",
+      "players": [],
+      "updatedAt": "2026-10-28T11:37:29.176Z"
     }
   ],
   "matches": [
@@ -1610,5 +1514,5 @@
       "Localhost (Entorno Local), CR": 10
     }
   },
-  "updatedAt": "2026-10-28T01:43:28.623Z"
+  "updatedAt": "2026-10-28T03:25:56.565Z"
 }

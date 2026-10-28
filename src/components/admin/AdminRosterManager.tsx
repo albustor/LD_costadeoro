@@ -26,7 +26,8 @@ import {
   ExternalLink,
   Mail,
   FileCheck,
-  KeyRound
+  KeyRound,
+  BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -475,6 +476,18 @@ export function AdminRosterManager() {
               Comparte el portal webapp directo a cada coordinador deportivo con su PIN de seguridad. La institución podrá ingresar atletas en línea o registrar la nómina oficial.
             </p>
           </div>
+
+          <a
+            href="/admin/manual"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black shadow-md transition self-start sm:self-center shrink-0 cursor-pointer"
+            title="Abrir la guía paso a paso del proceso de inscripciones por WhatsApp en una pestaña nueva"
+          >
+            <BookOpen className="w-4 h-4 text-slate-950" />
+            <span>Guía Paso a Paso</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-950/70" />
+          </a>
         </div>
 
         {/* Cuadrícula de Enlaces por Institución */}

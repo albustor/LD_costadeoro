@@ -43,7 +43,8 @@ import {
   Activity,
   Heart,
   Search,
-  Filter
+  Filter,
+  BookOpen
 } from 'lucide-react';
 import { tournamentStorage } from '@/lib/storageAdapter';
 import { uploadMediaToBunny, validateMediaFile, BUNNY_MEDIA_CONFIG, BunnyUploadResult } from '@/lib/bunnyMediaService';
@@ -599,6 +600,18 @@ export function AdminControlPanel() {
               <QrCode className="w-3.5 h-3.5 text-amber-400" />
               <span>Cartel QR Canchas</span>
             </button>
+
+            <a
+              href="/admin/manual"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-2xs transition cursor-pointer"
+              title="Abrir el manual interactivo paso a paso para administradores en una pestaña nueva"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-slate-950" />
+              <span>Manual Paso a Paso</span>
+              <ExternalLink className="w-3 h-3 text-slate-950/70" />
+            </a>
           </div>
         </div>
 
