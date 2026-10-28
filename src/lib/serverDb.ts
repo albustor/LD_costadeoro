@@ -417,9 +417,52 @@ export async function addCommentToPost(
 }
 
 /**
- * Obtiene todas las nóminas oficiales desde la base de datos central
+ * Obtiene todas las nóminas oficiales desde la base de datos central (Firestore + local)
  */
 export async function getAllRostersFromDb(): Promise<TeamRoster[]> {
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const snap = await firestore.collection('costa_de_oro_rosters').get();
+      if (!snap.empty) {
+        const cloudRosters: TeamRoster[] = [];
+        snap.docs.forEach((doc: any) => {
+          const d = doc.data();
+          cloudRosters.push({
+            schoolId: d.schoolId,
+            sport: d.sport,
+            categoryId: d.categoryId,
+            coachName: d.coachName || '',
+            assistantCoachName: d.assistantCoachName || undefined,
+            players: Array.isArray(d.players) ? d.players : [],
+            updatedAt: d.updatedAt || new Date().toISOString(),
+          });
+        });
+
+        const db = await getTournamentDb();
+        const localList = db.rosters || INITIAL_DEFAULT_ROSTERS;
+        const combined = [...localList];
+
+        cloudRosters.forEach((cr) => {
+          const idx = combined.findIndex(
+            (r) => r.schoolId === cr.schoolId && r.sport === cr.sport && r.categoryId === cr.categoryId
+          );
+          if (idx >= 0) {
+            combined[idx] = cr;
+          } else {
+            combined.push(cr);
+          }
+        });
+
+        db.rosters = combined;
+        saveTournamentDb(db).catch(() => {});
+        return combined;
+      }
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Rosters Read Fallback]:', fsErr);
+  }
+
   const db = await getTournamentDb();
   if (!db.rosters || db.rosters.length === 0) {
     db.rosters = INITIAL_DEFAULT_ROSTERS;
@@ -429,7 +472,7 @@ export async function getAllRostersFromDb(): Promise<TeamRoster[]> {
 }
 
 /**
- * Guarda o actualiza una nómina de categoría en la base de datos central
+ * Guarda o actualiza una nómina de categoría en la base de datos central (Firestore + local)
  */
 export async function saveRosterToDb(newRoster: TeamRoster): Promise<TeamRoster> {
   const db = await getTournamentDb();
@@ -456,6 +499,23 @@ export async function saveRosterToDb(newRoster: TeamRoster): Promise<TeamRoster>
   db.rosters = current;
   await saveTournamentDb(db);
 
+  // Persistir en Firestore en la nube
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const docId = `${updatedRoster.schoolId}_${updatedRoster.sport}_${updatedRoster.categoryId}`;
+      const payload = Object.fromEntries(
+        Object.entries(updatedRoster).filter(([_, v]) => v !== undefined)
+      );
+      await firestore.collection('costa_de_oro_rosters').doc(docId).set({
+        ...payload,
+        updatedAtServer: FieldValue.serverTimestamp(),
+      }, { merge: true });
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Save Roster Warning]:', fsErr);
+  }
+
   return updatedRoster;
 }
 
@@ -466,6 +526,7 @@ export async function saveMultipleRostersToDb(rostersToSave: TeamRoster[]): Prom
   const db = await getTournamentDb();
   const current = db.rosters || [];
 
+  const savedList: TeamRoster[] = [];
   rostersToSave.forEach((newR) => {
     const idx = current.findIndex(
       (r) =>
@@ -482,10 +543,30 @@ export async function saveMultipleRostersToDb(rostersToSave: TeamRoster[]): Prom
     } else {
       current.push(updatedR);
     }
+    savedList.push(updatedR);
   });
 
   db.rosters = current;
   await saveTournamentDb(db);
+
+  // Persistir lote en Firestore
+  try {
+    const firestore = getFirestoreDb();
+    if (firestore) {
+      const batch = firestore.batch();
+      savedList.forEach((r) => {
+        const docId = `${r.schoolId}_${r.sport}_${r.categoryId}`;
+        const docRef = firestore.collection('costa_de_oro_rosters').doc(docId);
+        const payload = Object.fromEntries(
+          Object.entries(r).filter(([_, v]) => v !== undefined)
+        );
+        batch.set(docRef, { ...payload, updatedAtServer: FieldValue.serverTimestamp() }, { merge: true });
+      });
+      await batch.commit();
+    }
+  } catch (fsErr) {
+    console.warn('[Firestore Save Multiple Rosters Warning]:', fsErr);
+  }
 
   return current;
 }
@@ -502,6 +583,18 @@ export async function deleteRosterFromDb(schoolId: string, sport: string, catego
 
   if (db.rosters.length !== initialLen) {
     await saveTournamentDb(db);
+
+    // Eliminar de Firestore
+    try {
+      const firestore = getFirestoreDb();
+      if (firestore) {
+        const docId = `${schoolId}_${sport}_${categoryId}`;
+        await firestore.collection('costa_de_oro_rosters').doc(docId).delete();
+      }
+    } catch (fsErr) {
+      console.warn('[Firestore Delete Roster Warning]:', fsErr);
+    }
+
     return true;
   }
   return false;

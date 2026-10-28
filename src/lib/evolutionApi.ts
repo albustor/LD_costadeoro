@@ -449,7 +449,6 @@ export const WEEKLY_REPORT_RECIPIENTS = [
 
 // 📱 DESTINATARIOS DE ALERTAS DEL SISTEMA (Nóminas y Pings)
 export const ADMIN_NOTIFICATION_RECIPIENTS = [
-  { name: 'Don Alejandro (Coordinador de Eventos)', phone: '50688445486', role: 'Coordinador de Eventos' },
   { name: 'Alberto · Curiol Studio Admin', phone: '50660602617', role: 'Administrador General' },
 ];
 

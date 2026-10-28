@@ -64,6 +64,11 @@ export function AdminRosterManager() {
 
   useEffect(() => {
     reloadRosters();
+    rosterService.fetchRemoteRosters().then((remotes) => {
+      if (remotes && remotes.length > 0) {
+        setAllRosters(remotes);
+      }
+    }).catch((err) => console.warn('[AdminRosterManager] Error sincronizando nóminas:', err));
 
     const handleSync = () => reloadRosters();
     window.addEventListener('rosters_sync_updated', handleSync);

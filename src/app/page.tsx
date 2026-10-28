@@ -134,6 +134,12 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <Link
+                href="/inscripciones"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
+              >
+                <span>📋 Inscripciones con PIN</span>
+              </Link>
               <a
                 href="https://wa.me/?text=%C2%A1Hola%20familias!%20%F0%9F%8F%86%20Les%20invitamos%20a%20seguir%20las%20tablas%20de%20posiciones%20oficiales%20de%20la%20Liga%20Costa%20de%20Oro%202026%20y%20a%20compartir%20sus%20fotos%20y%20videos%20de%20la%201.%C2%AA%20fecha%20en%20nuestro%20portal%20oficial:%20https://costadeoro.curiol.studio"
                 target="_blank"

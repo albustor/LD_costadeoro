@@ -36,6 +36,7 @@ import { PIN_TO_SCHOOL_MAP, getSchoolByPin, rosterService, validateFullName } fr
 function RegistroNominaContent() {
   const searchParams = useSearchParams();
   const schoolParam = searchParams.get('school');
+  const pinParam = searchParams.get('pin');
 
   // Escuela Activa
   const [selectedSchool, setSelectedSchool] = useState<School | null>(() => {
@@ -66,7 +67,7 @@ function RegistroNominaContent() {
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
   const [allSchoolRosters, setAllSchoolRosters] = useState<TeamRoster[]>([]);
 
-  // Si cambia el parámetro de URL, actualizar la escuela seleccionada
+  // Si cambian los parámetros de URL (colegio o PIN), actualizar y auto-desbloquear
   useEffect(() => {
     if (schoolParam) {
       const match = SCHOOLS_DATA.find((s) => s.id === schoolParam);
@@ -74,7 +75,24 @@ function RegistroNominaContent() {
         setSelectedSchool(match);
       }
     }
-  }, [schoolParam]);
+    if (pinParam) {
+      const pin = pinParam.trim();
+      setEnteredPin(pin);
+      if (pin === '9999') {
+        const defaultSc = selectedSchool || SCHOOLS_DATA[0];
+        setSelectedSchool(defaultSc);
+        setIsPinUnlocked(true);
+        setPinError(null);
+      } else {
+        const schoolFound = getSchoolByPin(pin);
+        if (schoolFound) {
+          setSelectedSchool(schoolFound);
+          setIsPinUnlocked(true);
+          setPinError(null);
+        }
+      }
+    }
+  }, [schoolParam, pinParam]);
 
   // Cargar nóminas guardadas de la institución
   const loadRosters = () => {
