@@ -381,6 +381,35 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
                 <p>
                   2. En la pantalla de bienvenida, digita la clave <code>2026ControlAdmin</code> (o la corta <code>8421</code>) y presiona <strong>«Desbloquear Acceso»</strong>.
                 </p>
+
+                {/* TARJETA DESTACADA CLAVE MAESTRA */}
+                <div className="p-4 rounded-2xl bg-[#FDF8E7] border-2 border-[#D9C16C] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] text-[#9A6B38] font-black uppercase tracking-wider block">
+                      Clave Oficial Maestra de Administración
+                    </span>
+                    <strong className="font-mono text-lg text-[#28375E] tracking-wider block">
+                      2026ControlAdmin
+                    </strong>
+                    <span className="text-xs text-slate-600 block mt-0.5">
+                      Contraseña principal de Don Alejandro para desbloquear la consola y gestionar resultados, actas y nóminas.
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                        navigator.clipboard.writeText('2026ControlAdmin');
+                        alert('¡Clave 2026ControlAdmin copiada al portapapeles!');
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#9A6B38] hover:bg-[#83582A] text-white font-extrabold text-xs shadow-xs transition-colors shrink-0 cursor-pointer self-start sm:self-center"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copiar clave</span>
+                  </button>
+                </div>
+
                 <p>
                   3. En la barra superior de pestañas, haz clic en <strong>«6. Nóminas Oficiales e Inscripciones»</strong> para entrar al gestor central.
                 </p>
