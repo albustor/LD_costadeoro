@@ -140,6 +140,10 @@ export default function AdminManualPage() {
   // Navegación por pasos
   const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4>(1);
   
+  // Despacho rápido en Paso 2
+  const [quickSchoolKey, setQuickSchoolKey] = useState<string>('cria');
+  const [quickPhone, setQuickPhone] = useState<string>('');
+  
   // Selector de Ficha PDF
   const [pdfSchoolKey, setPdfSchoolKey] = useState<string>('cria');
   const [pdfSport, setPdfSport] = useState<string>('Fútbol · Categoría C Masculino');
@@ -216,6 +220,17 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
   const handleSendSchoolWa = (schoolKey: string) => {
     const text = encodeURIComponent(getSchoolWaMessage(schoolKey));
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  };
+
+  const handleQuickSendWa = () => {
+    const cleanPhone = quickPhone.trim().replace(/[^0-9]/g, '');
+    const text = encodeURIComponent(getSchoolWaMessage(quickSchoolKey));
+    let url = `https://api.whatsapp.com/send?text=${text}`;
+    if (cleanPhone) {
+      const full = cleanPhone.startsWith('506') ? cleanPhone : `506${cleanPhone}`;
+      url = `https://api.whatsapp.com/send?phone=${full}&text=${text}`;
+    }
+    window.open(url, '_blank');
   };
 
   // Generador de Ficha Oficial PDF y WhatsApp (Paso 4)
@@ -470,13 +485,13 @@ _Liga Costa de Oro 2026 · Curiol Studio_`;
             }`}
           >
             <span className={`text-[10px] font-black uppercase tracking-wider ${activeStep === 2 ? 'text-[#D9C16C]' : 'text-[#9A6B38]'}`}>
-              2️⃣ Paso 2
+              2️⃣ Paso 2 · Inmediato
             </span>
             <strong className="text-xs sm:text-sm font-extrabold leading-tight">
               Despacho por WhatsApp
             </strong>
             <span className={`text-[11px] ${activeStep === 2 ? 'text-slate-300' : 'text-slate-500'}`}>
-              Invitaciones a colegios
+              Envío directo en 1 clic
             </span>
           </button>
 
@@ -523,25 +538,66 @@ _Liga Costa de Oro 2026 · Curiol Studio_`;
         </nav>
 
         {/* ═══════════════════════════════════════════════════════════════
-            PASO 1: INGRESO A LA MESA DE ADMINISTRACIÓN
+            PASO 1: INGRESO A LA MESA DE ADMINISTRACIÓN Y FUNCIONES
             ═══════════════════════════════════════════════════════════════ */}
         {activeStep === 1 && (
-          <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-4 animate-fade-in">
+          <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5 animate-fade-in">
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 rounded-full bg-[#9A6B38] text-white font-black text-xs uppercase tracking-wider">
                 Paso 1
               </span>
               <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                Ingreso a la mesa de administración (Pestaña 6)
+                Ingreso y funciones de la mesa de administración (Pestaña 6)
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Don Alejandro ingresa a la plataforma oficial desde cualquier teléfono o computadora:
+              La <strong>Mesa de Administración</strong> es el centro neurálgico del torneo. Desde allí, Don Alejandro tiene el control total sobre las inscripciones, actas y credenciales:
             </p>
 
-            <div className="space-y-3 pt-1">
+            {/* ¿QUÉ SE HACE DESDE EL ADMINISTRADOR? */}
+            <div className="space-y-2">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#28375E] block">
+                📌 ¿Qué gestiona Don Alejandro desde el Panel de Administración?
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="p-3.5 rounded-xl bg-[#FAF6F0] border border-slate-200 space-y-1">
+                  <span className="text-lg block">👁️</span>
+                  <strong className="text-xs font-extrabold text-[#28375E] block">1. Supervisión en vivo</strong>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    Revisar qué colegios ya ingresaron su nómina, cuántos atletas tienen acreditados y si falta alguna categoría.
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#FAF6F0] border border-slate-200 space-y-1">
+                  <span className="text-lg block">📲</span>
+                  <strong className="text-xs font-extrabold text-[#28375E] block">2. Despacho y reenvío</strong>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    Enviar los enlaces oficiales por WhatsApp a los coordinadores o reenviarlos si alguien extravió su mensaje.
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#FAF6F0] border border-slate-200 space-y-1">
+                  <span className="text-lg block">✍️</span>
+                  <strong className="text-xs font-extrabold text-[#28375E] block">3. Inscripción en mesa</strong>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    Registrar o corregir atletas directamente si un profesor no tiene señal o le dicta los datos por teléfono.
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#FAF6F0] border border-slate-200 space-y-1">
+                  <span className="text-lg block">📄</span>
+                  <strong className="text-xs font-extrabold text-[#28375E] block">4. Actas de arbitraje</strong>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    Exportar en Excel (.xls) y en PDF las listas completas para entregar a los árbitros y anotadores en cancha.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* INSTRUCCIONES DE INGRESO */}
+            <div className="space-y-3 pt-2">
               <div className="p-4 rounded-2xl bg-[#FAF6F0] border-l-4 border-[#28375E] text-xs sm:text-sm text-slate-700 space-y-1">
-                <strong className="text-slate-900 font-extrabold block">1. Abrir la dirección web oficial:</strong>
+                <strong className="text-slate-900 font-extrabold block">1. Dirección web oficial:</strong>
                 <p>
                   Ingrese a{' '}
                   <a 
@@ -553,32 +609,48 @@ _Liga Costa de Oro 2026 · Curiol Studio_`;
                     <span>costadeoro.curiol.studio/admin</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>{' '}
-                  en Google Chrome, Safari o Microsoft Edge.
+                  en su teléfono o computadora.
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#FAF6F0] border-l-4 border-[#9A6B38] text-xs sm:text-sm text-slate-700 space-y-1">
-                <strong className="text-slate-900 font-extrabold block">2. Desbloquear con su clave de administrador:</strong>
+                <strong className="text-slate-900 font-extrabold block">2. Desbloqueo:</strong>
                 <p>
                   Escriba su contraseña maestra personal enviada por WhatsApp privado y presione <strong>«Desbloquear Acceso»</strong>.
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#FAF6F0] border-l-4 border-emerald-600 text-xs sm:text-sm text-slate-700 space-y-1">
-                <strong className="text-slate-900 font-extrabold block">3. Ubicar la pestaña 6:</strong>
+                <strong className="text-slate-900 font-extrabold block">3. Consola de Nóminas:</strong>
                 <p>
-                  En la barra superior de pestañas del panel admin, toque <strong>«6. Nóminas Oficiales e Inscripciones»</strong>. Allí se concentran todas las herramientas de gestión.
+                  En la barra superior de pestañas del panel admin, toque <strong>«6. Nóminas Oficiales e Inscripciones»</strong>.
                 </p>
               </div>
             </div>
 
-            <div className="flex justify-end pt-4">
+            {/* BOTÓN LANZADOR DIRECTO A PESTAÑA 6 */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#FAF6F0] to-[#F5EFE6] border-2 border-[#D9C16C] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div>
+                <strong className="text-sm font-black text-[#28375E] block">Acceso Directo al Panel Administrativo</strong>
+                <span className="text-xs text-slate-600 block mt-0.5">Toque este botón para abrir la consola de administración en una pestaña nueva:</span>
+              </div>
+              <a
+                href="https://costadeoro.curiol.studio/admin"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#28375E] hover:bg-[#1a2540] text-white font-black text-xs shadow-xs transition cursor-pointer shrink-0"
+              >
+                <span>🚀 Abrir Mesa de Control Admin (Pestaña 6) ↗</span>
+              </a>
+            </div>
+
+            <div className="flex justify-end pt-2">
               <button
                 type="button"
                 onClick={() => setActiveStep(2)}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#28375E] hover:bg-[#1a2540] text-white font-extrabold text-xs shadow-xs transition-colors cursor-pointer"
               >
-                <span>Continuar al Paso 2: Despacho por WhatsApp</span>
+                <span>Continuar al Paso 2: Despacho Inmediato por WhatsApp</span>
                 <span>➔</span>
               </button>
             </div>
@@ -586,21 +658,69 @@ _Liga Costa de Oro 2026 · Curiol Studio_`;
         )}
 
         {/* ═══════════════════════════════════════════════════════════════
-            PASO 2: DESPACHO POR WHATSAPP A COLEGIOS
+            PASO 2: DESPACHO POR WHATSAPP A COLEGIOS (ACCIÓN DIRECTA)
             ═══════════════════════════════════════════════════════════════ */}
         {activeStep === 2 && (
           <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-4 animate-fade-in">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full bg-[#9A6B38] text-white font-black text-xs uppercase tracking-wider">
-                Paso 2
+              <span className="px-3 py-1 rounded-full bg-emerald-600 text-white font-black text-xs uppercase tracking-wider">
+                Paso 2 · Inmediato
               </span>
               <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                Despacho de invitaciones por WhatsApp a los coordinadores
+                Despacho directo de invitaciones por WhatsApp a coordinadores
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Cada colegio tiene asignado un enlace oficial individual. Con solo pulsar el botón verde <strong>«📲 Enviar WhatsApp»</strong>, el sistema abre WhatsApp con el mensaje estructurado listo para despacho:
+              Desde esta misma pantalla, Don Alejandro puede realizar el despacho <strong>de manera inmediata y directa</strong>. Toque el botón verde del colegio correspondiente para abrir WhatsApp con el mensaje redactado y listo para enviar:
             </p>
+
+            {/* CONSOLA DE ENVÍO DIRECTO A NÚMERO */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-300 space-y-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div>
+                  <strong className="text-xs sm:text-sm font-black text-emerald-950 block">⚡ Despacho Rápido e Inmediato</strong>
+                  <span className="text-[11px] text-emerald-800 block">Seleccione el colegio y, opcionalmente, digite el teléfono del profesor para abrir el chat directo sin buscarlo:</span>
+                </div>
+                <span className="px-2.5 py-0.5 rounded bg-white text-emerald-900 border border-emerald-300 text-[10px] font-black uppercase">
+                  Acción en 1 Clic
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 items-end">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-emerald-900">1. Colegio:</label>
+                  <select
+                    value={quickSchoolKey}
+                    onChange={(e) => setQuickSchoolKey(e.target.value)}
+                    className="w-full text-xs font-bold py-2 px-3 rounded-lg bg-white border border-emerald-300 text-slate-900 cursor-pointer"
+                  >
+                    {Object.entries(SCHOOLS_MANUAL_DATA).map(([k, s]) => (
+                      <option key={k} value={k}>{s.short} (PIN {s.pin})</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-emerald-900">2. Teléfono (opcional):</label>
+                  <input
+                    type="tel"
+                    value={quickPhone}
+                    onChange={(e) => setQuickPhone(e.target.value)}
+                    placeholder="Ej: 88882617 o deje en blanco"
+                    className="w-full text-xs font-mono font-bold py-2 px-3 rounded-lg bg-white border border-emerald-300 text-slate-900 outline-none"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleQuickSendWa}
+                  className="w-full py-2 px-3 rounded-lg bg-[#25D366] hover:bg-[#20ba5a] text-white font-black text-xs shadow-xs flex items-center justify-center gap-1.5 cursor-pointer transition"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>📲 Despachar WhatsApp Inmediato</span>
+                </button>
+              </div>
+            </div>
 
             <div className="p-4 rounded-2xl bg-emerald-50 border-l-4 border-emerald-500 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
               <strong className="block font-black text-emerald-900">💡 Regla técnica de acceso seguro:</strong>

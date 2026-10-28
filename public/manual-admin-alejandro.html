@@ -212,7 +212,6 @@
     }
 
     .top-bar-inner {
-      max-w: 1000px;
       max-width: 1080px;
       margin: 0 auto;
       display: flex;
@@ -561,6 +560,121 @@
       color: #475569;
       line-height: 1.6;
       margin-bottom: 20px;
+    }
+
+    /* MATRIZ DE RESPONSABILIDADES PASO 1 */
+    .admin-roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .admin-role-card {
+      background: #FAF6F0;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .admin-role-icon {
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+
+    .admin-role-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--curiol-blue);
+    }
+
+    .admin-role-desc {
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    /* BARRA DE ACCIÓN DIRECTA PASO 1 */
+    .direct-admin-launcher {
+      background: linear-gradient(135deg, #FAF6F0 0%, #F5EFE6 100%);
+      border: 2px solid var(--curiol-gold);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .btn-launch-admin {
+      background: var(--curiol-blue);
+      color: #ffffff;
+      padding: 12px 22px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(40, 55, 94, 0.25);
+      transition: all 0.15s ease;
+    }
+
+    .btn-launch-admin:hover {
+      background: var(--curiol-blue-dark);
+      transform: translateY(-1px);
+    }
+
+    /* DESPACHO INMEDIATO PASO 2 */
+    .direct-dispatch-console {
+      background: #F0FDF4;
+      border: 2px solid #86EFAC;
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .dispatch-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .dispatch-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    @media (max-width: 768px) {
+      .dispatch-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-direct-phone {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #86EFAC;
+      background: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #166534;
+      outline: none;
+      width: 100%;
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -1162,7 +1276,7 @@
         background-color: #ffffff !important;
         color: #000000 !important;
       }
-      .top-bar, .steps-tabs-nav, .confidential-box, .btn-print, .btn-wa-send, .btn-copy-link, .btn-open-form, .pdf-tool-box, .wa-preview-box, footer {
+      .top-bar, .steps-tabs-nav, .confidential-box, .btn-print, .btn-wa-send, .btn-copy-link, .btn-open-form, .pdf-tool-box, .wa-preview-box, footer, .direct-admin-launcher, .direct-dispatch-console {
         display: none !important;
       }
       .page-container {
@@ -1298,17 +1412,17 @@
       <button id="tabBtn1" class="step-tab-btn active" onclick="goToStep(1)">
         <span class="step-num-badge">1️⃣ Paso 1</span>
         <span class="step-tab-label">Ingreso a Mesa Admin</span>
-        <span class="step-tab-sub">Login y Pestaña 6</span>
+        <span class="step-tab-sub">¿Qué se hace en Admin?</span>
       </button>
 
       <button id="tabBtn2" class="step-tab-btn" onclick="goToStep(2)">
-        <span class="step-num-badge">2️⃣ Paso 2</span>
+        <span class="step-num-badge">2️⃣ Paso 2 · Inmediato</span>
         <span class="step-tab-label">Despacho por WhatsApp</span>
-        <span class="step-tab-sub">Invitaciones a colegios</span>
+        <span class="step-tab-sub">Envío directo en 1 clic</span>
       </button>
 
       <button id="tabBtn3" class="step-tab-btn" onclick="goToStep(3)">
-        <span class="step-num-badge">3️⃣ Paso 3</span>
+        <span class="step-num-badge">3️⃣ Paso 3 · Visual</span>
         <span class="step-tab-label">Registro Visual de Atletas</span>
         <span class="step-tab-sub">Consola & Dos Apellidos</span>
       </button>
@@ -1322,50 +1436,133 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════
-         PASO 1: INGRESO A LA MESA DE ADMINISTRACIÓN
+         PASO 1: INGRESO A LA MESA DE ADMINISTRACIÓN Y FUNCIONES DEL ADMIN
          ═══════════════════════════════════════════════════════════════ -->
     <div id="stepPane1" class="step-card">
       <div class="step-header-inner">
         <span class="step-pill">Paso 1</span>
-        <h2 class="step-title">Ingreso a la mesa de administración (Pestaña 6)</h2>
+        <h2 class="step-title">Ingreso y funciones de la mesa de administración (Pestaña 6)</h2>
       </div>
       <p class="step-lead">
-        Don Alejandro ingresa a la plataforma oficial desde cualquier teléfono o computadora:
+        La <strong>Mesa de Administración</strong> es el centro neurálgico del torneo. Desde allí, Don Alejandro tiene el control total sobre las inscripciones, actas y credenciales:
       </p>
 
-      <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+      <!-- ¿QUÉ SE HACE DESDE EL ADMINISTRADOR? (4 RESPONSABILIDADES CLARAS) -->
+      <div style="font-size: 13px; font-weight: 800; color: var(--curiol-blue); text-transform: uppercase; margin-bottom: 8px;">
+        📌 ¿Qué gestiona Don Alejandro desde el Panel de Administración?
+      </div>
+      <div class="admin-roles-grid">
+        <div class="admin-role-card">
+          <span class="admin-role-icon">👁️</span>
+          <strong class="admin-role-title">1. Supervisión en vivo</strong>
+          <p class="admin-role-desc">Revisar qué colegios ya ingresaron su nómina, cuántos atletas tienen acreditados y si falta alguna categoría.</p>
+        </div>
+
+        <div class="admin-role-card">
+          <span class="admin-role-icon">📲</span>
+          <strong class="admin-role-title">2. Despacho y reenvío</strong>
+          <p class="admin-role-desc">Enviar los enlaces oficiales por WhatsApp a los coordinadores o reenviarlos si alguien extravió su mensaje.</p>
+        </div>
+
+        <div class="admin-role-card">
+          <span class="admin-role-icon">✍️</span>
+          <strong class="admin-role-title">3. Inscripción en mesa</strong>
+          <p class="admin-role-desc">Registrar o corregir atletas directamente si un profesor no tiene señal o le dicta los datos por teléfono.</p>
+        </div>
+
+        <div class="admin-role-card">
+          <span class="admin-role-icon">📄</span>
+          <strong class="admin-role-title">4. Actas de arbitraje</strong>
+          <p class="admin-role-desc">Exportar en Excel (.xls) y en PDF las listas completas para entregar a los árbitros y anotadores en cancha.</p>
+        </div>
+      </div>
+
+      <!-- INSTRUCCIONES DE INGRESO -->
+      <div style="display: flex; flex-direction: column; gap: 14px; margin: 20px 0;">
         <div style="background: #FAF6F0; border-left: 4px solid var(--curiol-blue); padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 13.5px;">
-          <strong>1. Abrir la dirección web oficial:</strong> Ingrese a <a href="https://costadeoro.curiol.studio/admin" target="_blank" style="color: var(--curiol-blue); font-weight: 800;">costadeoro.curiol.studio/admin</a> en Google Chrome, Safari o Microsoft Edge.
+          <strong>1. Dirección web oficial:</strong> Ingrese a <a href="https://costadeoro.curiol.studio/admin" target="_blank" style="color: var(--curiol-blue); font-weight: 800;">costadeoro.curiol.studio/admin</a> en su celular o computadora.
         </div>
 
         <div style="background: #FAF6F0; border-left: 4px solid var(--curiol-bronze); padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 13.5px;">
-          <strong>2. Desbloquear con su clave de administrador:</strong> Escriba su contraseña maestra personal enviada por WhatsApp privado y presione <strong>«Desbloquear Acceso»</strong>.
+          <strong>2. Desbloqueo:</strong> Escriba su contraseña maestra personal enviada por WhatsApp privado y presione <strong>«Desbloquear Acceso»</strong>.
         </div>
 
         <div style="background: #FAF6F0; border-left: 4px solid var(--accent-green); padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 13.5px;">
-          <strong>3. Ubicar la pestaña 6:</strong> En la barra superior de pestañas del panel admin, toque <strong>«6. Nóminas Oficiales e Inscripciones»</strong>. Allí se concentran todas las herramientas de gestión.
+          <strong>3. Consola de Nóminas:</strong> En la barra superior, toque la pestaña <strong>«6. Nóminas Oficiales e Inscripciones»</strong>.
         </div>
+      </div>
+
+      <!-- BOTÓN LANZADOR DIRECTO A PESTAÑA 6 -->
+      <div class="direct-admin-launcher">
+        <div>
+          <strong style="color: var(--curiol-blue); font-size: 14.5px; display: block;">Acceso Directo al Panel Administrativo</strong>
+          <span style="font-size: 12px; color: #475569;">Toque este botón para abrir la consola de administración en una pestaña nueva:</span>
+        </div>
+        <a href="https://costadeoro.curiol.studio/admin" target="_blank" class="btn-launch-admin">
+          <span>🚀 Abrir Mesa de Control Admin (Pestaña 6) ↗</span>
+        </a>
       </div>
 
       <div style="text-align: right; margin-top: 24px;">
         <button onclick="goToStep(2)" class="lock-btn" style="display: inline-flex; margin-left: auto;">
-          <span>Continuar al Paso 2: Despacho por WhatsApp</span>
+          <span>Continuar al Paso 2: Despacho Inmediato por WhatsApp</span>
           <span>➔</span>
         </button>
       </div>
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════
-         PASO 2: DESPACHO POR WHATSAPP A COLEGIOS
+         PASO 2: DESPACHO POR WHATSAPP A COLEGIOS (ACCIÓN DIRECTA E INMEDIATA)
          ═══════════════════════════════════════════════════════════════ -->
     <div id="stepPane2" class="step-card" style="display: none;">
       <div class="step-header-inner">
-        <span class="step-pill">Paso 2</span>
-        <h2 class="step-title">Despacho de invitaciones por WhatsApp a los coordinadores</h2>
+        <span class="step-pill green">Paso 2 · Inmediato</span>
+        <h2 class="step-title">Despacho directo de invitaciones por WhatsApp a coordinadores</h2>
       </div>
       <p class="step-lead">
-        Cada colegio tiene asignado un enlace oficial individual. Con solo pulsar el botón verde <strong>«📲 Enviar WhatsApp»</strong>, el sistema abre WhatsApp con el mensaje estructurado listo para despacho:
+        Desde esta misma pantalla, Don Alejandro puede realizar el despacho <strong>de manera inmediata y directa</strong>. Toque el botón verde del colegio correspondiente para abrir WhatsApp con el mensaje redactado y listo para enviar:
       </p>
+
+      <!-- CONSOLA DE ENVÍO DIRECTO A NÚMERO PERSONALIZADO -->
+      <div class="direct-dispatch-console">
+        <div class="dispatch-header">
+          <div>
+            <strong style="color: #166534; font-size: 14px; display: block;">⚡ Despacho Rápido e Inmediato</strong>
+            <span style="font-size: 12px; color: #15803D;">Seleccione el colegio y, si lo desea, ingrese el número del profesor para abrir el chat directo sin buscarlo:</span>
+          </div>
+          <span style="font-size: 11px; background: #ffffff; border: 1px solid #86EFAC; color: #166534; padding: 3px 8px; border-radius: 6px; font-weight: 800;">
+            Acción en 1 clic
+          </span>
+        </div>
+
+        <div class="dispatch-controls">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase;">1. Colegio:</label>
+            <select id="quickSchoolSelect" class="input-direct-phone" style="font-family: inherit;">
+              <option value="la-paz-cabo-velas">La Paz Cabo Velas (PIN 1001)</option>
+              <option value="la-paz-tempisque">La Paz Tempisque (PIN 1002)</option>
+              <option value="cria" selected>CRIA (PIN 2001)</option>
+              <option value="journey-school">Journey School (PIN 3001)</option>
+              <option value="vittorino">Monseñor Vittorino (PIN 4001)</option>
+              <option value="educarte">Educarte (PIN 5001)</option>
+            </select>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase;">2. Teléfono (opcional):</label>
+            <input 
+              type="tel" 
+              id="quickPhoneInput" 
+              class="input-direct-phone" 
+              placeholder="Ej: 88882617 o deje en blanco"
+            >
+          </div>
+
+          <button onclick="sendQuickWhatsApp()" class="btn-wa-send" style="padding: 11px 18px; font-size: 13px;">
+            <span>📲 Despachar WhatsApp Inmediato</span>
+          </button>
+        </div>
+      </div>
 
       <!-- REGLA TÉCNICA CLAVE -->
       <div style="background: var(--accent-green-bg); border-left: 4px solid var(--accent-green); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #065F46; line-height: 1.55;">
@@ -1374,7 +1571,7 @@
         • <strong>PIN de respaldo:</strong> El PIN de 4 dígitos indicado en el mensaje es un respaldo por si abren luego en otra computadora y requieren confirmarlo.
       </div>
 
-      <!-- LISTA DE LOS 6 COLEGIOS -->
+      <!-- LISTA DE LOS 6 COLEGIOS CON ACCIÓN DIRECTA -->
       <div class="school-grid">
 
         <div class="school-card-row">
@@ -1529,7 +1726,7 @@
             <span>📋 Pantalla de Inscripción y Nómina Oficial · Vista en Vivo</span>
           </div>
           <span style="font-size: 11px; background: #ECFDF5; color: #065F46; padding: 2px 8px; border-radius: 4px; font-weight: 800;">
-            ● Conectado a Firestore
+            ● Conectado a Firestore (Lectura y Escritura OK)
           </span>
         </div>
 
@@ -2033,6 +2230,19 @@ _Comité Organizador · Liga Costa de Oro 2026_`;
     function sendWhatsApp(schoolKey) {
       const msg = encodeURIComponent(generateMessage(schoolKey));
       window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+    }
+
+    function sendQuickWhatsApp() {
+      const schoolKey = document.getElementById('quickSchoolSelect').value;
+      const phoneInput = document.getElementById('quickPhoneInput').value.trim().replace(/[^0-9]/g, '');
+      const msg = encodeURIComponent(generateMessage(schoolKey));
+
+      let targetUrl = `https://api.whatsapp.com/send?text=${msg}`;
+      if (phoneInput) {
+        const fullPhone = phoneInput.startsWith('506') ? phoneInput : `506${phoneInput}`;
+        targetUrl = `https://api.whatsapp.com/send?phone=${fullPhone}&text=${msg}`;
+      }
+      window.open(targetUrl, '_blank');
     }
 
     function copyMessage(schoolKey) {
