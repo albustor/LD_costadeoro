@@ -24,9 +24,11 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleWeeklyReport(request: NextRequest) {
-  const startTime = Date.now();
-  const db = await getTournamentDb();
-  const analytics = await getAnalyticsSummaryFromDb();
+  return NextResponse.json({
+    success: true,
+    message: "Torneo Costa de Oro concluido. Reportes semanales de los viernes desactivados definitivamente.",
+    deactivated: true
+  });
 
   // Fecha y hora actual en Costa Rica
   const nowCR = new Date().toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' });

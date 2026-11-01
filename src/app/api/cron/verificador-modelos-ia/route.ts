@@ -251,7 +251,7 @@ async function handleAudit(request: NextRequest) {
   const emailPayload = {
     recipients: [
       'info@curiol.studio',
-      'alberto.bustos.ortega@mep.go.cr',
+      'info@curiol.studio',
     ],
     subject: `🤖 [Auditoría IA 5:00 AM] Liga Costa de Oro 2026 — Estado: ${allOperational ? '100% OPERACIONAL ✅' : 'ATENCIÓN REQUERIDA ⚠️'}`,
     bodyHtml: `
@@ -300,7 +300,7 @@ async function handleAudit(request: NextRequest) {
 ${testResults.map((r) => `${r.status === 'ONLINE' ? '✅' : '⚠️'} *${r.provider}* (${r.model}): ${r.status} [${r.latencyMs}ms]`).join('\n')}
 
 🛡️ *Resiliencia:* Cascada activa de 4 niveles con respaldo local SHA-256.
-✉️ *Copia enviada a:* info@curiol.studio y alberto.bustos.ortega@mep.go.cr`,
+✉️ *Copia enviada a:* info@curiol.studio y info@curiol.studio`,
   };
 
   return NextResponse.json({

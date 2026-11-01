@@ -586,20 +586,9 @@ export async function sendWhatsAppMessageViaEvolutionApi(
  * Despacha notificación de registro de nómina a todos los administradores oficiales
  */
 export async function sendRosterNotificationToAdmins(roster: TeamRoster) {
-  const message = formatRosterNotificationMessage(roster);
-  const results = [];
-
-  for (const admin of ADMIN_NOTIFICATION_RECIPIENTS) {
-    const res = await sendWhatsAppMessageViaEvolutionApi(admin.phone, message);
-    results.push({
-      recipient: admin.name,
-      phone: admin.phone,
-      ...res,
-      directUrl: getWhatsAppDirectUrl(admin.phone, message),
-    });
-  }
-
-  return results;
+  // Torneo concluido: No se despachan notificaciones por WhatsApp a administradores
+  console.log('[NOTIFICATION] Torneo concluido. Notificación de nómina omitida.');
+  return [];
 }
 
 /**
