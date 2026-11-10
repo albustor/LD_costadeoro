@@ -312,5 +312,15 @@ class TestScoringRulesMEP2026(unittest.TestCase):
         self.assertEqual(stats["jornadas_summary"]["jornada_2"]["scheduled_matches"], 1)
         self.assertEqual(stats["category_metrics"]["cat-c-futbol"]["total_scored"], 3)
 
+    def test_solid_strategy_contract_liskov(self):
+        """Valida que todas las estrategias deportivas cumplan el contrato LSP/OCP."""
+        from sport_scoring_strategies import SPORT_STRATEGIES, get_sport_strategy
+        for sport_key in ("futbol", "baloncesto", "voleibol"):
+            strat = get_sport_strategy(sport_key)
+            self.assertEqual(strat.sport_id, sport_key)
+            self.assertTrue(callable(strat.apply_match_result))
+            self.assertTrue(callable(strat.tiebreaker_key))
+            self.assertTrue(callable(strat.match_total_scored))
+
 if __name__ == "__main__":
     unittest.main()

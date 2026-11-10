@@ -260,10 +260,17 @@
       "schoolId": "cria",
       "sport": "futbol",
       "categoryId": "cat-c-futbol",
-      "coachName": "",
-      "assistantCoachName": "",
-      "players": [],
-      "updatedAt": "2026-10-28T11:37:29.176Z"
+      "coachName": "Carlos Mendoza",
+      "players": [
+        {
+          "id": "p-test-cria-1",
+          "jerseyNumber": 10,
+          "fullName": "Alexander David Smith Mora",
+          "position": "Delantero",
+          "isCaptain": true
+        }
+      ],
+      "updatedAt": "2026-10-28T14:26:36.087Z"
     },
     {
       "schoolId": "journey-school",
@@ -651,12 +658,12 @@
       "venue": "Cabo Velas",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "cria",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
+      "homeScore": 1,
+      "awayScore": 1,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
       "notes": "Jornada 2 · Triangular femenino (3:00 p. m. | Sede: Cabo Velas)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "updatedAt": "2026-11-03T07:55:00Z"
     },
     {
       "id": "j2-fut-fem-02",
@@ -670,12 +677,12 @@
       "venue": "Cabo Velas",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "la-paz-tempisque",
-      "homeScore": 0,
+      "homeScore": 2,
       "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
+      "status": "completed",
+      "currentPeriod": "Finalizado",
       "notes": "Jornada 2 · Triangular femenino (3:00 p. m. | Sede: Cabo Velas)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "updatedAt": "2026-11-03T07:55:00Z"
     },
     {
       "id": "j2-fut-fem-03",
@@ -689,12 +696,12 @@
       "venue": "Cabo Velas",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-tempisque",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
+      "homeScore": 3,
+      "awayScore": 1,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
       "notes": "Jornada 2 · Triangular femenino (3:00 p. m. | Sede: Cabo Velas)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "updatedAt": "2026-11-03T07:55:00Z"
     },
     {
       "id": "j2-fut-c-01",
@@ -704,16 +711,16 @@
       "categoryId": "cat-c-futbol",
       "sport": "futbol",
       "date": "2026-11-03",
-      "time": "15:00",
-      "venue": "Brasilito",
+      "time": "15:15",
+      "venue": "Cancha de Brasilito",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-tempisque",
       "homeScore": 0,
       "awayScore": 0,
       "status": "scheduled",
       "currentPeriod": "Programado",
-      "notes": "Jornada 2 · CRIA vs. La Paz Tempisque (3:00 p. m. | Sede: Brasilito)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "notes": "Jornada 2 · CRIA vs. La Paz Tempisque (3:15 p. m. | Sede: Cancha de Brasilito)",
+      "updatedAt": "2026-11-03T07:55:00Z"
     },
     {
       "id": "j2-fut-c-02",
@@ -723,16 +730,16 @@
       "categoryId": "cat-c-futbol",
       "sport": "futbol",
       "date": "2026-11-03",
-      "time": "15:00",
-      "venue": "Brasilito",
+      "time": "15:15",
+      "venue": "Cancha de Brasilito",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "journey-school",
       "homeScore": 0,
       "awayScore": 0,
       "status": "scheduled",
       "currentPeriod": "Programado",
-      "notes": "Jornada 2 · La Paz Cabo Velas vs. Journey (3:00 p. m. | Sede: Brasilito)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "notes": "Jornada 2 · La Paz Cabo Velas vs. Journey (3:15 p. m. | Sede: Cancha de Brasilito)",
+      "updatedAt": "2026-11-03T07:55:00Z"
     },
     {
       "id": "j2-fut-d-01",
@@ -762,15 +769,27 @@
       "sport": "voleibol",
       "date": "2026-11-05",
       "time": "15:00",
-      "venue": "La Paz Tempisque o Educarte",
-      "homeTeamId": "la-paz-tempisque",
-      "awayTeamId": "educarte",
-      "homeScore": 0,
+      "venue": "Centro Educativo Educarte",
+      "homeTeamId": "educarte",
+      "awayTeamId": "la-paz-tempisque",
+      "homeScore": 2,
       "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 2 · Libre: Vittorino y La Paz Cabo Velas (3:00 p. m. | Sede: La Paz Tempisque o Educarte)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 2 · Voleibol Femenino / Categoría C (Educarte 2-0 La Paz Tempisque · Set 1: 25-20, Set 2: 25-15)",
+      "updatedAt": "2026-11-05T16:30:00Z",
+      "homeSetsWon": 2,
+      "awaySetsWon": 0,
+      "setScores": [
+        {
+          "home": 25,
+          "away": 20
+        },
+        {
+          "home": 25,
+          "away": 15
+        }
+      ]
     },
     {
       "id": "j2-bal-c-01",
@@ -1514,5 +1533,5 @@
       "Localhost (Entorno Local), CR": 10
     }
   },
-  "updatedAt": "2026-10-28T03:25:56.565Z"
+  "updatedAt": "2026-10-28T14:26:36.087Z"
 }

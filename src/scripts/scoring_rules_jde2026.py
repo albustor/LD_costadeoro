@@ -9,6 +9,7 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field, asdict
 import json
 import math
+from sport_scoring_strategies import get_sport_strategy, SPORT_STRATEGIES
 
 OFFICIAL_SCHOOLS = [
     {
@@ -223,131 +224,9 @@ class CostaDeOroCalculator:
             home.played += 1
             away.played += 1
 
-            if sport == "voleibol":
-                # En voleibol: si existe setScores, sumar los puntos reales de cada set para PF/PC y pointsRatio
-                set_scores = match.get("setScores")
-                if isinstance(set_scores, list) and len(set_scores) > 0:
-                    pts_home = sum(int(s.get("home", 0) or 0) for s in set_scores if isinstance(s, dict))
-                    pts_away = sum(int(s.get("away", 0) or 0) for s in set_scores if isinstance(s, dict))
-                    home.pointsFor += pts_home
-                    home.pointsAgainst += pts_away
-                    away.pointsFor += pts_away
-                    away.pointsAgainst += pts_home
-                else:
-                    home.pointsFor += home_score
-                    home.pointsAgainst += away_score
-                    away.pointsFor += away_score
-                    away.pointsAgainst += home_score
-            else:
-                home.pointsFor += home_score
-                home.pointsAgainst += away_score
-                away.pointsFor += away_score
-                away.pointsAgainst += home_score
-
-            if sport == "futbol":
-                # Normativa Fútbol MEP: Victoria = 3, Empate = 1, Derrota = 0
-                if home_score > away_score:
-                    home.won += 1
-                    home.points += 3
-                    home.form.append("W")
-                    away.lost += 1
-                    away.form.append("L")
-                elif home_score < away_score:
-                    away.won += 1
-                    away.points += 3
-                    away.form.append("W")
-                    home.lost += 1
-                    home.form.append("L")
-                else:
-                    home.drawn += 1
-                    home.points += 1
-                    home.form.append("D")
-                    away.drawn += 1
-                    away.points += 1
-                    away.form.append("D")
-
-            elif sport == "baloncesto":
-                # Normativa Baloncesto FIBA / MEP: Victoria = 2, Derrota = 1
-                if home_score > away_score:
-                    home.won += 1
-                    home.points += 2
-                    home.form.append("W")
-                    away.lost += 1
-                    away.points += 1
-                    away.form.append("L")
-                elif home_score < away_score:
-                    away.won += 1
-                    away.points += 2
-                    away.form.append("W")
-                    home.lost += 1
-                    home.points += 1
-                    home.form.append("L")
-
-            elif sport == "voleibol":
-                raw_home_sets = match.get("homeSetsWon")
-                raw_away_sets = match.get("awaySetsWon")
-                home_sets = int(raw_home_sets) if raw_home_sets is not None else int(home_score)
-                away_sets = int(raw_away_sets) if raw_away_sets is not None else int(away_score)
-
-                if home.setsWon is not None:
-                    home.setsWon += home_sets
-                if home.setsLost is not None:
-                    home.setsLost += away_sets
-                if away.setsWon is not None:
-                    away.setsWon += away_sets
-                if away.setsLost is not None:
-                    away.setsLost += home_sets
-
-                is_five_sets = (home_sets == 3 or away_sets == 3)
-
-                if home_sets > away_sets:
-                    home.won += 1
-                    home.form.append("W")
-                    away.lost += 1
-                    away.form.append("L")
-
-                    if is_five_sets:
-                        # MEP Art 77.4 (3 de 5 sets): 3-0: 5pts | 3-1: 4pts/1pt | 3-2: 3pts/2pts
-                        if away_sets == 0:
-                            home.points += 5
-                            away.points += 0
-                        elif away_sets == 1:
-                            home.points += 4
-                            away.points += 1
-                        else:
-                            home.points += 3
-                            away.points += 2
-                    else:
-                        # MEP Art 77.4 (2 de 3 sets): 2-0: 3pts/0pts | 2-1: 2pts/1pt
-                        if away_sets == 1:
-                            home.points += 2
-                            away.points += 1
-                        else:
-                            home.points += 3
-                            away.points += 0
-                elif away_sets > home_sets:
-                    away.won += 1
-                    away.form.append("W")
-                    home.lost += 1
-                    home.form.append("L")
-
-                    if is_five_sets:
-                        if home_sets == 0:
-                            away.points += 5
-                            home.points += 0
-                        elif home_sets == 1:
-                            away.points += 4
-                            home.points += 1
-                        else:
-                            away.points += 3
-                            home.points += 2
-                    else:
-                        if home_sets == 1:
-                            away.points += 2
-                            home.points += 1
-                        else:
-                            away.points += 3
-                            home.points += 0
+            # Delegación SOLID (SRP + OCP + LSP + DIP) a la estrategia del deporte
+            strategy = get_sport_strategy(sport)
+            strategy.apply_match_result(home, away, match)
 
         # Calcular diferenciales y ratios oficiales
         rows: List[StandingRow] = []
@@ -360,32 +239,9 @@ class CostaDeOroCalculator:
             row.form = row.form[-5:]
             rows.append(row)
 
-        # Criterios Oficiales de Desempate (MEP - ICODER 2026)
-        def tiebreaker_key(r: StandingRow):
-            # Mayor puntuación
-            score_pts = r.points
-            # Mayor partidos ganados (PG)
-            score_won = r.won
-
-            # A. Voleibol
-            if sport == "voleibol":
-                # Protección 0 PJ: Si tiene 0 puntos y 0 PJ, no debe saltar sobre quien jugó y perdió
-                played_factor = 1 if r.played > 0 else (0 if r.points > 0 else -1)
-                pts_ratio = r.pointsRatio or 0.0
-                sets_ratio = r.setsRatio or 0.0
-                sets_diff = r.setsDiff or 0
-                return (score_pts, score_won, played_factor, pts_ratio, sets_ratio, sets_diff)
-
-            # B. Baloncesto
-            if sport == "baloncesto":
-                return (score_pts, score_won, r.diff, r.pointsFor)
-
-            # C. Fútbol
-            # Mayor Gol Diferencia (GD), Mayor Goles a Favor (GF), Menor Goles en Contra
-            return (score_pts, score_won, r.diff, r.pointsFor, -r.pointsAgainst)
-
-        # Ordenar de mayor a menor
-        rows.sort(key=tiebreaker_key, reverse=True)
+        # Criterios Oficiales de Desempate (MEP - ICODER 2026) vía Estrategia SOLID
+        strategy = get_sport_strategy(sport)
+        rows.sort(key=strategy.tiebreaker_key, reverse=True)
 
         # Resolver serie particular acumulada (Head-to-Head multi-jornada) si hay empate en fútbol o baloncesto
         if sport in ("futbol", "baloncesto") and len(rows) > 1:

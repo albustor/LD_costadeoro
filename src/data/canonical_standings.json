@@ -1,6 +1,6 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-10-28T02:43:27.273057+00:00",
+  "last_updated": "2026-11-10T16:05:08.246118+00:00",
   "version": "1.1.0",
   "matches_processed": 41,
   "computed_standing_points": {
@@ -18,20 +18,22 @@
           "location": "Brasilito, Cabo Velas",
           "city": "Santa Cruz, Guanacaste"
         },
-        "played": 2,
-        "won": 1,
-        "drawn": 1,
+        "played": 4,
+        "won": 2,
+        "drawn": 2,
         "lost": 0,
-        "pointsFor": 4,
-        "pointsAgainst": 1,
-        "diff": 3,
-        "points": 4,
+        "pointsFor": 7,
+        "pointsAgainst": 2,
+        "diff": 5,
+        "points": 8,
         "setsWon": null,
         "setsLost": null,
         "setsDiff": null,
         "setsRatio": null,
-        "pointsRatio": 4.0,
+        "pointsRatio": 3.5,
         "form": [
+          "D",
+          "W",
           "D",
           "W"
         ],
@@ -50,22 +52,24 @@
           "location": "Playa Flamingo",
           "city": "Santa Cruz, Guanacaste"
         },
-        "played": 2,
-        "won": 0,
-        "drawn": 2,
+        "played": 4,
+        "won": 1,
+        "drawn": 3,
         "lost": 0,
-        "pointsFor": 2,
-        "pointsAgainst": 2,
-        "diff": 0,
-        "points": 2,
+        "pointsFor": 6,
+        "pointsAgainst": 4,
+        "diff": 2,
+        "points": 6,
         "setsWon": null,
         "setsLost": null,
         "setsDiff": null,
         "setsRatio": null,
-        "pointsRatio": 1.0,
+        "pointsRatio": 1.5,
         "form": [
           "D",
-          "D"
+          "D",
+          "D",
+          "W"
         ],
         "position": 2
       },
@@ -82,22 +86,24 @@
           "location": "Comunidad, Carrillo",
           "city": "Guanacaste"
         },
-        "played": 2,
+        "played": 4,
         "won": 0,
         "drawn": 1,
-        "lost": 1,
-        "pointsFor": 1,
-        "pointsAgainst": 4,
-        "diff": -3,
+        "lost": 3,
+        "pointsFor": 2,
+        "pointsAgainst": 9,
+        "diff": -7,
         "points": 1,
         "setsWon": null,
         "setsLost": null,
         "setsDiff": null,
         "setsRatio": null,
-        "pointsRatio": 0.25,
+        "pointsRatio": 0.2222,
         "form": [
           "L",
-          "D"
+          "D",
+          "L",
+          "L"
         ],
         "position": 3
       },
@@ -321,17 +327,17 @@
         "position": 1
       },
       {
-        "teamId": "vittorino",
+        "teamId": "la-paz-tempisque",
         "school": {
-          "id": "vittorino",
-          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
-          "shortName": "Monseñor Vittorino",
-          "acronym": "VIT",
-          "logo": "🛡️",
-          "primaryColor": "#0284c7",
-          "secondaryColor": "#0369a1",
-          "location": "Huacas",
-          "city": "Santa Cruz, Guanacaste"
+          "id": "la-paz-tempisque",
+          "name": "La Paz Community School Tempisque",
+          "shortName": "La Paz Tempisque",
+          "acronym": "LPTP",
+          "logo": "🌿",
+          "primaryColor": "#059669",
+          "secondaryColor": "#047857",
+          "location": "Comunidad, Carrillo",
+          "city": "Guanacaste"
         },
         "played": 0,
         "won": 0,
@@ -350,17 +356,17 @@
         "position": 2
       },
       {
-        "teamId": "la-paz-tempisque",
+        "teamId": "vittorino",
         "school": {
-          "id": "la-paz-tempisque",
-          "name": "La Paz Community School Tempisque",
-          "shortName": "La Paz Tempisque",
-          "acronym": "LPTP",
-          "logo": "🌿",
-          "primaryColor": "#059669",
-          "secondaryColor": "#047857",
-          "location": "Comunidad, Carrillo",
-          "city": "Guanacaste"
+          "id": "vittorino",
+          "name": "Centro Educativo Católico Monseñor Vittorino Girardi Stellin",
+          "shortName": "Monseñor Vittorino",
+          "acronym": "VIT",
+          "logo": "🛡️",
+          "primaryColor": "#0284c7",
+          "secondaryColor": "#0369a1",
+          "location": "Huacas",
+          "city": "Santa Cruz, Guanacaste"
         },
         "played": 0,
         "won": 0,
@@ -444,6 +450,38 @@
         "position": 1
       },
       {
+        "teamId": "educarte",
+        "school": {
+          "id": "educarte",
+          "name": "Educarte Bilingual High School",
+          "shortName": "Educarte",
+          "acronym": "EDU",
+          "logo": "☀️",
+          "primaryColor": "#e11d48",
+          "secondaryColor": "#be123c",
+          "location": "Tamarindo",
+          "city": "Santa Cruz, Guanacaste"
+        },
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "pointsFor": 84,
+        "pointsAgainst": 85,
+        "diff": -1,
+        "points": 3,
+        "setsWon": 2,
+        "setsLost": 2,
+        "setsDiff": 0,
+        "setsRatio": 1.0,
+        "pointsRatio": 0.9882,
+        "form": [
+          "L",
+          "W"
+        ],
+        "position": 2
+      },
+      {
         "teamId": "vittorino",
         "school": {
           "id": "vittorino",
@@ -472,37 +510,6 @@
         "form": [
           "L"
         ],
-        "position": 2
-      },
-      {
-        "teamId": "educarte",
-        "school": {
-          "id": "educarte",
-          "name": "Educarte Bilingual High School",
-          "shortName": "Educarte",
-          "acronym": "EDU",
-          "logo": "☀️",
-          "primaryColor": "#e11d48",
-          "secondaryColor": "#be123c",
-          "location": "Tamarindo",
-          "city": "Santa Cruz, Guanacaste"
-        },
-        "played": 1,
-        "won": 0,
-        "drawn": 0,
-        "lost": 1,
-        "pointsFor": 34,
-        "pointsAgainst": 50,
-        "diff": -16,
-        "points": 0,
-        "setsWon": 0,
-        "setsLost": 2,
-        "setsDiff": -2,
-        "setsRatio": 0.0,
-        "pointsRatio": 0.68,
-        "form": [
-          "L"
-        ],
         "position": 3
       },
       {
@@ -518,20 +525,22 @@
           "location": "Comunidad, Carrillo",
           "city": "Guanacaste"
         },
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
-        "pointsFor": 0,
-        "pointsAgainst": 0,
-        "diff": 0,
+        "lost": 1,
+        "pointsFor": 35,
+        "pointsAgainst": 50,
+        "diff": -15,
         "points": 0,
         "setsWon": 0,
-        "setsLost": 0,
-        "setsDiff": 0,
+        "setsLost": 2,
+        "setsDiff": -2,
         "setsRatio": 0.0,
-        "pointsRatio": 0.0,
-        "form": [],
+        "pointsRatio": 0.7,
+        "form": [
+          "L"
+        ],
         "position": 4
       }
     ],
@@ -822,12 +831,12 @@
   "computed_statistics": {
     "global_summary": {
       "total_matches": 41,
-      "completed_matches": 13,
+      "completed_matches": 17,
       "live_matches": 0,
-      "scheduled_matches": 24,
+      "scheduled_matches": 20,
       "postponed_matches": 4,
-      "total_goals_futbol": 24,
-      "total_sets_voleibol": 6,
+      "total_goals_futbol": 32,
+      "total_sets_voleibol": 8,
       "total_points_baloncesto": 241
     },
     "jornadas_summary": {
@@ -842,10 +851,10 @@
       "jornada_2": {
         "jornada": 2,
         "total_matches": 10,
-        "completed_matches": 0,
-        "scheduled_matches": 10,
+        "completed_matches": 4,
+        "scheduled_matches": 6,
         "postponed_matches": 0,
-        "completion_pct": 0.0
+        "completion_pct": 40.0
       },
       "jornada_3": {
         "jornada": 3,
@@ -861,12 +870,12 @@
         "categoryId": "cat-fem-futbol",
         "sport": "futbol",
         "total_matches": 10,
-        "completed_matches": 3,
-        "scheduled_matches": 6,
+        "completed_matches": 6,
+        "scheduled_matches": 3,
         "postponed_matches": 1,
-        "total_scored": 7,
+        "total_scored": 15,
         "unit_label": "goles",
-        "avg_per_match": 2.33,
+        "avg_per_match": 2.5,
         "leader_school": "La Paz Cabo Velas",
         "top_offense_school": "La Paz Cabo Velas"
       },
@@ -900,10 +909,10 @@
         "categoryId": "cat-c-voleibol",
         "sport": "voleibol",
         "total_matches": 6,
-        "completed_matches": 2,
-        "scheduled_matches": 4,
+        "completed_matches": 3,
+        "scheduled_matches": 3,
         "postponed_matches": 0,
-        "total_scored": 4,
+        "total_scored": 6,
         "unit_label": "sets",
         "avg_per_match": 2.0,
         "leader_school": "La Paz Cabo Velas",
