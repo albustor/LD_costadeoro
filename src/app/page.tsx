@@ -75,7 +75,7 @@ export default function HomePage() {
                   Calendario actualizado y tablas de posiciones
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Consulta las nuevas fechas de noviembre (Jornada 2, Jornada 3 y Finales) y las tablas de posiciones oficiales.
+                  Consulta los horarios confirmados de <strong className="text-amber-300 font-bold">Fútbol categoría C</strong> (Martes 17 en Brasilito y Jueves 19 en Cabo Velas), rumbo a la Final del 23 al 27 de noviembre.
                 </p>
               </div>
               <div className="pt-1 flex flex-wrap items-center gap-2">
@@ -137,7 +137,7 @@ export default function HomePage() {
                 📅 Noviembre
               </span>
               <p className="text-xs sm:text-sm text-slate-800 font-medium">
-                <strong className="font-black text-slate-950">¡Programación oficial actualizada!</strong> · Jornada 2 (2 al 6 nov), Jornada 3 (16 al 20 nov) y Finales (23 al 27 nov).
+                <strong className="font-black text-slate-950">¡Programación de Fútbol categoría C confirmada!</strong> · Martes 17 nov (Cancha de Brasilito · 3:15, 3:45 y 4:15 p. m.) y Jueves 19 nov (Cancha de La Paz Cabo Velas · 3:15 y 4:15 p. m.) rumbo a las Finales (23 al 27 nov).
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2 shrink-0">

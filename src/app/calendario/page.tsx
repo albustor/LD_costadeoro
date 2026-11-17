@@ -216,20 +216,34 @@ const NOVEMBER_SCHEDULE: ScheduleDayBlock[] = [
             label: 'CRIA vs. Journey',
             homeSchoolId: 'cria',
             awaySchoolId: 'journey-school',
-          },
-          {
-            label: 'CRIA vs. Vittorino',
-            homeSchoolId: 'cria',
-            awaySchoolId: 'vittorino',
+            subBlocks: {
+              time: '3:15 p. m.',
+              venue: 'Cancha de Brasilito',
+              badge: '✅ Confirmado',
+            },
           },
           {
             label: 'Journey vs. Vittorino',
             homeSchoolId: 'journey-school',
             awaySchoolId: 'vittorino',
+            subBlocks: {
+              time: '3:45 p. m.',
+              venue: 'Cancha de Brasilito',
+              badge: '✅ Confirmado',
+            },
+          },
+          {
+            label: 'CRIA vs. Vittorino',
+            homeSchoolId: 'cria',
+            awaySchoolId: 'vittorino',
+            subBlocks: {
+              time: '4:15 p. m.',
+              venue: 'Cancha de Brasilito',
+              badge: '✅ Confirmado',
+            },
           },
         ],
-        time: '3:00 p. m.',
-        venue: 'CRIA o Brasilito',
+        venue: 'Cancha de Brasilito',
       },
     ],
   },
@@ -289,23 +303,32 @@ const NOVEMBER_SCHEDULE: ScheduleDayBlock[] = [
     sport: 'futbol',
     sportIcon: '🔁',
     isReposicion: true,
-    dayTitle: 'Jueves 19 · REPOSICIÓN Fútbol categoría C',
+    dayTitle: 'Jueves 19 · Fútbol categoría C',
     groups: [
       {
         matchups: [
           {
-            label: 'La Paz Cabo Velas vs. Vittorino',
-            homeSchoolId: 'la-paz-cabo-velas',
-            awaySchoolId: 'vittorino',
-          },
-          {
             label: 'La Paz Tempisque vs. Vittorino',
             homeSchoolId: 'la-paz-tempisque',
             awaySchoolId: 'vittorino',
+            subBlocks: {
+              time: '3:15 p. m.',
+              venue: 'Cancha de La Paz Cabo Velas',
+              badge: '✅ Confirmado',
+            },
+          },
+          {
+            label: 'La Paz Cabo Velas vs. Vittorino',
+            homeSchoolId: 'la-paz-cabo-velas',
+            awaySchoolId: 'vittorino',
+            subBlocks: {
+              time: '4:15 p. m.',
+              venue: 'Cancha de La Paz Cabo Velas',
+              badge: '✅ Confirmado',
+            },
           },
         ],
-        time: 'Por definir',
-        venue: 'La Paz Tempisque',
+        venue: 'Cancha de La Paz Cabo Velas',
       },
     ],
   },
@@ -667,6 +690,24 @@ export default function CalendarioPage() {
               Lunes 16 al Viernes 20 de noviembre
             </span>
           </div>
+
+          {/* Comunicado oficial de Fútbol Categoría C */}
+          {(sportFilter === 'all' || sportFilter === 'futbol') && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/90 border-2 border-emerald-300 shadow-2xs space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-700 text-white text-xs font-extrabold">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>⚽ Programación confirmada · Fútbol categoría C</span>
+                </span>
+                <span className="text-xs font-extrabold text-emerald-900">
+                  Etapa de clasificación · Martes 17 y Jueves 19 de noviembre
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                Con la confirmación del <strong className="font-black text-slate-950">Colegio Monseñor Vittorino</strong> realizamos los ajustes en la programación de manera tal que logremos consolidar la etapa de clasificación y que todos los equipos completen la totalidad de los partidos. Una vez concluida esta etapa, se programa la <strong className="font-black text-slate-950">Final para la semana del 23 al 27 de noviembre</strong>. Agradecemos a todos los equipos y entrenadores tomar nota de la programación y coordinar su participación.
+              </p>
+            </div>
+          )}
 
           {jornada3Blocks.length === 0 ? (
             <div className="p-6 text-center bg-white rounded-2xl border border-slate-200 text-slate-500 text-xs sm:text-sm">
