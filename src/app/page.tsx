@@ -75,7 +75,7 @@ export default function HomePage() {
                   Calendario actualizado y tablas de posiciones
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Consulta los horarios confirmados de <strong className="text-amber-300 font-bold">Fútbol categoría C</strong> (Martes 17 en Brasilito y Jueves 19 en Cabo Velas), rumbo a la Final del 23 al 27 de noviembre.
+                  Consulta la programación oficial de la <strong className="text-amber-300 font-bold">Jornada Decisiva de este Jueves 19 de noviembre</strong> en Baloncesto, Voleibol y Fútbol C, rumbo a las Finales.
                 </p>
               </div>
               <div className="pt-1 flex flex-wrap items-center gap-2">
@@ -130,33 +130,89 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Cintillo informativo de la programación de noviembre y botones de acción */}
-          <div className="p-3.5 sm:px-5 sm:py-3.5 rounded-2xl bg-blue-50/90 border border-blue-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <div className="flex items-start sm:items-center gap-3">
-              <span className="px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-black shrink-0 shadow-2xs">
-                📅 Noviembre
+          {/* Cintillo destacado de la Jornada Decisiva: Jueves 19 de Noviembre */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-amber-50 via-white to-blue-50/70 border-2 border-amber-400/90 shadow-sm space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200/80 pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 text-xs font-black shrink-0 shadow-2xs">
+                  🏆 Jornada Decisiva
+                </span>
+                <span className="text-xs sm:text-sm font-extrabold text-slate-900">
+                  Jueves 19 de noviembre · Cierre de fase regular y pase a Finales
+                </span>
+              </div>
+              <span className="text-[11px] font-bold text-amber-950 bg-amber-200/80 px-2.5 py-0.5 rounded-full border border-amber-300">
+                Baloncesto · Voleibol · Fútbol C
               </span>
-              <p className="text-xs sm:text-sm text-slate-800 font-medium">
-                <strong className="font-black text-slate-950">¡Programación de Fútbol categoría C confirmada!</strong> · Martes 17 nov (Cancha de Brasilito · 3:15, 3:45 y 4:15 p. m.) y Jueves 19 nov (Cancha de La Paz Cabo Velas · 3:15 y 4:15 p. m.) rumbo a las Finales (23 al 27 nov).
-              </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2 shrink-0">
-              <Link
-                href="/calendario"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
-              >
-                <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                <span>Ver calendario de noviembre</span>
-              </Link>
-              <a
-                href="https://wa.me/?text=%C2%A1Hola%20familias!%20%F0%9F%8F%86%20Ya%20est%C3%A1%20disponible%20la%20programaci%C3%B3n%20oficial%20de%20noviembre%20(Jornada%202,%20Jornada%203%20y%20Finales),%20las%20tablas%20de%20posiciones%20y%20el%20muro%20familiar%20de%20la%20Liga%20Costa%20de%20Oro%202026%20en:%20https://costadeoro.curiol.studio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Compartir portal en WhatsApp</span>
-              </a>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs sm:text-sm">
+              {/* Baloncesto */}
+              <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+                <div className="flex items-center justify-between text-xs font-bold text-amber-900 border-b border-slate-100 pb-1">
+                  <span>🏀 Baloncesto C</span>
+                  <span className="text-[11px] font-semibold text-slate-600">Sede: Educarte</span>
+                </div>
+                <p className="font-extrabold text-slate-900 pt-0.5">
+                  2:00 p. m. · Educarte 🆚 La Paz Tempisque
+                </p>
+              </div>
+
+              {/* Voleibol */}
+              <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+                <div className="flex items-center justify-between text-xs font-bold text-blue-900 border-b border-slate-100 pb-1">
+                  <span>🏐 Voleibol C</span>
+                  <span className="text-[11px] font-semibold text-slate-600">Sede: La Arena (Cabo Velas)</span>
+                </div>
+                <div className="font-extrabold text-slate-900 space-y-0.5 pt-0.5">
+                  <p>3:00 p. m. · La Paz Tempisque 🆚 La Paz Cabo Velas</p>
+                  <p>3:45 p. m. · La Paz Tempisque 🆚 Monseñor Vittorino</p>
+                  <p>4:30 p. m. · Educarte 🆚 Monseñor Vittorino</p>
+                </div>
+              </div>
+
+              {/* Fútbol */}
+              <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+                <div className="flex items-center justify-between text-xs font-bold text-emerald-900 border-b border-slate-100 pb-1">
+                  <span>⚽ Fútbol C</span>
+                  <span className="text-[11px] font-semibold text-slate-600">Sede: Cancha Cabo Velas</span>
+                </div>
+                <div className="font-extrabold text-slate-900 space-y-0.5 pt-0.5">
+                  <p>3:15 p. m. · La Paz Tempisque 🆚 Monseñor Vittorino</p>
+                  <p>4:15 p. m. · La Paz Cabo Velas 🆚 Monseñor Vittorino</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <p className="text-xs text-slate-600">
+                Invitamos a toda la comunidad a acompañar y apoyar a nuestros equipos en esta jornada decisiva.
+              </p>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <Link
+                  href="/calendario"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-300 text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Ver calendario completo</span>
+                </Link>
+                <Link
+                  href="/marcadores"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
+                >
+                  <Trophy className="w-3.5 h-3.5" />
+                  <span>Tablas de posiciones</span>
+                </Link>
+                <a
+                  href="https://wa.me/?text=%C2%A1Hola%20familias!%20%F0%9F%8F%86%20Ya%20est%C3%A1%20disponible%20la%20programaci%C3%B3n%20de%20la%20Jornada%20Decisiva%20del%20Jueves%2019%20de%20Noviembre%20en%20la%20Liga%20Costa%20de%20Oro%202026%20en:%20https://costadeoro.curiol.studio"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition-all shadow-2xs cursor-pointer"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Compartir en WhatsApp</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
