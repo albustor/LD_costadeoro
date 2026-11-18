@@ -717,7 +717,7 @@ export const INITIAL_MATCHES: Match[] = [
     categoryId: 'cat-c-voleibol',
     sport: 'voleibol',
     date: '2026-11-19',
-    time: '15:00',
+    time: '15:45',
     venue: 'La Arena, La Paz Cabo Velas',
     homeTeamId: 'la-paz-tempisque',
     awayTeamId: 'vittorino',
@@ -725,8 +725,8 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     status: 'scheduled',
     currentPeriod: 'Programado',
-    notes: 'Jornada 3 · La Paz Tempisque vs. Vittorino (3:00 p. m. | Sede: La Arena, La Paz Cabo Velas)',
-    updatedAt: '2026-10-27T18:00:00Z',
+    notes: 'Jornada 3 · La Paz Tempisque vs. Vittorino (3:45 p. m. | Sede: La Arena, La Paz Cabo Velas)',
+    updatedAt: '2026-11-18T16:19:00Z',
   },
   {
     id: 'j3-vol-c-03',
@@ -736,7 +736,7 @@ export const INITIAL_MATCHES: Match[] = [
     categoryId: 'cat-c-voleibol',
     sport: 'voleibol',
     date: '2026-11-19',
-    time: '15:00',
+    time: '16:30',
     venue: 'La Arena, La Paz Cabo Velas',
     homeTeamId: 'educarte',
     awayTeamId: 'vittorino',
@@ -744,8 +744,8 @@ export const INITIAL_MATCHES: Match[] = [
     awayScore: 0,
     status: 'scheduled',
     currentPeriod: 'Programado',
-    notes: 'Jornada 3 · Educarte vs. Vittorino (3:00 p. m. | Sede: La Arena, La Paz Cabo Velas)',
-    updatedAt: '2026-10-27T18:00:00Z',
+    notes: 'Jornada 3 · Educarte vs. Vittorino (4:30 p. m. | Sede: La Arena, La Paz Cabo Velas)',
+    updatedAt: '2026-11-18T16:19:00Z',
   },
 
   // JUEVES 19 NOV · FÚTBOL CATEGORÍA C · Cancha de La Paz Cabo Velas
@@ -788,7 +788,7 @@ export const INITIAL_MATCHES: Match[] = [
     updatedAt: '2026-11-16T18:15:00Z',
   },
 
-  // VIERNES 20 NOV · BALONCESTO CATEGORÍAS C Y D
+  // JUEVES 19 NOV · BALONCESTO CATEGORÍA C · Centro Educativo Educarte
   {
     id: 'j3-bal-c-01',
     tournamentId: 'costa-de-oro-2026',
@@ -796,17 +796,17 @@ export const INITIAL_MATCHES: Match[] = [
     jornadaName: 'Jornada 3 · 16 al 20 de noviembre',
     categoryId: 'cat-c-baloncesto',
     sport: 'baloncesto',
-    date: '2026-11-20',
-    time: '15:00',
-    venue: 'La Paz Tempisque o Educarte',
-    homeTeamId: 'la-paz-tempisque',
-    awayTeamId: 'educarte',
+    date: '2026-11-19',
+    time: '14:00',
+    venue: 'Centro Educativo Educarte',
+    homeTeamId: 'educarte',
+    awayTeamId: 'la-paz-tempisque',
     homeScore: 0,
     awayScore: 0,
     status: 'scheduled',
     currentPeriod: 'Programado',
-    notes: 'Jornada 3 · Hora por definir | Sede: La Paz Tempisque o Educarte',
-    updatedAt: '2026-10-27T18:00:00Z',
+    notes: 'Jornada 3 · Educarte vs. La Paz Tempisque (2:00 p. m. | Sede: Centro Educativo Educarte)',
+    updatedAt: '2026-11-18T16:19:00Z',
   },
   {
     id: 'j3-bal-d-01',
