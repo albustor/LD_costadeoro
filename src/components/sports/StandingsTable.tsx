@@ -135,9 +135,16 @@ export function StandingsTable({ categoryId, hideCategoryPills }: StandingsTable
                         <span className="block font-bold text-slate-900 text-xs sm:text-sm">
                           {row.school.name}
                         </span>
-                        <span className="block text-[10.5px] text-slate-500">
-                          {row.school.location}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="text-[10.5px] text-slate-500">
+                            {row.school.location}
+                          </span>
+                          {row.played === 0 && (
+                            <span className="inline-block text-[9.5px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-1.5 py-0.2 rounded-md">
+                              Sin partidos disputados en esta categoría
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -204,16 +211,25 @@ export function StandingsTable({ categoryId, hideCategoryPills }: StandingsTable
       </div>
 
       {/* Rules Legend Footnote */}
-      <div className="p-3 bg-slate-50 text-[10.5px] text-slate-500 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5">
-          <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+      <div className="p-3 bg-slate-50 text-[10.5px] text-slate-500 border-t border-slate-200 space-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <HelpCircle className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span>
+              {sport === 'futbol' && 'Reglamento FEDEFUTBOL: Victoria = 3 pts | Empate = 1 pt | Derrota = 0 pts. Desempate: GD, GF, duelo directo.'}
+              {sport === 'baloncesto' && 'Reglamento FIBA/FECOBA: Victoria = 2 pts | Derrota en cancha = 1 pt | No presentación = 0 pts. Desempate: duelo directo, diferencia.'}
+              {sport === 'voleibol' && 'Reglamento MEP/FIVB: Victoria 2-0 = 3 pts | Victoria 2-1 = 2 pts | Derrota 1-2 = 1 pt | Derrota 0-2 = 0 pts. Desempate: ratio de sets.'}
+            </span>
+          </div>
+          <span className="text-amber-700 font-semibold shrink-0">Cálculo determinista Python (MEP 2026)</span>
+        </div>
+
+        <div className="pt-1.5 border-t border-slate-200/70 text-[10.5px] text-slate-600 flex items-start gap-1.5 leading-normal">
+          <span className="font-bold text-amber-700 shrink-0">ℹ️ Nota sobre equipos con 0 PJ:</span>
           <span>
-            {sport === 'futbol' && 'Reglamento FEDEFUTBOL: Victoria = 3 pts | Empate = 1 pt | Derrota = 0 pts. Desempate: GD, GF, duelo directo.'}
-            {sport === 'baloncesto' && 'Reglamento FIBA/FECOBA: Victoria = 2 pts | Derrota en cancha = 1 pt | No presentación = 0 pts. Desempate: duelo directo, diferencia.'}
-            {sport === 'voleibol' && 'Reglamento MEP/FIVB: Victoria 2-0 = 3 pts | Victoria 2-1 = 2 pts | Derrota 1-2 = 1 pt | Derrota 0-2 = 0 pts. Desempate: ratio de sets.'}
+            Las instituciones con 0 partidos jugados corresponden a colegios que no inscribieron representativo en esa categoría específica o cuyos encuentros oficiales se encuentran en estado de reprogramación pendiente según la normativa deportiva escolar MEP 2026.
           </span>
         </div>
-        <span className="text-amber-700 font-semibold">Actualización en tiempo real</span>
       </div>
     </div>
   );

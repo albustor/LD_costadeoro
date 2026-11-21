@@ -224,6 +224,17 @@ export default function MarcadoresPage() {
             </div>
           )}
 
+          {categoryMatches.length > 0 && categoryMatches.some((m) => m.status !== 'completed' || isRescheduledMatch(m)) && (
+            <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-xs text-amber-950 flex items-start sm:items-center gap-2.5 shadow-2xs">
+              <span className="font-extrabold text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded text-[10px] shrink-0 uppercase tracking-wider">
+                Aclaración de encuentros
+              </span>
+              <p className="text-[11px] leading-snug text-slate-700">
+                Los partidos con distintivo <strong>«Programado»</strong> o <strong>«VS»</strong> corresponden a fechas venideras (como las Grandes Finales y jornadas de cierre). Los partidos con distintivo <strong>«Por reprogramar (0 : 0)»</strong> son encuentros pospuestos por fuerza mayor que no asignan puntos a ningún equipo hasta disputarse en cancha.
+              </p>
+            </div>
+          )}
+
           {categoryMatches.length === 0 ? (
             <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-500 text-xs sm:text-sm">
               No hay partidos registrados en esta jornada para esta categoría.
