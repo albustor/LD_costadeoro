@@ -1,8 +1,8 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-11-21T11:45:41.126424+00:00",
+  "last_updated": "2026-11-21T12:44:48.835538+00:00",
   "version": "1.1.0",
-  "matches_processed": 42,
+  "matches_processed": 38,
   "computed_standing_points": {
     "cat-fem-futbol": [
       {
@@ -510,22 +510,21 @@
           "location": "Tamarindo",
           "city": "Santa Cruz, Guanacaste"
         },
-        "played": 3,
-        "won": 1,
+        "played": 2,
+        "won": 0,
         "drawn": 0,
         "lost": 2,
-        "pointsFor": 135,
-        "pointsAgainst": 148,
-        "diff": -13,
-        "points": 4,
-        "setsWon": 3,
+        "pointsFor": 85,
+        "pointsAgainst": 113,
+        "diff": -28,
+        "points": 1,
+        "setsWon": 1,
         "setsLost": 4,
-        "setsDiff": -1,
-        "setsRatio": 0.75,
-        "pointsRatio": 0.9122,
+        "setsDiff": -3,
+        "setsRatio": 0.25,
+        "pointsRatio": 0.7522,
         "form": [
           "L",
-          "W",
           "L"
         ],
         "position": 3
@@ -543,21 +542,20 @@
           "location": "Comunidad, Carrillo",
           "city": "Guanacaste"
         },
-        "played": 3,
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 3,
-        "pointsFor": 98,
-        "pointsAgainst": 151,
-        "diff": -53,
+        "lost": 2,
+        "pointsFor": 63,
+        "pointsAgainst": 101,
+        "diff": -38,
         "points": 0,
         "setsWon": 0,
-        "setsLost": 6,
-        "setsDiff": -6,
+        "setsLost": 4,
+        "setsDiff": -4,
         "setsRatio": 0.0,
-        "pointsRatio": 0.649,
+        "pointsRatio": 0.6238,
         "form": [
-          "L",
           "L",
           "L"
         ],
@@ -855,13 +853,13 @@
   },
   "computed_statistics": {
     "global_summary": {
-      "total_matches": 42,
-      "completed_matches": 28,
+      "total_matches": 38,
+      "completed_matches": 27,
       "live_matches": 0,
-      "scheduled_matches": 11,
+      "scheduled_matches": 8,
       "postponed_matches": 3,
       "total_goals_futbol": 58,
-      "total_sets_voleibol": 15,
+      "total_sets_voleibol": 13,
       "total_points_baloncesto": 394
     },
     "jornadas_summary": {
@@ -875,28 +873,28 @@
       },
       "jornada_2": {
         "jornada": 2,
-        "total_matches": 10,
-        "completed_matches": 5,
+        "total_matches": 9,
+        "completed_matches": 4,
         "scheduled_matches": 5,
         "postponed_matches": 0,
-        "completion_pct": 50.0
+        "completion_pct": 44.4
       },
       "jornada_3": {
         "jornada": 3,
-        "total_matches": 15,
+        "total_matches": 12,
         "completed_matches": 10,
-        "scheduled_matches": 5,
+        "scheduled_matches": 2,
         "postponed_matches": 0,
-        "completion_pct": 66.7
+        "completion_pct": 83.3
       }
     },
     "category_metrics": {
       "cat-fem-futbol": {
         "categoryId": "cat-fem-futbol",
         "sport": "futbol",
-        "total_matches": 11,
+        "total_matches": 8,
         "completed_matches": 6,
-        "scheduled_matches": 4,
+        "scheduled_matches": 1,
         "postponed_matches": 1,
         "total_scored": 15,
         "unit_label": "goles",
@@ -933,13 +931,13 @@
       "cat-c-voleibol": {
         "categoryId": "cat-c-voleibol",
         "sport": "voleibol",
-        "total_matches": 6,
-        "completed_matches": 6,
+        "total_matches": 5,
+        "completed_matches": 5,
         "scheduled_matches": 0,
         "postponed_matches": 0,
-        "total_scored": 13,
+        "total_scored": 11,
         "unit_label": "sets",
-        "avg_per_match": 2.17,
+        "avg_per_match": 2.2,
         "leader_school": "La Paz Cabo Velas",
         "top_offense_school": "La Paz Cabo Velas"
       },

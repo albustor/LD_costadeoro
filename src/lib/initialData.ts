@@ -461,37 +461,6 @@ export const INITIAL_MATCHES: Match[] = [
     "updatedAt": "2026-10-27T18:00:00Z"
   },
   {
-    "id": "j2-vol-c-01",
-    "tournamentId": "costa-de-oro-2026",
-    "jornada": 2,
-    "jornadaName": "Jornada 2 · 2 al 6 de noviembre",
-    "categoryId": "cat-c-voleibol",
-    "sport": "voleibol",
-    "date": "2026-11-05",
-    "time": "15:00",
-    "venue": "Centro Educativo Educarte",
-    "homeTeamId": "educarte",
-    "awayTeamId": "la-paz-tempisque",
-    "homeScore": 2,
-    "awayScore": 0,
-    "status": "completed",
-    "currentPeriod": "Finalizado",
-    "notes": "Jornada 2 · Voleibol Femenino / Categoría C (Educarte 2-0 La Paz Tempisque · Set 1: 25-20, Set 2: 25-15)",
-    "updatedAt": "2026-11-05T16:30:00Z",
-    "homeSetsWon": 2,
-    "awaySetsWon": 0,
-    "setScores": [
-      {
-        "home": 25,
-        "away": 20
-      },
-      {
-        "home": 25,
-        "away": 15
-      }
-    ]
-  },
-  {
     "id": "j2-bal-c-01",
     "tournamentId": "costa-de-oro-2026",
     "jornada": 2,
@@ -546,63 +515,6 @@ export const INITIAL_MATCHES: Match[] = [
     "status": "scheduled",
     "currentPeriod": "Programado",
     "notes": "Jornada 2 · 1:00 p. m. | Sede: La Paz Tempisque",
-    "updatedAt": "2026-10-27T18:00:00Z"
-  },
-  {
-    "id": "j3-fut-fem-01",
-    "tournamentId": "costa-de-oro-2026",
-    "jornada": 3,
-    "jornadaName": "Jornada 3 · 16 al 20 de noviembre",
-    "categoryId": "cat-fem-futbol",
-    "sport": "futbol",
-    "date": "2026-11-16",
-    "time": "15:00",
-    "venue": "La Paz Tempisque",
-    "homeTeamId": "la-paz-tempisque",
-    "awayTeamId": "cria",
-    "homeScore": 0,
-    "awayScore": 0,
-    "status": "scheduled",
-    "currentPeriod": "Programado",
-    "notes": "Jornada 3 · Triangular femenino (3:00 p. m. | Sede: La Paz Tempisque)",
-    "updatedAt": "2026-10-27T18:00:00Z"
-  },
-  {
-    "id": "j3-fut-fem-02",
-    "tournamentId": "costa-de-oro-2026",
-    "jornada": 3,
-    "jornadaName": "Jornada 3 · 16 al 20 de noviembre",
-    "categoryId": "cat-fem-futbol",
-    "sport": "futbol",
-    "date": "2026-11-16",
-    "time": "15:00",
-    "venue": "La Paz Tempisque",
-    "homeTeamId": "la-paz-tempisque",
-    "awayTeamId": "la-paz-cabo-velas",
-    "homeScore": 0,
-    "awayScore": 0,
-    "status": "scheduled",
-    "currentPeriod": "Programado",
-    "notes": "Jornada 3 · Triangular femenino (3:00 p. m. | Sede: La Paz Tempisque)",
-    "updatedAt": "2026-10-27T18:00:00Z"
-  },
-  {
-    "id": "j3-fut-fem-03",
-    "tournamentId": "costa-de-oro-2026",
-    "jornada": 3,
-    "jornadaName": "Jornada 3 · 16 al 20 de noviembre",
-    "categoryId": "cat-fem-futbol",
-    "sport": "futbol",
-    "date": "2026-11-16",
-    "time": "15:00",
-    "venue": "La Paz Tempisque",
-    "homeTeamId": "cria",
-    "awayTeamId": "la-paz-cabo-velas",
-    "homeScore": 0,
-    "awayScore": 0,
-    "status": "scheduled",
-    "currentPeriod": "Programado",
-    "notes": "Jornada 3 · Triangular femenino (3:00 p. m. | Sede: La Paz Tempisque)",
     "updatedAt": "2026-10-27T18:00:00Z"
   },
   {

@@ -111,10 +111,10 @@ export default function HomePage() {
                   </span>
                 </div>
                 <h2 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug">
-                  ¡Comparte tus fotografías y videos de la 1.ª fecha!
+                  ¡Comparte tus fotografías y videos de las grandes finales!
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  Invitamos a todas las familias, estudiantes y docentes a inaugurar nuestro álbum comunitario subiendo sus mejores fotos, videos y porras de la primera fecha.
+                  Invitamos a todas las familias, estudiantes y docentes a celebrar esta fiesta deportiva compartiendo sus mejores fotos, videos y porras en el camino al campeonato.
                 </p>
               </div>
               <div className="pt-1 flex flex-wrap items-center gap-2.5">
@@ -130,7 +130,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Cintillo destacado de la Semana de Grandes Finales */}
+          {/* Cintillo destacado de la Semana de Grandes Finales con Afiche Oficial */}
           <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-amber-50 via-white to-emerald-50/70 border-2 border-amber-400/90 shadow-md space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200/80 pb-3">
               <div className="flex items-center gap-2">
@@ -146,29 +146,51 @@ export default function HomePage() {
               </span>
             </div>
 
-            {/* Tarjeta de impacto: Gran Final Fútbol Femenino Lunes 23 Noviembre */}
-            <div className="p-4 rounded-xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white border border-amber-400/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-md bg-amber-400 text-slate-950 text-[11px] font-black uppercase">
+            {/* Tarjeta de impacto con el afiche oficial de la Gran Final Fútbol Femenino */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white border-2 border-amber-400/80 shadow-md flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+              {/* Afiche Oficial Captura 5 */}
+              <div className="w-full sm:w-48 md:w-56 shrink-0 overflow-hidden rounded-xl border border-amber-400/40 shadow-lg">
+                <img
+                  src="/images/afiche-gran-final-femenina.jpg"
+                  alt="Afiche Oficial Gran Final Fútbol Femenino · La Paz Cabo Velas vs. CRIA"
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+
+              {/* Detalles oficiales del encuentro */}
+              <div className="space-y-2.5 flex-1 text-center sm:text-left">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-amber-400 text-slate-950 text-xs font-black uppercase tracking-wide">
                     ⚽ Gran Final · Fútbol Femenino
                   </span>
-                  <span className="text-xs font-bold text-amber-300">Lunes 23 de noviembre · 3:30 p. m.</span>
+                  <span className="text-xs font-bold text-amber-300 bg-white/10 px-2.5 py-1 rounded-md">
+                    Lunes 23 de noviembre · 3:30 p. m.
+                  </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-extrabold text-white">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white leading-snug">
                   La Paz Cabo Velas (Tiburones) 🆚 CRIA (Costa Rica International Academy)
                 </h3>
-                <p className="text-xs text-slate-300">
-                  📍 Sede Oficial: <strong className="text-amber-300">Cancha de Brasilito</strong> · ¡Acompáñanos a coronar a las campeonas intercolegiales!
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  📍 Sede Oficial: <strong className="text-amber-300 font-bold">Cancha de Brasilito</strong>. Dos colegios de excelencia guanacasteca disputan la copa oficial en una jornada histórica para el deporte estudiantil femenino.
                 </p>
+                <div className="pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+                  <Link
+                    href="/calendario"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm transition-all shadow-sm cursor-pointer"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>Ver ficha del partido</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href="/marcadores"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 transition-all cursor-pointer"
+                  >
+                    <Trophy className="w-4 h-4 text-amber-400" />
+                    <span>Tabla de posiciones</span>
+                  </Link>
+                </div>
               </div>
-              <Link
-                href="/calendario"
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition-all shadow-sm shrink-0 cursor-pointer"
-              >
-                <span>Ver ficha del partido</span>
-                <ChevronRight className="w-4 h-4" />
-              </Link>
             </div>
 
             {/* Cuadro de honor de las demás finales definidas */}
