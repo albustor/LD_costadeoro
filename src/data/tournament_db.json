@@ -822,12 +822,12 @@
       "venue": "CRIA",
       "homeTeamId": "cria",
       "awayTeamId": "journey-school",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 2 · Horario por definir | Sede: CRIA | ✅ Ya acordado",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "homeScore": 42,
+      "awayScore": 39,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 2 · Baloncesto D (CRIA 42 - 39 Journey School)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j2-bal-d-02",
@@ -917,12 +917,12 @@
       "venue": "Cancha de Brasilito",
       "homeTeamId": "cria",
       "awayTeamId": "journey-school",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · CRIA vs. Journey (3:15 p. m. | Sede: Cancha de Brasilito)",
-      "updatedAt": "2026-11-16T18:15:00Z"
+      "homeScore": 3,
+      "awayScore": 1,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Fútbol C (CRIA 3 - 1 Journey School)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-fut-c-03",
@@ -937,11 +937,11 @@
       "homeTeamId": "journey-school",
       "awayTeamId": "vittorino",
       "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · Journey vs. Vittorino (3:45 p. m. | Sede: Cancha de Brasilito)",
-      "updatedAt": "2026-11-16T18:15:00Z"
+      "awayScore": 5,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Fútbol C (Vittorino 5 - 0 Journey School)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-fut-c-02",
@@ -956,11 +956,11 @@
       "homeTeamId": "cria",
       "awayTeamId": "vittorino",
       "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · CRIA vs. Vittorino (4:15 p. m. | Sede: Cancha de Brasilito)",
-      "updatedAt": "2026-11-16T18:15:00Z"
+      "awayScore": 5,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Fútbol C (Vittorino 5 - 0 CRIA)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-fut-d-01",
@@ -974,12 +974,12 @@
       "venue": "La Paz Tempisque",
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "la-paz-cabo-velas",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · La Paz Tempisque vs. La Paz Cabo Velas (1:00 p. m. | Sede: La Paz Tempisque)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "homeScore": 2,
+      "awayScore": 1,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Fútbol D (La Paz Tempisque 2 - 1 La Paz Cabo Velas)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-vol-c-01",
@@ -994,11 +994,23 @@
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "la-paz-cabo-velas",
       "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · La Paz Tempisque vs. La Paz Cabo Velas (3:00 p. m. | Sede: La Arena, La Paz Cabo Velas)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "awayScore": 2,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Voleibol C (La Paz Cabo Velas 2-0 La Paz Tempisque · 25-10, 26-24)",
+      "updatedAt": "2026-11-21T11:45:00Z",
+      "homeSetsWon": 0,
+      "awaySetsWon": 2,
+      "setScores": [
+        {
+          "home": 10,
+          "away": 25
+        },
+        {
+          "home": 24,
+          "away": 26
+        }
+      ]
     },
     {
       "id": "j3-vol-c-02",
@@ -1013,11 +1025,23 @@
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "vittorino",
       "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · La Paz Tempisque vs. Vittorino (3:45 p. m. | Sede: La Arena, La Paz Cabo Velas)",
-      "updatedAt": "2026-11-18T16:19:00Z"
+      "awayScore": 2,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Voleibol C (Vittorino 2-0 La Paz Tempisque · 25-13, 25-16)",
+      "updatedAt": "2026-11-21T11:45:00Z",
+      "homeSetsWon": 0,
+      "awaySetsWon": 2,
+      "setScores": [
+        {
+          "home": 13,
+          "away": 25
+        },
+        {
+          "home": 16,
+          "away": 25
+        }
+      ]
     },
     {
       "id": "j3-vol-c-03",
@@ -1031,12 +1055,28 @@
       "venue": "La Arena, La Paz Cabo Velas",
       "homeTeamId": "educarte",
       "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · Educarte vs. Vittorino (4:30 p. m. | Sede: La Arena, La Paz Cabo Velas)",
-      "updatedAt": "2026-11-18T16:19:00Z"
+      "homeScore": 1,
+      "awayScore": 2,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Voleibol C (Vittorino 2-1 Educarte · 23-25, 25-21, 15-5)",
+      "updatedAt": "2026-11-21T11:45:00Z",
+      "homeSetsWon": 1,
+      "awaySetsWon": 2,
+      "setScores": [
+        {
+          "home": 25,
+          "away": 23
+        },
+        {
+          "home": 21,
+          "away": 25
+        },
+        {
+          "home": 5,
+          "away": 15
+        }
+      ]
     },
     {
       "id": "j3-fut-c-rep-02",
@@ -1050,12 +1090,12 @@
       "venue": "Cancha de La Paz Cabo Velas",
       "homeTeamId": "la-paz-tempisque",
       "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · La Paz Tempisque vs. Vittorino (3:15 p. m. | Sede: Cancha de La Paz Cabo Velas)",
-      "updatedAt": "2026-11-16T18:15:00Z"
+      "homeScore": 4,
+      "awayScore": 3,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Fútbol C (La Paz Tempisque 4 - 3 Vittorino)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-fut-c-rep-01",
@@ -1069,12 +1109,12 @@
       "venue": "Cancha de La Paz Cabo Velas",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "vittorino",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · La Paz Cabo Velas vs. Vittorino (4:15 p. m. | Sede: Cancha de La Paz Cabo Velas)",
-      "updatedAt": "2026-11-16T18:15:00Z"
+      "homeScore": 1,
+      "awayScore": 1,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Fútbol C (La Paz Cabo Velas 1 - 1 Vittorino)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-bal-c-01",
@@ -1088,12 +1128,12 @@
       "venue": "Centro Educativo Educarte",
       "homeTeamId": "educarte",
       "awayTeamId": "la-paz-tempisque",
-      "homeScore": 0,
-      "awayScore": 0,
-      "status": "scheduled",
-      "currentPeriod": "Programado",
-      "notes": "Jornada 3 · Educarte vs. La Paz Tempisque (2:00 p. m. | Sede: Centro Educativo Educarte)",
-      "updatedAt": "2026-11-18T16:19:00Z"
+      "homeScore": 60,
+      "awayScore": 12,
+      "status": "completed",
+      "currentPeriod": "Finalizado",
+      "notes": "Jornada 3 · Baloncesto C (Educarte 60 - 12 La Paz Tempisque)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-bal-d-01",
@@ -1102,17 +1142,17 @@
       "jornadaName": "Jornada 3 · 16 al 20 de noviembre",
       "categoryId": "cat-d-baloncesto",
       "sport": "baloncesto",
-      "date": "2026-11-20",
-      "time": "15:00",
+      "date": "2026-12-07",
+      "time": "15:15",
       "venue": "CRIA",
       "homeTeamId": "cria",
       "awayTeamId": "la-paz-tempisque",
       "homeScore": 0,
       "awayScore": 0,
-      "status": "postponed",
-      "currentPeriod": "Por reprogramar",
-      "notes": "Jornada 3 · CRIA vs. La Paz Tempisque (Reprogramar fecha · Hora por definir | Sede: CRIA)",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "status": "scheduled",
+      "currentPeriod": "Programado",
+      "notes": "Jornada 3 · Lunes 7 de Diciembre (3:15 p. m. | Sede: CRIA)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     },
     {
       "id": "j3-bal-d-02",
@@ -1121,17 +1161,36 @@
       "jornadaName": "Jornada 3 · 16 al 20 de noviembre",
       "categoryId": "cat-d-baloncesto",
       "sport": "baloncesto",
-      "date": "2026-11-20",
-      "time": "15:00",
-      "venue": "La Arena, La Paz Cabo Velas",
+      "date": "2026-12-07",
+      "time": "14:00",
+      "venue": "CRIA",
       "homeTeamId": "la-paz-cabo-velas",
       "awayTeamId": "journey-school",
       "homeScore": 0,
       "awayScore": 0,
       "status": "scheduled",
       "currentPeriod": "Programado",
-      "notes": "Jornada 3 · 3:00 p. m. | Sede: La Arena, La Paz Cabo Velas",
-      "updatedAt": "2026-10-27T18:00:00Z"
+      "notes": "Jornada 3 · Lunes 7 de Diciembre (2:00 p. m. | Sede: CRIA)",
+      "updatedAt": "2026-11-21T11:45:00Z"
+    },
+    {
+      "id": "final-fut-fem-01",
+      "tournamentId": "costa-de-oro-2026",
+      "jornada": 4,
+      "jornadaName": "Gran Final Oficial · 23 de noviembre",
+      "categoryId": "cat-fem-futbol",
+      "sport": "futbol",
+      "date": "2026-11-23",
+      "time": "15:30",
+      "venue": "Cancha de Brasilito",
+      "homeTeamId": "la-paz-cabo-velas",
+      "awayTeamId": "cria",
+      "homeScore": 0,
+      "awayScore": 0,
+      "status": "scheduled",
+      "currentPeriod": "Gran Final",
+      "notes": "🏆 GRAN FINAL OFICIAL · La Paz Cabo Velas vs. CRIA (3:30 p. m. | Sede: Cancha de Brasilito)",
+      "updatedAt": "2026-11-21T11:45:00Z"
     }
   ],
   "analytics": {
