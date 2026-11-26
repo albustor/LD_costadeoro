@@ -294,7 +294,7 @@ export default function HomePage() {
                 className="w-full sm:w-48 md:w-56 shrink-0 overflow-hidden rounded-xl border-2 border-amber-400/60 shadow-lg group cursor-pointer block"
               >
                 <img
-                  src="/images/afiche-grandes-finales-muro.jpg"
+                  src="/images/afiche-grandes-finales-muro.jpg?v=2"
                   alt="Afiche Oficial Grandes Finales · Apoya al máximo a tu equipo en el Muro"
                   className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
                 />
