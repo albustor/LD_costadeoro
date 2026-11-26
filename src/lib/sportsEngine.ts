@@ -101,12 +101,23 @@ export function calculateStandings(
       return;
     }
 
-    home.played += 1;
-    away.played += 1;
-
-    // Goles / Puntos acumulados en partidos válidos disputados
     const effectiveHomeScore = match.homeScore || 0;
     const effectiveAwayScore = match.awayScore || 0;
+    const effectiveHomeSets = match.homeSetsWon || 0;
+    const effectiveAwaySets = match.awaySetsWon || 0;
+
+    if (
+      (match.jornada === 4 || match.id.startsWith('final-')) &&
+      effectiveHomeScore === 0 &&
+      effectiveAwayScore === 0 &&
+      effectiveHomeSets === 0 &&
+      effectiveAwaySets === 0
+    ) {
+      return;
+    }
+
+    home.played += 1;
+    away.played += 1;
 
     home.pointsFor += effectiveHomeScore;
     home.pointsAgainst += effectiveAwayScore;

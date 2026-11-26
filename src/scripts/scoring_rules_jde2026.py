@@ -220,6 +220,15 @@ class CostaDeOroCalculator:
 
             home_score = match.get("homeScore", 0) or 0
             away_score = match.get("awayScore", 0) or 0
+            home_sets_val = match.get("homeSetsWon", 0) or 0
+            away_sets_val = match.get("awaySetsWon", 0) or 0
+
+            # Si es una Gran Final (Jornada 4 / final-*) proclamada por podio oficial sin marcador numérico capturado (0-0),
+            # no se altera la tabla de puntos de la fase clasificatoria con un empate 0-0 artificial.
+            if (int(match.get("jornada", 1) or 1) == 4 or str(match.get("id", "")).startswith("final-")) and (
+                home_score == 0 and away_score == 0 and home_sets_val == 0 and away_sets_val == 0
+            ):
+                continue
 
             home.played += 1
             away.played += 1
@@ -329,9 +338,9 @@ class CostaDeOroCalculator:
             for m in completed_valid if m.get("sport") == "baloncesto"
         )
 
-        # Resumen por Jornada (Jornadas 1, 2 y 3)
+        # Resumen por Jornada (Jornadas 1, 2, 3 y 4 Finales)
         jornadas_summary: Dict[str, Dict[str, Any]] = {}
-        for j_num in (1, 2, 3):
+        for j_num in (1, 2, 3, 4):
             j_matches = [m for m in matches if int(m.get("jornada", 1) or 1) == j_num]
             j_comp = [m for m in j_matches if m.get("status") == "completed" and not is_rescheduled_match(m)]
             j_post = [m for m in j_matches if is_rescheduled_match(m)]

@@ -763,8 +763,8 @@ export const INITIAL_MATCHES: Match[] = [
     "awayScore": 0,
     "status": "scheduled",
     "currentPeriod": "Programado",
-    "notes": "Jornada 3 · Lunes 7 de Diciembre (3:15 p. m. | Sede: CRIA)",
-    "updatedAt": "2026-11-21T11:45:00Z"
+    "notes": "Fecha proyectada para el lunes 7 de diciembre, pendiente de confirmación (Sede: CRIA)",
+    "updatedAt": "2026-11-26T12:00:00Z"
   },
   {
     "id": "j3-bal-d-02",
@@ -782,8 +782,8 @@ export const INITIAL_MATCHES: Match[] = [
     "awayScore": 0,
     "status": "scheduled",
     "currentPeriod": "Programado",
-    "notes": "Jornada 3 · Lunes 7 de Diciembre (2:00 p. m. | Sede: CRIA)",
-    "updatedAt": "2026-11-21T11:45:00Z"
+    "notes": "Fecha proyectada para el lunes 7 de diciembre, pendiente de confirmación (Sede: CRIA)",
+    "updatedAt": "2026-11-26T12:00:00Z"
   },
   {
     "id": "final-fut-fem-01",
@@ -799,10 +799,48 @@ export const INITIAL_MATCHES: Match[] = [
     "awayTeamId": "cria",
     "homeScore": 0,
     "awayScore": 0,
+    "status": "completed",
+    "currentPeriod": "Finalizado",
+    "notes": "🏆 FINAL FÚTBOL FEMENINO · 🥇 Campeón: La Paz Cabo Velas | 🥈 Subcampeón: CRIA | 🥉 Tercer lugar: La Paz Tempisque",
+    "updatedAt": "2026-11-26T12:00:00Z"
+  },
+  {
+    "id": "final-vol-c-01",
+    "tournamentId": "costa-de-oro-2026",
+    "jornada": 4,
+    "jornadaName": "Próximas Finales · Noviembre y Diciembre",
+    "categoryId": "cat-c-voleibol",
+    "sport": "voleibol",
+    "date": "2026-11-30",
+    "time": "15:15",
+    "venue": "Gimnasio Vittorino",
+    "homeTeamId": "vittorino",
+    "awayTeamId": "la-paz-cabo-velas",
+    "homeScore": 0,
+    "awayScore": 0,
     "status": "scheduled",
     "currentPeriod": "Gran Final",
-    "notes": "🏆 GRAN FINAL OFICIAL · La Paz Cabo Velas vs. CRIA (3:30 p. m. | Sede: Cancha de Brasilito)",
-    "updatedAt": "2026-11-21T11:45:00Z"
+    "notes": "🏆 FINAL VOLEIBOL CATEGORÍA C · Lunes 30 de noviembre (3:15 p. m. | Sede: Gimnasio Vittorino) · Colegio Vittorino vs. La Paz Cabo Velas",
+    "updatedAt": "2026-11-26T12:00:00Z"
+  },
+  {
+    "id": "final-fut-c-01",
+    "tournamentId": "costa-de-oro-2026",
+    "jornada": 4,
+    "jornadaName": "Próximas Finales · Noviembre y Diciembre",
+    "categoryId": "cat-c-futbol",
+    "sport": "futbol",
+    "date": "2026-12-02",
+    "time": "14:00",
+    "venue": "La Paz Tempisque",
+    "homeTeamId": "la-paz-tempisque",
+    "awayTeamId": "vittorino",
+    "homeScore": 0,
+    "awayScore": 0,
+    "status": "scheduled",
+    "currentPeriod": "Gran Final",
+    "notes": "🏆 FINAL FÚTBOL CATEGORÍA C · Miércoles 2 de diciembre (2:00 p. m. | Sede: La Paz Tempisque) · La Paz Tempisque vs. Colegio Vittorino",
+    "updatedAt": "2026-11-26T12:00:00Z"
   }
 ];
 

@@ -1,8 +1,8 @@
 {
   "generator": "costa_de_oro_calculator.py (MEP-ICODER 2026 Engine)",
-  "last_updated": "2026-11-21T12:44:48.835538+00:00",
+  "last_updated": "2026-11-26T18:05:22.138297+00:00",
   "version": "1.1.0",
-  "matches_processed": 38,
+  "matches_processed": 40,
   "computed_standing_points": {
     "cat-fem-futbol": [
       {
@@ -853,10 +853,10 @@
   },
   "computed_statistics": {
     "global_summary": {
-      "total_matches": 38,
-      "completed_matches": 27,
+      "total_matches": 40,
+      "completed_matches": 28,
       "live_matches": 0,
-      "scheduled_matches": 8,
+      "scheduled_matches": 9,
       "postponed_matches": 3,
       "total_goals_futbol": 58,
       "total_sets_voleibol": 13,
@@ -886,6 +886,14 @@
         "scheduled_matches": 2,
         "postponed_matches": 0,
         "completion_pct": 83.3
+      },
+      "jornada_4": {
+        "jornada": 4,
+        "total_matches": 3,
+        "completed_matches": 1,
+        "scheduled_matches": 2,
+        "postponed_matches": 0,
+        "completion_pct": 33.3
       }
     },
     "category_metrics": {
@@ -893,21 +901,21 @@
         "categoryId": "cat-fem-futbol",
         "sport": "futbol",
         "total_matches": 8,
-        "completed_matches": 6,
-        "scheduled_matches": 1,
+        "completed_matches": 7,
+        "scheduled_matches": 0,
         "postponed_matches": 1,
         "total_scored": 15,
         "unit_label": "goles",
-        "avg_per_match": 2.5,
+        "avg_per_match": 2.14,
         "leader_school": "La Paz Cabo Velas",
         "top_offense_school": "La Paz Cabo Velas"
       },
       "cat-c-futbol": {
         "categoryId": "cat-c-futbol",
         "sport": "futbol",
-        "total_matches": 11,
+        "total_matches": 12,
         "completed_matches": 8,
-        "scheduled_matches": 2,
+        "scheduled_matches": 3,
         "postponed_matches": 1,
         "total_scored": 35,
         "unit_label": "goles",
@@ -931,9 +939,9 @@
       "cat-c-voleibol": {
         "categoryId": "cat-c-voleibol",
         "sport": "voleibol",
-        "total_matches": 5,
+        "total_matches": 6,
         "completed_matches": 5,
-        "scheduled_matches": 0,
+        "scheduled_matches": 1,
         "postponed_matches": 0,
         "total_scored": 11,
         "unit_label": "sets",

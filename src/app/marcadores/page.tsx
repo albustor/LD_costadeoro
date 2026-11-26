@@ -41,7 +41,7 @@ export default function MarcadoresPage() {
   );
 
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
-  const [jornadaFilter, setJornadaFilter] = useState<'all' | 1 | 2 | 3>('all');
+  const [jornadaFilter, setJornadaFilter] = useState<'all' | 1 | 2 | 3 | 4>('all');
 
   // Actualizar categoría al cambiar deporte
   const handleSportSelect = (sport: SportType) => {
@@ -175,11 +175,12 @@ export default function MarcadoresPage() {
                 { id: 1, label: 'Jornada 1 (Oct)' },
                 { id: 2, label: 'Jornada 2 (2-6 Nov)' },
                 { id: 3, label: 'Jornada 3 (16-20 Nov)' },
+                { id: 4, label: '🏆 Finales' },
               ].map((jTab) => (
                 <button
                   key={jTab.id}
                   type="button"
-                  onClick={() => setJornadaFilter(jTab.id as 'all' | 1 | 2 | 3)}
+                  onClick={() => setJornadaFilter(jTab.id as 'all' | 1 | 2 | 3 | 4)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer border ${
                     jornadaFilter === jTab.id
                       ? 'bg-slate-950 text-amber-300 border-slate-950 shadow-2xs'
@@ -191,6 +192,43 @@ export default function MarcadoresPage() {
               ))}
             </div>
           </div>
+
+          {/* 🏆 CUADRO DE HONOR OFICIAL SI ES FÚTBOL FEMENINO */}
+          {currentCategory.id === 'cat-fem-futbol' && (
+            <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white border-2 border-amber-400/80 shadow-md space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-black uppercase">
+                  🏆 Final Fútbol Femenino · Cuadro de Honor Oficial
+                </span>
+                <span className="text-xs font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-2.5 py-0.5 rounded-full">
+                  ✅ Final Concluida · ¡Next Play!
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs sm:text-sm">
+                <div className="p-3 rounded-2xl bg-amber-400/15 border border-amber-400/60 flex items-center gap-2.5">
+                  <SchoolEmblem schoolId="la-paz-cabo-velas" size="xs" showBorder={false} />
+                  <div>
+                    <span className="text-[11px] font-black text-amber-300 uppercase block">🥇 Campeón</span>
+                    <span className="font-black text-white">La Paz Cabo Velas</span>
+                  </div>
+                </div>
+                <div className="p-3 rounded-2xl bg-white/10 border border-white/20 flex items-center gap-2.5">
+                  <SchoolEmblem schoolId="cria" size="xs" showBorder={false} />
+                  <div>
+                    <span className="text-[11px] font-black text-slate-300 uppercase block">🥈 Subcampeón</span>
+                    <span className="font-black text-white">CRIA</span>
+                  </div>
+                </div>
+                <div className="p-3 rounded-2xl bg-amber-700/20 border border-amber-500/30 flex items-center gap-2.5">
+                  <SchoolEmblem schoolId="la-paz-tempisque" size="xs" showBorder={false} />
+                  <div>
+                    <span className="text-[11px] font-black text-amber-200 uppercase block">🥉 Tercer lugar</span>
+                    <span className="font-black text-white">La Paz Tempisque</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 📊 CINTILLO DE ESTADÍSTICAS CANÓNICAS PRECALCULADAS POR PYTHON */}
           {catMetrics && (
@@ -260,8 +298,12 @@ export default function MarcadoresPage() {
                     {/* Encabezado del Partido */}
                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs pb-2 border-b border-slate-100">
                       <div className="flex flex-wrap items-center gap-2 text-slate-600 font-semibold">
-                        <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 font-extrabold text-[10.5px] border border-slate-200">
-                          Jornada {m.jornada || 1}
+                        <span className={`px-2 py-0.5 rounded-md font-extrabold text-[10.5px] border ${
+                          m.jornada === 4
+                            ? 'bg-amber-400 text-slate-950 border-amber-500'
+                            : 'bg-slate-100 text-slate-800 border-slate-200'
+                        }`}>
+                          {m.jornada === 4 ? '🏆 Gran Final' : `Jornada ${m.jornada || 1}`}
                         </span>
                         <span>{formatFullDateCostaRica(m.date)}</span>
                         <span className="inline-flex items-center gap-1 text-slate-500">
@@ -314,7 +356,13 @@ export default function MarcadoresPage() {
                           ? 'bg-slate-900 text-amber-400 border border-amber-500/40'
                           : 'bg-slate-950 text-amber-300'
                       }`}>
-                        {isRescheduled ? '0 : 0' : isCompleted || isLive ? `${m.homeScore} : ${m.awayScore}` : 'VS'}
+                        {isRescheduled
+                          ? '0 : 0'
+                          : m.id === 'final-fut-fem-01' && isCompleted && m.homeScore === 0 && m.awayScore === 0
+                          ? '🥇 vs 🥈'
+                          : isCompleted || isLive
+                          ? `${m.homeScore} : ${m.awayScore}`
+                          : 'VS'}
                       </div>
 
                       {/* Visitante */}

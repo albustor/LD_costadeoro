@@ -561,10 +561,10 @@ export default function CalendarioPage() {
             </div>
             <h1 className="text-xl sm:text-3xl font-black text-slate-900 flex items-center gap-2.5 tracking-tight">
               <Calendar className="w-6 h-6 sm:w-7 sm:h-7 text-amber-600 shrink-0" />
-              <span>📋 PROGRAMACIÓN DEPORTIVA · NOVIEMBRE</span>
+              <span>📋 PROGRAMACIÓN DEPORTIVA · FINALES Y JORNADAS</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
-              Calendario oficial de encuentros para la Jornada 2 (2 al 6 de noviembre), Jornada 3 (16 al 20 de noviembre) y Semana de Finales (23 al 27 de noviembre).
+              Cuadro de honor de la Final de Fútbol Femenino, programación oficial de las Próximas Finales (noviembre y diciembre) y calendario de Jornadas 2 y 3.
             </p>
           </div>
 
@@ -592,10 +592,10 @@ export default function CalendarioPage() {
           {/* Selector de Jornada */}
           <div className="flex flex-wrap items-center gap-1.5">
             {[
-              { id: 'all', label: '📅 Todo noviembre' },
-              { id: 'jornada2', label: 'Jornada 2 (2 al 6 nov)' },
+              { id: 'all', label: '📅 Todo el calendario' },
+              { id: 'finales', label: '🏆 Finales (Nov - Dic)' },
               { id: 'jornada3', label: 'Jornada 3 (16 al 20 nov)' },
-              { id: 'finales', label: '🏆 Finales (23 al 27 nov)' },
+              { id: 'jornada2', label: 'Jornada 2 (2 al 6 nov)' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -722,39 +722,220 @@ export default function CalendarioPage() {
       )}
 
       {/* ========================================================= */}
-      {/* 🏆 FINALES · 23 al 27 de noviembre */}
+      {/* 🏆 FINALES Y CUADRO DE HONOR · NOVIEMBRE Y DICIEMBRE */}
       {/* ========================================================= */}
       {(jornadaFilter === 'all' || jornadaFilter === 'finales') && (
         <section className="space-y-4">
-          <div className="p-5 sm:p-7 rounded-3xl bg-gradient-to-r from-amber-50 via-yellow-50/60 to-emerald-50/50 border-2 border-amber-300 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-5 sm:p-7 rounded-3xl bg-gradient-to-r from-amber-50 via-yellow-50/60 to-emerald-50/50 border-2 border-amber-300 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200/80 pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shadow-2xs shrink-0">
                   <Trophy className="w-6 h-6" />
                 </div>
                 <div>
                   <span className="px-2.5 py-0.5 rounded-full bg-amber-200/90 text-amber-950 text-[11px] font-black">
-                    SEMANA DE CIERRE Y CAMPEONATO
+                    FASE DE CAMPEONATO · LIGA LA COSTA DE ORO
                   </span>
                   <h2 className="text-lg sm:text-2xl font-black text-slate-900 mt-0.5">
-                    🏆 FINALES · 23 al 27 de noviembre
+                    🏆 FINALES OFICIALES · NOVIEMBRE Y DICIEMBRE
                   </h2>
                 </div>
               </div>
+              <span className="text-xs font-extrabold text-emerald-950 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300 self-start sm:self-auto">
+                ¡Next Play! · Sana convivencia y espíritu deportivo
+              </span>
             </div>
 
-            {/* Nota oficial de confirmación */}
-            <div className="p-4 rounded-2xl bg-white/95 border border-amber-300/90 flex items-start gap-3 text-xs sm:text-sm text-slate-800 shadow-2xs">
-              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <div className="space-y-1.5">
-                <p className="font-bold text-slate-900">
-                  ⚠️ Pendiente de confirmar: horarios y sedes indicados como &ldquo;por definir&rdquo;, así como las canchas alternativas de algunas jornadas.
+            {/* 1. 🏆 FINAL FÚTBOL FEMENINO | CUADRO DE HONOR OFICIAL */}
+            {(sportFilter === 'all' || sportFilter === 'futbol') && (
+              <div className="p-4 sm:p-6 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white border-2 border-amber-400/80 shadow-md space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-amber-400 text-slate-950 text-xs font-black uppercase">
+                      🏆 FINAL FÚTBOL FEMENINO | LIGA LA COSTA DE ORO
+                    </span>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-3 py-1 rounded-full">
+                    ✅ Final Disputada · Lunes 23 de noviembre
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  Este lunes disfrutamos de una gran final, llena de espíritu deportivo y sana competencia. 💪⚽
                 </p>
-                <p className="font-black text-amber-900 text-sm sm:text-base">
-                  ¡Nos vemos en la cancha! 💪
+
+                {/* Podio Oficial con Emblemas */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="p-4 rounded-2xl bg-amber-400/15 border-2 border-amber-400/70 flex items-center gap-3.5 shadow-sm">
+                    <SchoolEmblem schoolId="la-paz-cabo-velas" size="sm" showBorder={false} />
+                    <div>
+                      <span className="text-xs font-black text-amber-300 uppercase tracking-wider block">
+                        🥇 Campeón
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-white">
+                        La Paz Cabo Velas
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-white/10 border border-white/25 flex items-center gap-3.5">
+                    <SchoolEmblem schoolId="cria" size="sm" showBorder={false} />
+                    <div>
+                      <span className="text-xs font-black text-slate-300 uppercase tracking-wider block">
+                        🥈 Subcampeón
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-white">
+                        CRIA
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-amber-700/20 border border-amber-500/40 flex items-center gap-3.5">
+                    <SchoolEmblem schoolId="la-paz-tempisque" size="sm" showBorder={false} />
+                    <div>
+                      <span className="text-xs font-black text-amber-200 uppercase tracking-wider block">
+                        🥉 Tercer lugar
+                      </span>
+                      <span className="text-base sm:text-lg font-black text-white">
+                        La Paz Tempisque
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs sm:text-sm text-amber-200/90 font-medium pt-1">
+                  Seguimos preparando las próximas finales, promoviendo siempre la sana convivencia y el espíritu deportivo. ¡Next Play!
                 </p>
               </div>
+            )}
+
+            {/* 2. 🏆 PRÓXIMAS FINALES PROGRAMADAS */}
+            <div className="space-y-3">
+              <h3 className="text-sm sm:text-base font-black text-slate-900 flex items-center gap-2">
+                <span>🏆 PRÓXIMAS FINALES | LIGA LA COSTA DE ORO</span>
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Lunes 30 de noviembre · Voleibol categoría C */}
+                {(sportFilter === 'all' || sportFilter === 'voleibol') && (
+                  <div className="bg-white rounded-3xl border border-sky-200 border-t-4 border-t-sky-600 p-4 sm:p-5 shadow-2xs space-y-3.5">
+                    <div className="p-3 rounded-2xl bg-sky-50/90 border border-sky-200 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">🏐</span>
+                        <div>
+                          <span className="text-[11px] font-black text-sky-800 uppercase block">
+                            📅 Lunes 30 de noviembre
+                          </span>
+                          <h4 className="font-black text-sm sm:text-base text-sky-950">
+                            Gran Final · Voleibol categoría C
+                          </h4>
+                        </div>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-black border border-emerald-300">
+                        ✅ Confirmada
+                      </span>
+                    </div>
+
+                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <SchoolEmblem schoolId="vittorino" size="xs" showBorder={false} />
+                        <span className="font-black text-xs sm:text-sm text-slate-900">
+                          Colegio Vittorino vs. La Paz Cabo Velas
+                        </span>
+                      </div>
+                      <SchoolEmblem schoolId="la-paz-cabo-velas" size="xs" showBorder={false} />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 text-white font-mono font-bold">
+                        <Clock className="w-3.5 h-3.5 text-amber-400" />
+                        <span>3:15 p. m.</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold border border-slate-200">
+                        <MapPin className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Gimnasio Vittorino</span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Miércoles 2 de diciembre · Fútbol categoría C */}
+                {(sportFilter === 'all' || sportFilter === 'futbol') && (
+                  <div className="bg-white rounded-3xl border border-emerald-200 border-t-4 border-t-emerald-600 p-4 sm:p-5 shadow-2xs space-y-3.5">
+                    <div className="p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">⚽</span>
+                        <div>
+                          <span className="text-[11px] font-black text-emerald-800 uppercase block">
+                            📅 Miércoles 2 de diciembre
+                          </span>
+                          <h4 className="font-black text-sm sm:text-base text-emerald-950">
+                            Gran Final · Fútbol categoría C
+                          </h4>
+                        </div>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-black border border-emerald-300">
+                        ✅ Confirmada
+                      </span>
+                    </div>
+
+                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <SchoolEmblem schoolId="la-paz-tempisque" size="xs" showBorder={false} />
+                        <span className="font-black text-xs sm:text-sm text-slate-900">
+                          La Paz Tempisque vs. Colegio Vittorino
+                        </span>
+                      </div>
+                      <SchoolEmblem schoolId="vittorino" size="xs" showBorder={false} />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 text-white font-mono font-bold">
+                        <Clock className="w-3.5 h-3.5 text-amber-400" />
+                        <span>2:00 p. m.</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold border border-slate-200">
+                        <MapPin className="w-3.5 h-3.5 text-amber-600" />
+                        <span>La Paz Tempisque</span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+
+            {/* 3. ⏳ FINALES PENDIENTES DE COORDINACIÓN */}
+            {(sportFilter === 'all' || sportFilter === 'baloncesto') && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/95 border border-amber-300/90 space-y-3 shadow-2xs">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+                  <h4 className="font-black text-xs sm:text-sm text-slate-900 uppercase tracking-wide">
+                    ⏳ Finales pendientes de coordinación
+                  </h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                  <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/90 space-y-1">
+                    <span className="font-black text-slate-900 block">
+                      🏀 Baloncesto categoría C
+                    </span>
+                    <p className="text-xs text-slate-700 font-medium">
+                      Fecha y sede por definir.
+                    </p>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/90 space-y-1">
+                    <span className="font-black text-slate-900 block">
+                      🏀 Baloncesto categoría D
+                    </span>
+                    <p className="text-xs text-slate-700 font-medium">
+                      Fecha proyectada para el <strong>lunes 7 de diciembre</strong>, pendiente de confirmación.
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs sm:text-sm font-bold text-slate-800 pt-1">
+                  Continuamos coordinando los detalles para el desarrollo de las finales, procurando una excelente experiencia deportiva para todos.
+                </p>
+              </div>
+            )}
           </div>
         </section>
       )}
