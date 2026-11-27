@@ -148,25 +148,15 @@ export default function HomePage() {
               </span>
             </div>
 
-            {/* 🏆 FINAL FÚTBOL FEMENINO | CUADRO DE HONOR OFICIAL */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white border-2 border-amber-400/80 shadow-md flex flex-col md:flex-row items-center gap-4 sm:gap-6">
-              {/* Afiche Oficial */}
-              <div className="w-full sm:w-44 md:w-52 shrink-0 overflow-hidden rounded-xl border border-amber-400/40 shadow-lg">
-                <img
-                  src="/images/afiche-gran-final-femenina.jpg"
-                  alt="Afiche Oficial Gran Final Fútbol Femenino · La Paz Cabo Velas Campeón"
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-
-              {/* Podio Oficial Final Fútbol Femenino */}
-              <div className="space-y-3 flex-1 text-center sm:text-left w-full">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+            {/* 🏆 FINAL FÚTBOL FEMENINO | CUADRO DE HONOR OFICIAL (SIN AFICHE DE FECHA PASADA) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white border-2 border-amber-400/80 shadow-md">
+              <div className="space-y-3 w-full">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="px-2.5 py-1 rounded-md bg-amber-400 text-slate-950 text-xs font-black uppercase tracking-wide">
                     🏆 Final Fútbol Femenino · Liga La Costa de Oro
                   </span>
                   <span className="text-xs font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-2.5 py-1 rounded-md">
-                    ✅ Final Concluida · ¡Next Play!
+                    ✅ Cuadro de Honor Oficial · ¡Next Play!
                   </span>
                 </div>
 
@@ -174,31 +164,46 @@ export default function HomePage() {
                   Este lunes disfrutamos de una gran final, llena de espíritu deportivo y sana competencia. 💪⚽
                 </p>
 
-                {/* Tarjetas de Podio 1°, 2° y 3° */}
+                {/* Tarjetas de Podio 1°, 2° y 3° con emblemas */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-left">
-                  <div className="p-3 rounded-xl bg-amber-400/15 border border-amber-400/50 space-y-0.5">
-                    <span className="text-[11px] font-black text-amber-300 uppercase tracking-wider block">
-                      🥇 Campeón
-                    </span>
-                    <span className="text-sm sm:text-base font-black text-white block">
-                      La Paz Cabo Velas
-                    </span>
+                  <div className="p-3 rounded-xl bg-amber-400/15 border border-amber-400/60 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center">
+                      <SchoolEmblem schoolId="la-paz-cabo-velas" size="xs" showBorder={false} />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-black text-amber-300 uppercase tracking-wider block">
+                        🥇 Campeón
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-white block">
+                        La Paz Cabo Velas
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/10 border border-white/20 space-y-0.5">
-                    <span className="text-[11px] font-black text-slate-300 uppercase tracking-wider block">
-                      🥈 Subcampeón
-                    </span>
-                    <span className="text-sm sm:text-base font-black text-white block">
-                      CRIA
-                    </span>
+                  <div className="p-3 rounded-xl bg-white/10 border border-white/20 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center">
+                      <SchoolEmblem schoolId="cria" size="xs" showBorder={false} />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-black text-slate-300 uppercase tracking-wider block">
+                        🥈 Subcampeón
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-white block">
+                        CRIA
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-3 rounded-xl bg-amber-700/20 border border-amber-500/30 space-y-0.5">
-                    <span className="text-[11px] font-black text-amber-200 uppercase tracking-wider block">
-                      🥉 Tercer lugar
-                    </span>
-                    <span className="text-sm sm:text-base font-black text-white block">
-                      La Paz Tempisque
-                    </span>
+                  <div className="p-3 rounded-xl bg-amber-700/20 border border-amber-500/30 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center">
+                      <SchoolEmblem schoolId="la-paz-tempisque" size="xs" showBorder={false} />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-black text-amber-200 uppercase tracking-wider block">
+                        🥉 Tercer lugar
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-white block">
+                        La Paz Tempisque
+                      </span>
+                    </div>
                   </div>
                 </div>
 
